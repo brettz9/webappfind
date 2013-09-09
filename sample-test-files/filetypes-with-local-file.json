@@ -1,0 +1,18 @@
+{
+    "fileMatches": [
+        [".*", "mytype"]
+    ],
+    "hierarchy": {
+        "mytype": ["json", "js"]
+    },
+    "defaultHandlers": {
+        "mytype": {
+            "view": "D:\\wamp\\www\\_servers\\me@brett-zamir.me\\webappfind\\javascript.html?type=%type&method=%method&pathID=&pathID",
+            "register": "http://example.com/register"
+        },
+        "json": {
+            "view": "http://example.com/JSONview",
+            "register": "http://example.com/JSONregister"
+        }
+    }
+}

@@ -1,0 +1,24 @@
+{
+    "fileMatches": [
+        ["\\.html", "htmltype"],
+        [".*", "mytype"]
+    ],
+    "hierarchy": {
+        "mytype": ["json", "js"]
+    },
+    "defaultHandlers": {
+        "htmltype": {
+            "edit": "http://brett-zamir.me/webappfind/html.html?editmode=true&type=%type&method=%method&pathID=%pathID",
+            "register": "http://example.com/register"
+        },
+        "mytype": {
+            "view": "http://brett-zamir.me/webappfind/javascript.html?type=%type&method=%method&pathID=%pathID",
+            "edit": "http://brett-zamir.me/webappfind/javascript.html?editmode=true&type=%type&method=%method&pathID=%pathID",
+            "register": "http://example.com/register"
+        },
+        "json": {
+            "view": "http://example.com/JSONview",
+            "register": "http://example.com/JSONregister"
+        }
+    }
+}

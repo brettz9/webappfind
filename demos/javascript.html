@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>WebAppFind</title>
+    <!-- CodeMirror -->
+    <script src="CodeMirror/lib/codemirror.js"></script>
+    <script src="CodeMirror/mode/javascript/javascript.js"></script>
+    <link href="CodeMirror//lib/codemirror.css" rel="stylesheet" type="text/css" />
+    <!-- WebAppFind -->
+    <style>
+    #save {display:block;}
+    .CodeMirror {width: 80%; height: 400px; border: 1px solid;}
+    </style>
+    <script>
+/*globals CodeMirror*/
+/*
+TODOS:
+1. We could allow separate tabs when new pathIDs are obtained via our message listener
+*/
+
+(function () {'use strict';
+
+var saveMessage = 'webapp-save',
+    excludedMessages = [saveMessage];
+
+
+function $ (sel) {
+    return document.querySelector(sel);
+}
+
+window.addEventListener('DOMContentLoaded', function () {
+    // Could pass option 'readOnly' if determine from protocl that this is view mode only
+    var pathID,
+        cm = CodeMirror.fromTextArea($('#javascript'), {autofocus: true});
+
+    window.addEventListener('message', function(e) {
+        if (e.origin !== window.location.origin || // PRIVACY AND SECURITY! (for viewing and saving, respecitvely)
+            (!Array.isArray(e.data) || excludedMessages.indexOf(e.data[0]) > -1) // Validate format and avoid our post below
+        ) {
+            return;
+        }
+        var messageType = e.data[0];
+        switch (messageType) {
+            case 'webapp-view':
+                // Populate the contents
+                pathID = e.data[1];
+                cm.setValue(e.data[2]);
+                $('#save').disabled = false;
+                break;
+            case 'webapp-save-end':
+                alert('save complete for pathID ' + e.data[1] + '!');
+                break;
+            default:
+                throw 'Unexpected method';
+        }
+    }, false);
+
+    $('#save').addEventListener('click', function () {
+        window.postMessage([saveMessage, pathID, cm.getValue()], window.location.origin);
+    });
+});
+
+}());
+    </script>
+</head>
+<body>
+<button id="save" disabled="disabled">Save</button>
+<textarea id="javascript" cols="100" rows="30"></textarea>
+</body>
+</html>
