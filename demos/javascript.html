@@ -84,7 +84,7 @@ window.addEventListener('DOMContentLoaded', function () {
                 rangeFinder: new CodeMirror.fold.combine(CodeMirror.fold.brace, CodeMirror.fold.comment)
             },
             gutters: ['CodeMirror-lint-markers', 'CodeMirror-foldgutter', 'CodeMirror-linenumbers', breakpointsClass],
-            lint: {bitwise: true} // Options should hopefully work here after https://github.com/marijnh/CodeMirror/pull/1817
+            lint: {bitwise: true}
         }),
         choice = (document.location.search && document.location.search.match(urlThemePattern)) ||
             (document.cookie && document.cookie.match(cookieThemePattern))
