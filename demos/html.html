@@ -1,25 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8">
-	<title>HTML Editor</title>
+    <meta charset="utf-8" />
+    <title>HTML Editor</title>
     <script src="../node_modules/jamilih/jml.js"></script>
-	<script src="ckeditor/ckeditor.js"></script>
-	<script src="ckeditor/samples/assets/uilanguages/languages.js"></script>
-	<link rel="stylesheet" href="ckeditor/samples/sample.css">
+    <script src="ckeditor/ckeditor.js"></script>
+    <script src="ckeditor/samples/assets/uilanguages/languages.js"></script>
+    <link rel="stylesheet" href="ckeditor/samples/sample.css" type="text/css" />
+    <link rel="stylesheet" href="html.css" type="text/css" />
 </head>
 <body>
     <div>
-        <button id="save" disabled="disabled">Save</button>
-        <form action="" method="post">
-            <p>
-                Available languages (<span id="count"></span> languages):<br>
+        <form id="editorForm">
+            <div id="outer-toolbar">
+                <label for="languages">Available languages (<span id="count"></span> languages):</label>
                 <select id="languages" disabled="disabled">
                 </select>
-            </p>
-            <p>
+            </div>
+            <div>
                 <textarea cols="80" id="editor1" name="editor1" rows="10"></textarea>
-            </p>
+            </div>
         </form>
     </div>
 <script>
@@ -47,7 +47,9 @@ function listenForMessages() {
                 // Populate the contents
                 pathID = e.data[1];
                 editor.setData(e.data[2]);
-                $('#save').disabled = false;
+                if ($('cke_button__save')) {
+                    $('a.cke_button__save').disabled = false;
+                }
                 break;
             case 'webapp-save-end':
                 alert('save complete for pathID ' + e.data[1] + '!');
@@ -72,9 +74,26 @@ function createEditor(languageCode) {
             instanceReady: function() {
                 // Wait for the editor to be ready to set
                 // the language combo.
+                editor.execCommand('maximize'); // Full screen mode
                 var languages = document.getElementById('languages');
                 languages.value = this.langCode;
                 languages.disabled = false;
+                if (!pathID) { // Disable save button before adding a listener until we get a path
+                    $('a.cke_button__save').disabled = true;
+                }
+                editor.on('beforeCommandExec', function (e) {
+                    if (e.data.name === 'save') {
+                        throw 'Stop!!!'; // Neither return false, e.stop(), nor e.cancel() seems to work (not preventing the DOM equivalents in the save click listener), but this does
+                    }
+                });
+
+                $('a.cke_button__save').addEventListener('click', function (e) {
+                    if (!pathID) {
+                        alert('No pathID set by Firefox yet! Remember to invoke this file from an executable or command line and in edit mode.');
+                        return;
+                    }
+                    window.postMessage([saveMessage, pathID, editor.getData()], window.location.origin);
+                });
             }
         }
     });
@@ -93,14 +112,6 @@ jml('span', [String(window.CKEDITOR_LANGS.length)], $('#count')); // Todo: Avoid
 
 languages.addEventListener('change', function () {
     createEditor(this.value);
-});
-
-$('#save').addEventListener('click', function () {
-    if (!pathID) {
-        alert('No pathID set by Firefox yet! Remember to invoke this file from an executable or command line and in edit mode.');
-        return;
-    }
-    window.postMessage([saveMessage, pathID, editor.getData()], window.location.origin);
 });
 
 // At page startup, load the default language:

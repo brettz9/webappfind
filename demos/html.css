@@ -1,0 +1,12 @@
+#outer-toolbar {
+    position: fixed;
+    top: 0px; right: 0px;
+    height: 20px;
+    background-color:white; padding: 3px;
+}
+#outer-toolbar, #toolbar *, #languages {
+    z-index: 999999 !important;
+}
+#outer-toolbar, label[for=languages] {
+    background: -moz-linear-gradient(center top , rgb(245, 245, 245), rgb(207, 209, 207)) repeat scroll 0% 0% rgb(207, 209, 207);
+}
