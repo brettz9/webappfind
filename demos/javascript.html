@@ -124,6 +124,10 @@ window.addEventListener('DOMContentLoaded', function () {
     }, false);
 
     $('#save').addEventListener('click', function () {
+        if (!pathID) {
+            alert('No pathID set by Firefox yet! Remember to invoke this file from an executable or command line and in edit mode.');
+            return;
+        }
         window.postMessage([saveMessage, pathID, cm.getValue()], window.location.origin);
     });
     

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>HTML Editor</title>
+    <script src="../node_modules/jamilih/jml.js"></script>
+	<script src="ckeditor/ckeditor.js"></script>
+	<script src="ckeditor/samples/assets/uilanguages/languages.js"></script>
+	<link rel="stylesheet" href="ckeditor/samples/sample.css">
+</head>
+<body>
+    <div>
+        <button id="save" disabled="disabled">Save</button>
+        <form action="" method="post">
+            <p>
+                Available languages (<span id="count"></span> languages):<br>
+                <select id="languages" disabled="disabled">
+                </select>
+            </p>
+            <p>
+                <textarea cols="80" id="editor1" name="editor1" rows="10"></textarea>
+            </p>
+        </form>
+    </div>
+<script>
+/*globals jml, CKEDITOR */
+(function () {'use strict';
+var i, editor, languages,
+    // Could pass option 'readOnly' if determine from protocol that this is view mode only
+    pathID,
+    saveMessage = 'webapp-save',
+    excludedMessages = [saveMessage];
+
+function $ (sel) {
+    return document.querySelector(sel);
+}
+function listenForMessages() {
+    window.addEventListener('message', function(e) {
+        if (e.origin !== window.location.origin || // PRIVACY AND SECURITY! (for viewing and saving, respecitvely)
+            (!Array.isArray(e.data) || excludedMessages.indexOf(e.data[0]) > -1) // Validate format and avoid our post below
+        ) {
+            return;
+        }
+        var messageType = e.data[0];
+        switch (messageType) {
+            case 'webapp-view':
+                // Populate the contents
+                pathID = e.data[1];
+                editor.setData(e.data[2]);
+                $('#save').disabled = false;
+                break;
+            case 'webapp-save-end':
+                alert('save complete for pathID ' + e.data[1] + '!');
+                break;
+            default:
+                throw 'Unexpected method';
+        }
+    }, false);
+}
+
+
+function createEditor(languageCode) {
+    if (editor) {
+        editor.destroy();
+    }
+
+    // Replace the <textarea id="editor"> with an CKEditor
+    // instance, using default configurations.
+    editor = CKEDITOR.replace('editor1', {
+        language: languageCode,
+        on: {
+            instanceReady: function() {
+                // Wait for the editor to be ready to set
+                // the language combo.
+                var languages = document.getElementById('languages');
+                languages.value = this.langCode;
+                languages.disabled = false;
+            }
+        }
+    });
+}
+
+listenForMessages(); 
+languages = $('#languages');
+for (i = 0; i < window.CKEDITOR_LANGS.length ; i++ ) {
+    jml('option', {value: window.CKEDITOR_LANGS[i].code}, [
+        window.CKEDITOR_LANGS[i].name
+    ], languages);
+}
+
+// Set the number of languages.
+jml('span', [String(window.CKEDITOR_LANGS.length)], $('#count')); // Todo: Avoid Jamilih requiring explicit string conversion
+
+languages.addEventListener('change', function () {
+    createEditor(this.value);
+});
+
+$('#save').addEventListener('click', function () {
+    if (!pathID) {
+        alert('No pathID set by Firefox yet! Remember to invoke this file from an executable or command line and in edit mode.');
+        return;
+    }
+    window.postMessage([saveMessage, pathID, editor.getData()], window.location.origin);
+});
+
+// At page startup, load the default language:
+createEditor('');
+
+}());
+</script>
+</body>
+</html>

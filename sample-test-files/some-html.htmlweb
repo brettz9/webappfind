@@ -1,12 +1,1 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <meta charset="utf-8" />
-    <title></title>
-</head>
-<body>
-
-Yup, this is <b>HTML</b> right here.
-
-</body>
-</html>
+<p>Yup, this is <strong>HTML</strong> right here. And how about <u>now</u>?</p>
