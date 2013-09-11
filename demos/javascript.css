@@ -1,0 +1,62 @@
+/* Also see codemirror.css for changes may make to padding, gutter, cursor, and default theme */
+
+/* General display */
+.CodeMirror {width: 100%; border: 1px solid;}
+
+/* Automatic vertical sizing with a minimum height */
+.CodeMirror {
+    min-height: 200px;
+    height: auto;
+}
+.CodeMirror-scroll {
+    overflow-y: hidden;
+    overflow-x: auto;
+}
+
+/* gutters: using our custom breakpoints item set on a gutterClick event */
+.CodeMirror-breakpoints {width: .8em;}
+.CodeMirror-breakpoint {color: #822; }
+
+/* highlightSelectionMatches: Match highlighting (when clicking on an instance of a word, finds other instances of the word) */
+.CodeMirror-focused .cm-matchhighlight {
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAAFklEQVQI12NgYGBgkKzc8x9CMDAwAAAmhwSbidEoSQAAAABJRU5ErkJggg==);
+    background-position: bottom;
+    background-repeat: repeat-x;
+}
+.CodeMirror-focused .cm-matchhighlight:not(.CodeMirror-selectedtext) { /* Don't apply background if this is the highlighted word itself */
+    background-color: beige;
+}
+
+/* matchBrackets */
+div.CodeMirror span.CodeMirror-matchingbracket {color: #0f0;}
+div.CodeMirror span.CodeMirror-nonmatchingbracket {color: #f22;}
+
+/* styleActiveLine: We can override CodeMirror's default here */
+.CodeMirror-activeline-background {background: #e8f2ff;}
+
+/* styleSelectedText: match selection (when clicking on a word, it can selectively highlight that word alone) */
+.CodeMirror-selected  { background-color: blue !important; }
+.CodeMirror-selectedtext { color: white !important; }
+
+/* Code folding */
+.CodeMirror-foldmarker {
+    color: blue;
+    text-shadow: #b9f 1px 1px 2px, #b9f -1px -1px 2px, #b9f 1px -1px 2px, #b9f -1px 1px 2px;
+    font-family: arial;
+    line-height: .3;
+    cursor: pointer;
+}
+.CodeMirror-foldgutter {
+    width: .7em;
+}
+.CodeMirror-foldgutter-open,
+.CodeMirror-foldgutter-folded {
+    color: #555;
+    cursor: pointer;
+}
+.CodeMirror-foldgutter-open:after {
+    content: "\25BE";
+}
+.CodeMirror-foldgutter-folded:after {
+    content: "\25B8";
+}
