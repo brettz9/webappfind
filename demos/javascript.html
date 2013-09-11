@@ -21,6 +21,11 @@
     
     <script src="CodeMirror/addon/edit/matchbrackets.js"></script>
     
+    
+    <script src="CodeMirror/addon/hint/show-hint.js"></script>
+    <script src="CodeMirror/addon/hint/javascript-hint.js"></script>
+    <link href="CodeMirror/addon/hint/show-hint.css" rel="stylesheet" type="text/css" />
+    
     <script src="jshint.js"></script><!--<script src="http://ajax.aspnetcdn.com/ajax/jshint/r07/jshint.js"></script>-->
     <script src="CodeMirror/addon/lint/lint.js"></script>
     <script src="CodeMirror/addon/lint/javascript-lint.js"></script>
@@ -55,6 +60,9 @@ window.addEventListener('DOMContentLoaded', function () {
         marker.className = 'CodeMirror-breakpoint';
         return marker;
     }
+    CodeMirror.commands.autocomplete = function(cm) {
+        CodeMirror.showHint(cm, CodeMirror.hint.javascript);
+    };
     var pathID,
         breakpointsClass = 'CodeMirror-breakpoints',
         urlThemePattern = /[?&]theme=(.*?)(?:&|$)/,
@@ -68,7 +76,10 @@ window.addEventListener('DOMContentLoaded', function () {
             styleSelectedText: true,
             highlightSelectionMatches: {showToken: /\w/},
             viewportMargin: Infinity, // Make sure whole doc is rendered so browser text search will work; will badly affect large docs per http://codemirror.net/doc/manual.html#option_viewportMargin
-            extraKeys: {'Ctrl-Q': function(cm){ cm.foldCode(cm.getCursor()); }},
+            extraKeys: {
+                'Ctrl-Q': function(cm){ cm.foldCode(cm.getCursor()); },
+                'Ctrl-Space': 'autocomplete'
+            },
             foldGutter: {
                 rangeFinder: new CodeMirror.fold.combine(CodeMirror.fold.brace, CodeMirror.fold.comment)
             },
