@@ -1,6 +1,9 @@
 /* Also see codemirror.css for changes may make to padding, gutter, cursor, and default theme */
 
 /* General display */
+#toolbar {position: fixed; top: 0px; right: 0px; height: 20px; background-color:white; padding: 3px;}
+#toolbar, #toolbar *, #themes1 {z-index: 999999 !important;}
+
 .CodeMirror {width: 100%; border: 1px solid;}
 
 /* Automatic vertical sizing with a minimum height */
@@ -24,7 +27,8 @@
     background-repeat: repeat-x;
 }
 .CodeMirror-focused .cm-matchhighlight:not(.CodeMirror-selectedtext) { /* Don't apply background if this is the highlighted word itself */
-    background-color: beige;
+    background-color: blue;
+    color:white;
 }
 
 /* matchBrackets */

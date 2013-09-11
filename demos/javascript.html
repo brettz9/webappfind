@@ -164,9 +164,9 @@ window.addEventListener('DOMContentLoaded', function () {
     <link rel="stylesheet" href="CodeMirror/theme/xq-light.css" type="text/css" />
 </head>
 <body>
-<div>
+<div id="toolbar">
     <button id="save" disabled="disabled">Save</button>
-    <label for="themes">Select a theme:</label>
+    <span id="themes1">Select a theme:</span>
     <select id="themes">
         <option selected="selected">default</option>
         <option>3024-day</option>
@@ -197,6 +197,8 @@ window.addEventListener('DOMContentLoaded', function () {
         <option>xq-light</option>
     </select>
 </div>
+<div id="js-container">
 <textarea id="javascript" cols="100" rows="30"></textarea>
+</div>
 </body>
 </html>
