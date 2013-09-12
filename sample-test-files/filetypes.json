@@ -1,12 +1,20 @@
 {
     "fileMatches": [
         ["\\.html", "htmltype"],
+        ["\\.css", "csstype"],
+        ["\\.svg", "svgtype"],
         [".*", "mytype"]
     ],
     "hierarchy": {
         "mytype": ["json", "js"]
     },
     "defaultHandlers": {
+        "csstype": {
+            "edit": "http://brett-zamir.me/webappfind/css.html?editmode=true&type=%type&method=%method&pathID=%pathID"
+        },
+        "svgtype": {
+            "edit": "http://brett-zamir.me/webappfind/svg.html?editmode=true&type=%type&method=%method&pathID=%pathID"
+        },
         "htmltype": {
             "edit": "http://brett-zamir.me/webappfind/html.html?editmode=true&type=%type&method=%method&pathID=%pathID",
             "register": "http://example.com/register"
