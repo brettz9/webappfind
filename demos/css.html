@@ -67,6 +67,7 @@ window.addEventListener('DOMContentLoaded', function () {
         return marker;
     }
     CodeMirror.commands.autocomplete = function(cm) {
+        // It would be nice for CSS autocomplete to include colors for color properties but the previous state currently exposed does not seem to allow for this even though /mode/css/css.js has a colorKeywords array and could designate a special "style" for properties say ending in "color".
         CodeMirror.showHint(cm, CodeMirror.hint.css);
     };
     var pathID,
@@ -100,6 +101,7 @@ window.addEventListener('DOMContentLoaded', function () {
             },
             gutters: ['CodeMirror-lint-markers', 'CodeMirror-foldgutter', 'CodeMirror-linenumbers', breakpointsClass],
             lint: true // CSS Lint options?
+            // One might add support for CSS Lint options by adapting css-lint.js to call CSSLint.verify with a second argument representing user-supplied options (on the CodeMirror editor instance). Those user-supplied options might also allow a function which could optionally call CSSLint.getRuleset() to get the current rules if it wanted to add to them and then return the ruleset array
         }),
         choice = (document.location.search && document.location.search.match(urlThemePattern)) ||
             (document.cookie && document.cookie.match(cookieThemePattern))
