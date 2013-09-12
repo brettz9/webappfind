@@ -5,7 +5,7 @@
     <title>WebAppFind</title>
     <!-- CodeMirror -->
     <script src="CodeMirror/lib/codemirror.js"></script>
-    <script src="CodeMirror/mode/javascript/javascript.js"></script>
+    <script src="CodeMirror/mode/css/css.js"></script>
     <script src="CodeMirror/keymap/extra.js"></script>
 
     <script src="CodeMirror/addon/fold/foldcode.js"></script>
@@ -27,17 +27,16 @@
     
     
     <script src="CodeMirror/addon/hint/show-hint.js"></script>
-    <script src="CodeMirror/addon/hint/javascript-hint.js"></script>
+    <script src="CodeMirror/addon/hint/css-hint.js"></script>
     <link href="CodeMirror/addon/hint/show-hint.css" rel="stylesheet" type="text/css" />
     
-    <script src="jshint.js"></script><!--<script src="http://ajax.aspnetcdn.com/ajax/jshint/r07/jshint.js"></script>-->
     <script src="CodeMirror/addon/lint/lint.js"></script>
-    <script src="CodeMirror/addon/lint/javascript-lint.js"></script>
+    <script src="csslint.js"></script><!--<script src="https://rawgithub.com/stubbornella/csslint/master/release/csslint.js"></script>-->
     <link href="CodeMirror/addon/lint/lint.css" rel="stylesheet" type="text/css" />
     <link href="CodeMirror/lib/codemirror.css" rel="stylesheet" type="text/css" />
 
     <!-- WebAppFind -->
-    <link href="javascript.css" rel="stylesheet" type="text/css" />
+    <link href="javascript.css" rel="stylesheet" type="text/css" /><!-- For now, it seems we may be able to share this -->
     
     <script>
 /*globals CodeMirror*/
@@ -65,13 +64,13 @@ window.addEventListener('DOMContentLoaded', function () {
         return marker;
     }
     CodeMirror.commands.autocomplete = function(cm) {
-        CodeMirror.showHint(cm, CodeMirror.hint.javascript);
+        CodeMirror.showHint(cm, CodeMirror.hint.css);
     };
     var pathID,
         breakpointsClass = 'CodeMirror-breakpoints',
         urlThemePattern = /[?&]theme=(.*?)(?:&|$)/,
         cookieThemePattern = /^theme=([^;]*)(?:;|$)/,
-        cm = CodeMirror.fromTextArea($('#javascript'), {
+        cm = CodeMirror.fromTextArea($('#css'), {
             autofocus: true,
             lineNumbers: true,
             lineWrapping: true,
@@ -93,7 +92,7 @@ window.addEventListener('DOMContentLoaded', function () {
                 rangeFinder: new CodeMirror.fold.combine(CodeMirror.fold.brace, CodeMirror.fold.comment)
             },
             gutters: ['CodeMirror-lint-markers', 'CodeMirror-foldgutter', 'CodeMirror-linenumbers', breakpointsClass],
-            lint: {bitwise: true}
+            // lint: {bitwise: true} // CSS Lint options?
         }),
         choice = (document.location.search && document.location.search.match(urlThemePattern)) ||
             (document.cookie && document.cookie.match(cookieThemePattern))
@@ -221,8 +220,8 @@ window.addEventListener('DOMContentLoaded', function () {
         <option>xq-light</option>
     </select>
 </div>
-<div id="js-container">
-<textarea id="javascript" cols="100" rows="30" placeholder="Loading..."></textarea>
+<div id="css-container">
+<textarea id="css" cols="100" rows="30" placeholder="Loading..."></textarea>
 </div>
 </body>
 </html>
