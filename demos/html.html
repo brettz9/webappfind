@@ -47,7 +47,7 @@ function listenForMessages() {
                 // Populate the contents
                 pathID = e.data[1];
                 editor.setData(e.data[2]);
-                if ($('cke_button__save')) {
+                if ($('a.cke_button__save')) {
                     $('a.cke_button__save').disabled = false;
                 }
                 break;
