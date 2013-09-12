@@ -117,7 +117,19 @@ languages.addEventListener('change', function () {
 // At page startup, load the default language:
 createEditor('');
 
+/*
+Testing with events on form controls within the editor--e.g., to allow double-clicking of a checkbox for "StickyBrains"-like behavior
+Works in Chrome, not Firefox
+setTimeout(function () {
+alert($('.cke_wysiwyg_frame').contentDocument.querySelector('select[name=security]'))
+$('.cke_wysiwyg_frame').contentDocument.querySelector('select[name=security]').addEventListener('click', function () {
+alert('cool');
+});
+}, 6000);
+*/
+
 }());
+
 </script>
 </body>
 </html>
