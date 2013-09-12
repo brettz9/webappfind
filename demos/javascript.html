@@ -18,6 +18,8 @@
     <script src="CodeMirror/addon/display/placeholder.js"></script>
 
     <script src="CodeMirror/addon/edit/trailingspace.js"></script>
+    
+    <script src="CodeMirror/addon/edit/closebrackets.js"></script>
 
     <script src="CodeMirror/addon/search/searchcursor.js"></script>
     <script src="CodeMirror/addon/search/match-highlighter.js"></script><!-- Use with searchcursor -->
@@ -81,13 +83,17 @@ window.addEventListener('DOMContentLoaded', function () {
             showTrailingSpace: true,
             tabSize: 4,
             indentUnit: 4,
-            indentWithTabs: true,
+            // indentWithTabs: true,
             autoCloseBrackets: true,
             highlightSelectionMatches: {showToken: /\w/},
             viewportMargin: Infinity, // Make sure whole doc is rendered so browser text search will work; will badly affect large docs per http://codemirror.net/doc/manual.html#option_viewportMargin
             extraKeys: {
                 'Ctrl-Q': function(cm){ cm.foldCode(cm.getCursor()); },
-                'Ctrl-Space': 'autocomplete'
+                'Ctrl-Space': 'autocomplete',
+                Tab: function (cm) {
+                    var spaces = Array(cm.getOption('indentUnit') + 1).join(' ');
+                    cm.replaceSelection(spaces, 'end', '+input');
+                }
             },
             foldGutter: {
                 rangeFinder: new CodeMirror.fold.combine(CodeMirror.fold.brace, CodeMirror.fold.comment)

@@ -18,6 +18,8 @@
     <script src="CodeMirror/addon/display/placeholder.js"></script>
 
     <script src="CodeMirror/addon/edit/trailingspace.js"></script>
+    
+    <script src="CodeMirror/addon/edit/closebrackets.js"></script>
 
     <script src="CodeMirror/addon/search/searchcursor.js"></script>
     <script src="CodeMirror/addon/search/match-highlighter.js"></script><!-- Use with searchcursor -->
@@ -32,6 +34,7 @@
     
     <script src="CodeMirror/addon/lint/lint.js"></script>
     <script src="csslint.js"></script><!--<script src="https://rawgithub.com/stubbornella/csslint/master/release/csslint.js"></script>-->
+    <script src="CodeMirror/addon/lint/css-lint.js"></script>
     <link href="CodeMirror/addon/lint/lint.css" rel="stylesheet" type="text/css" />
     <link href="CodeMirror/lib/codemirror.css" rel="stylesheet" type="text/css" />
 
@@ -80,19 +83,23 @@ window.addEventListener('DOMContentLoaded', function () {
             showTrailingSpace: true,
             tabSize: 4,
             indentUnit: 4,
-            indentWithTabs: true,
+            // indentWithTabs: true,
             autoCloseBrackets: true,
             highlightSelectionMatches: {showToken: /\w/},
             viewportMargin: Infinity, // Make sure whole doc is rendered so browser text search will work; will badly affect large docs per http://codemirror.net/doc/manual.html#option_viewportMargin
             extraKeys: {
-                'Ctrl-Q': function(cm){ cm.foldCode(cm.getCursor()); },
-                'Ctrl-Space': 'autocomplete'
+                'Ctrl-Q': function (cm) { cm.foldCode(cm.getCursor()); },
+                'Ctrl-Space': 'autocomplete',
+                Tab: function (cm) {
+                    var spaces = Array(cm.getOption('indentUnit') + 1).join(' ');
+                    cm.replaceSelection(spaces, 'end', '+input');
+                }
             },
             foldGutter: {
                 rangeFinder: new CodeMirror.fold.combine(CodeMirror.fold.brace, CodeMirror.fold.comment)
             },
             gutters: ['CodeMirror-lint-markers', 'CodeMirror-foldgutter', 'CodeMirror-linenumbers', breakpointsClass],
-            // lint: {bitwise: true} // CSS Lint options?
+            lint: true // CSS Lint options?
         }),
         choice = (document.location.search && document.location.search.match(urlThemePattern)) ||
             (document.cookie && document.cookie.match(cookieThemePattern))
