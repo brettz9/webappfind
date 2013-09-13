@@ -5,6 +5,7 @@
         ["\\.jpe?g", "jpegtype"],
         ["\\.png", "pngtype"],
         ["\\.gif", "giftype"],
+        ["\\.ico", "icotype"],
         ["\\.svg", "svgtype"],
         ["\\.webm", "webmvideotype"],
         ["\\.ogg", "oggaudiotype"],
@@ -29,6 +30,9 @@
         },
         "giftype": {
             "binary-view": "http://brett-zamir.me/webappfind/gif.html?type=%type&method=%method&pathID=%pathID"
+        },
+        "icotype": {
+            "binary-view": "http://brett-zamir.me/webappfind/ico.html?type=%type&method=%method&pathID=%pathID"
         },
         "svgtype": {
             "edit": "http://brett-zamir.me/webappfind/svg.html?editmode=true&type=%type&method=%method&pathID=%pathID"

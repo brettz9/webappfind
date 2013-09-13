@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>WebAppFind ICO viewer (for favicons)</title>
+    <style>img {width:100%;}</style>
+</head>
+<body>
+<div>
+    <select id="sizes">
+        <option value="16">16×16</option>
+        <option value="32">32×32</option>
+        <option value="48">48×48</option>
+        <option value="64">64×64</option>
+    </select>
+</div>
+<img />
+<script>
+/*globals btoa */
+(function () {'use strict';
+function $ (sel) {
+    return document.querySelector(sel);
+}
+
+var pathID,
+    saveMessage = 'webapp-save',
+    excludedMessages = [saveMessage],
+    img = $('img'),
+    imageType = 'x-icon',
+    icoMIME = 'image/x-icon',
+    addFavicon = function () {
+        var link = document.createElement('link');
+            link.type = icoMIME;
+            link.rel = 'shortcut icon';
+            link.href = img.src;
+            document.getElementsByTagName('head')[0].appendChild(link);
+    },
+    replaceFavicon = function (icon, canvas) {
+        var newIcon = icon.cloneNode(true);
+        newIcon.setAttribute('href', canvas.toDataURL(icoMIME));
+        icon.parentNode.replaceChild(newIcon, icon);
+        // $('link').href = canvas.toDataURL(icoMIME); // This alone doesn't work; have to replace whole element
+    };
+
+$('#sizes').addEventListener('click', function () {
+    var ctx,
+        canvas = document.createElement('canvas'),
+        size = this.options[this.selectedIndex].value;
+    $('img').style.width = $('img').style.height = size + 'px';
+    canvas.width = size;
+    canvas.height = size;
+    ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0);
+    
+    replaceFavicon($('link'), canvas); // We could just replace the icon without canvas, but we do the above with canvas in case resizing makes a difference
+});
+
+
+window.addEventListener('message', function(e) {
+    if (e.origin !== window.location.origin || // PRIVACY AND SECURITY! (for viewing and saving, respecitvely)
+        (!Array.isArray(e.data) || excludedMessages.indexOf(e.data[0]) > -1) // Validate format and avoid a post below
+    ) {
+        return;
+    }
+    var messageType = e.data[0];
+    switch (messageType) {
+        case 'webapp-view':
+            // Populate the contents
+            pathID = e.data[1];
+            img.src = 'data:image/' + imageType + ';base64,' + btoa(e.data[2]); // Converts binary string to base64
+            addFavicon(); // No need to wait for img.onload
+            // $('#save').disabled = false;
+            break;
+        /*case 'webapp-save-end':
+            alert('save complete for pathID ' + e.data[1] + '!');
+            break;*/
+        default:
+            throw 'Unexpected method' + messageType;
+    }
+}, false);
+
+
+}());
+</script>
+</body>
+</html>
