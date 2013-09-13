@@ -1,15 +1,15 @@
-# Project: WebAppFinder-(Edit mode)-Firefox
+# Project: WebAppFinder-binary-view-mode-Firefox
 # Makefile created by Dev-C++ 5.4.2
 
 CPP      = g++.exe
 CC       = gcc.exe
 WINDRES  = windres.exe
-OBJ      = main.o config.o
-LINKOBJ  = main.o config.o
+OBJ      = main.o binary-view-config.o
+LINKOBJ  = main.o binary-view-config.o
 LIBS     = -L"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/lib" -static-libgcc -mwindows
 INCS     = -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include"
 CXXINCS  = -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include"
-BIN      = WebAppFinder-edit-mode-Firefox.exe
+BIN      = WebAppFinder-binary-view-mode-Firefox.exe
 CXXFLAGS = $(CXXINCS) -mwindows
 CFLAGS   = $(INCS) -mwindows
 RM       = rm -f
@@ -28,5 +28,5 @@ $(BIN): $(OBJ)
 main.o: main.cpp
 	$(CPP) -c main.cpp -o main.o $(CXXFLAGS)
 
-config.o: config.cpp
-	$(CPP) -c config.cpp -o config.o $(CXXFLAGS)
+binary-view-config.o: binary-view-config.cpp
+	$(CPP) -c binary-view-config.cpp -o binary-view-config.o $(CXXFLAGS)
