@@ -4,12 +4,16 @@
         ["\\.css", "csstype"],
         ["\\.svg", "svgtype"],
         ["\\.webm", "webmtype"],
+        ["\\.ogg", "oggtype"],
         [".*", "mytype"]
     ],
     "hierarchy": {
         "mytype": ["json", "js"]
     },
     "defaultHandlers": {
+        "oggtype": {
+            "binary-view": "http://brett-zamir.me/webappfind/ogg.html?type=%type&method=%method&pathID=%pathID"
+        },
         "webmtype": {
             "binary-view": "http://brett-zamir.me/webappfind/webm.html?type=%type&method=%method&pathID=%pathID"
         },
