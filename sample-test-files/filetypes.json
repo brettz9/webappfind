@@ -2,30 +2,42 @@
     "fileMatches": [
         ["\\.html", "htmltype"],
         ["\\.css", "csstype"],
+        ["\\.jpe?g", "jpegtype"],
+        ["\\.png", "pngtype"],
+        ["\\.gif", "giftype"],
         ["\\.svg", "svgtype"],
-        ["\\.webm", "webmtype"],
-        ["\\.ogg", "oggtype"],
+        ["\\.webm", "webmvideotype"],
+        ["\\.ogg", "oggaudiotype"],
         [".*", "mytype"]
     ],
     "hierarchy": {
         "mytype": ["json", "js"]
     },
     "defaultHandlers": {
-        "oggtype": {
-            "binary-view": "http://brett-zamir.me/webappfind/ogg.html?type=%type&method=%method&pathID=%pathID"
-        },
-        "webmtype": {
-            "binary-view": "http://brett-zamir.me/webappfind/webm.html?type=%type&method=%method&pathID=%pathID"
+        "htmltype": {
+            "edit": "http://brett-zamir.me/webappfind/html.html?editmode=true&type=%type&method=%method&pathID=%pathID",
+            "register": "http://example.com/register"
         },
         "csstype": {
             "edit": "http://brett-zamir.me/webappfind/css.html?editmode=true&type=%type&method=%method&pathID=%pathID"
         },
+        "jpegtype": {
+            "binary-view": "http://brett-zamir.me/webappfind/jpeg.html?type=%type&method=%method&pathID=%pathID"
+        },
+        "pngtype": {
+            "binary-view": "http://brett-zamir.me/webappfind/png.html?type=%type&method=%method&pathID=%pathID"
+        },
+        "giftype": {
+            "binary-view": "http://brett-zamir.me/webappfind/gif.html?type=%type&method=%method&pathID=%pathID"
+        },
         "svgtype": {
             "edit": "http://brett-zamir.me/webappfind/svg.html?editmode=true&type=%type&method=%method&pathID=%pathID"
         },
-        "htmltype": {
-            "edit": "http://brett-zamir.me/webappfind/html.html?editmode=true&type=%type&method=%method&pathID=%pathID",
-            "register": "http://example.com/register"
+        "oggaudiotype": {
+            "binary-view": "http://brett-zamir.me/webappfind/ogg.html?type=%type&method=%method&pathID=%pathID"
+        },
+        "webmvideotype": {
+            "binary-view": "http://brett-zamir.me/webappfind/webm.html?type=%type&method=%method&pathID=%pathID"
         },
         "mytype": {
             "view": "http://brett-zamir.me/webappfind/javascript.html?type=%type&method=%method&pathID=%pathID",

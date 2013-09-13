@@ -1,4 +1,8 @@
-The file sample-test-files/History-neilArmstrong-TheMoonLanding.ogg (obtained from http://archive.org/download/TheMoonLanding/History-neilArmstrong-TheMoonLanding.ogg ) is in the public domain according to http://archive.org/details/TheMoonLanding .
+The following files are in the public domain:
+* sample-test-files/History-neilArmstrong-TheMoonLanding.ogg (obtained from http://archive.org/download/TheMoonLanding/History-neilArmstrong-TheMoonLanding.ogg with public domain license indicated at http://archive.org/details/TheMoonLanding )
+* sample-test-files/Israel_-_Haifa_-_Bahai_Gardens_004.jpg (obtained from http://commons.wikimedia.org/wiki/File:Israel_-_Haifa_-_Bahai_Gardens_004.jpg as posted by "User:EdoM")
+* sample-test-files/Bahaitemplatestar.png (obtained from http://commons.wikimedia.org/wiki/File:Bahaitemplatestar.png as posted by "en:User:Cunado19" and improved by "en:User:AnonMoos")
+* sample-test-files/Haykal2.gif (obtained from http://commons.wikimedia.org/wiki/File:Haykal2.gif as posted by "en:User:Cunado19")
 
 All other files are Copyright (C) 2013 Brett Zamir
 

@@ -2,10 +2,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
-    <title>WebAppFind Ogg audio player</title>
+    <style>img {width:100%;}</style>
 </head>
 <body>
-<audio controls=""></audio>
+<img />
 <script>
 /*globals btoa */
 (function () {'use strict';
@@ -13,7 +13,10 @@
 var pathID,
     saveMessage = 'webapp-save',
     excludedMessages = [saveMessage],
-    audio = document.querySelector('audio');
+    img = document.querySelector('img'),
+    imageType = 'png';
+
+document.title = 'WebAppFind ' + imageType.toUpperCase() + ' viewer';
 
 window.addEventListener('message', function(e) {
     if (e.origin !== window.location.origin || // PRIVACY AND SECURITY! (for viewing and saving, respecitvely)
@@ -26,8 +29,7 @@ window.addEventListener('message', function(e) {
         case 'webapp-view':
             // Populate the contents
             pathID = e.data[1];
-            audio.src = 'data:audio/ogg;base64,' + btoa(e.data[2]); // Converts binary string to base64
-            audio.play();
+            img.src = 'data:image/' + imageType + ';base64,' + btoa(e.data[2]); // Converts binary string to base64
             // $('#save').disabled = false;
             break;
         /*case 'webapp-save-end':
