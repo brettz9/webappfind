@@ -3,12 +3,16 @@
         ["\\.html", "htmltype"],
         ["\\.css", "csstype"],
         ["\\.svg", "svgtype"],
+        ["\\.webm", "webmtype"],
         [".*", "mytype"]
     ],
     "hierarchy": {
         "mytype": ["json", "js"]
     },
     "defaultHandlers": {
+        "webmtype": {
+            "binary-view": "http://brett-zamir.me/webappfind/webm.html?type=%type&method=%method&pathID=%pathID"
+        },
         "csstype": {
             "edit": "http://brett-zamir.me/webappfind/css.html?editmode=true&type=%type&method=%method&pathID=%pathID"
         },
