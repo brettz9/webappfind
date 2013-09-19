@@ -23,25 +23,25 @@
             "edit": "http://brett-zamir.me/webappfind/css.html?editmode=true&type=%type&method=%method&pathID=%pathID"
         },
         "jpegtype": {
-            "binary-view": "http://brett-zamir.me/webappfind/jpeg.html?type=%type&method=%method&pathID=%pathID"
+            "binaryview": "http://brett-zamir.me/webappfind/jpeg.html?type=%type&method=%method&pathID=%pathID"
         },
         "pngtype": {
-            "binary-view": "http://brett-zamir.me/webappfind/png.html?type=%type&method=%method&pathID=%pathID"
+            "binaryview": "http://brett-zamir.me/webappfind/png.html?type=%type&method=%method&pathID=%pathID"
         },
         "giftype": {
-            "binary-view": "http://brett-zamir.me/webappfind/gif.html?type=%type&method=%method&pathID=%pathID"
+            "binaryview": "http://brett-zamir.me/webappfind/gif.html?type=%type&method=%method&pathID=%pathID"
         },
         "icotype": {
-            "binary-view": "http://brett-zamir.me/webappfind/ico.html?type=%type&method=%method&pathID=%pathID"
+            "binaryview": "http://brett-zamir.me/webappfind/ico.html?type=%type&method=%method&pathID=%pathID"
         },
         "svgtype": {
             "edit": "http://brett-zamir.me/webappfind/svg.html?editmode=true&type=%type&method=%method&pathID=%pathID"
         },
         "oggaudiotype": {
-            "binary-view": "http://brett-zamir.me/webappfind/ogg.html?type=%type&method=%method&pathID=%pathID"
+            "binaryview": "http://brett-zamir.me/webappfind/ogg.html?type=%type&method=%method&pathID=%pathID"
         },
         "webmvideotype": {
-            "binary-view": "http://brett-zamir.me/webappfind/webm.html?type=%type&method=%method&pathID=%pathID"
+            "binaryview": "http://brett-zamir.me/webappfind/webm.html?type=%type&method=%method&pathID=%pathID"
         },
         "mytype": {
             "view": "http://brett-zamir.me/webappfind/javascript.html?type=%type&method=%method&pathID=%pathID",

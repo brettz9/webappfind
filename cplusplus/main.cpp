@@ -42,7 +42,7 @@ int main(int argc, char** argv) {
 			methodStr = "view";
 			break;
 		case BinaryView:
-			methodStr = "binary-view";
+			methodStr = "binaryview";
 			break;
 		case Edit:
 			methodStr = "edit";
