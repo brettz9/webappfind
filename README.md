@@ -7,6 +7,7 @@ Unlike a more generic solution, such as with a Firefox add-on or [AsYouWish](htt
 # Possible future API changes
 1. Change filetypes.json to .filetypes.json or at least support the latter for those not wishing to distract users or let them mess things up.
 1. Possible changes to parameters passed to registered protocol handlers and/or default handlers (if any, as may only be passed through postMessage or some other means)
+    1. Avoid or allow repeats of URI, method, filetype, path too?
 
 # Higher priority todos planned
 1. Create tests with using registerProtocolHandler (also for JS/JSON/mytype)
@@ -36,6 +37,7 @@ Unlike a more generic solution, such as with a Firefox add-on or [AsYouWish](htt
 1. Piggyback on drag-and-drop file capabilities (or create own) to allow files dropped in this way to be saved back to disk and/or path provided to the app.
 1. Add a mode to get notifications for updates to files (e.g., in case the "view"'d contents get updated by another app after the initial load into WebAppFind)
 1. Listen for unregistration of protocols to disable acting on future messages from them (only relevant for pages already loaded in this session)
+1. Option to avoid or allow new tabs for same URI/method/filetype/path? (option to get the same tab or new tabs for them?); option to push to all open windows in different manner so can notify user of updates but not change focus, etc.
 1. "Demos"
     1. Demos ought to use cookie-using full screen option for HTML and SVG
     1. Get HTML CodeMirror to use closetag, html5complete, matchTags (in addition to JS ones if mixed mode can support), use the preview option?; http://codemirror.net/demo/widget.html for line bars in linting (html, css, javascript)? linting for HTML? (jslint can do some)
