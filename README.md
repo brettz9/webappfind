@@ -4,12 +4,55 @@ Allows double-click or "Open with..." right-click on "view" or "edit" executable
 
 Unlike a more generic solution, such as with a Firefox add-on or [AsYouWish](https://github.com/brettz9/asyouwish/)-enabled site, *webappfind* minimizes security and privacy risks by only allowing files designated in the above manner to be available to the relevant web application.
 
-# Possible future todos
-1. Support other OSes.
-1. Installer to facilitate setting up of OpenWith per user choices (whether for right-click, associating certain types with handler to open when file is double-clicked, or hard-coded options)?
-1. Option to confirm reading and/or saving of data upon each attempt
-1. Create demo supporting docx format (rather than requiring export to HTML for Word docs)
-1. Listen for unregistration of protocols to disable acting on future messages from them (only relevant for pages already loaded in this session)
-1. (More to come)
+# Possible future API changes
+1. Change filetypes.json to .filetypes.json or at least support the latter for those not wishing to distract users or let them mess things up.
+1. Possible changes to parameters passed to registered protocol handlers and/or default handlers (if any, as may only be passed through postMessage or some other means)
 
-More to come, including full readme and functional demos.
+# Higher priority todos planned
+1. Create tests with using registerProtocolHandler (also for JS/JSON/mytype)
+1. Command line argument to hard-code a specific URL for opening (optionally looking for fallbacks if the supplied one is a protocol but not found)
+1. Support hard-coding to transmit file paths regardless of prefs?
+1. Submit to AMO, Bower, etc.
+1. Rewrite C++ exe's as batch scripts
+    1. Auto-generate these batch scripts for users (though we can supply the ones not using hard-coded URLs) via our Firefox add-on based on their supplying:
+        1. Method (view, edit, etc.) for opening files via webappfind
+        1. Optional "hidden" flag (in conjunction with, or only from, AsYouWish?) to embed a hidden DOM window script (use for batch-script-like functionality)
+            1. Potentially privileged via AsYouWish, and aware of file path, could, e.g., create 10 copies of a supplied file name in the same directory or some other pipeline
+        1. An optional, hard-coded web app URL (to circumvent the normal detection procedures and always open with a given web app)
+        1. An optional icon, so as to distinguish in task bar, etc. (making shortcuts via command line: http://ss64.com/nt/shortcut.html )
+        1. Whether to auto-create a new profile just for this combination of options and a -no-remote call to allow executable-like behavior (separate icon instance in task bar though not icon)
+        1. Another browser path if other browsers ever support
+1. Executable Creator (skeleton at https://builder.addons.mozilla.org/package/204099/latest/ )
+1. Disable further save attempts with bad ID supplied
+1. Unregister command line handler, etc. on add-on uninstall
+1. Complete [ExecuteBuilder](https://builder.addons.mozilla.org/package/204099/latest/)
+
+# Possible future todos
+1. Command line flag additions:
+    1. 
+1. Integrate functionality into https://github.com/brettz9/filebrowser-enhanced
+1. Option to enable file: protocol (though mention it is risky for security and privacy); report issue to FF if issue not already added (also for better means than '*' for add-on communication?)
+1. Option to confirm reading and/or saving of data upon each attempt
+1. Piggyback on drag-and-drop file capabilities (or create own) to allow files dropped in this way to be saved back to disk and/or path provided to the app.
+1. Add a mode to get notifications for updates to files (e.g., in case the "view"'d contents get updated by another app after the initial load into WebAppFind)
+1. Listen for unregistration of protocols to disable acting on future messages from them (only relevant for pages already loaded in this session)
+1. "Demos"
+    1. Demos ought to use cookie-using full screen option for HTML and SVG
+    1. Get HTML CodeMirror to use closetag, html5complete, matchTags (in addition to JS ones if mixed mode can support), use the preview option?; http://codemirror.net/demo/widget.html for line bars in linting (html, css, javascript)? linting for HTML? (jslint can do some)
+    1. Add CodeMirror search/replace?
+    1. Tweak change CSS autocomplete in CodeMirror to support color/background-color, support CSS lint options
+    1. Cookie to hold JSHint options (or CSS lint options))
+    1. JSON and XML demos including CodeMirror xmlautocomplete
+    1. images/canvas: http://www.picozu.com/editor/ ?
+    1. audio: http://plucked.de/ and https://github.com/plucked/html5-audio-editor ?
+    1. video - popcorn?
+    1. music notations  - http://www.vexflow.com/
+    1. MIDI, etc.
+    1. better integration of CodeMirror/CKEditor, using full (mixed HTML) features of latest CodeMirror
+    1. update my regex support in CodeMirror for regex type and for JS overlay: http://codemirror.net/1/contrib/regex/index.html
+    1. CKEditor support for popup SVGEdit and SVGEdit support for CKEditor foreign objects
+    1. Add CodeMirror to SVG Edit XML view
+    1. For SVG Edit demo, add own SVG icon for saving to file
+    1. Sticky app, with power-user support for form controls like checkboxes (underlying events currently supported better in Chrome than in Firefox), paperclip links, etc.; modify WebAppFind to support display of independent data files (for multiple stickies in this case)
+    1. Create demo supporting docx format (rather than requiring export to HTML for Word docs)
+1. (more)
