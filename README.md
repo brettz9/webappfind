@@ -8,9 +8,12 @@ Unlike a more generic solution, such as with a Firefox add-on or [AsYouWish](htt
 1. Change filetypes.json to .filetypes.json or at least support the latter for those not wishing to distract users or let them mess things up.
 1. Possible changes to parameters passed to registered protocol handlers and/or default handlers (if any, as may only be passed through postMessage or some other means)
     1. Change what is passed within URL? method, filetype, path? or just pass through postMessage? Bookmarkability vs. clean API?
+
 # Higher priority todos planned
+
 1. Create tests with using registerProtocolHandler (also for JS/JSON/mytype)
 1. Command line argument to hard-code a specific URL for opening (optionally looking for fallbacks if the supplied one is a protocol but not found)
+1. Arbitrary command line args to pass on to webapps
 1. Support hard-coding to transmit file paths regardless of prefs?
 1. Submit to AMO, Bower, etc.
 1. Rewrite C++ exe's as batch scripts
@@ -21,6 +24,7 @@ Unlike a more generic solution, such as with a Firefox add-on or [AsYouWish](htt
             1. Allow args to webappfind to avoid adding a window, e.g., for a type to handling .jsbatch files to cause a them to be launched with privileges (via AYW? though better to avoid need for any HTML--just JS) in a hidden window (or manage files to run on a schedule; integrate with a Windows task scheduler in case not open?), so work like AYW but without a footprint (but without working each restart as with "add-on sites"); may still be useful with other privs, e.g., to get (send to network) and save file contents, and if asking for privs, will prompt dialog (e.g., to read a file and then use privs--though this would be redundant, perhaps in this mode we can always pass the real path so it adds value, e.g., if script wants to do something in same directory); see also todos in ExecuteBuilder for more on
             command-line-like approach
         1. An optional, hard-coded web app URL (to circumvent the normal detection procedures and always open with a given web app)
+        1. Option for any web app to open by default in full-screen mode
         1. An optional icon, so as to distinguish in task bar, etc. (making shortcuts via command line: http://ss64.com/nt/shortcut.html )
         1. Whether to auto-create a new profile just for this combination of options and a -no-remote call to allow executable-like behavior (separate icon instance in task bar though not icon)
         1. Another browser path if other browsers ever support
@@ -30,6 +34,7 @@ Unlike a more generic solution, such as with a Firefox add-on or [AsYouWish](htt
 1. Complete [ExecuteBuilder](https://builder.addons.mozilla.org/package/204099/latest/)
 
 # Possible future todos
+
 1. Command line flag additions:
     1. 
 1. Integrate functionality into https://github.com/brettz9/filebrowser-enhanced
@@ -66,5 +71,4 @@ Unlike a more generic solution, such as with a Firefox add-on or [AsYouWish](htt
         1. 
     1. Create demo supporting docx format (rather than requiring export to HTML for Word docs)
     1. Demonstrate approach of allowing data files for download (so can store them anywhere)--if not AYW approach for namespaced shared browser access--as well as data files chosen from File selector (and save over such a file if within the protocol and user permits)
-
 1. (more)
