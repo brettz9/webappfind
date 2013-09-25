@@ -62,4 +62,6 @@ Unlike a more generic solution, such as with a Firefox add-on or [AsYouWish](htt
         1. Modify WebAppFind to support display of independent data files (for multiple stickies in this case); or don't only associate a file path with individual URLs (file: or http:), but also allow associations with tab groups or bookmark folders so that if saving a new StickyBrains/CKEditor/word-processing file, it will save to a folder where one's ideas are already grouped
         1. 
     1. Create demo supporting docx format (rather than requiring export to HTML for Word docs)
+    1. Demonstrate approach of allowing data files for download (so can store them anywhere)--if not AYW approach for namespaced shared browser access--as well as data files chosen from File selector (and save over such a file if within the protocol and user permits)
+
 1. (more)
