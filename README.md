@@ -7,8 +7,7 @@ Unlike a more generic solution, such as with a Firefox add-on or [AsYouWish](htt
 # Possible future API changes
 1. Change filetypes.json to .filetypes.json or at least support the latter for those not wishing to distract users or let them mess things up.
 1. Possible changes to parameters passed to registered protocol handlers and/or default handlers (if any, as may only be passed through postMessage or some other means)
-    1. Avoid or allow repeats of URI, method, filetype, path too?
-
+    1. Change what is passed within URL? method, filetype, path? or just pass through postMessage? Bookmarkability vs. clean API?
 # Higher priority todos planned
 1. Create tests with using registerProtocolHandler (also for JS/JSON/mytype)
 1. Command line argument to hard-code a specific URL for opening (optionally looking for fallbacks if the supplied one is a protocol but not found)
