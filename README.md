@@ -39,6 +39,9 @@ Unlike a more generic solution, such as with a Firefox add-on or [AsYouWish](htt
 1. "Demos"
     1. Demos ought to use cookie-using full screen option for HTML and SVG
     1. Get HTML CodeMirror to use closetag, html5complete, matchTags (in addition to JS ones if mixed mode can support), use the preview option?; http://codemirror.net/demo/widget.html for line bars in linting (html, css, javascript)? linting for HTML? (jslint can do some)
+    1. JS enhancement: CodeMirror tern support? can this work or be made to work with JSDoc?
+    1. use CodeMirror diffs/merge add-ons if version-control trigger types supported
+    1. use runmode for getting code syntax highlighting within CKEditor HTML (e.g., for doing blog posts): http://codemirror.net/demo/runmode.html and for a button to copy-HTML-(+css with styles inlined?)-to-clipboard in each of the html/javascript/css/svg/etc. modes
     1. Add CodeMirror search/replace?
     1. Tweak change CSS autocomplete in CodeMirror to support color/background-color, support CSS lint options
     1. Cookie to hold JSHint options (or CSS lint options))
@@ -53,6 +56,9 @@ Unlike a more generic solution, such as with a Firefox add-on or [AsYouWish](htt
     1. CKEditor support for popup SVGEdit and SVGEdit support for CKEditor foreign objects
     1. Add CodeMirror to SVG Edit XML view
     1. For SVG Edit demo, add own SVG icon for saving to file
-    1. Sticky app, with power-user support for form controls like checkboxes (underlying events currently supported better in Chrome than in Firefox), paperclip links, etc.; modify WebAppFind to support display of independent data files (for multiple stickies in this case)
+    1. Sticky app
+        1. power-user support for form controls like checkboxes (underlying events currently supported better in Chrome than in Firefox), paperclip links, etc.
+        1. Modify WebAppFind to support display of independent data files (for multiple stickies in this case); or don't only associate a file path with individual URLs (file: or http:), but also allow associations with tab groups or bookmark folders so that if saving a new StickyBrains/CKEditor/word-processing file, it will save to a folder where one's ideas are already grouped
+        1. 
     1. Create demo supporting docx format (rather than requiring export to HTML for Word docs)
 1. (more)
