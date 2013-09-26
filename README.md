@@ -1,13 +1,49 @@
 # webappfind
 
-Allows double-click or "Open with..." right-click on "view" or "edit" executable files on one's desktop (currently, executables are for Windows only) to be sent to Firefox (via command line arguments) which are intercepted by a Firefox add-on which checks for an optional filetypes.json file within the same directory as the right-clicked file to determine more precise handling. Based on what is chosen/found and on user preferences, a handler web application will be sought to open the file of the designated type (including generic or custom types) as well as allow saves to be made back to the file, if the "edit" type was chosen and a suitable handler found.
+Are you a fan of web apps, but want the freedom to place your data files where you like on your desktop and thus be able to work offline and own your data rather than keeping it in the cloud? Do you want the freedom to just double-click a file (or right-click it) so that it opens in a web app, saving you the trouble of having to copy the file path, move from your desktop to the web app, and paste the path in a file finder? Do you want to avoid dragging files into your web app when modifications to the files cannot be saved back directly to your hard drive?
+
+WebAppFind addresses these use cases by allowing you to double-click or "Open with..." right-click on "view" or "edit" executable files on your desktop (currently, executables are for Windows only), sending the file path details to Firefox (via command line arguments) which are then intercepted by a Firefox add-on which checks for an *optional* filetypes.json file within the same directory as the right-clicked file to determine more precise handling (the file extension will be used to determine the type otherwise). Based on what is chosen/found and on user preferences, a handler web site will be sought in Firefox to open the file of the designated type (whether a generic or custom type) as well as allow saves to be made back to the file if the "edit" type was the type chosen and a suitable handler site was found to send back a save event.
 
 Unlike a more generic solution, such as with a Firefox add-on or [AsYouWish](https://github.com/brettz9/asyouwish/)-enabled site, *webappfind* minimizes security and privacy risks by only allowing files designated in the above manner to be available to the relevant web application.
+
+# Some use case scenarios
+
+1. Work on Git on your desktop while being able to open HTML files for WYSIWYG editing in a (CKEditor) web app which you can easily modify to add buttons for snippets you like to add? Do you want to use CodeMirror for syntax highlighting of your JavaScript and CSS? (Demos are included which do all of these.)
+
+# API
+
+The following steps may currently be altered by user preference.
+
+1. File types can currently be obtained based on file extension (e.g., "myScript.js" would incorporate "js" into the type name) or based on settings within a filetypes.json file placed within the same directory as the data files. The rules are as follows:
+    1. Use a (lower-case) file extension (e.g., "js" in our example above)
+    1. If a filetypes.json file is supplied within the same directory as the data files, a lower-case custom type can be specified:
+        1. At the root of the filetypes.json JSON object can be a property "fileMatches" which is an array of two-value arrays. The first item in these inner arrays must be a regular expression expressed as a string to indicate which files will be matched and the second value to indicate the type to be assigned to the match. The first inner array containing a match will be the one used to designate the type name (which must be lower-case ASCII letters only).
+1. Once a file type is known as per above...
+    1. a protocol may be checked for the detected type as follows:
+        1. The protocol to find the type will begin with "web+local"
+        1. The protocol must then be followed by the (lower-case) method (currently "view", "binaryview", or "edit")
+        1. The protocol must then be concluded by the file type as per above (i.e., the file extension like "js" or filetypes.json designated (lower case ASCII) type name).
+        1. If the protocol is found to be registered, it will be visited and these steps will end. Otherwise, continue with the following steps.
+    1. If the filetypes.json file contains a top-level "defaultHandlers" property object, this object will be checked against the type name and if a subobject for this type is found:
+        1. that object will be checked to see whether the "register" mode is present, and if yes, the user would be forwarded to it (to allow a site the ability to register itself as a handler) and these steps would stop. Otherwise, continue.
+        1. that object will be checked to see whether the requested open mode is also present (e.g., "view", "binaryview", or "edit").
+            1. If the open mode key is present, its value will be used as the site to open. (Currently, %type , %method and %pathID are variables that will be substituted. User preferences may determine that the path ID is not the actual path but a mere GUID.) Although this may be changed in the future, file:// URLs currently do not work with WebAppFind message posting (due to current privacy leaks in Firefox with add-on-to-file-protocol-webpage communication).
+    1. If the filetypes.json file contains a top level "hierarchy" property object and if a suitable mode was not found, the hierarchy object may be checked for the type name to see what types might be acceptable alternatives (in decreasing order of preference) to determine the type to check in future steps below.
+    1. If no other information is present in the filetypes.json file, if the file is not present, or if a specific default site was not found, depending on user settings, depending on user setting, the browser may attempt to open the file. Otherwise, if a non-default setting is changed, the user may delegate the opening of the file back to the desktop.
+
+So, for example, if no filetypes.json file were present (or if the filetypes.json indicated that the given file was of the "js" type), a edit-capable loading of a JavaScript source file might look for a registration at "web+localeditjs:". Depending on user configuration, if such a hander is not found, the file may be opened in the browser or on the desktop.
+
+# Rationale for filetypes.json design
+
+Although there may be some advantages to storing meta-data at the individual file level, I did not see a very convenient way in which Windows would allow the addition of arbitary meta-data which Firefox could easily query. Having a JSON file would allow developers to add some type configuration (beyond the more generic info detectable by a file extension) within the directory containing the data files.
+
+The "fileMatches" array is an array of arrays in order to ensure matches occur in reliable order across systems (since ECMAScript does not guarantee iteration order across implementations). Other fields are keyed to type name (noting that these must all be lower-case ASCII letters since web protocols only allow these to work after the "web+").
 
 # Possible future API changes
 1. Change filetypes.json to .filetypes.json or at least support the latter for those not wishing to distract users or let them mess things up.
 1. Possible changes to parameters passed to registered protocol handlers and/or default handlers (if any, as may only be passed through postMessage or some other means)
     1. Change what is passed within URL? method, filetype, path? or just pass through postMessage? Bookmarkability vs. clean API?
+1. Since web protocols are not meant to be used to have the privilege of reading from or writing to files (unless they belong to reserved protocols which, per the HTML spec, cannot be registered from the web anyways), the current approach of allowing web sites to register themselves as handlers might need to be modified to use some other mechanism which can at least provide warnings to users about the capabilities they are thereby approving (perhaps as within [AsYouWish](https://github.com/brettz9/asyouwish/) when sites themselves can do the requesting for privileges). However, since WebAppFind chose to start with the web protocol approach not only because it is an existing method for sites to register themselves for later potential use, but because the data security and privacy issues are confined to data files which are explicitly opened from the desktop when using the WebAppFind approach.
 
 # Higher priority todos planned
 
