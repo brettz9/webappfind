@@ -807,7 +807,7 @@ var pathID,
     excludedMessages = [saveMessage];
 
 window.addEventListener('message', function(e) {
-    if (e.origin !== window.location.origin || // PRIVACY AND SECURITY! (for viewing and saving, respecitvely)
+    if (e.origin !== window.location.origin || // PRIVACY AND SECURITY! (for viewing and saving, respectively)
         (!Array.isArray(e.data) || excludedMessages.indexOf(e.data[0]) > -1) // Validate format and avoid our post below
     ) {
         return;
