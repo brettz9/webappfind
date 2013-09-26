@@ -10,7 +10,7 @@ Unlike a more generic solution, such as with a Firefox add-on or [AsYouWish](htt
 
 1. Work on Git on your desktop while being able to open HTML files for WYSIWYG editing in a (CKEditor) web app which you can easily modify to add buttons for snippets you like to add? Do you want to use CodeMirror for syntax highlighting of your JavaScript and CSS? (Demos are included which do all of these.)
 
-# API
+# API: file type finding
 
 The following steps may currently be altered by user preference.
 
@@ -20,9 +20,9 @@ The following steps may currently be altered by user preference.
         1. At the root of the filetypes.json JSON object can be a property "fileMatches" which is an array of two-value arrays. The first item in these inner arrays must be a regular expression expressed as a string to indicate which files will be matched and the second value to indicate the type to be assigned to the match. The first inner array containing a match will be the one used to designate the type name (which must be lower-case ASCII letters only).
 1. Once a file type is known as per above...
     1. a protocol may be checked for the detected type as follows:
-        1. The protocol to find the type will begin with "web+local"
+        1. The protocol to find the type will begin with "web+local" (only existing [whitelisted protocols or "web+" ones are allowed](http://www.whatwg.org/specs/web-apps/current-work/multipage/timers.html#dom-navigator-registerprotocolhandler))
         1. The protocol must then be followed by the (lower-case) method (currently "view", "binaryview", or "edit")
-        1. The protocol must then be concluded by the file type as per above (i.e., the file extension like "js" or filetypes.json designated (lower case ASCII) type name).
+        1. The protocol must then be concluded by the file type as per above (i.e., the file extension like "js" or filetypes.json designated type name (which [must be lower case ASCII](http://www.whatwg.org/specs/web-apps/current-work/multipage/timers.html#dom-navigator-registerprotocolhandler))).
         1. If the protocol is found to be registered, it will be visited and these steps will end. Otherwise, continue with the following steps.
     1. If the filetypes.json file contains a top-level "defaultHandlers" property object, this object will be checked against the type name and if a subobject for this type is found:
         1. that object will be checked to see whether the "register" mode is present, and if yes, the user would be forwarded to it (to allow a site the ability to register itself as a handler) and these steps would stop. Otherwise, continue.
@@ -32,6 +32,47 @@ The following steps may currently be altered by user preference.
     1. If no other information is present in the filetypes.json file, if the file is not present, or if a specific default site was not found, depending on user settings, depending on user setting, the browser may attempt to open the file. Otherwise, if a non-default setting is changed, the user may delegate the opening of the file back to the desktop.
 
 So, for example, if no filetypes.json file were present (or if the filetypes.json indicated that the given file was of the "js" type), a edit-capable loading of a JavaScript source file might look for a registration at "web+localeditjs:". Depending on user configuration, if such a hander is not found, the file may be opened in the browser or on the desktop.
+
+# API: reading file contents
+
+```javascript
+var pathID; // We might use an array to track multiple path IDs within the same app (once WebAppFind may be modified to support this capability!)
+window.addEventListener('message', function(e) {
+    // e.data might be set to something like:
+    // ['webapp-view', '{1e5c754e-95d3-4431-a08c-5364db753d97}', 'the loaded file contents will be here!']
+    // ...or if the user has checked the option "Reveal selected file paths to scripts", it may look like this:
+    // ['webapp-view', 'C:\\Users\\Brett\\someDataFile.txt', 'the loaded file contents will be here!']
+    
+    if (e.origin !== window.location.origin || // We are only interested in a message sent as though within this URL by our Firefox add-on
+        (!Array.isArray(e.data) || // Validate format
+            e.data[0] === 'webapp-save') // Avoid our post below (other messages might be possible in the future which may also need to be excluded if your subsequent code makes assumptions on the type of message this is)
+    ) {
+        return;
+    }
+    if (e.data[0] === 'webapp-view') {
+        pathID = e.data[1]; // We remember this in case we are in "edit" mode which requires a pathID for saving back to disk
+        var fileContents = e.data[2];
+        // Do something with fileContents like adding them to a textarea, etc.
+    }
+```
+
+Only windows with the URI approved by the process detailed above will be able to successfully receive such messages (and only for the supplied file).
+
+# API: saving back to the originally supplied file path (for the "edit" mode only)
+
+See above regarding the pathID 2nd value of the first (array) argument (`previouslySavedPathIDFromViewEvent`). This argument is intended to allow for sites to handle multiple files in a single session (although WebAppFind currently will always open the file in a new tab as a new instance).
+
+Note the important comment below about ensuring your users' privacy.
+
+```javascript
+// For your user's privacy, you should only post the
+//  file contents to this page itself (and this save
+//  will be picked up by the Firefox add-on), so do
+//  NOT change the second argument.
+window.postMessage(['webapp-save', previouslySavedPathIDFromViewEvent, dataToSaveAsString], window.location.origin);
+```
+
+Only windows with the URI approved by the process detailed above can successfully save such messages (and only for the supplied file).
 
 # Rationale for filetypes.json design
 
@@ -44,6 +85,29 @@ The "fileMatches" array is an array of arrays in order to ensure matches occur i
 1. Possible changes to parameters passed to registered protocol handlers and/or default handlers (if any, as may only be passed through postMessage or some other means)
     1. Change what is passed within URL? method, filetype, path? or just pass through postMessage? Bookmarkability vs. clean API?
 1. Since web protocols are not meant to be used to have the privilege of reading from or writing to files (unless they belong to reserved protocols which, per the HTML spec, cannot be registered from the web anyways), the current approach of allowing web sites to register themselves as handlers might need to be modified to use some other mechanism which can at least provide warnings to users about the capabilities they are thereby approving (perhaps as within [AsYouWish](https://github.com/brettz9/asyouwish/) when sites themselves can do the requesting for privileges). However, since WebAppFind chose to start with the web protocol approach not only because it is an existing method for sites to register themselves for later potential use, but because the data security and privacy issues are confined to data files which are explicitly opened from the desktop when using the WebAppFind approach.
+
+# Possible future user preference changes
+
+Currently preferences are global, whereas it may be desirable to allow users to customize their preferences by type/protocol in addition to the current default global ones.
+
+# Comparison with similar WebAPI work
+
+[WebActivities](https://wiki.mozilla.org/WebAPI/WebActivities) is similar to WebAppFind in that both seek to allow delegation of certain behaviors such as "view" and "edit" to (potentially) different apps (where the user also has the freedom to choose any app to handle the given type of activity), but WebActivities does not operate on files.
+
+The [WebAPI](https://wiki.mozilla.org/WebAPI) has a [DeviceStorageAPI](https://wiki.mozilla.org/WebAPI/DeviceStorageAPI) which has certain file-related behaviors. The proposal at present appears to be limited, however, to files in a specific directory of one's hard drive. It does not allow one the freedom to store one's files wherever one likes on one's hard-drive for better organization purposes. It also does not seem to anticipate the activities being triggered from one's desktop, but rather if one is already within the app.
+
+The DeviceStorageAPI appears to allow more privileges (like [AsYouWish](https://github.com/brettz9/asyouwish/)) whereas WebAppFind is currently focused on individual file reading and saving (though WebAppFind may add other actions in the future, such as listening for file change events).
+
+# Comparison with AsYouWish
+
+[AsYouWish](https://github.com/brettz9/asyouwish/) allows a higher-than-normal privilege level to websites, but it differs in a number of areas:
+
+1. AsYouWish sites ask for permission, and once approved, then can immediately do their work. WebAppFind currently allows sites to ask for permission to register themselves as handlers, but their work will only become relevant when the user opens a file via WebAppFind.
+2. AsYouWish allows for a vast number of possible privileges (though subject to user approval) including potentially arbitrary file reading and writing (as with Firefox extensions), while WebAppFind is limited to file reading and writing (though it may expand to certain other circumscribed, user-initated file-related activities in the future) and only for those files so opened as opened by the user.
+
+# Implementation notes
+
+A direct visit to the protocol should provide no side effects. However, it is possible that a malicious handler opened by the user in "edit" mode could provide immediate side effects by saving back data to overwrite the supplied file. This might be mitigated by a configurable option to require the user's consent upon each save and/or to inform the user of the proposed diffs before saving. But again this will only be possible upon user initiation, and a site will only be usable as a handler if the filetypes.json packaged with the data file designates it as a default handler for the data file (and the user maintains the preference to use this information) or if they have previously approved a protocol site for the given type.
 
 # Higher priority todos planned
 
@@ -76,11 +140,12 @@ The "fileMatches" array is an array of arrays in order to ensure matches occur i
 1. Integrate functionality into https://github.com/brettz9/filebrowser-enhanced
 1. When [AsYouWish](https://github.com/brettz9/asyouwish/) is in use, allow path-reading as long as site is AYW-approved and the page is registered for the protocol--so one can bookmark a path and always load it or load with other approved paths (e.g., in different tabs within a webapp); also can remember paths to invoke upon FF start up ("website addons")
 1. Option to enable file: protocol (though mention it is risky for security and privacy); report issue to FF if issue not already added (also for better means than '*' for add-on communication?)
-1. Option to confirm reading and/or saving of data upon each attempt
+1. Option to confirm reading and/or saving of data upon each attempt and/or display the proposed diffs before saving. (See "Implementation notes" section).
 1. Piggyback on drag-and-drop file capabilities (or create own) to allow files dropped in this way to be saved back to disk and/or path provided to the app.
 1. Add a mode to get notifications for updates to files (e.g., in case the "view"'d contents get updated by another app after the initial load into WebAppFind)
 1. Listen for unregistration of protocols to disable acting on future messages from them (only relevant for pages already loaded in this session)
 1. Option to avoid or allow new tabs for same URI/method/filetype/path? (option to get the same tab or new tabs for them?); option to push to all open windows in different manner so can notify user of updates but not change focus, etc.
+1. Open up wiki for custom type documentation/links with "proposal", "accepted", etc. statuses similar to the WhatWG meta tags wiki? Even if filetypes.json is used with "register" on "defaultHandlers", it may be convenient to have a separate spec URL, including for cases where the file extension is used without filetypes.json.
 1. "Demos"
     1. Demos ought to use cookie-using full screen option for HTML and SVG
     1. Get HTML CodeMirror to use closetag, html5complete, matchTags (in addition to JS ones if mixed mode can support), use the preview option?; http://codemirror.net/demo/widget.html for line bars in linting (html, css, javascript)? linting for HTML? (jslint can do some)
