@@ -54,6 +54,7 @@ window.addEventListener('message', function(e) {
         var fileContents = e.data[2];
         // Do something with fileContents like adding them to a textarea, etc.
     }
+});
 ```
 
 Only windows with the URI approved by the process detailed above will be able to successfully receive such messages (and only for the supplied file).
@@ -69,6 +70,9 @@ Note the important comment below about ensuring your users' privacy.
 //  file contents to this page itself (and this save
 //  will be picked up by the Firefox add-on), so do
 //  NOT change the second argument.
+// You should only call this when the user has indicated
+//  they wish to make a save such as if they have approved
+//  draft auto-saving or when manually clicking a save button.
 window.postMessage(['webapp-save', previouslySavedPathIDFromViewEvent, dataToSaveAsString], window.location.origin);
 ```
 
