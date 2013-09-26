@@ -157,6 +157,7 @@ A direct visit to the protocol should provide no side effects. However, it is po
 1. Listen for unregistration of protocols to disable acting on future messages from them (only relevant for pages already loaded in this session)
 1. Option to avoid or allow new tabs for same URI/method/filetype/path? (option to get the same tab or new tabs for them?); option to push to all open windows in different manner so can notify user of updates but not change focus, etc.
 1. Open up wiki for custom type documentation/links with "proposal", "accepted", etc. statuses similar to the WhatWG meta tags wiki? Even if filetypes.json is used with "register" on "defaultHandlers", it may be convenient to have a separate spec URL, including for cases where the file extension is used without filetypes.json.
+1. Allow genuine POST or other non-GET or header-dependent requests (ala curl)?
 1. "Demos"
     1. Demos ought to use cookie-using full screen option for HTML and SVG
     1. Get HTML CodeMirror to use closetag, html5complete, matchTags (in addition to JS ones if mixed mode can support), use the preview option?; http://codemirror.net/demo/widget.html for line bars in linting (html, css, javascript)? linting for HTML? (jslint can do some)
