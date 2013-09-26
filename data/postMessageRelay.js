@@ -16,7 +16,7 @@ self.port.on('webappfindStart', function (result) {'use strict';
     if (!addedMessageListener) {
         document.defaultView.addEventListener('message', function (e) {
         
-            if (!Array.isArray(e.data) || e.data[0] !== 'webapp-save') {
+            if (e.origin !== window.location.origin || !Array.isArray(e.data) || e.data[0] !== 'webapp-save') {
                 return;
             }
             var pathID = e.data[1],
