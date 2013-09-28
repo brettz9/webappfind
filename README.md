@@ -15,7 +15,7 @@ Unlike a more generic solution, such as with a Firefox add-on or [AsYouWish](htt
 Note that you must first install the Firefox add-on (the XPI file) so that the following steps will work (the add-on has not yet been submitted to the Addons site, so for now, you will have to either build the XPI from source or use the pre-built XPI included with the repository).
 
 1. Right-click on a file.
-    1. If you want to use WebAppFind without disturbing your defaults for that file extension, select "Open with"->"Choose default program..." and then make sure "Always use the selected program to open this kind of file" is not checked.
+    1. If you want to use WebAppFind without disturbing your defaults for that file extension, select "Open with"->"Choose default program..." if present (or if not present, open the file and choose "Select a program from a list of installed programs") and then make sure "Always use the selected program to open this kind of file" is not checked.
     1. If you always want to use WebAppFind when handling files of this extension, click "Properties", then click "Change..." next to "Opens with:" in the General tab of the dialog.
 1. Click "Browse".
 1. Navigate to an executable within the "cplusplus" folder of this [WebAppFind](https://github.com/brettz9/webappfind) repository (or, if you prefer, you can build the executables yourself with the source code included in this repository). If you want web apps to open this file in view-only mode, choose "WebAppFinder-view-mode-Firefox.exe" (or "WebAppFinder-binaryview-mode-Firefox.exe" if this is for a program needing to open a file in binary mode, such as images, sound files, or videos). If you want to grant the webapp read and write access for this file (or type of file if you chose option 1.2) you open via WebAppFind, choose "WebAppFinder-edit-mode-Firefox.exe".
@@ -236,7 +236,7 @@ Besides "view", "binaryview", "edit", "register", the following modes might be a
 1. Add CodeMirror search/replace?
 1. Tweak change CSS autocomplete in CodeMirror to support color/background-color, support CSS lint options
 1. Cookie to hold JSHint options (or CSS lint options))
-1. JSON and XML demos including CodeMirror xmlautocomplete
+1. JSON (just use mytype.html and change the title and add to filetypes.json) and XML demos including CodeMirror xmlautocomplete
 1. images/canvas: http://www.picozu.com/editor/ ?
 1. audio: http://plucked.de/ and https://github.com/plucked/html5-audio-editor ?
 1. video - popcorn?
