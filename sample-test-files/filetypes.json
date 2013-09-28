@@ -22,7 +22,7 @@
         "htmltype": {
             "view": "http://brett-zamir.me/webappfind/html.html?type=%type&method=%method&pathID=%pathID",
             "edit": "http://brett-zamir.me/webappfind/html.html?editmode=true&type=%type&method=%method&pathID=%pathID",
-            "register": "http://example.com/register"
+            "register": "http://brett-zamir.me/webappfind/html-register.html"
         },
         "txt": {
             "view": "http://brett-zamir.me/webappfind/txt.html?type=%type&method=%method&pathID=%pathID",
@@ -55,7 +55,7 @@
         "mytype": {
             "view": "http://brett-zamir.me/webappfind/javascript.html?type=%type&method=%method&pathID=%pathID",
             "edit": "http://brett-zamir.me/webappfind/javascript.html?editmode=true&type=%type&method=%method&pathID=%pathID",
-            "register": "http://example.com/register"
+            "register": "http://brett-zamir.me/webappfind/mytype-register.html"
         }
     }
 }
