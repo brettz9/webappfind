@@ -10,7 +10,15 @@ Unlike a more generic solution, such as with a Firefox add-on or [AsYouWish](htt
 
 # Usage notes
 
-The following are some notes for caution. More detailed usage instructions are hoped to be rendered unnecessary once the [ExecuteBuilder](https://builder.addons.mozilla.org/package/204099/latest/) add-on is complete (this add-on is to optionally interact with WebAppFind to allow building and assignment of executable/batch files which can be designated for specific file types without the user needing to find the path of these executables as WebAppFind currently requires).
+1. Right-click on a file.
+    1. If you want to use WebAppFind without disturbing your defaults for that file extension, select "Open with"->"Choose default program..." and then make sure "Always use the selected program to open this kind of file" is not checked.
+    1. If you always want to use WebAppFind when handling files of this extension, click "Properties", then click "Change..." next to "Opens with:" in the General tab of the dialog.
+1. Click "Browse".
+1. Navigate to an executable within the "cplusplus" folder of this [WebAppFind](https://github.com/brettz9/webappfind) repository. If you want web apps to open this file in view-only mode, choose "WebAppFinder-view-mode-Firefox.exe" (or "WebAppFinder-binaryview-mode-Firefox.exe" if this is for a program needing to open a file in binary mode, such as images, sound files, or videos). If you want to grant the webapp read and write access for this file (or type of file if you chose option 1.2) you open via WebAppFind, choose "WebAppFinder-edit-mode-Firefox.exe".
+1. Select "Ok".
+1. If you used "Open with" (as per step 1.1 above), your file should have already opened with WebAppFind. If you opted for "Properties" (step 1.2 above), you should now be able to double-click any file possessing the same extension to open it with WebAppFind.
+
+The remaining notes are for caution. It is hoped that the instructions above can be mostly automated once the [ExecuteBuilder](https://builder.addons.mozilla.org/package/204099/latest/) add-on is complete (this add-on is to optionally interact with WebAppFind to allow building and assignment of executable/batch files which can be designated for specific file types without the user needing to find the path of these executables as WebAppFind currently requires).
 
 If an edit web+local protocol is enabled and open and then disabled in the same session, it will keep having save access (though within that window session only). One must currently close any open tabs for that web application if one no longer wishes to allow access (though as noted elsewhere in the documentation, the app only has access to the files to which it was permitted access).
 
@@ -35,7 +43,7 @@ The following steps may currently be altered by user preference.
     1. If the filetypes.json file contains a top-level "defaultHandlers" property object, this object will be checked against the type name and if a subobject for this type is found:
         1. that object will be checked to see whether the "register" mode is present, and if yes, the user would be forwarded to it (to allow a site the ability to register itself as a handler) and these steps would stop. Otherwise, continue.
         1. that object will be checked to see whether the requested open mode is also present (e.g., "view", "binaryview", or "edit").
-            1. If the open mode key is present, its value will be used as the site to open. (Currently, %type , %method and %pathID are variables that will be substituted. User preferences may determine that the path ID is not the actual path but a mere GUID.) Although this may be changed in the future, file:// URLs currently do not work with WebAppFind message posting (due to current privacy leaks in Firefox with add-on-to-file-protocol-webpage communication).
+            1. If the open mode key is present, its value will be used as the site to open. (Currently, %type , %method and %pathID are variables that will be substituted. User preferences may determine that the path ID is not the actual path but a mere GUID.) Although this may be changed in the future, file:// URLs currently do not work with WebAppFind message posting (due to current privacy leaks in Firefox with add-on-to-file-protocol-webpage communication) (I don't believe custom DOM events worked with file:, and there is apparently no other method of communicating with an add-on (without injecting a global) that we could use like allowing sites to open a chrome:// URL (restartless might be able to get such URLs via chrome.manifest or dynamically but not allowed cross-domain)).
     1. If the filetypes.json file contains a top level "hierarchy" property object and if a suitable mode was not found, the hierarchy object may be checked for the type name to see what types might be acceptable alternatives (in decreasing order of preference) to determine the type to check in future steps below.
     1. If no other information is present in the filetypes.json file, if the file is not present, or if a specific default site was not found, depending on user settings, depending on user setting, the browser may attempt to open the file. Otherwise, if a non-default setting is changed, the user may delegate the opening of the file back to the desktop.
 
@@ -95,6 +103,12 @@ The "fileMatches" array is an array of arrays in order to ensure matches occur i
 Although I would eventually like to allow the add-on to accept hard-coded URLs for the web apps (so that users or vendors could ensure that their "Open With" instruction went to a particular URL regardless of add-on settings) and while filetypes.json does provide for *default*Handlers, filetypes.json deliberately avoids providing a mechanism for obligating the add-on to utilize a specific web app URL when opening files of a given type. This is by design as I believe the open nature of operating systems letting you choose what application to use for a given data file ought to be maintained by default with web apps (and be unlike the even worse status quo where websites not only don't allow other apps to read their data but host your data exclusively at their own site, even if they at least allow offline capability). I am interested, however, in seeing the possibility for registering "validate" modes independently from editors (but even here, I don't think I'd want to allow hard-coding of validators). But again, I do intend to allow hard-coding at the add-on level to provide some means of obligating the use of a particular URL.
 
 Note that although this particular collection of "Open With..." executables and a (currently Firefox-only) add-on is called "WebAppFind", the protocols are prefixed to begin with the more generic phrasing "web+local" so as to allow openness to the possibility that non-browser desktop apps could also handle reading and editing of these offline-available, type-aware data files. The filetypes.json file is similarly non-commital in terminology or behavior about where the files will be opened, so desktop apps could (and, I believe, ought) to utilize filetypes.json when seeking to detect type information (beyond just reading the file extension).
+
+# Rationale for API design
+
+`postMessage` was chosen for having a familiar API and already designed for potentially untrusted collaboration sources. (See the section "Comparison with similar WebAPI work" for other possibilities.)
+
+Before discovering the command line handling, I originally sought to have the executable create a temp file containing an ID and path and mode info while supplying that to the add-on via a URL which would in turn check the temp file (this approach might work for other browsers if they do not allow add-ons to check command line arguments).
 
 # Possible future API changes
 
@@ -160,8 +174,8 @@ A direct visit to the protocol should provide no side effects. However, it is po
 1. Option to enable file: protocol (though mention it is risky for security and privacy); report issue to FF if issue not already added (also for better means than '*' for add-on communication?)
 1. Option to confirm reading and/or saving of data upon each attempt and/or display the proposed diffs before saving. (See "Implementation notes" section).
 1. Piggyback on drag-and-drop file capabilities (or create own) to allow files dropped in this way to be saved back to disk and/or path provided to the app.
-1. Add a mode to get notifications for updates to files (e.g., in case the "view"'d contents get updated by another app after the initial load into WebAppFind)
-1. Listen for unregistration of protocols to disable acting on future messages from them (only relevant for pages already loaded in this session)
+1. Add a mode to get notifications for updates to files (e.g., in case the "view"'d contents get updated by another app after the initial load into WebAppFind).
+1. Listen for unregistration of protocols to disable acting on future messages from them (only relevant for pages already loaded in this session).
 1. Option to avoid or allow new tabs for same URI/method/filetype/path? (option to get the same tab or new tabs for them?); option to push to all open windows in different manner so can notify user of updates but not change focus, etc.
 1. Open up wiki for custom type documentation/links with "proposal", "accepted", etc. statuses similar to the WhatWG meta tags wiki? Even if filetypes.json is used with "register" on "defaultHandlers", it may be convenient to have a separate spec URL, including for cases where the file extension is used without filetypes.json.
 1. Allow genuine POST or other non-GET or header-dependent requests (ala curl)?
