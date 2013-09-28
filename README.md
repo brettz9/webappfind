@@ -8,13 +8,17 @@ WebAppFind allow you to make your data files accessible to other programs and to
 
 Unlike a more generic solution, such as with a Firefox add-on or [AsYouWish](https://github.com/brettz9/asyouwish/)-enabled site, *webappfind* minimizes security and privacy risks by only allowing files designated in the above manner to be available to the relevant web application.
 
-# Usage notes
+# Executable usage notes
+
+(For command line usage, see its API below.)
+
+Note that you must first install the Firefox add-on (the XPI file) so that the following steps will work (the add-on has not yet been submitted to the Addons site, so for now, you will have to either build the XPI from source or use the pre-built XPI included with the repository).
 
 1. Right-click on a file.
     1. If you want to use WebAppFind without disturbing your defaults for that file extension, select "Open with"->"Choose default program..." and then make sure "Always use the selected program to open this kind of file" is not checked.
     1. If you always want to use WebAppFind when handling files of this extension, click "Properties", then click "Change..." next to "Opens with:" in the General tab of the dialog.
 1. Click "Browse".
-1. Navigate to an executable within the "cplusplus" folder of this [WebAppFind](https://github.com/brettz9/webappfind) repository. If you want web apps to open this file in view-only mode, choose "WebAppFinder-view-mode-Firefox.exe" (or "WebAppFinder-binaryview-mode-Firefox.exe" if this is for a program needing to open a file in binary mode, such as images, sound files, or videos). If you want to grant the webapp read and write access for this file (or type of file if you chose option 1.2) you open via WebAppFind, choose "WebAppFinder-edit-mode-Firefox.exe".
+1. Navigate to an executable within the "cplusplus" folder of this [WebAppFind](https://github.com/brettz9/webappfind) repository (or, if you prefer, you can build the executables yourself with the source code included in this repository). If you want web apps to open this file in view-only mode, choose "WebAppFinder-view-mode-Firefox.exe" (or "WebAppFinder-binaryview-mode-Firefox.exe" if this is for a program needing to open a file in binary mode, such as images, sound files, or videos). If you want to grant the webapp read and write access for this file (or type of file if you chose option 1.2) you open via WebAppFind, choose "WebAppFinder-edit-mode-Firefox.exe".
 1. Select "Ok".
 1. If you used "Open with" (as per step 1.1 above), your file should have already opened with WebAppFind. If you opted for "Properties" (step 1.2 above), you should now be able to double-click any file possessing the same extension to open it with WebAppFind.
 
@@ -29,6 +33,18 @@ If an edit web+local protocol is enabled and open and then disabled in the same 
 # Possible future user preference changes
 
 Currently preferences are global, whereas it may be desirable to allow users to customize their preferences by type/protocol in addition to the current default global ones.
+
+# Command line API
+
+WebAppFind is triggered (currently Firefox only) through command line arguments passed to Firefox and handled by the WebAppFind add-on.
+
+It is my goal to complete work on [ExecuteBuilder](https://builder.addons.mozilla.org/package/204099/latest/) to facilitate the building of executables (probably batch scripts tied to cmd.exe) with icon for task bar usage, etc., but currently one must either use (or build) the executables included in the repository or call the command line oneself.
+
+The following process is subject to change and may potentially even be scrapped altogether if another approach is found to be easier for streamlining cross-browser invocation, but currently this API is available if someone wishes to build their own executables using the API or to simply be able to run commands manually from the command line.
+
+* `-webapp-<method>` (i.e., "-webapp-view", "-webapp-binaryview", or "-webapp-edit")
+* `-url <path>` ("-url" can be omitted) - Indicates the path of the file which will be available with privileges (currently, view or edit) to the webapp; note that the leveraging of this built-in Mozilla API will most likely be changed to "-path".
+* `-remote "openurl(about:newtab)"` - This built-in Mozilla command line API allows Firefox (unlike "-silent") to gain focus without additional instructions to Windows. If the tab is determined to not be needed (e.g., if the user has opted to allow desktop opening of the file when no protocols are found), the add-on will simply auto-close the tab that this parameter opens.
 
 # For developers
 
@@ -155,6 +171,7 @@ The DeviceStorageAPI appears to allow more privileges (like [AsYouWish](https://
 # Higher priority todos planned
 
 1. Create tests with using registerProtocolHandler (also for JS/JSON/mytype)
+1. Change command line to use something besides -url for file paths (and stop defining new command line listeners for each method--just require it as an additional parameter?).
 1. Command line argument to hard-code a specific URL for opening (optionally looking for fallbacks if the supplied one is a protocol but not found)
 1. Arbitrary command line args to pass on to webapps
 1. Support hard-coding to transmit file paths regardless of prefs?
@@ -180,7 +197,7 @@ The DeviceStorageAPI appears to allow more privileges (like [AsYouWish](https://
 
 1. Command line flag additions:
     1. See also [ExecuteBuilder](https://builder.addons.mozilla.org/package/204099/latest/)
-    1. ?
+    1. Support the "register" method from command line?
 1. Integrate functionality into https://github.com/brettz9/filebrowser-enhanced
 1. When [AsYouWish](https://github.com/brettz9/asyouwish/) is in use, allow path-reading as long as site is AYW-approved and the page is registered for the protocol--so one can bookmark a path and always load it or load with other approved paths (e.g., in different tabs within a webapp); also can remember paths to invoke upon FF start up ("website addons")
 1. Ensure some additional privacy for users desiring it by restricting external access (using https://developer.mozilla.org/en-US/docs/XPCOM_Interface_Reference/nsIContentPolicy and https://developer.mozilla.org/en-US/docs/XPCOM_Interface_Reference/nsIPrincipal per http://stackoverflow.com/questions/18369052/firefox-add-on-to-load-webpage-without-network-access ?) See also http://en.wikipedia.org/wiki/Site-specific_browser regarding such sandboxing.
