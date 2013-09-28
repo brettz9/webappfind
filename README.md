@@ -38,6 +38,7 @@ When developing a web app for use with WebAppFind, it is even more important to 
 
 1. Please note the security comments within the API comments below for details on how to make communiction with the add-on safely (via `postMessage`).
 1. As with any web app, do not trust user-supplied data (e.g., to paste it using `innerHTML`), especially if that data is supplied via the URL (to which hackers can link or cause their visitors to visit such pages).
+1. There should be no side effects upon the opening of a link to your web app, so for example, you should not automatically save file contents back to disk (at least without user approval). (An exception might be made in the future if AsYouWish is installed and the user wished to bookmark privileged but harmless or per-use-confirmed processes, e.g., to visit a link to package up some files as part of a build process.)
 
 ## API: file type finding
 
@@ -50,11 +51,11 @@ The following steps may currently be altered by user preference.
 1. Once a file type is known as per above...
     1. a protocol may be checked for the detected type as follows:
         1. The protocol to find the type will begin with "web+local" (only existing [whitelisted protocols or "web+" ones are allowed](http://www.whatwg.org/specs/web-apps/current-work/multipage/timers.html#dom-navigator-registerprotocolhandler))
-        1. The protocol must then be followed by the (lower-case) method (currently "view", "binaryview", or "edit")
+        1. The protocol must then be followed by the (lower-case) method (currently "view", "binaryview", "edit", or "register")
         1. The protocol must then be concluded by the file type as per above (i.e., the file extension like "js" or filetypes.json designated type name (which [must be lower case ASCII](http://www.whatwg.org/specs/web-apps/current-work/multipage/timers.html#dom-navigator-registerprotocolhandler))).
         1. If the protocol is found to be registered, it will be visited and these steps will end. Otherwise, continue with the following steps.
     1. If the filetypes.json file contains a top-level "defaultHandlers" property object, this object will be checked against the type name and if a subobject for this type is found:
-        1. that object will be checked to see whether the "register" mode is present, and if yes, the user would be forwarded to it (to allow a site the ability to register itself as a handler) and these steps would stop. Otherwise, continue.
+        1. that object will be checked to see whether the "register" mode is present, and if yes, the user would be forwarded to it (to allow a site the ability to register itself as a handler for any number of modes and/or be a portal to those modes) and these steps would stop. Otherwise, continue.
         1. that object will be checked to see whether the requested open mode is also present (e.g., "view", "binaryview", or "edit").
             1. If the open mode key is present, its value will be used as the site to open. (Currently, %type , %method and %pathID are variables that will be substituted. User preferences may determine that the path ID is not the actual path but a mere GUID.) Although this may be changed in the future, file:// URLs currently do not work with WebAppFind message posting (due to current privacy leaks in Firefox with add-on-to-file-protocol-webpage communication) (I don't believe custom DOM events worked with file:, and there is apparently no other method of communicating with an add-on (without injecting a global) that we could use like allowing sites to open a chrome:// URL (restartless might be able to get such URLs via chrome.manifest or dynamically but not allowed cross-domain)).
     1. If the filetypes.json file contains a top level "hierarchy" property object and if a suitable mode was not found, the hierarchy object may be checked for the type name to see what types might be acceptable alternatives (in decreasing order of preference) to determine the type to check in future steps below.
@@ -129,6 +130,8 @@ Before discovering the command line handling, I originally sought to have the ex
 1. Possible changes to parameters passed to registered protocol handlers and/or default handlers (if any, as may only be passed through postMessage or some other means)
     1. Change what is passed within URL? method, filetype, path? or just pass through postMessage? Bookmarkability vs. clean API?
 1. Since web protocols are not meant to be used to have the privilege of reading from or writing to files (unless they belong to reserved protocols which, per the HTML spec, cannot be registered from the web anyways), the current approach of allowing web sites to register themselves as handlers might need to be modified to use some other mechanism which can at least provide warnings to users about the capabilities they are thereby approving (perhaps as within [AsYouWish](https://github.com/brettz9/asyouwish/) when sites themselves can do the requesting for privileges). However, since WebAppFind chose to start with the web protocol approach not only because it is an existing method for sites to register themselves for later potential use, but because the data security and privacy issues are confined to data files which are explicitly opened from the desktop when using the WebAppFind approach.
+1. See todos below for possible additions to modes beyond "view" and "edit".
+1. See about spec changes to be more tolerant of characters beyond lower-case ASCII letters
 
 ## Implementation notes
 
@@ -184,11 +187,24 @@ The DeviceStorageAPI appears to allow more privileges (like [AsYouWish](https://
 1. Option to enable file: protocol (though mention it is currently risky in Firefox to use `postMessage` for security and privacy given its lack of scoping); report issue to FF if issue not already added (also for better means than '*' for add-on communication?) . However, this option would be quite useful, especially if the todo just above on restricting external access were implemented, given that web apps could be installed to work with one's files (ideally without concerns that the data was going to be sent anywhere, and if the todo to confirm saves were implemented, one could also see what changes were being made to a file before being actually saved). Unfortunately, file: sites cannot register themselves as protocol handlers, so the user would need to configure their settings so as to rely on the default handlers in filetypes.json to be able to use such a file (or we would need to create our own mechanism, such as through `postMessage` back to the add-on (or a change in the file's GET parameters or perhaps modification of an element within the document), to allow a file: site to request permission to become usable as a protocol handler).
 1. Option to confirm reading and/or saving of data upon each attempt and/or display the proposed diffs before saving. (See "Implementation notes" section).
 1. Piggyback on drag-and-drop file capabilities (or create own) to allow files dropped in this way to be saved back to disk and/or path provided to the app.
-1. Add a mode to get notifications for updates to files (e.g., in case the "view"'d contents get updated by another app after the initial load into WebAppFind).
 1. Listen for unregistration of protocols to disable acting on future messages from them (only relevant for pages already loaded in this session).
 1. Option to avoid or allow new tabs for same URI/method/filetype/path? (option to get the same tab or new tabs for them?); option to push to all open windows in different manner so can notify user of updates but not change focus, etc.
 1. Open up wiki for custom type documentation/links with "proposal", "accepted", etc. statuses similar to the WhatWG meta tags wiki? Even if filetypes.json is used with "register" on "defaultHandlers", it may be convenient to have a separate spec URL, including for cases where the file extension is used without filetypes.json.
 1. Allow genuine POST or other non-GET or header-dependent requests (ala curl)?
+
+# Possible future mode additions
+
+Besides "view", "binaryview", "edit", "register", the following modes might be added in future versions:
+
+1. Version control
+    1. "create", "delete" - for any necessary set-up before creation or deletion of a file (as with saving, the protocol should not have side effects, so these should only bring one to the page to confirm the user wished to take such an action--and the browser might have its own confirmation for these actions).
+    1. "rename" and "move" (or cut or copy and paste)
+    1. "versioncontrol" - A mechanism could be added to request listening to events which would impact version control (though some means of determining scope would be needed--e.g., a folder and all its subfolders--as well as privacy/security considerations which expands beyond the current scope of individual file viewing and saving; similar concerns would need to be taken into account for other modes that may process multiple files like search or file packaging). These events could be used to open a (hidden?) web app to store data (e.g., via localStorage or a new "edit" mechanism which could save to disk, but circumscribed by file type so that, e.g., a repository binary could be modified without the user needing to explicitly open it) and build a file history for a "repository". This "versioncontrol" handlers ought to allow multiple listening apps in some manner; this would be both for the sake of allowing different versioncontrol storage mechanisms/repository types, for ensuring that any viewing apps get updated upon external changes, as well as for any apps storing meta-data related to a document or documents but not saved within them to be notified and respond accordingly (including possibly saving their own updates back to disk), e.g., for building up a history of commit messages (which would at least effectively need the completion of the todo to allow a single web app to handle multiple documents at once).
+1. "send to" or "mailer" - e.g., to put file contents and/or file attachment(s), subject, etc. into a mail viewer, ready to email (with equivalents for chatting)?
+1. "validate" - Before the save command of an "edit" mode process (and its response back to the app) is completed, it may be handy to have a separate protocol be called for any registered validators of a given file type to perform validation and conditionally reject a save. Instead of receiving the file path, they would be passed the proposed file contents for saving from "edit" to ensure proper well-formedness and validity before saving back to disk. It might be ideal for a validator to simply be a JavaScript file with a specific function, but for parity, we should probably implement this as another HTML file using a (secure) postMessage.
+
+1. "preconvert" and "postconvert" - hooks to transform content before reading or writing, respectively (but before "validate")
+1. "splash" - for a splash page leading to the modes so that "register" can be exclusively for registering users? 
 
 # Possible "Demos" todos
 
