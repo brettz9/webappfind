@@ -26,7 +26,20 @@ If an edit web+local protocol is enabled and open and then disabled in the same 
 
 1. Work on Git on your desktop while being able to open HTML files for WYSIWYG editing in a (CKEditor) web app which you can easily modify to add buttons for snippets you like to add? Do you want to use CodeMirror for syntax highlighting of your JavaScript and CSS? (Demos are included which do all of these.)
 
-# API: file type finding
+# Possible future user preference changes
+
+Currently preferences are global, whereas it may be desirable to allow users to customize their preferences by type/protocol in addition to the current default global ones.
+
+# For developers
+
+## Important security notes
+
+When developing a web app for use with WebAppFind, it is even more important to protect the privacy and security of your users since your web app may inadvertently be exposing data they have saved on their desktops or even overwriting it.
+
+1. Please note the security comments within the API comments below for details on how to make communiction with the add-on safely (via `postMessage`).
+1. As with any web app, do not trust user-supplied data (e.g., to paste it using `innerHTML`), especially if that data is supplied via the URL (to which hackers can link or cause their visitors to visit such pages).
+
+## API: file type finding
 
 The following steps may currently be altered by user preference.
 
@@ -49,7 +62,7 @@ The following steps may currently be altered by user preference.
 
 So, for example, if no filetypes.json file were present (or if the filetypes.json indicated that the given file was of the "js" type), a edit-capable loading of a JavaScript source file might look for a registration at "web+localeditjs:". Depending on user configuration, if such a hander is not found, the file may be opened in the browser or on the desktop.
 
-# API: reading file contents
+## API: reading file contents
 
 ```javascript
 var pathID; // We might use an array to track multiple path IDs within the same app (once WebAppFind may be modified to support this capability!)
@@ -75,7 +88,7 @@ window.addEventListener('message', function(e) {
 
 Only windows with the URI approved by the process detailed above will be able to successfully receive such messages (and only for the supplied file).
 
-# API: saving back to the originally supplied file path (for the "edit" mode only)
+## API: saving back to the originally supplied file path (for the "edit" mode only)
 
 See above regarding the pathID 2nd value of the first (array) argument (`previouslySavedPathIDFromViewEvent`). This argument is intended to allow for sites to handle multiple files in a single session (although WebAppFind currently will always open the file in a new tab as a new instance).
 
@@ -94,9 +107,9 @@ window.postMessage(['webapp-save', previouslySavedPathIDFromViewEvent, dataToSav
 
 Only windows with the URI approved by the process detailed above can successfully save such messages (and only for the supplied file).
 
-# Rationale for filetypes.json design
+## Rationale for filetypes.json design
 
-Although there may be some advantages to storing meta-data at the individual file level, I did not see a very convenient way in which Windows would allow the addition of arbitary meta-data which Firefox could easily query. Having a JSON file would allow developers to add some type configuration (beyond the more generic info detectable by a file extension) within the directory containing the data files.
+Although there may be some advantages to storing meta-data at the individual file level, I did not see a very convenient way in which Windows would allow the addition of arbitary meta-data which Firefox could easily query (Windows does not appear to offer arbitrary addition and editing of properties though programs, e.g., TortoiseGit, appear to be able to overlay the properties and are aware of file-level metadata while adding their own). Having a JSON file would allow developers to add some type configuration (beyond the more generic info detectable by a file extension) within the directory containing the data files.
 
 The "fileMatches" array is an array of arrays in order to ensure matches occur in reliable order across systems (since ECMAScript does not guarantee iteration order across implementations). Other fields are keyed to type name (noting that these must all be lower-case ASCII letters since web protocols only allow these to work after the "web+").
 
@@ -104,22 +117,22 @@ Although I would eventually like to allow the add-on to accept hard-coded URLs f
 
 Note that although this particular collection of "Open With..." executables and a (currently Firefox-only) add-on is called "WebAppFind", the protocols are prefixed to begin with the more generic phrasing "web+local" so as to allow openness to the possibility that non-browser desktop apps could also handle reading and editing of these offline-available, type-aware data files. The filetypes.json file is similarly non-commital in terminology or behavior about where the files will be opened, so desktop apps could (and, I believe, ought) to utilize filetypes.json when seeking to detect type information (beyond just reading the file extension).
 
-# Rationale for API design
+## Rationale for API design
 
 `postMessage` was chosen for having a familiar API and already designed for potentially untrusted collaboration sources. (See the section "Comparison with similar WebAPI work" for other possibilities.)
 
 Before discovering the command line handling, I originally sought to have the executable create a temp file containing an ID and path and mode info while supplying that to the add-on via a URL which would in turn check the temp file (this approach might work for other browsers if they do not allow add-ons to check command line arguments).
 
-# Possible future API changes
+## Possible future API changes
 
 1. Change filetypes.json to .filetypes.json or at least support the latter for those not wishing to distract users or let them mess things up.
 1. Possible changes to parameters passed to registered protocol handlers and/or default handlers (if any, as may only be passed through postMessage or some other means)
     1. Change what is passed within URL? method, filetype, path? or just pass through postMessage? Bookmarkability vs. clean API?
 1. Since web protocols are not meant to be used to have the privilege of reading from or writing to files (unless they belong to reserved protocols which, per the HTML spec, cannot be registered from the web anyways), the current approach of allowing web sites to register themselves as handlers might need to be modified to use some other mechanism which can at least provide warnings to users about the capabilities they are thereby approving (perhaps as within [AsYouWish](https://github.com/brettz9/asyouwish/) when sites themselves can do the requesting for privileges). However, since WebAppFind chose to start with the web protocol approach not only because it is an existing method for sites to register themselves for later potential use, but because the data security and privacy issues are confined to data files which are explicitly opened from the desktop when using the WebAppFind approach.
 
-# Possible future user preference changes
+## Implementation notes
 
-Currently preferences are global, whereas it may be desirable to allow users to customize their preferences by type/protocol in addition to the current default global ones.
+A direct visit to the protocol (including through XSRF) should provide no side effects. However, it is possible that a malicious handler opened by the user in "edit" mode could provide immediate side effects by saving back data to overwrite the supplied file. This might be mitigated by a configurable option to require the user's consent upon each save and/or to inform the user of the proposed diffs before saving. But again this will only be possible upon user initiation, only for the specific file or files approved in a given session, and a site will only be usable as a handler if the filetypes.json packaged with the data file designates it as a default handler for the data file (and the user maintains the preference to use this information) or if they have previously approved a protocol site for the given type.
 
 # Comparison with similar WebAPI work
 
@@ -136,10 +149,6 @@ The DeviceStorageAPI appears to allow more privileges (like [AsYouWish](https://
 1. AsYouWish sites ask for permission, and once approved, then can immediately do their work. WebAppFind currently allows sites to ask for permission to register themselves as handlers, but their work will only become relevant when the user opens a file via WebAppFind.
 2. AsYouWish allows for a vast number of possible privileges (though subject to user approval) including potentially arbitrary file reading and writing (as with Firefox extensions), while WebAppFind is limited to file reading and writing (though it may expand to certain other circumscribed, user-initated file-related activities in the future) and only for those files so opened as opened by the user.
 
-# Implementation notes
-
-A direct visit to the protocol should provide no side effects. However, it is possible that a malicious handler opened by the user in "edit" mode could provide immediate side effects by saving back data to overwrite the supplied file. This might be mitigated by a configurable option to require the user's consent upon each save and/or to inform the user of the proposed diffs before saving. But again this will only be possible upon user initiation, and a site will only be usable as a handler if the filetypes.json packaged with the data file designates it as a default handler for the data file (and the user maintains the preference to use this information) or if they have previously approved a protocol site for the given type.
-
 # Higher priority todos planned
 
 1. Create tests with using registerProtocolHandler (also for JS/JSON/mytype)
@@ -147,7 +156,7 @@ A direct visit to the protocol should provide no side effects. However, it is po
 1. Arbitrary command line args to pass on to webapps
 1. Support hard-coding to transmit file paths regardless of prefs?
 1. Submit to AMO, Bower, etc.
-1. Rewrite C++ exe's as batch scripts
+1. Rewrite C++ exe's as batch scripts (for sake of [ExecuteBuilder](https://builder.addons.mozilla.org/package/204099/latest/))
     1. Auto-generate these batch scripts for users (though we can supply the ones not using hard-coded URLs) via our Firefox add-on based on their supplying:
         1. Method (view, edit, etc.) for opening files via webappfind
         1. Optional "hidden" flag (in conjunction with, or only from, AsYouWish?) to embed a hidden DOM window script (use for batch-script-like functionality)
@@ -159,10 +168,9 @@ A direct visit to the protocol should provide no side effects. However, it is po
         1. An optional icon, so as to distinguish in task bar, etc. (making shortcuts via command line: http://ss64.com/nt/shortcut.html )
         1. Whether to auto-create a new profile just for this combination of options and a -no-remote call to allow executable-like behavior (separate icon instance in task bar though not icon)
         1. Another browser path if other browsers ever support
-1. Executable Creator (skeleton at https://builder.addons.mozilla.org/package/204099/latest/ )
+1. Complete [ExecuteBuilder](https://builder.addons.mozilla.org/package/204099/latest/)
 1. Disable further save attempts with bad ID supplied
 1. Unregister command line handler, etc. on add-on uninstall
-1. Complete [ExecuteBuilder](https://builder.addons.mozilla.org/package/204099/latest/)
 1. Check upon each save attempt that the loaded protocol is still registered as a handler (and remove usage notes above once implemented).
 
 # Possible future todos
