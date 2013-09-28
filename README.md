@@ -42,8 +42,7 @@ It is my goal to complete work on [ExecuteBuilder](https://builder.addons.mozill
 
 The following process is subject to change and may potentially even be scrapped altogether if another approach is found to be easier for streamlining cross-browser invocation, but currently this API is available if someone wishes to build their own executables using the API or to simply be able to run commands manually from the command line.
 
-* `-webapp-<method>` (i.e., "-webapp-view", "-webapp-binaryview", or "-webapp-edit")
-* `-url <path>` ("-url" can be omitted) - Indicates the path of the file which will be available with privileges (currently, view or edit) to the webapp; note that the leveraging of this built-in Mozilla API will most likely be changed to "-path".
+* `-webapp-<method> <path>` (i.e., "-webapp-view", "-webapp-binaryview", or "-webapp-edit" and the file path) - Indicates the path of the file which will be available with privileges (currently, view or edit) to the webapp.
 * `-remote "openurl(about:newtab)"` - This built-in Mozilla command line API allows Firefox (unlike "-silent") to gain focus without additional instructions to Windows. If the tab is determined to not be needed (e.g., if the user has opted to allow desktop opening of the file when no protocols are found), the add-on will simply auto-close the tab that this parameter opens.
 
 # For developers
@@ -171,7 +170,7 @@ The DeviceStorageAPI appears to allow more privileges (like [AsYouWish](https://
 # Higher priority todos planned
 
 1. Create tests with using registerProtocolHandler (also for JS/JSON/mytype)
-1. Change command line to use something besides -url for file paths (and stop defining new command line listeners for each method--just require it as an additional parameter?).
+1. Stop defining new command line listeners for each method--just require it as an additional parameter?
 1. Command line argument to hard-code a specific URL for opening (optionally looking for fallbacks if the supplied one is a protocol but not found)
 1. Arbitrary command line args to pass on to webapps
 1. Support hard-coding to transmit file paths regardless of prefs?
