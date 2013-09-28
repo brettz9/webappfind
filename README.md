@@ -176,7 +176,8 @@ The DeviceStorageAPI appears to allow more privileges (like [AsYouWish](https://
 # Possible future todos
 
 1. Command line flag additions:
-    1. 
+    1. See also [ExecuteBuilder](https://builder.addons.mozilla.org/package/204099/latest/)
+    1. ?
 1. Integrate functionality into https://github.com/brettz9/filebrowser-enhanced
 1. When [AsYouWish](https://github.com/brettz9/asyouwish/) is in use, allow path-reading as long as site is AYW-approved and the page is registered for the protocol--so one can bookmark a path and always load it or load with other approved paths (e.g., in different tabs within a webapp); also can remember paths to invoke upon FF start up ("website addons")
 1. Ensure some additional privacy for users desiring it by restricting external access (using https://developer.mozilla.org/en-US/docs/XPCOM_Interface_Reference/nsIContentPolicy and https://developer.mozilla.org/en-US/docs/XPCOM_Interface_Reference/nsIPrincipal per http://stackoverflow.com/questions/18369052/firefox-add-on-to-load-webpage-without-network-access ?) See also http://en.wikipedia.org/wiki/Site-specific_browser regarding such sandboxing.
@@ -189,29 +190,29 @@ The DeviceStorageAPI appears to allow more privileges (like [AsYouWish](https://
 1. Open up wiki for custom type documentation/links with "proposal", "accepted", etc. statuses similar to the WhatWG meta tags wiki? Even if filetypes.json is used with "register" on "defaultHandlers", it may be convenient to have a separate spec URL, including for cases where the file extension is used without filetypes.json.
 1. Allow genuine POST or other non-GET or header-dependent requests (ala curl)?
 
-1. "Demos"
-    1. Demos ought to use cookie-using full screen option for HTML and SVG
-    1. Get HTML CodeMirror to use closetag, html5complete, matchTags (in addition to JS ones if mixed mode can support), use the preview option?; http://codemirror.net/demo/widget.html for line bars in linting (html, css, javascript)? linting for HTML? (jslint can do some)
-    1. JS enhancement: CodeMirror tern support? can this work or be made to work with JSDoc?
-    1. use CodeMirror diffs/merge add-ons if version-control trigger types supported
-    1. use runmode for getting code syntax highlighting within CKEditor HTML (e.g., for doing blog posts): http://codemirror.net/demo/runmode.html and for a button to copy-HTML-(+css with styles inlined?)-to-clipboard in each of the html/javascript/css/svg/etc. modes
-    1. Add CodeMirror search/replace?
-    1. Tweak change CSS autocomplete in CodeMirror to support color/background-color, support CSS lint options
-    1. Cookie to hold JSHint options (or CSS lint options))
-    1. JSON and XML demos including CodeMirror xmlautocomplete
-    1. images/canvas: http://www.picozu.com/editor/ ?
-    1. audio: http://plucked.de/ and https://github.com/plucked/html5-audio-editor ?
-    1. video - popcorn?
-    1. music notations  - http://www.vexflow.com/
-    1. MIDI, etc.
-    1. better integration of CodeMirror/CKEditor, using full (mixed HTML) features of latest CodeMirror
-    1. update my regex support in CodeMirror for regex type and for JS overlay: http://codemirror.net/1/contrib/regex/index.html
-    1. CKEditor support for popup SVGEdit and SVGEdit support for CKEditor foreign objects
-    1. Add CodeMirror to SVG Edit XML view
-    1. For SVG Edit demo, add own SVG icon for saving to file
-    1. Sticky app
-        1. power-user support for form controls like checkboxes (underlying events currently supported better in Chrome than in Firefox), paperclip links, etc.
-        1. Modify WebAppFind to support display of independent data files (for multiple stickies in this case); or don't only associate a file path with individual URLs (file: or http:), but also allow associations with tab groups or bookmark folders so that if saving a new StickyBrains/CKEditor/word-processing file, it will save to a folder where one's ideas are already grouped
-    1. Create demo supporting docx format (rather than requiring export to HTML for Word docs)
-    1. Demonstrate approach of allowing data files for download (so can store them anywhere)--if not AYW approach for namespaced shared browser access--as well as data files chosen from File selector (and save over such a file if within the protocol and user permits)
-1. (more)
+# Possible "Demos" todos
+
+1. Demos ought to use cookie-using full screen option for HTML and SVG
+1. Get HTML CodeMirror to use closetag, html5complete, matchTags (in addition to JS ones if mixed mode can support), use the preview option?; http://codemirror.net/demo/widget.html for line bars in linting (html, css, javascript)? linting for HTML? (jslint can do some)
+1. JS enhancement: CodeMirror tern support? can this work or be made to work with JSDoc?
+1. use CodeMirror diffs/merge add-ons if version-control trigger types supported
+1. use runmode for getting code syntax highlighting within CKEditor HTML (e.g., for doing blog posts): http://codemirror.net/demo/runmode.html and for a button to copy-HTML-(+css with styles inlined?)-to-clipboard in each of the html/javascript/css/svg/etc. modes
+1. Add CodeMirror search/replace?
+1. Tweak change CSS autocomplete in CodeMirror to support color/background-color, support CSS lint options
+1. Cookie to hold JSHint options (or CSS lint options))
+1. JSON and XML demos including CodeMirror xmlautocomplete
+1. images/canvas: http://www.picozu.com/editor/ ?
+1. audio: http://plucked.de/ and https://github.com/plucked/html5-audio-editor ?
+1. video - popcorn?
+1. music notations  - http://www.vexflow.com/
+1. MIDI, etc.
+1. better integration of CodeMirror/CKEditor, using full (mixed HTML) features of latest CodeMirror
+1. update my regex support in CodeMirror for regex type and for JS overlay: http://codemirror.net/1/contrib/regex/index.html
+1. CKEditor support for popup SVGEdit and SVGEdit support for CKEditor foreign objects
+1. Add CodeMirror to SVG Edit XML view
+1. For SVG Edit demo, add own SVG icon for saving to file
+1. Sticky app
+    1. power-user support for form controls like checkboxes (underlying events currently supported better in Chrome than in Firefox), paperclip links, etc.
+    1. Modify WebAppFind to support display of independent data files (for multiple stickies in this case); or don't only associate a file path with individual URLs (file: or http:), but also allow associations with tab groups or bookmark folders so that if saving a new StickyBrains/CKEditor/word-processing file, it will save to a folder where one's ideas are already grouped
+1. Create demo supporting docx format (rather than requiring export to HTML for Word docs)
+1. Demonstrate approach of allowing data files for download (so can store them anywhere)--if not AYW approach for namespaced shared browser access--as well as data files chosen from File selector (and save over such a file if within the protocol and user permits)
