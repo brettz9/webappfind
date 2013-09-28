@@ -80,6 +80,8 @@ So, for example, if no filetypes.json file were present (or if the filetypes.jso
 
 ## API: reading file contents
 
+The 'webapp-view' message (see the example below) will occur for "view", "binaryview", and "edit" methods to indicate the readiness of the file contents (whether binary or not).
+
 ```javascript
 var pathID; // We might use an array to track multiple path IDs within the same app (once WebAppFind may be modified to support this capability!)
 window.addEventListener('message', function(e) {
@@ -109,6 +111,8 @@ Only windows with the URI approved by the process detailed above will be able to
 See above regarding the pathID 2nd value of the first (array) argument (`previouslySavedPathIDFromViewEvent`). This argument is intended to allow for sites to handle multiple files in a single session (although WebAppFind currently will always open the file in a new tab as a new instance).
 
 Note the important comment below about ensuring your users' privacy.
+
+A message 'webapp-save-end' will be sent from the add-on to a WebAppFind-opened app once a save has occurred successfully (in case the app would like to inform the user in some manner).
 
 ```javascript
 // For your user's privacy, you should only post the
