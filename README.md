@@ -171,7 +171,8 @@ A direct visit to the protocol should provide no side effects. However, it is po
     1. 
 1. Integrate functionality into https://github.com/brettz9/filebrowser-enhanced
 1. When [AsYouWish](https://github.com/brettz9/asyouwish/) is in use, allow path-reading as long as site is AYW-approved and the page is registered for the protocol--so one can bookmark a path and always load it or load with other approved paths (e.g., in different tabs within a webapp); also can remember paths to invoke upon FF start up ("website addons")
-1. Option to enable file: protocol (though mention it is risky for security and privacy); report issue to FF if issue not already added (also for better means than '*' for add-on communication?)
+1. Ensure some additional privacy for users desiring it by restricting external access (using https://developer.mozilla.org/en-US/docs/XPCOM_Interface_Reference/nsIContentPolicy and https://developer.mozilla.org/en-US/docs/XPCOM_Interface_Reference/nsIPrincipal per http://stackoverflow.com/questions/18369052/firefox-add-on-to-load-webpage-without-network-access ?) See also http://en.wikipedia.org/wiki/Site-specific_browser regarding such sandboxing.
+1. Option to enable file: protocol (though mention it is currently risky in Firefox to use `postMessage` for security and privacy given its lack of scoping); report issue to FF if issue not already added (also for better means than '*' for add-on communication?) . However, this option would be quite useful, especially if the todo just above on restricting external access were implemented, given that web apps could be installed to work with one's files (ideally without concerns that the data was going to be sent anywhere, and if the todo to confirm saves were implemented, one could also see what changes were being made to a file before being actually saved). Unfortunately, file: sites cannot register themselves as protocol handlers, so the user would need to configure their settings so as to rely on the default handlers in filetypes.json to be able to use such a file (or we would need to create our own mechanism, such as through `postMessage` back to the add-on (or a change in the file's GET parameters or perhaps modification of an element within the document), to allow a file: site to request permission to become usable as a protocol handler).
 1. Option to confirm reading and/or saving of data upon each attempt and/or display the proposed diffs before saving. (See "Implementation notes" section).
 1. Piggyback on drag-and-drop file capabilities (or create own) to allow files dropped in this way to be saved back to disk and/or path provided to the app.
 1. Add a mode to get notifications for updates to files (e.g., in case the "view"'d contents get updated by another app after the initial load into WebAppFind).
@@ -179,7 +180,6 @@ A direct visit to the protocol should provide no side effects. However, it is po
 1. Option to avoid or allow new tabs for same URI/method/filetype/path? (option to get the same tab or new tabs for them?); option to push to all open windows in different manner so can notify user of updates but not change focus, etc.
 1. Open up wiki for custom type documentation/links with "proposal", "accepted", etc. statuses similar to the WhatWG meta tags wiki? Even if filetypes.json is used with "register" on "defaultHandlers", it may be convenient to have a separate spec URL, including for cases where the file extension is used without filetypes.json.
 1. Allow genuine POST or other non-GET or header-dependent requests (ala curl)?
-1. Ensure some additional privacy for users desiring it by restricting external access (using https://developer.mozilla.org/en-US/docs/XPCOM_Interface_Reference/nsIContentPolicy and https://developer.mozilla.org/en-US/docs/XPCOM_Interface_Reference/nsIPrincipal per http://stackoverflow.com/questions/18369052/firefox-add-on-to-load-webpage-without-network-access ?) See also http://en.wikipedia.org/wiki/Site-specific_browser regarding such sandboxing.
 
 1. "Demos"
     1. Demos ought to use cookie-using full screen option for HTML and SVG
@@ -204,7 +204,6 @@ A direct visit to the protocol should provide no side effects. However, it is po
     1. Sticky app
         1. power-user support for form controls like checkboxes (underlying events currently supported better in Chrome than in Firefox), paperclip links, etc.
         1. Modify WebAppFind to support display of independent data files (for multiple stickies in this case); or don't only associate a file path with individual URLs (file: or http:), but also allow associations with tab groups or bookmark folders so that if saving a new StickyBrains/CKEditor/word-processing file, it will save to a folder where one's ideas are already grouped
-        1. 
     1. Create demo supporting docx format (rather than requiring export to HTML for Word docs)
     1. Demonstrate approach of allowing data files for download (so can store them anywhere)--if not AYW approach for namespaced shared browser access--as well as data files chosen from File selector (and save over such a file if within the protocol and user permits)
 1. (more)
