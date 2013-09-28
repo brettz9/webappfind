@@ -54,7 +54,7 @@ When developing a web app for use with WebAppFind, it is even more important to 
 
 1. Please note the security comments within the API comments below for details on how to make communiction with the add-on safely (via `postMessage`).
 1. As with any web app, do not trust user-supplied data (e.g., to paste it using `innerHTML`), especially if that data is supplied via the URL (to which hackers can link or cause their visitors to visit such pages).
-1. There should be no side effects upon the opening of a link to your web app, so for example, you should not automatically save file contents back to disk (at least without user approval). (An exception might be made in the future if AsYouWish is installed and the user wished to bookmark privileged but harmless or per-use-confirmed processes, e.g., to visit a link to package up some files as part of a build process.)
+1. There should be no side effects upon the opening of a link to your web app (and whether or not your app is opened as a URL, protocol, or protocol-opened-through-WebAppFind), so for example, you should not automatically save file contents back to disk (at least without user approval). (An exception might be made in the future if AsYouWish is installed and the user wished to bookmark privileged but harmless or per-use-confirmed processes, e.g., to visit a link to package up some files as part of a build process.)
 
 ## API: file type finding
 
