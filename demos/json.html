@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>WebAppFind JSON editor demo</title>
+    <!-- CodeMirror -->
+    <script src="CodeMirror/lib/codemirror.js"></script>
+    <script src="CodeMirror/mode/javascript/javascript.js"></script>
+    <script src="CodeMirror/keymap/extra.js"></script>
+
+    <script src="CodeMirror/addon/fold/foldcode.js"></script>
+    <script src="CodeMirror/addon/fold/foldgutter.js"></script>
+    <script src="CodeMirror/addon/fold/brace-fold.js"></script>
+    <script src="CodeMirror/addon/fold/comment-fold.js"></script>
+
+    <script src="CodeMirror/addon/selection/active-line.js"></script>
+
+    <script src="CodeMirror/addon/display/placeholder.js"></script>
+
+    <script src="CodeMirror/addon/edit/trailingspace.js"></script>
+    
+    <script src="CodeMirror/addon/edit/closebrackets.js"></script>
+
+    <script src="CodeMirror/addon/search/searchcursor.js"></script>
+    <script src="CodeMirror/addon/search/match-highlighter.js"></script><!-- Use with searchcursor -->
+    <script src="CodeMirror/addon/selection/mark-selection.js"></script><!-- Use with searchcursor -->
+    
+    <script src="CodeMirror/addon/edit/matchbrackets.js"></script>
+    
+    
+    <script src="CodeMirror/addon/hint/show-hint.js"></script>
+    <script src="CodeMirror/addon/hint/javascript-hint.js"></script>
+    <link href="CodeMirror/addon/hint/show-hint.css" rel="stylesheet" type="text/css" />
+    
+    <script src="jshint.js"></script><!--<script src="http://ajax.aspnetcdn.com/ajax/jshint/r07/jshint.js"></script>-->
+    <script src="jsonlint.js"></script><!--<script src="https://rawgithub.com/zaach/jsonlint/79b553fb65c192add9066da64043458981b3972b/lib/jsonlint.js"></script>-->
+    <script src="CodeMirror/addon/lint/lint.js"></script>
+    <script src="CodeMirror/addon/lint/json-lint.js"></script>
+    <link href="CodeMirror/addon/lint/lint.css" rel="stylesheet" type="text/css" />
+    <link href="CodeMirror/lib/codemirror.css" rel="stylesheet" type="text/css" />
+
+    <!-- WebAppFind -->
+    <link href="javascript.css" rel="stylesheet" type="text/css" />
+    
+    <script>
+/*globals CodeMirror*/
+/*
+TODOS:
+1. We could allow separate tabs when new pathIDs are obtained via our message listener
+*/
+
+(function () {'use strict';
+
+var saveMessage = 'webapp-save',
+    excludedMessages = [saveMessage];
+
+
+function $ (sel) {
+    return document.querySelector(sel);
+}
+
+window.addEventListener('DOMContentLoaded', function () {
+    // Could pass option 'readOnly' if determine from protocol that this is view mode only
+    function makeMarker () {
+        var marker = document.createElement('div');
+        marker.appendChild(document.createTextNode('\u25cf'));
+        marker.className = 'CodeMirror-breakpoint';
+        return marker;
+    }
+    CodeMirror.commands.autocomplete = function(cm) {
+        CodeMirror.showHint(cm, CodeMirror.hint.javascript);
+    };
+    var pathID,
+        breakpointsClass = 'CodeMirror-breakpoints',
+        urlThemePattern = /[?&]theme=(.*?)(?:&|$)/,
+        cookieThemePattern = /^theme=([^;]*)(?:;|$)/,
+        cm = CodeMirror.fromTextArea($('#json'), {
+            autofocus: true,
+            lineNumbers: true,
+            lineWrapping: true,
+            matchBrackets: true,
+            styleActiveLine: true,
+            styleSelectedText: true,
+            showTrailingSpace: true,
+            tabSize: 4,
+            indentUnit: 4,
+            // indentWithTabs: true,
+            autoCloseBrackets: true,
+            highlightSelectionMatches: {showToken: /\w/},
+            viewportMargin: Infinity, // Make sure whole doc is rendered so browser text search will work; will badly affect large docs per http://codemirror.net/doc/manual.html#option_viewportMargin
+            extraKeys: {
+                'Ctrl-Q': function(cm){ cm.foldCode(cm.getCursor()); },
+                'Ctrl-Space': 'autocomplete',
+                Tab: function (cm) {
+                    var spaces = Array(cm.getOption('indentUnit') + 1).join(' ');
+                    cm.replaceSelection(spaces, 'end', '+input');
+                }
+            },
+            foldGutter: {
+                rangeFinder: new CodeMirror.fold.combine(CodeMirror.fold.brace, CodeMirror.fold.comment)
+            },
+            gutters: ['CodeMirror-lint-markers', 'CodeMirror-foldgutter', 'CodeMirror-linenumbers', breakpointsClass],
+            // lint: {bitwise: true}, // Lint options for JSON?
+            lint: true,
+            mode: {name: 'javascript', json: true}
+        }),
+        choice = (document.location.search && document.location.search.match(urlThemePattern)) ||
+            (document.cookie && document.cookie.match(cookieThemePattern))
+            || '';
+    choice = choice && choice[1];
+    
+    cm.on('gutterClick', function(cm, n, clickedGutterClass) { // , e
+        if (clickedGutterClass !== breakpointsClass) {
+            return;
+        }
+        var info = cm.lineInfo(n),
+            gutterMarkers = info.gutterMarkers || {},
+            hasBreakpointToRemove = gutterMarkers['CodeMirror-breakpoints'];
+        cm.setGutterMarker(n, breakpointsClass, hasBreakpointToRemove ? null : makeMarker());
+    });
+
+    window.addEventListener('message', function(e) {
+        if (e.origin !== window.location.origin || // PRIVACY AND SECURITY! (for viewing and saving, respectively)
+            (!Array.isArray(e.data) || excludedMessages.indexOf(e.data[0]) > -1) // Validate format and avoid our post below
+        ) {
+            return;
+        }
+        var messageType = e.data[0];
+        switch (messageType) {
+            case 'webapp-view':
+                // Populate the contents
+                pathID = e.data[1];
+                cm.setValue(e.data[2]);
+                $('#save').disabled = false;
+                break;
+            case 'webapp-save-end':
+                alert('save complete for pathID ' + e.data[1] + '!');
+                break;
+            default:
+                throw 'Unexpected method';
+        }
+    }, false);
+
+    $('#save').addEventListener('click', function () {
+        if (!pathID) {
+            alert('No pathID set by Firefox yet! Remember to invoke this file from an executable or command line and in edit mode.');
+            return;
+        }
+        window.postMessage([saveMessage, pathID, cm.getValue()], window.location.origin);
+    });
+    
+    function themes () {
+        var theme = this.options[this.selectedIndex].value,
+            cookie = 'theme=' + encodeURIComponent(theme);
+        cm.setOption('theme', theme);
+        document.cookie = document.cookie ? document.cookie.replace(cookieThemePattern, cookie) : cookie;
+        // Todo: We might change the site location (or opportunity to copy-paste the link) to provide a chance to bookmark the theme
+    }
+    $('#themes').addEventListener('click', themes);
+    $('#themes').addEventListener('keypress', themes);
+
+    if (choice) {
+        choice = decodeURIComponent(choice);
+        $('#themes').value = choice;
+        cm.setOption('theme', choice);
+    }
+    
+});
+
+}());
+    </script>
+    <!-- Themes -->
+    <link rel="stylesheet" href="CodeMirror/theme/3024-day.css" type="text/css" />
+    <link rel="stylesheet" href="CodeMirror/theme/3024-night.css" type="text/css" />
+    <link rel="stylesheet" href="CodeMirror/theme/ambiance.css" type="text/css" />
+    <link rel="stylesheet" href="CodeMirror/theme/base16-dark.css" type="text/css" />
+    <link rel="stylesheet" href="CodeMirror/theme/base16-light.css" type="text/css" />
+    <link rel="stylesheet" href="CodeMirror/theme/blackboard.css" type="text/css" />
+    <link rel="stylesheet" href="CodeMirror/theme/cobalt.css" type="text/css" />
+    <link rel="stylesheet" href="CodeMirror/theme/eclipse.css" type="text/css" />
+    <link rel="stylesheet" href="CodeMirror/theme/elegant.css" type="text/css" />
+    <link rel="stylesheet" href="CodeMirror/theme/erlang-dark.css" type="text/css" />
+    <link rel="stylesheet" href="CodeMirror/theme/lesser-dark.css" type="text/css" />
+    <link rel="stylesheet" href="CodeMirror/theme/midnight.css" type="text/css" />
+    <link rel="stylesheet" href="CodeMirror/theme/monokai.css" type="text/css" />
+    <link rel="stylesheet" href="CodeMirror/theme/neat.css" type="text/css" />
+    <link rel="stylesheet" href="CodeMirror/theme/night.css" type="text/css" />
+    <link rel="stylesheet" href="CodeMirror/theme/paraiso-dark.css" type="text/css" />
+    <link rel="stylesheet" href="CodeMirror/theme/paraiso-light.css" type="text/css" />
+    <link rel="stylesheet" href="CodeMirror/theme/rubyblue.css" type="text/css" />
+    <link rel="stylesheet" href="CodeMirror/theme/solarized.css" type="text/css" />
+    <link rel="stylesheet" href="CodeMirror/theme/the-matrix.css" type="text/css" />
+    <link rel="stylesheet" href="CodeMirror/theme/tomorrow-night-eighties.css" type="text/css" />
+    <link rel="stylesheet" href="CodeMirror/theme/twilight.css" type="text/css" />
+    <link rel="stylesheet" href="CodeMirror/theme/vibrant-ink.css" type="text/css" />
+    <link rel="stylesheet" href="CodeMirror/theme/xq-dark.css" type="text/css" />
+    <link rel="stylesheet" href="CodeMirror/theme/xq-light.css" type="text/css" />
+</head>
+<body>
+<div id="toolbar">
+    <button id="save" disabled="disabled">Save</button>
+    <span id="themes1">Select a theme:</span>
+    <select id="themes">
+        <option selected="selected">default</option>
+        <option>3024-day</option>
+        <option>3024-night</option>
+        <option>ambiance</option>
+        <option>base16-dark</option>
+        <option>base16-light</option>
+        <option>blackboard</option>
+        <option>cobalt</option>
+        <option>eclipse</option>
+        <option>elegant</option>
+        <option>erlang-dark</option>
+        <option>lesser-dark</option>
+        <option>midnight</option>
+        <option>monokai</option>
+        <option>neat</option>
+        <option>night</option>
+        <option>paraiso-dark</option>
+        <option>paraiso-light</option>
+        <option>rubyblue</option>
+        <option>solarized dark</option>
+        <option>solarized light</option>
+        <option>the-matrix</option>
+        <option>tomorrow-night-eighties</option>
+        <option>twilight</option>
+        <option>vibrant-ink</option>
+        <option>xq-dark</option>
+        <option>xq-light</option>
+    </select>
+</div>
+<div id="json-container">
+<textarea id="json" cols="100" rows="30" placeholder="Loading..."></textarea>
+</div>
+</body>
+</html>

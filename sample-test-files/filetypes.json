@@ -2,6 +2,7 @@
     "fileMatches": [
         ["\\.html", "htmltype"],
         ["\\.txt", "txt"],
+        ["\\.json", "json"],
         ["\\.css", "csstype"],
         ["\\.jpe?g", "jpegtype"],
         ["\\.png", "pngtype"],
@@ -27,6 +28,10 @@
         "txt": {
             "view": "http://brett-zamir.me/webappfind/txt.html?type=%type&method=%method&pathID=%pathID",
             "edit": "http://brett-zamir.me/webappfind/txt.html?editmode=true&type=%type&method=%method&pathID=%pathID"
+        },
+        "json": {
+            "view": "http://brett-zamir.me/webappfind/json.html?type=%type&method=%method&pathID=%pathID",
+            "edit": "http://brett-zamir.me/webappfind/json.html?editmode=true&type=%type&method=%method&pathID=%pathID"
         },
         "csstype": {
             "edit": "http://brett-zamir.me/webappfind/css.html?editmode=true&type=%type&method=%method&pathID=%pathID"
