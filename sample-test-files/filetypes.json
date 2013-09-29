@@ -3,6 +3,7 @@
         ["\\.html", "htmltype"],
         ["\\.txt", "txt"],
         ["\\.json", "json"],
+        ["\\.xml", "xml"],
         ["\\.css", "csstype"],
         ["\\.jpe?g", "jpegtype"],
         ["\\.png", "pngtype"],
@@ -32,6 +33,10 @@
         "json": {
             "view": "http://brett-zamir.me/webappfind/json.html?type=%type&method=%method&pathID=%pathID",
             "edit": "http://brett-zamir.me/webappfind/json.html?editmode=true&type=%type&method=%method&pathID=%pathID"
+        },
+        "xml": {
+            "view": "http://brett-zamir.me/webappfind/xml.html?type=%type&method=%method&pathID=%pathID",
+            "edit": "http://brett-zamir.me/webappfind/xml.html?editmode=true&type=%type&method=%method&pathID=%pathID"
         },
         "csstype": {
             "edit": "http://brett-zamir.me/webappfind/css.html?editmode=true&type=%type&method=%method&pathID=%pathID"

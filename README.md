@@ -231,19 +231,19 @@ Besides "view", "binaryview", "edit", "register", the following modes might be a
 1. Demos ought to use cookie-using full screen option for HTML and SVG
 1. Get HTML CodeMirror to use closetag, html5complete, matchTags (in addition to JS ones if mixed mode can support), use the preview option?; http://codemirror.net/demo/widget.html for line bars in linting (html, css, javascript)? linting for HTML? (jslint can do some)
 1. JS enhancement: CodeMirror tern support? can this work or be made to work with JSDoc?
-1. use CodeMirror diffs/merge add-ons if version-control trigger types supported
-1. use runmode for getting code syntax highlighting within CKEditor HTML (e.g., for doing blog posts): http://codemirror.net/demo/runmode.html and for a button to copy-HTML-(+css with styles inlined?)-to-clipboard in each of the html/javascript/css/svg/etc. modes
+1. Use CodeMirror diffs/merge add-ons if version-control trigger types supported
+1. Use runmode for getting code syntax highlighting within CKEditor HTML (e.g., for doing blog posts): http://codemirror.net/demo/runmode.html and for a button to copy-HTML-(+css with styles inlined?)-to-clipboard in each of the html/javascript/css/svg/etc. modes
 1. Add CodeMirror search/replace?
 1. Tweak change CSS autocomplete in CodeMirror to support color/background-color, support CSS lint options
-1. Cookie to hold JSHint options (or CSS lint options))
+1. Cookie to hold JSHint options (or CSS lint options) and for remembering XML "schemaInfo"
 1. XML demo including CodeMirror xmlautocomplete
-1. images/canvas: http://www.picozu.com/editor/ ?
-1. audio: http://plucked.de/ and https://github.com/plucked/html5-audio-editor ?
-1. video - popcorn?
-1. music notations  - http://www.vexflow.com/
+1. Images/canvas: http://www.picozu.com/editor/ ?
+1. Audio: http://plucked.de/ and https://github.com/plucked/html5-audio-editor ?
+1. Video - popcorn?
+1. Music notations  - http://www.vexflow.com/
 1. MIDI, etc.
-1. better integration of CodeMirror/CKEditor, using full (mixed HTML) features of latest CodeMirror
-1. update my regex support in CodeMirror for regex type and for JS overlay: http://codemirror.net/1/contrib/regex/index.html
+1. Better integration of CodeMirror/CKEditor, using full (mixed HTML) features of latest CodeMirror
+1. Update my regex support in CodeMirror for regex type and for JS overlay: http://codemirror.net/1/contrib/regex/index.html
 1. CKEditor support for popup SVGEdit and SVGEdit support for CKEditor foreign objects
 1. Add CodeMirror to SVG Edit XML view
 1. For SVG Edit demo, add own SVG icon for saving to file

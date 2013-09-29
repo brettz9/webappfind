@@ -46,6 +46,9 @@
 div.CodeMirror span.CodeMirror-matchingbracket {color: #0f0;}
 div.CodeMirror span.CodeMirror-nonmatchingbracket {color: #f22;}
 
+/* matchTags (XML, not JavaScript) */
+.CodeMirror-matchingtag { background: rgba(255, 150, 0, .3); }
+
 /* styleActiveLine: We can override CodeMirror's default here */
 .CodeMirror-activeline-background {background: #e8f2ff;}
 
