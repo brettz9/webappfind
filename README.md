@@ -174,18 +174,19 @@ The DeviceStorageAPI appears to allow more privileges (like [AsYouWish](https://
 
 [AsYouWish](https://github.com/brettz9/asyouwish/) allows a higher-than-normal privilege level to websites, but it differs in a number of areas:
 
-1. AsYouWish sites ask for permission, and once approved, then can immediately do their work. WebAppFind currently allows sites to ask for permission to register themselves as handlers, but their work will only become relevant when the user opens a file via WebAppFind.
+1. AsYouWish sites ask for permission, and once approved, can then immediately do their work. WebAppFind currently allows sites to ask for permission to register themselves as handlers, but their work will only become relevant when the user opens a file via WebAppFind.
 2. AsYouWish allows for a vast number of possible privileges (though subject to user approval) including potentially arbitrary file reading and writing (as with Firefox extensions), while WebAppFind is limited to file reading and writing (though it may expand to certain other circumscribed, user-initated file-related activities in the future) and only for those files so opened as opened by the user.
 
 # Higher priority todos planned
 
-1. Create tests with using registerProtocolHandler (also for JS/JSON/mytype)
+1. Disable further save attempts with bad ID supplied in case a however previously approved site is attempting to guess at the paths of (if the user has enabled path transmission), or at the GUID representing, other non-approved files
+1. Check upon each save attempt that the loaded protocol is still registered as a handler (and remove usage notes above once implemented).
 1. Stop defining new command line listeners for each method--just require it as an additional parameter?
-1. Command line argument to hard-code a specific URL for opening (optionally looking for fallbacks if the supplied one is a protocol but not found)
+1. Support command-line transmission of the file privileges to a specific web app URLs regardless of prefs/config? (optionally looking for fallbacks if the supplied one is a protocol but not found)
 1. Arbitrary command line args to pass on to webapps
-1. Support hard-coding to transmit file paths regardless of prefs?
+1. Create tests with using registerProtocolHandler (also for JS/JSON/mytype)
 1. Submit to AMO, Bower, etc.
-1. Rewrite C++ exe's as batch scripts (for sake of [ExecuteBuilder](https://builder.addons.mozilla.org/package/204099/latest/))
+1. Rewrite C++ exe's as batch scripts (particularly for the sake of [ExecuteBuilder](https://builder.addons.mozilla.org/package/204099/latest/)), but made executable by being tied to cmd.exe
     1. Auto-generate these batch scripts for users (though we can supply the ones not using hard-coded URLs) via our Firefox add-on based on their supplying:
         1. Method (view, edit, etc.) for opening files via webappfind
         1. Optional "hidden" flag (in conjunction with, or only from, AsYouWish?) to embed a hidden DOM window script (use for batch-script-like functionality)
@@ -195,12 +196,10 @@ The DeviceStorageAPI appears to allow more privileges (like [AsYouWish](https://
         1. An optional, hard-coded web app URL (to circumvent the normal detection procedures and always open with a given web app)
         1. Option for any web app to open by default in full-screen mode
         1. An optional icon, so as to distinguish in task bar, etc. (making shortcuts via command line: http://ss64.com/nt/shortcut.html )
-        1. Whether to auto-create a new profile just for this combination of options and a -no-remote call to allow executable-like behavior (separate icon instance in task bar though not icon)
+        1. Whether to auto-create a new profile just for this combination of options and a -no-remote call to allow executable-like behavior (creates a separate icon instance in the task bar though not a separate icon unless, again, the icon is attached to a short cut)
         1. Another browser path if other browsers ever support
 1. Complete [ExecuteBuilder](https://builder.addons.mozilla.org/package/204099/latest/)
-1. Disable further save attempts with bad ID supplied
 1. Unregister command line handler, etc. on add-on uninstall
-1. Check upon each save attempt that the loaded protocol is still registered as a handler (and remove usage notes above once implemented).
 
 # Possible future todos
 
