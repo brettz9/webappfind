@@ -204,7 +204,7 @@ The DeviceStorageAPI appears to allow more privileges (like [AsYouWish](https://
 # Possible future todos
 
 1. Command line flag additions:
-    1. See also [ExecuteBuilder](https://builder.addons.mozilla.org/package/204099/latest/)
+    1. See below and also possibly the notes within the [ExecuteBuilder](https://builder.addons.mozilla.org/package/204099/latest/) code
     1. Support the "register" method from command line?
 1. Integrate functionality into https://github.com/brettz9/filebrowser-enhanced
 1. When [AsYouWish](https://github.com/brettz9/asyouwish/) is in use, allow path-reading as long as site is AYW-approved and the page is registered for the protocol--so one can bookmark a path and always load it or load with other approved paths (e.g., in different tabs within a webapp); also can remember paths to invoke upon FF start up ("website addons")
@@ -221,7 +221,7 @@ The DeviceStorageAPI appears to allow more privileges (like [AsYouWish](https://
 
 Besides "view", "binaryview", "edit", "register", the following modes might be added in future versions:
 
-1. Version control
+1. Version control (also some discussion of possibilites for multiple file saving)
     1. "create", "delete" - for any necessary set-up before creation or deletion of a file (as with saving, the protocol should not have side effects, so these should only bring one to the page to confirm the user wished to take such an action--and the browser might have its own confirmation for these actions).
     1. "rename" and "move" (or cut or copy and paste)
     1. "versioncontrol" - A mechanism could be added to request listening to events which would impact version control (though some means of determining scope would be needed--e.g., a folder and all its subfolders--as well as privacy/security considerations which expands beyond the current scope of individual file viewing and saving; similar concerns would need to be taken into account for other modes that may process multiple files like search or file packaging). These events could be used to open a (hidden?) web app to store data (e.g., via localStorage or a new "edit" mechanism which could save to disk, but circumscribed by file type so that, e.g., a repository binary could be modified without the user needing to explicitly open it) and build a file history for a "repository". This "versioncontrol" handlers ought to allow multiple listening apps in some manner; this would be both for the sake of allowing different versioncontrol storage mechanisms/repository types, for ensuring that any viewing apps get updated upon external changes, as well as for any apps storing meta-data related to a document or documents but not saved within them to be notified and respond accordingly (including possibly saving their own updates back to disk), e.g., for building up a history of commit messages (which would at least effectively need the completion of the todo to allow a single web app to handle multiple documents at once).
