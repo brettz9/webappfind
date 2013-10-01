@@ -2,15 +2,19 @@
 
 Are you a fan of web apps, but want the freedom to place your data files where you like on your desktop and thus be able to work offline and own your data rather than keeping it in the cloud? Do you want the freedom to just double-click (or right-click) a file on your desktop so that it opens in a web app, saving you the trouble of having to copy the file path, move from your desktop to the web app, and paste the path in a file finder? Do you want to avoid dragging files into your web app when modifications to the files cannot be saved back directly to your hard drive?
 
-WebAppFind addresses these use cases by allowing you to double-click or "Open with..." right-click on "view" or "edit" executable files on your desktop (currently, executables are for Windows only), sending the file path details to Firefox (via command line arguments) which are then intercepted by a Firefox add-on which checks for an *optional* filetypes.json file within the same directory as the right-clicked file to determine more precise handling (the file extension will be used to determine the type otherwise). Based on what is chosen/found and on user preferences, a handler web site will be sought in Firefox to open the file of the designated type (whether a generic or custom type) as well as allow saves to be made back to the file if the "edit" type was the type chosen and a suitable handler site was found to send back a save event.
+WebAppFind addresses these use cases by allowing you to double-click (or use "Open with..." right-click) on "view" or "edit" executable files on your desktop (currently, executables are for Windows only), sending the file path details to Firefox (via command line arguments) which are then intercepted by a Firefox add-on which checks for an *optional* filetypes.json file within the same directory as the right-clicked file to determine more precise handling (the file extension will be used to determine the type otherwise). Based on what is chosen/found and on user preferences, a handler web site will be sought in Firefox to open the file of the designated type (whether a generic or custom type) as well as allow saves to be made back to the file if the "edit" type was the type chosen and a suitable handler site was found to send back a save event.
 
-WebAppFind allow you to make your data files accessible to other programs and to give your users peace of mind to not be locked into your application alone. It also allows your users to open such data files in your program immediately and intelligently, using whatever file extension you prefer, even if it is a generic one such as "json" or "js".
+WebAppFind allow you to make your data files accessible to other programs and to give your users peace of mind to not be locked into your application alone. It also allows your users to open your custom data files in your program immediately and intelligently, using whatever file extension you prefer, even if the file extension is a generic one such as "json" or "js" while your own data file follows a particular format or schema.
 
 Unlike a more generic solution, such as with a Firefox add-on or [AsYouWish](https://github.com/brettz9/asyouwish/)-enabled site, *webappfind* minimizes security and privacy risks by only allowing files designated in the above manner to be available to the relevant web application.
 
 # Executable usage notes
 
 (For command line usage, see its API below.)
+
+It is hoped that the instructions below can be mostly automated and simplified once the [ExecuteBuilder](https://builder.addons.mozilla.org/package/204099/latest/) add-on is complete (this add-on is to optionally interact with WebAppFind to allow building and assignment of executable/batch files which can be designated for specific file types without the user needing to find the path of these executables as WebAppFind currently requires).
+
+## Instructions
 
 Note that you must first install the Firefox add-on (the XPI file) so that the following steps will work (the add-on has not yet been submitted to the Addons site, so for now, you will have to either build the XPI from source or use the pre-built XPI included with the repository).
 
@@ -21,8 +25,6 @@ Note that you must first install the Firefox add-on (the XPI file) so that the f
 1. Navigate to an executable within the "cplusplus" folder of this [WebAppFind](https://github.com/brettz9/webappfind) repository (or, if you prefer, you can build the executables yourself with the source code included in this repository). If you want web apps to open this file in view-only mode, choose "WebAppFinder-view-mode-Firefox.exe" (or "WebAppFinder-binaryview-mode-Firefox.exe" if this is for a program needing to open a file in binary mode, such as images, sound files, or videos). If you want to grant the webapp read and write access for this file (or type of file if you chose option 1.2) you open via WebAppFind, choose "WebAppFinder-edit-mode-Firefox.exe".
 1. Select "Ok".
 1. If you used "Open with" (as per step 1.1 above), your file should have already opened with WebAppFind. If you opted for "Properties" (step 1.2 above), you should now be able to double-click any file possessing the same extension to open it with WebAppFind.
-
-The remaining notes are for caution. It is hoped that the instructions above can be mostly automated once the [ExecuteBuilder](https://builder.addons.mozilla.org/package/204099/latest/) add-on is complete (this add-on is to optionally interact with WebAppFind to allow building and assignment of executable/batch files which can be designated for specific file types without the user needing to find the path of these executables as WebAppFind currently requires).
 
 If an edit web+local protocol is enabled and open and then disabled in the same session, it will keep having save access (though within that window session only). One must currently close any open tabs for that web application if one no longer wishes to allow access (though as noted elsewhere in the documentation, the app only has access to the files to which it was permitted access).
 
