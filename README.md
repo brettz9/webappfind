@@ -72,17 +72,17 @@ The following steps may currently be altered by user preference.
         1. The protocol must then be concluded by the file type as per above (i.e., the file extension like "js" or filetypes.json designated type name (which [must be lower case ASCII](http://www.whatwg.org/specs/web-apps/current-work/multipage/timers.html#dom-navigator-registerprotocolhandler))).
         1. If the protocol is found to be registered, it will be visited and these steps will end. Otherwise, continue with the following steps.
     1. If the filetypes.json file contains a top-level "defaultHandlers" property object, this object will be checked against the type name and if a subobject for this type is found:
-        1. that object will be checked to see whether the "register" mode is present, and if yes, the user would be forwarded to it (to allow a site the ability to register itself as a handler for any number of modes and/or be a portal to those modes) and these steps would stop. Otherwise, continue.
+        1. that object will be checked to see whether the "register" mode is present (and the add-on user has not opted out of visiting these links), and if yes, the user would be forwarded to it (to allow a site the ability to register itself as a handler for any number of modes and/or be a portal to those modes) and these steps would stop. Otherwise, continue.
         1. that object will be checked to see whether the requested open mode is also present (e.g., "view", "binaryview", or "edit").
-            1. If the open mode key is present, its value will be used as the site to open. (Currently, %type , %method and %pathID are variables that will be substituted. User preferences may determine that the path ID is not the actual path but a mere GUID.) Although this may be changed in the future, file:// URLs currently do not work with WebAppFind message posting (due to current privacy leaks in Firefox with add-on-to-file-protocol-webpage communication) (I don't believe custom DOM events worked with file:, and there is apparently no other method of communicating with an add-on (without injecting a global) that we could use like allowing sites to open a chrome:// URL (restartless might be able to get such URLs via chrome.manifest or dynamically but not allowed cross-domain)).
+            1. If the open mode key is present, its value will be used as the site to open. (Currently, %type , %method and %pathID are variables that will be substituted. User preferences may determine that the path ID is not the actual path but a mere GUID.) Although this may be changed in the future, file:// URLs currently do not work with WebAppFind message posting (due to current privacy leaks in Firefox with add-on-to-file-protocol-webpage communication) (I don't believe custom DOM events worked with file:, and there is apparently no other method of communicating with an add-on (without injecting a global) that we could use like allowing sites to open a chrome:// URL (restartless might be able to get such URLs via chrome.manifest or dynamically but this is not allowed from the file: protocol)).
     1. If the filetypes.json file contains a top level "hierarchy" property object and if a suitable mode was not found, the hierarchy object may be checked for the type name to see what types might be acceptable alternatives (in decreasing order of preference) to determine the type to check in future steps below.
-    1. If no other information is present in the filetypes.json file, if the file is not present, or if a specific default site was not found, depending on user settings, depending on user setting, the browser may attempt to open the file. Otherwise, if a non-default setting is changed, the user may delegate the opening of the file back to the desktop.
+    1. If no other information is present in the filetypes.json file, if the file is not present, or if a specific default site was not found, depending on user settings, depending on user setting, the browser may attempt to open the file. Depending on user settings, the user may delegate the opening of the file back to the desktop (the default, however, is not to do so). If the user has not permitted either of these behaviors, an error message will be displayed.
 
 So, for example, if no filetypes.json file were present (or if the filetypes.json indicated that the given file was of the "js" type), a edit-capable loading of a JavaScript source file might look for a registration at "web+localeditjs:". Depending on user configuration, if such a hander is not found, the file may be opened in the browser or on the desktop.
 
 ## API: reading file contents
 
-The 'webapp-view' message (see the example below) will occur for "view", "binaryview", and "edit" methods to indicate the readiness of the file contents (whether binary or not).
+The 'webapp-view' message (see the example below) will be sent to the web app when a desktop file has been opened in the "view", "binaryview", or "edit" mode. This message delivers the file contents (whether in binary form or not) to the web app.
 
 ```javascript
 var pathID; // We might use an array to track multiple path IDs within the same app (once WebAppFind may be modified to support this capability!)
@@ -110,11 +110,15 @@ Only windows with the URI approved by the process detailed above will be able to
 
 ## API: saving back to the originally supplied file path (for the "edit" mode only)
 
-See above regarding the pathID 2nd value of the first (array) argument (`previouslySavedPathIDFromViewEvent`). This argument is intended to allow for sites to handle multiple files in a single session (although WebAppFind currently will always open the file in a new tab as a new instance).
+A save will be performed by sending a 'webapp-save' to the add-on (see the code below).
+
+A pathID will be needed when making a save of file contents back to the add-on (which will save back to disk). You can obtain this before making saves, by listening for the 'webapp-view' message (described under "API: reading file contents" above); the 2nd value of the first (array) argument (`previouslySavedPathIDFromViewEvent`) will contain this information.
+
+This pathID is intended to allow for sites to handle multiple files in a single session (although WebAppFind currently will always open the file in a new tab as a new instance).
 
 Note the important comment below about ensuring your users' privacy.
 
-A message 'webapp-save-end' will be sent from the add-on to a WebAppFind-opened app once a save has occurred successfully (in case the app would like to inform the user in some manner).
+Once a save has been performed, a message, 'webapp-save-end', will be sent from the add-on back to the WebAppFind-opened app (in case the app would like to inform the user in some manner).
 
 ```javascript
 // For your user's privacy, you should only post the
