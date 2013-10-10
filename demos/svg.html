@@ -842,7 +842,9 @@ setTimeout(function () {
             }
             window.postMessage([saveMessage, pathID, svgEditor.canvas.getSvgString()], window.location.origin);
         }}}, [
-            ['div'],
+            ['div', [
+                $('#tool_save').querySelector('svg').cloneNode(true)]
+            ],
             'Save Image back to Disk'
         ]),
         $('#tool_save').nextSibling
