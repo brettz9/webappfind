@@ -184,6 +184,9 @@ The DeviceStorageAPI appears to allow more privileges (like [AsYouWish](https://
 1. Stop defining new command line listeners for each method--just require it as an additional parameter?
 1. Support command-line transmission of the file privileges to a specific web app URLs regardless of prefs/config? (optionally looking for fallbacks if the supplied one is a protocol but not found)
 1. Arbitrary command line args to pass on to webapps
+1. Allow eval-able strings (or JS file paths) as arguments (with or without the usual WebAppFind
+file contents/paths) which Firefox then evaluates so as to provide AYW-like privileged
+functionality in a batch file manner without exposing privileges to web apps unless invoked from the desktop (as a workaround, one could use WebAppFind to open an AYW-enabled site, especially if it adds an eval-like ability and WebAppFind get support for passing in arbitrary command line args). Batch scripts (including the functionality to optionally receive file arguments or paths to JS files if AYW was used or XHR paths were used) could thus be written in JS and take advantage of FF cross-platform features (like [Node.js command line scripts](http://www.2ality.com/2011/12/nodejs-shell-scripting.html) but browser aware too). Could use in conjunction with proposed "hidden" flag to avoid adding a tab (or do so by default).
 1. Create tests with using registerProtocolHandler (also for JS/JSON/mytype)
 1. Submit to AMO, Bower, etc.
 1. Rewrite C++ exe's as batch scripts (particularly for the sake of [ExecuteBuilder](https://builder.addons.mozilla.org/package/204099/latest/)), but made executable by being tied to cmd.exe
