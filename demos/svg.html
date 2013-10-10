@@ -812,14 +812,14 @@ window.addEventListener('message', function(e) {
     ) {
         return;
     }
-    var messageType = e.data[0];
+    var svgString,
+        messageType = e.data[0];
     switch (messageType) {
         case 'webapp-view':
             // Populate the contents
             pathID = e.data[1];
             
-            //var svgString = '<svg width="640" height="480" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg"><'+'!-- Created with SVG-edit - http://svg-edit.googlecode.com/ -'+'-><g><title>Layer 1</title><ellipse ry="37" rx="87" id="svg_1" cy="117" cx="48" stroke-width="5" stroke="#000000" fill="#FF0000"/><ellipse ry="18" rx="16" id="svg_2" cy="105" cx="42" stroke-width="5" stroke="#000000" fill="#FF0000"/></g></svg>';
-            var svgString = e.data[2];
+            svgString = e.data[2];
             svgEditor.loadFromString(svgString);
             
             /*if ($('#tool_save_file')) {
