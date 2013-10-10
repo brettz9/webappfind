@@ -851,28 +851,6 @@ setTimeout(function () {
     );
 }, 4000);
 
-/*
-<li id="tool_save">
-    <div><svg class="svg_icon" xmlns:xlink="http://www.w3.org/1999/xlink" height="24" width="24" xmlns="http://www.w3.org/2000/svg"viewBox="0 0 24 24"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
- <defs>
-  <linearGradient id="xsvg_41250" x1="0" y1="0" x2="1" y2="0">
-   <stop offset="0" stop-color="#727272" stop-opacity="1"></stop>
-   <stop offset="1" stop-color="#d6d6d6" stop-opacity="1"></stop>
-  </linearGradient>
-  <linearGradient id="xsvg_46251" x1="0.04297" y1="0.00391" x2="0.21484" y2="0.875">
-   <stop offset="0" stop-color="#81bbf4" stop-opacity="1"></stop>
-   <stop offset="1" stop-color="#376eb7" stop-opacity="1"></stop>
-  </linearGradient>
- </defs>
-   <path d="m1.51669,22.3458l21.13245,-0.10111l0,-6.06673l-2.62892,-9.80789l-16.27907,0.10111l-2.32558,9.20121l0.10111,6.67341z" id="svg_21" fill="#e0e0e0" stroke="#202020"></path>
-   <rect x="2.42667" y="16.58227" width="19.21031" height="4.75108" id="svg_32" fill="url(#xsvg_41250)" stroke="#efefef"></rect>
-   <path d="m4.55005,11.12235l0.70779,-2.83114l13.04348,0l0.70779,3.13448c-0.70779,2.52781 -4.04479,3.84227 -7.17897,3.84227c-2.72977,0 -6.37007,-1.41557 -7.28008,-4.1456z" id="svg_42" fill="#c0c0c0" stroke="#ffffff"></path>
-  <path d="m7.14286,9.74903l5.21236,5.79151l5.50193,-5.88803l-2.50965,-0.09653l0,-2.79923c0,-2.3166 -2.3166,-5.59846 -6.56371,-5.59846c-4.05405,0 -6.27413,3.37838 -6.56371,6.75676c0.48263,-1.5444 2.7027,-4.53668 4.44015,-4.44015c2.12355,-0.09653 2.79923,1.64093 2.79923,3.37838l0.09653,2.79923l-2.41313,0.09653z" id="svg_45" fill="url(#xsvg_46251)" stroke="#285582"></path>
-</svg></svg></div>
-            Save Image (S)
-        </li>
-    */
-
 /*window.addEventListener('DOMContentLoaded', function () { // We need this even here because otherwise we will run before the localStorage loading (even if this is placed within a svgEditor.ready() callback)
 // SVG-Edit checks from URL or local storage to add a URL; since our WebAppFind system adds file content through postMessage rather than URL, we could also solve this by adding the string to localStorage which the app will then load. However, since this might be a privacy concern for some, we instead load after DOMContentLoaded which times things to run after localStorage data is loaded. SVG-Edit still adds to localStorage on unload; we might avoid this be setting localStorage to the empty string upon beforeunload?
 // var name = 'svgedit-' + svgEditor.curConfig.canvasName;
