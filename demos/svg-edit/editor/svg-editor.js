@@ -4566,7 +4566,7 @@
 				updateCanvas(true);
 // 			});
 
-		//	var revnums = "svg-editor.js ($Rev: 2591 $) ";
+		//	var revnums = "svg-editor.js ($Rev: 2594 $) ";
 		//	revnums += svgCanvas.getVersion();
 		//	$('#copyright')[0].setAttribute('title', revnums);
 
@@ -4585,7 +4585,7 @@
 						name = data.name,
 						args = data.args;
 					try {
-						e.source.postMessage(JSON.stringify({namespace: 'svg-edit', id: cbid, result: svgCanvas[name](args)}), '*');
+						e.source.postMessage(JSON.stringify({namespace: 'svg-edit', id: cbid, result: svgCanvas[name].apply(svgCanvas, args)}), '*');
 					} catch(err) {
 						e.source.postMessage(JSON.stringify({namespace: 'svg-edit', id: cbid, error: err.message}), '*');
 					}
