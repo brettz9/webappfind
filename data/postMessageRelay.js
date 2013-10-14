@@ -6,6 +6,12 @@ function l (msg) {
     console.log(msg);
 }
 
+document.defaultView.addEventListener('message', function (e) { // Listen for subsequent requests to read the file (necessary also for cases where the 'webapp-view' listener cannot be added immediately, e.g., within our SVG-edit extension which is loaded by the main page doing a script tag injection)
+    if (e.origin !== window.location.origin || !Array.isArray(e.data) || e.data[0] !== 'webapp-read') {
+        return;
+    }
+    self.port.emit('webappfindRead');
+});
 
 self.port.on('webappfindSaveEnd', function (path) {
     document.defaultView.postMessage(['webapp-save-end', path], window.location.origin);
