@@ -4566,18 +4566,18 @@
 				updateCanvas(true);
 // 			});
 
-		//	var revnums = "svg-editor.js ($Rev: 2590 $) ";
+		//	var revnums = "svg-editor.js ($Rev: 2591 $) ";
 		//	revnums += svgCanvas.getVersion();
 		//	$('#copyright')[0].setAttribute('title', revnums);
 
 			// Callback handler for embedapi.js
 			try {
 				window.addEventListener('message', function(e) {
-                    // We accept and post strings for the sake of IE9 support
-                    if (typeof e.data !== 'string') {
-                        return;
-                    }
-                    var data = JSON.parse(e.data);
+					// We accept and post strings for the sake of IE9 support
+					if (typeof e.data !== 'string') {
+						return;
+					}
+					var data = JSON.parse(e.data);
 					if (!data || typeof data !== 'object' || data.namespace !== 'svgCanvas') {
 						return;
 					}
