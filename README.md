@@ -238,7 +238,7 @@ Besides "view", "binaryview", "edit", "register", the following modes might be a
 # Possible "Demos" todos
 
 1. Demos ought to use cookie-using full screen option for HTML and SVG
-1. Get HTML CodeMirror to use closetag, html5complete, matchTags (in addition to JS ones if mixed mode can support), use the preview option?; http://codemirror.net/demo/widget.html for line bars in linting (html, css, javascript)? linting for HTML? (jslint can do some)
+1. Get HTML CodeMirror to use closetag, html5complete, matchTags (in addition to JS ones if mixed mode can support), use the preview option?; http://codemirror.net/demo/widget.html for line bars in linting (html, css, javascript)? linting for HTML? (JSLint can do some); ensure JSLint (and CSSLint?) applied to mixed HTML
 1. JS enhancement: CodeMirror tern support? can this work or be made to work with JSDoc?
 1. Use CodeMirror diffs/merge add-ons if version-control trigger types supported
 1. Use runmode for getting code syntax highlighting within CKEditor HTML (e.g., for doing blog posts): http://codemirror.net/demo/runmode.html and for a button to copy-HTML-(+css with styles inlined?)-to-clipboard in each of the html/javascript/css/svg/etc. modes
@@ -253,9 +253,8 @@ Besides "view", "binaryview", "edit", "register", the following modes might be a
 1. MIDI, etc.
 1. Better integration of CodeMirror/CKEditor, using full (mixed HTML) features of latest CodeMirror
 1. Update my regex support in CodeMirror for regex type and for JS overlay: http://codemirror.net/1/contrib/regex/index.html
-1. CKEditor support for popup SVGEdit and SVGEdit support for CKEditor foreign objects
+1. CKEditor support for popup or inline SVGEdit and SVGEdit support for CKEditor foreign objects (via foreignObject extension?)
 1. Add CodeMirror to SVG Edit XML view
-1. For SVG Edit demo, add own SVG icon for saving to file
 1. Sticky app
     1. power-user support for form controls like checkboxes (underlying events currently supported better in Chrome than in Firefox), paperclip links, etc.
     1. Modify WebAppFind to support display of independent data files (for multiple stickies in this case); or don't only associate a file path with individual URLs (file: or http:), but also allow associations with tab groups or bookmark folders so that if saving a new StickyBrains/CKEditor/word-processing file, it will save to a folder where one's ideas are already grouped
