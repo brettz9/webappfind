@@ -37,12 +37,12 @@
 				canvas_expansion: 3,
 				dimensions: [640,480],
 				initFill: {
-					color: 'FF0000',  // solid red
+					color: 'FF0000', // solid red
 					opacity: 1
 				},
 				initStroke: {
 					width: 5,
-					color: '000000',  // solid black
+					color: '000000', // solid black
 					opacity: 1
 				},
 				initOpacity: 1,
@@ -928,7 +928,6 @@
 
 					var timer;
 					var pos = $(show_sel).position();
-					$(hold_sel).css({'left': pos.left+34, 'top': pos.top+40});
 
 					// Clicking the "show" icon should set the current mode
 					shower.mousedown(function(evt) {
@@ -964,6 +963,7 @@
 					// $('#tools_rect').mouseleave(function(){$('#tools_rect').fadeOut();});
 				});
 				setFlyoutTitles();
+				setFlyoutPositions();
 			};
 
 			var makeFlyoutHolder = function(id, child) {
@@ -1213,7 +1213,7 @@
 	//
 	// 							// {sel:'#tool_rect', fn: clickRect, evt: 'mouseup', key: 4, parent: '#tools_rect', icon: 'rect'}
 	//
-	// 							var pos  = ('position' in opts)?opts.position:'last';
+	// 							var pos = ('position' in opts)?opts.position:'last';
 	// 							var len = flyout_holder.children().length;
 	//
 	// 							// Add at given position or end
@@ -1275,7 +1275,7 @@
 
 							// {sel:'#tool_rect', fn: clickRect, evt: 'mouseup', key: 4, parent: '#tools_rect', icon: 'rect'}
 
-							var pos  = ('position' in opts) ? opts.position : 'last';
+							var pos = ('position' in opts) ? opts.position : 'last';
 							var len = flyout_holder.children().length;
 
 							// Add at given position or end
@@ -2391,8 +2391,8 @@
 
 			var pasteInCenter = function() {
 				var zoom = svgCanvas.getZoom();
-				var x = (workarea[0].scrollLeft + workarea.width()/2)/zoom  - svgCanvas.contentW;
-				var y = (workarea[0].scrollTop + workarea.height()/2)/zoom  - svgCanvas.contentH;
+				var x = (workarea[0].scrollLeft + workarea.width()/2)/zoom - svgCanvas.contentW;
+				var y = (workarea[0].scrollTop + workarea.height()/2)/zoom - svgCanvas.contentH;
 				svgCanvas.pasteElements('point', x, y);
 			};
 
@@ -2527,7 +2527,7 @@
 
 			var clickExport = function() {
 				// Open placeholder window (prevents popup)
-				if (!customHandlers.pngsave)  {
+				if (!customHandlers.pngsave) {
 					var str = uiStrings.notification.loadingImage;
 					exportWindow = window.open('data:text/html;charset=utf-8,<title>' + str + '<\/title><h1>' + str + '<\/h1>');
 				}
@@ -2881,7 +2881,7 @@
 				setFlyoutPositions();
 				// $('.tools_flyout').each(function() {
 // 					var pos = $(this).position();
-// 					console.log($(this),  pos.left+(34 * scale));
+// 					console.log($(this), pos.left+(34 * scale));
 // 					$(this).css({'left': pos.left+(34 * scale), 'top': pos.top+(77 * scale)});
 // 					console.log('l', $(this).css('left'));
 // 				});
@@ -3150,11 +3150,12 @@
 					workarea[0]['scroll' + (type === 'width' ? 'Left' : 'Top')] -= (curval - val)/2;
 					win_wh[type] = curval;
 				});
+				setFlyoutPositions();
 			});
 
 			(function() {
 				workarea.scroll(function() {
-					// TODO:  jQuery's scrollLeft/Top() wouldn't require a null check
+					// TODO: jQuery's scrollLeft/Top() wouldn't require a null check
 					if ($('#ruler_x').length != 0) {
 						$('#ruler_x')[0].scrollLeft = workarea[0].scrollLeft;
 					}
@@ -3220,7 +3221,7 @@
 			}
 
 			// TODO: go back to the color boxes having white background-color and then setting
-			//       background-image to none.png (otherwise partially transparent gradients look weird)
+			//	background-image to none.png (otherwise partially transparent gradients look weird)
 			var colorPicker = function(elem) {
 				var picker = elem.attr('id') == 'stroke_color' ? 'stroke' : 'fill';
 // 				var opacity = (picker == 'stroke' ? $('#stroke_opacity') : $('#fill_opacity'));
@@ -3603,6 +3604,7 @@
 				$('#layerpanel').width('+=' + delta);
 				rulerX.css('right', parseInt(rulerX.css('right'), 10) + delta);
 				workarea.css('right', parseInt(workarea.css('right'), 10) + delta);
+				svgCanvas.runExtensions("workareaResized");
 			};
 
 			var resizeSidePanel = function(evt) {
@@ -3673,7 +3675,7 @@
 			};
 
 			var populateLayers = function() {
-        svgCanvas.clearSelection();
+				svgCanvas.clearSelection();
 				var layerlist = $('#layerlist tbody').empty();
 				var selLayerNames = $('#selLayerNames').empty();
 				var drawing = svgCanvas.getCurrentDrawing();
@@ -3913,7 +3915,7 @@
 					setAll: function() {
 						var flyouts = {};
 
-						$.each(tool_buttons, function(i, opts)  {
+						$.each(tool_buttons, function(i, opts) {
 							// Bind function to button
 							if (opts.sel) {
 								var btn = $(opts.sel);
@@ -4002,7 +4004,7 @@
 						$('#tool_zoom').dblclick(dblclickZoom);
 					},
 					setTitles: function() {
-						$.each(key_assocs, function(keyval, sel)  {
+						$.each(key_assocs, function(keyval, sel) {
 							var menu = ($(sel).parents('#main_menu').length);
 
 							$(sel).each(function() {
@@ -4221,11 +4223,11 @@
 
 			// use HTML5 File API: http://www.w3.org/TR/FileAPI/
 			// if browser has HTML5 File API support, then we will show the open menu item
-			// and provide a file input to click.  When that change event fires, it will
+			// and provide a file input to click. When that change event fires, it will
 			// get the text contents of the file and send it to the canvas
 			if (window.FileReader) {
 				var importImage = function(e) {
-          $.process_cancel(uiStrings.notification.loadingImage);
+					$.process_cancel(uiStrings.notification.loadingImage);
 					e.stopPropagation();
 					e.preventDefault();
 					$('#workarea').removeAttr('style');
@@ -4316,7 +4318,7 @@
 						if (!ok) return;
 						svgCanvas.clear();
 						if (f.files.length==1) {
-              $.process_cancel(uiStrings.notification.loadingImage);
+							$.process_cancel(uiStrings.notification.loadingImage);
 							var reader = new FileReader();
 							reader.onloadend = function(e) {
 								loadSvgString(e.target.result);
@@ -4399,7 +4401,7 @@
 					updateRulers(cnvs, zoom);
 					workarea.scroll();
 				}
-        $('#dialog_box').hide();
+				$('#dialog_box').hide();
 			};
 
 			// Make [1,2,5] array
@@ -4562,21 +4564,23 @@
 				updateCanvas(true);
 // 			});
 
-		//	var revnums = "svg-editor.js ($Rev: 2516 $) ";
+		//	var revnums = "svg-editor.js ($Rev: 2585 $) ";
 		//	revnums += svgCanvas.getVersion();
 		//	$('#copyright')[0].setAttribute('title', revnums);
 
 			// Callback handler for embedapi.js
 			try {
 				window.addEventListener('message', function(e) {
-                    if (typeof e.data !== 'string') { // Brett added
-                        return;
-                    }
-					var cbid = parseInt(e.data.substr(0, e.data.indexOf(';')), 10);
+					if (!e.data || typeof e.data !== 'object' || e.data.namespace !== 'svgCanvas') {
+						return;
+					}
+					var cbid = e.data.id,
+						name = e.data.name,
+						args = e.data.args;
 					try {
-						e.source.postMessage('SVGe'+cbid+';'+JSON.stringify(eval(e.data)), '*');
+						e.source.postMessage({namespace: 'svg-edit', id: cbid, result: svgCanvas[name](args)}, '*');
 					} catch(err) {
-						e.source.postMessage('SVGe'+cbid+';error:'+err.message, '*');
+						e.source.postMessage({namespace: 'svg-edit', id: cbid, error: err.message}, '*');
 					}
  				}, false);
 			} catch(err) {
@@ -4687,8 +4691,8 @@
 					'dataType': 'text',
 					cache: !!cache,
 					beforeSend:function(){
-            $.process_cancel(uiStrings.notification.loadingImage);
-        	 },
+						$.process_cancel(uiStrings.notification.loadingImage);
+					},
 					success: function(str) {
 						loadSvgString(str, cb);
 					},
@@ -4699,9 +4703,9 @@
 							$.alert(uiStrings.notification.URLloadFail + ': \n'+err+'', cb);
 						}
 					},
-    			complete:function(){
-               $('#dialog_box').hide();
-        	 }
+					complete:function(){
+						$('#dialog_box').hide();
+					}
 				});
 			});
 		};

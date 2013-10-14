@@ -54,7 +54,7 @@
             "binaryview": "http://brett-zamir.me/webappfind/ico.html?type=%type&method=%method&pathID=%pathID"
         },
         "svgtype": {
-            "edit": "http://brett-zamir.me/webappfind/svg.html?editmode=true&type=%type&method=%method&pathID=%pathID"
+            "edit": "http://brett-zamir.me/webappfind/svg-edit/editor/svg-editor.html?extensions=ext-markers.js,ext-connector.js,ext-eyedropper.js,ext-shapes.js,ext-imagelib.js,ext-grid.js,ext-polygon.js,ext-star.js,ext-webappfind.js&editmode=true&type=%type&method=%method&pathID=%pathID"
         },
         "oggaudiotype": {
             "binaryview": "http://brett-zamir.me/webappfind/ogg.html?type=%type&method=%method&pathID=%pathID"

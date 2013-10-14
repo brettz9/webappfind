@@ -5414,7 +5414,7 @@ this.getZoom = function(){return current_zoom;};
 // Function: getVersion
 // Returns a string which describes the revision number of SvgCanvas.
 this.getVersion = function() {
-	return "svgcanvas.js ($Rev: 2524 $)";
+	return "svgcanvas.js ($Rev: 2533 $)";
 };
 
 // Function: setUiStrings
@@ -6655,11 +6655,6 @@ var changeSelectedAttributeNoUndo = function(attr, newValue, elems) {
 		var elem = elems[i];
 		if (elem == null) continue;
 		
-		// Go into "select" mode for text changes
-		if (current_mode === "textedit" && attr !== "#text" && elem.textContent.length) {
-			textActions.toSelectMode(elem);
-		}
-		
 		// Set x,y vals on elements that don't have them
 		if ((attr === 'x' || attr === 'y') && no_xy_elems.indexOf(elem.tagName) >= 0) {
 			var bbox = getStrokedBBox([elem]);
@@ -6704,6 +6699,15 @@ var changeSelectedAttributeNoUndo = function(attr, newValue, elems) {
 				setHref(elem, newValue);
 			}
 			else elem.setAttribute(attr, newValue);
+
+			// Go into "select" mode for text changes
+			// NOTE: Important that this happens AFTER elem.setAttribute() or else attributes like
+			// font-size can get reset to their old value, ultimately by svgEditor.updateContextPanel(),
+			// after calling textActions.toSelectMode() below
+			if (current_mode === "textedit" && attr !== "#text" && elem.textContent.length) {
+				textActions.toSelectMode(elem);
+			}
+
 //			if (i==0)
 //				selectedBBoxes[0] = svgedit.utilities.getBBox(elem);
 			// Use the Firefox ffClone hack for text elements with gradients or
@@ -7557,7 +7561,7 @@ this.updateCanvas = function(w, h) {
 	}
 	
 	selectorManager.selectorParentGroup.setAttribute("transform", "translate(" + x + "," + y + ")");
-	
+	 runExtensions("canvasUpdated",{new_x:x, new_y:y, old_x:old_x, old_y:old_y, d_x:x - old_x, d_y:y - old_y});
 	return {x:x, y:y, old_x:old_x, old_y:old_y, d_x:x - old_x, d_y:y - old_y};
 };
 

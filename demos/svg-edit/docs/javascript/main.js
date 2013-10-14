@@ -173,9 +173,9 @@ function ShowTip(event, tooltipID, linkID)
     var docX = event.clientX + window.pageXOffset;
     var docY = event.clientY + window.pageYOffset;
 
-    var showCommand = "ReallyShowTip('" + tooltipID + "', '" + linkID + "', " + docX + ", " + docY + ")";
-
-    tooltipTimer = setTimeout(showCommand, 1000);
+    tooltipTimer = setTimeout(function () {
+            ReallyShowTip(tooltipID, linkID, docX, docY);
+        }, 1000);
     }
 
 function ReallyShowTip(tooltipID, linkID, docX, docY)
@@ -192,8 +192,8 @@ function ReallyShowTip(tooltipID, linkID, docX, docY)
         }
 /*    else if (document.all)
         {
-        tooltip = eval("document.all['" + tooltipID + "']");
-        link = eval("document.all['" + linkID + "']");
+        tooltip = document.all[tooltipID]);
+        link = document.all[linkID]);
         }
 */
     if (tooltip)
@@ -250,7 +250,7 @@ function HideTip(tooltipID)
     if (document.getElementById)
         {  tooltip = document.getElementById(tooltipID); }
     else if (document.all)
-        {  tooltip = eval("document.all['" + tooltipID + "']");  }
+        {  tooltip = document.all[tooltipID];  }
 
     if (tooltip)
         {  tooltip.style.visibility = "hidden";  }
@@ -285,7 +285,7 @@ function NDOnResize()
         {  clearTimeout(resizeTimer);  };
 
     resizeTimer = setTimeout(NDDoResize, 250);
-    };
+    }
 
 
 function NDDoResize()
@@ -448,6 +448,7 @@ function SearchPanel(name, mode, resultsPath)
     */
     this.OnSearchFieldChange = function()
         {
+        var t = this;
         if (this.keyTimeout)
             {
             clearTimeout(this.keyTimeout);
@@ -460,7 +461,9 @@ function SearchPanel(name, mode, resultsPath)
             {
             if (searchValue != "")
                 {
-                this.keyTimeout = setTimeout(this.name + ".Search()", this.keyTimeoutLength);
+                    this.keyTimeout = setTimeout(function () {
+                        t.name.Search();
+                    }, this.keyTimeoutLength);
                 }
             else
                 {
@@ -624,6 +627,7 @@ function SearchPanel(name, mode, resultsPath)
     */
     this.Activate = function(isActive, ignoreDeactivateDelay)
         {
+        var t = this;
         // We want to ignore isActive being false while the results window is open.
         if (isActive || (this.mode == "HTML" && this.DOMPopupSearchResultsWindow().style.display == "block"))
             {
@@ -642,7 +646,9 @@ function SearchPanel(name, mode, resultsPath)
             }
         else if (!ignoreDeactivateDelay)
             {
-            this.inactivateTimeout = setTimeout(this.name + ".InactivateAfterTimeout()", this.inactivateTimeoutLength);
+                this.inactivateTimeout = setTimeout(function () {
+                    t.name.InactivateAfterTimeout();
+                }, this.inactivateTimeoutLength);
             }
         else
             {
