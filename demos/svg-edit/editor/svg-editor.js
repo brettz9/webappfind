@@ -4566,7 +4566,7 @@
 				updateCanvas(true);
 // 			});
 
-		//	var revnums = "svg-editor.js ($Rev: 2594 $) ";
+		//	var revnums = "svg-editor.js ($Rev: 2584 $) ";
 		//	revnums += svgCanvas.getVersion();
 		//	$('#copyright')[0].setAttribute('title', revnums);
 
