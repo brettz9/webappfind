@@ -182,7 +182,7 @@ The DeviceStorageAPI appears to allow more privileges (like [AsYouWish](https://
 1. Disable further save attempts with bad ID supplied in case a however previously approved site is attempting to guess at the paths of (if the user has enabled path transmission), or at the GUID representing, other non-approved files
 1. Check upon each save attempt that the loaded protocol is still registered as a handler (and remove usage notes above once implemented).
 1. Stop defining new command line listeners for each method--just require it as an additional parameter?
-1. Support an optional, hard-coded web app URL (to circumvent the normal detection procedures and always open with a given web app).
+1. Support an optional, hard-coded web app URL and/or hard-coded file type (to circumvent the normal detection procedures and always open with a given web app).
 1. Support command-line transmission of the file privileges to a specific web app URLs regardless of prefs/config? (optionally looking for fallbacks if the supplied one is a protocol but not found)
 1. Arbitrary command line args to pass on to webapps
 1. Allow eval-able strings (or JS file paths) as arguments (with or without the usual WebAppFind
