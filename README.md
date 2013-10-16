@@ -44,7 +44,7 @@ It is my goal to complete work on [ExecuteBuilder](https://builder.addons.mozill
 
 The following process is subject to change and may potentially even be scrapped altogether if another approach is found to be easier for streamlining cross-browser invocation, but currently this API is available if someone wishes to build their own executables using the API or to simply be able to run commands manually from the command line.
 
-* `-webapp-<method> <path>` (i.e., "-webapp-view", "-webapp-binaryview", or "-webapp-edit" and the file path) - Indicates the path of the file which will be available with privileges (currently, view or edit) to the webapp.
+* `-webapp-<method> <path>` (i.e., "-webapp-view", "-webapp-binaryview", "-webapp-edit", or "-webapp-binaryedit" and the file path) - Indicates the path of the file which will be available with privileges (currently, view or edit) to the webapp.
 * `-remote "openurl(about:newtab)"` - This built-in Mozilla command line API allows Firefox (unlike "-silent") to gain focus without additional instructions to Windows. If the tab is determined to not be needed (e.g., if the user has opted to allow desktop opening of the file when no protocols are found), the add-on will simply auto-close the tab that this parameter opens.
 
 # For developers
@@ -68,12 +68,12 @@ The following steps may currently be altered by user preference.
 1. Once a file type is known as per above...
     1. a protocol may be checked for the detected type as follows:
         1. The protocol to find the type will begin with "web+local" (only existing [whitelisted protocols or "web+" ones are allowed](http://www.whatwg.org/specs/web-apps/current-work/multipage/timers.html#dom-navigator-registerprotocolhandler))
-        1. The protocol must then be followed by the (lower-case) method (currently "view", "binaryview", "edit", or "register")
+        1. The protocol must then be followed by the (lower-case) method (currently "view", "binaryview", "edit", "binaryedit", or "register")
         1. The protocol must then be concluded by the file type as per above (i.e., the file extension like "js" or filetypes.json designated type name (which [must be lower case ASCII](http://www.whatwg.org/specs/web-apps/current-work/multipage/timers.html#dom-navigator-registerprotocolhandler))).
         1. If the protocol is found to be registered, it will be visited and these steps will end. Otherwise, continue with the following steps.
     1. If the filetypes.json file contains a top-level "defaultHandlers" property object, this object will be checked against the type name and if a subobject for this type is found:
         1. that object will be checked to see whether the "register" mode is present (and the add-on user has not opted out of visiting these links), and if yes, the user would be forwarded to it (to allow a site the ability to register itself as a handler for any number of modes and/or be a portal to those modes) and these steps would stop. Otherwise, continue.
-        1. that object will be checked to see whether the requested open mode is also present (e.g., "view", "binaryview", or "edit").
+        1. that object will be checked to see whether the requested open mode is also present (e.g., "view", "binaryview", "edit", or "binaryedit").
             1. If the open mode key is present, its value will be used as the site to open. (Currently, %type , %method and %pathID are variables that will be substituted. User preferences may determine that the path ID is not the actual path but a mere GUID.) Although this may be changed in the future, file:// URLs currently do not work with WebAppFind message posting (due to current privacy leaks in Firefox with add-on-to-file-protocol-webpage communication) (I don't believe custom DOM events worked with file:, and there is apparently no other method of communicating with an add-on (without injecting a global) that we could use like allowing sites to open a chrome:// URL (restartless might be able to get such URLs via chrome.manifest or dynamically but this is not allowed from the file: protocol)).
     1. If the filetypes.json file contains a top level "hierarchy" property object and if a suitable mode was not found, the hierarchy object may be checked for the type name to see what types might be acceptable alternatives (in decreasing order of preference) to determine the type to check in future steps below.
     1. If no other information is present in the filetypes.json file, if the file is not present, or if a specific default site was not found, depending on user settings, depending on user setting, the browser may attempt to open the file. Depending on user settings, the user may delegate the opening of the file back to the desktop (the default, however, is not to do so). If the user has not permitted either of these behaviors, an error message will be displayed.
@@ -82,7 +82,7 @@ So, for example, if no filetypes.json file were present (or if the filetypes.jso
 
 ## API: reading file contents
 
-The 'webapp-view' message (see the example below) will be sent to the web app when a desktop file has been opened in the "view", "binaryview", or "edit" mode. This message delivers the file contents (whether in binary form or not) to the web app.
+The 'webapp-view' message (see the example below) will be sent to the web app when a desktop file has been opened in the "view", "binaryview", "edit", or "binaryedit" mode. This message delivers the file contents (whether in binary form or not) to the web app.
 
 ```javascript
 var pathID; // We might use an array to track multiple path IDs within the same app (once WebAppFind may be modified to support this capability!)
@@ -156,7 +156,7 @@ Before discovering the command line handling, I originally sought to have the ex
     1. Change what is passed within URL? method, filetype, path? or just pass through postMessage? Bookmarkability vs. clean API?
 1. Since web protocols are not meant to be used to have the privilege of reading from or writing to files (unless they belong to reserved protocols which, per the HTML spec, cannot be registered from the web anyways), the current approach of allowing web sites to register themselves as handlers might need to be modified to use some other mechanism which can at least provide warnings to users about the capabilities they are thereby approving (perhaps as within [AsYouWish](https://github.com/brettz9/asyouwish/) when sites themselves can do the requesting for privileges). However, since WebAppFind chose to start with the web protocol approach not only because it is an existing method for sites to register themselves for later potential use, but because the data security and privacy issues are confined to data files which are explicitly opened from the desktop when using the WebAppFind approach.
 1. Depending on whether registerProtocolHandler will continue to be used, see about whether the HTML spec might be open to more tolerance within the allowed characters of a custom protocol beyond lower-case ASCII letters.
-1. See todos below for possible additions to modes beyond just "view", "binaryview", and "edit".
+1. See todos below for possible additions to modes beyond just "view", "binaryview", "edit", and "binaryedit".
 
 ## Implementation notes
 
@@ -223,7 +223,7 @@ functionality in a batch file manner without exposing privileges to web apps unl
 
 # Possible future mode additions
 
-Besides "view", "binaryview", "edit", "register", the following modes might be added in future versions:
+Besides "view", "binaryview", "edit", "binaryedit", "register", the following modes might be added in future versions:
 
 1. Version control (also some discussion of possibilites for multiple file saving)
     1. "create", "delete" - for any necessary set-up before creation or deletion of a file (as with saving, the protocol should not have side effects, so these should only bring one to the page to confirm the user wished to take such an action--and the browser might have its own confirmation for these actions).
@@ -247,6 +247,7 @@ Besides "view", "binaryview", "edit", "register", the following modes might be a
 1. Cookie to hold JSHint options (or CSS lint options) and for remembering XML "schemaInfo"
 1. XML dialect demo with schema for CodeMirror xmlautocomplete (also a JSON schema for checking JSON dialects if not autocomplete as well?)
 1. Images/canvas: http://www.picozu.com/editor/ ?
+    1. Change binary-test-png.html demo into a real binary editor (if a good open source one is found)
 1. Audio: http://plucked.de/ and https://github.com/plucked/html5-audio-editor ?
 1. Video - popcorn?
 1. Music notations  - http://www.vexflow.com/

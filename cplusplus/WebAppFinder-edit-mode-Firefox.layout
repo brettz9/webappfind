@@ -4,9 +4,9 @@ Order=0,1,2
 [Editor_0]
 Open=1
 Top=1
-CursorCol=13
-CursorRow=47
-TopLine=44
+CursorCol=10
+CursorRow=52
+TopLine=32
 LeftChar=1
 [Editor_1]
 Open=1
@@ -20,5 +20,5 @@ Open=1
 Top=0
 CursorCol=75
 CursorRow=6
-TopLine=1
+TopLine=7
 LeftChar=1

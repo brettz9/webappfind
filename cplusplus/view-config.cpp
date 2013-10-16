@@ -3,7 +3,7 @@ using namespace std;
 
 // *****CONFIGURATION*****
 
-// Modify this for each file (possible options: Create, View, BinaryView, Edit, Validate)
+// Modify this for each file (possible options: Create, View, BinaryView, Edit, BinaryEdit, Validate)
 Method method = View;
 
 // Modify this to use the path of the browser

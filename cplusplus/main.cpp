@@ -47,6 +47,9 @@ int main(int argc, char** argv) {
 		case Edit:
 			methodStr = "edit";
 			break;
+		case BinaryEdit:
+			methodStr = "binaryedit";
+			break;
 		case Validate:
 			methodStr = "validate"; // Not yet supported
 			break;
