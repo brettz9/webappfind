@@ -182,6 +182,7 @@ The DeviceStorageAPI appears to allow more privileges (like [AsYouWish](https://
 1. Disable further save attempts with bad ID supplied in case a however previously approved site is attempting to guess at the paths of (if the user has enabled path transmission), or at the GUID representing, other non-approved files
 1. Check upon each save attempt that the loaded protocol is still registered as a handler (and remove usage notes above once implemented).
 1. Stop defining new command line listeners for each method--just require it as an additional parameter?
+1. Support an optional, hard-coded web app URL (to circumvent the normal detection procedures and always open with a given web app).
 1. Support command-line transmission of the file privileges to a specific web app URLs regardless of prefs/config? (optionally looking for fallbacks if the supplied one is a protocol but not found)
 1. Arbitrary command line args to pass on to webapps
 1. Allow eval-able strings (or JS file paths) as arguments (with or without the usual WebAppFind
@@ -190,17 +191,12 @@ functionality in a batch file manner without exposing privileges to web apps unl
 1. Create tests with using registerProtocolHandler (also for JS/JSON/mytype)
 1. Submit to AMO, Bower, etc.
 1. Rewrite C++ exe's as batch scripts (particularly for the sake of [ExecuteBuilder](https://builder.addons.mozilla.org/package/204099/latest/)), but made executable by being tied to cmd.exe
-    1. Auto-generate these batch scripts for users (though we can supply the ones not using hard-coded URLs) via our Firefox add-on based on their supplying:
-        1. Method (view, edit, etc.) for opening files via webappfind
-        1. Optional "hidden" flag (in conjunction with, or only from, AsYouWish?) to embed a hidden DOM window script (use for batch-script-like functionality)
-            1. Potentially privileged via AsYouWish, and aware of file path, could, e.g., create 10 copies of a supplied file name in the same directory or some other pipeline
-            1. Allow args to webappfind to avoid adding a window, e.g., for a type to handling .jsbatch files to cause a them to be launched with privileges (via AYW? though better to avoid need for any HTML--just JS) in a hidden window (or manage files to run on a schedule; integrate with a Windows task scheduler in case not open?), so work like AYW but without a footprint (but without working each restart as with "add-on sites"); may still be useful with other privs, e.g., to get (send to network) and save file contents, and if asking for privs, will prompt dialog (e.g., to read a file and then use privs--though this would be redundant, perhaps in this mode we can always pass the real path so it adds value, e.g., if script wants to do something in same directory); see also todos in ExecuteBuilder for more on
-            command-line-like approach
-        1. An optional, hard-coded web app URL (to circumvent the normal detection procedures and always open with a given web app)
-        1. Option for any web app to open by default in full-screen mode
-        1. An optional icon, so as to distinguish in task bar, etc. (making shortcuts via command line: http://ss64.com/nt/shortcut.html )
-        1. Whether to auto-create a new profile just for this combination of options and a -no-remote call to allow executable-like behavior (creates a separate icon instance in the task bar though not a separate icon unless, again, the icon is attached to a short cut)
-        1. Another browser path if other browsers ever support
+1. Installer script to run to facilitate setting up of OpenWith per user choices (if ExecuteBuilder is not installed, it could link to it, and if it is, it could bring user through steps).
+1. Support optional "hidden" flag (in conjunction with, or only from, AsYouWish?) to embed a hidden DOM window script (use for batch-script-like functionality)
+    1. Potentially privileged via AsYouWish, and aware of file path, could, e.g., create 10 copies of a supplied file name in the same directory or some other pipeline
+    1. Allow args to WebAppFind to avoid adding a window, e.g., for a type to handling .jsbatch files to cause a them to be launched with privileges (via AYW? though better to avoid need for any HTML--just JS) in a hidden window (or manage files to run on a schedule; integrate with a Windows task scheduler in case not open?), so work like AYW but without a footprint (but without working each restart as with "add-on sites"); may still be useful with other privs, e.g., to get (send to network) and save file contents, and if asking for privs, will prompt dialog (e.g., to read a file and then use privs--though this would be redundant, perhaps in this mode we can always pass the real path so it adds value, e.g., if script wants to do something in same directory); see also todos in ExecuteBuilder for more on
+    command-line-like approach
+1. Support option for any web app to open by default in full-screen mode (could just let web app and user handle, but user may prefer to bake it in to a particular executable only)
 1. Complete [ExecuteBuilder](https://builder.addons.mozilla.org/package/204099/latest/)
 1. Unregister command line handler, etc. on add-on uninstall
 
