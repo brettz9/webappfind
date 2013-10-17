@@ -267,4 +267,4 @@ Besides "view", "binaryview", "edit", "binaryedit", "register", the following mo
 1. Create demo supporting docx format (rather than requiring export to HTML for Word docs)
 1. Demonstrate approach of allowing data files for download (so can store them anywhere)--if not AYW approach for namespaced shared browser access--as well as data files chosen from File selector (and save over such a file if within the protocol and user permits)
 1. Ability to build [JHTML](http://brettz9.github.com/jhtml) with autocomplete (usable for saving as JSON or saving as HTML) once spec finalized (once <i> approach used)
-1. Integrate HTML/SVG (and then others) with Together.js to allow collaboration on one's local files
+1. Integrate HTML/SVG (and then others) with [Together.js](https://togetherjs.com/) to allow collaboration on one's local files
