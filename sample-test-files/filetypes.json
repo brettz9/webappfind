@@ -46,7 +46,7 @@
         },
         "pngtype": {
             "binaryview": "http://brett-zamir.me/webappfind/png.html?type=%type&method=%method&pathID=%pathID",
-            "binaryedit": "http://brett-zamir.me/webappfind/binary-test-png.html?type=%type&method=%method&pathID=%pathID"
+            "binaryedit": "http://brett-zamir.me/webappfind/png-edit.html?type=%type&method=%method&pathID=%pathID"
         },
         "giftype": {
             "binaryview": "http://brett-zamir.me/webappfind/gif.html?type=%type&method=%method&pathID=%pathID"
