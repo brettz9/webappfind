@@ -215,6 +215,7 @@ functionality in a batch file manner without exposing privileges to web apps unl
 1. Option to avoid or allow new tabs for same URI/method/filetype/path? (option to get the same tab or new tabs for them?); option to push to all open windows in different manner so can notify user of updates but not change focus, etc.
 1. Open up wiki for custom type documentation/links with "proposal", "accepted", etc. statuses similar to the WhatWG meta tags wiki? Even if filetypes.json is used with "register" on "defaultHandlers", it may be convenient to have a separate spec URL, including for cases where the file extension is used without filetypes.json.
 1. Allow genuine POST or other non-GET or header-dependent requests (ala curl)?
+1. Allow postMessage mechanism to receive content as entered in a dialog as opposed to a file (though with an optional file to save back)
 1. Allow filetypes.json to designate icon files (as well as suggested shortcut names?) for use with [ExecuteBuilder](https://builder.addons.mozilla.org/package/204099/latest/) executables so the user will not need to create their own icon? Would executables or batch files (or filebrowser-enhanced) be able to pre-read the current directory and parse the JSON file and then delegate to another executable associated with this icon?
 1. Create dialog to ask user for mode, etc., so executable doesn't have to bake it all in and can let the user decide at run-time.
 
