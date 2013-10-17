@@ -50,10 +50,12 @@
             "binaryedit": "http://brett-zamir.me/webappfind/png-edit.html?type=%type&method=%method&pathID=%pathID"
         },
         "giftype": {
-            "binaryview": "http://brett-zamir.me/webappfind/gif.html?type=%type&method=%method&pathID=%pathID"
+            "binaryview": "http://brett-zamir.me/webappfind/gif.html?type=%type&method=%method&pathID=%pathID",
+            "binaryedit": "http://brett-zamir.me/webappfind/gif-edit.html?type=%type&method=%method&pathID=%pathID"
         },
         "icotype": {
-            "binaryview": "http://brett-zamir.me/webappfind/ico.html?type=%type&method=%method&pathID=%pathID"
+            "binaryview": "http://brett-zamir.me/webappfind/ico.html?type=%type&method=%method&pathID=%pathID",
+            "binaryedit": "http://brett-zamir.me/webappfind/ico-edit.html?type=%type&method=%method&pathID=%pathID"
         },
         "svgtype": {
             "edit": "http://brett-zamir.me/webappfind/svg-edit/editor/svg-editor.html?extensions=ext-markers.js,ext-connector.js,ext-eyedropper.js,ext-shapes.js,ext-imagelib.js,ext-grid.js,ext-polygon.js,ext-star.js,ext-webappfind.js&editmode=true&type=%type&method=%method&pathID=%pathID"
