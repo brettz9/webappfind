@@ -268,3 +268,4 @@ Besides "view", "binaryview", "edit", "binaryedit", "register", the following mo
 1. Demonstrate approach of allowing data files for download (so can store them anywhere)--if not AYW approach for namespaced shared browser access--as well as data files chosen from File selector (and save over such a file if within the protocol and user permits)
 1. Ability to build [JHTML](http://brettz9.github.com/jhtml) with autocomplete (usable for saving as JSON or saving as HTML) once spec finalized (once <i> approach used)
 1. Integrate HTML/SVG (and then others) with [Together.js](https://togetherjs.com/) to allow collaboration on one's local files
+1. Markdown editor (http://pagedown.googlecode.com/hg/demo/browser/demo.html for buttons or http://dillinger.io/ for syntax highlighting or integrate CodeMirror markdown into pagedown?). See also http://stackoverflow.com/questions/2357022/what-is-a-good-client-side-markdown-editor/
