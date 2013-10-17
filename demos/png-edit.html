@@ -259,16 +259,20 @@ window.addEventListener('message', function(e) {
             // Populate the contents
             pathID = e.data[1];
             dataURL = 'data:image/' + imageType + ';base64,' + btoa(e.data[2]); // Converts binary string to base64
-            img.src = dataURL;            
-            fabric.Image.fromURL(dataURL, function(oImg) {
-                canvas.add(oImg);
-                canvas.setDimensions({width: img.width, height: img.height});
-                $('#canvas-width').value = img.width;
-                $('#canvas-height').value = img.height;
-                oImg.center();
-                oImg.setCoords();
-            });
-            $('#save').disabled = false;
+            img.src = dataURL;
+            img.crossOrigin = 'Anonymous'; // Note that this and the following were added during testing to overcome a security issue despite these being our own data URL strings! (And despite it having worked for one such image but not another!) Although I can't replicate the error now, I'm keeping these here in case it prevents problems.
+            img.onload = function () {
+                fabric.Image.fromURL(dataURL, function(oImg) {
+                    oImg.crossOrigin = 'Anonymous';
+                    canvas.add(oImg);
+                    canvas.setDimensions({width: img.width, height: img.height});
+                    $('#canvas-width').value = img.width;
+                    $('#canvas-height').value = img.height;
+                    oImg.center();
+                    oImg.setCoords();
+                });
+                $('#save').disabled = false;
+            };
             break;
         case 'webapp-save-end':
             alert('save complete for pathID ' + e.data[1] + '!');
