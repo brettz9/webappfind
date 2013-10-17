@@ -42,7 +42,8 @@
             "edit": "http://brett-zamir.me/webappfind/css.html?editmode=true&type=%type&method=%method&pathID=%pathID"
         },
         "jpegtype": {
-            "binaryview": "http://brett-zamir.me/webappfind/jpeg.html?type=%type&method=%method&pathID=%pathID"
+            "binaryview": "http://brett-zamir.me/webappfind/jpeg.html?type=%type&method=%method&pathID=%pathID",
+            "binaryedit": "http://brett-zamir.me/webappfind/jpeg-edit.html?type=%type&method=%method&pathID=%pathID"
         },
         "pngtype": {
             "binaryview": "http://brett-zamir.me/webappfind/png.html?type=%type&method=%method&pathID=%pathID",
