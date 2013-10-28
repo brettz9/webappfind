@@ -4294,10 +4294,12 @@ this.save = function(opts) {
 };
 
 // Function: rasterExport
-// Generates a PNG Data URL based on the current image, then calls "exported" 
-// with an object including the string and any issues found
-this.rasterExport = function() {
-	// remove the selected outline before serializing
+// Generates a Data URL based on the current image, then calls "exported" 
+// with an object including the string, image information, and any issues found
+this.rasterExport = function(imgType, quality) {
+    var mimeType = 'image/' + imgType.toLowerCase();
+
+    // remove the selected outline before serializing
 	clearSelection();
 	
 	// Check for known CanVG issues 
@@ -4323,7 +4325,7 @@ this.rasterExport = function() {
 	});
 
 	var str = this.svgCanvasToString();
-	call("exported", {svg: str, issues: issues});
+	call("exported", {svg: str, issues: issues, type: imgType, mimeType: mimeType, quality: quality});
 };
 
 // Function: getSvgString
@@ -4341,7 +4343,7 @@ this.getSvgString = function() {
 // generating IDs for future documents in SVG-Edit.
 // 
 //  Parameters:
-//   an opional boolean, which, if true, adds a nonce to the prefix. Thus
+//   an optional boolean, which, if true, adds a nonce to the prefix. Thus
 //	 svgCanvas.randomizeIds()  <==> svgCanvas.randomizeIds(true)
 //
 // if you're controlling SVG-Edit externally, and want randomized IDs, call
@@ -5414,7 +5416,7 @@ this.getZoom = function(){return current_zoom;};
 // Function: getVersion
 // Returns a string which describes the revision number of SvgCanvas.
 this.getVersion = function() {
-	return "svgcanvas.js ($Rev: 2591 $)";
+	return "svgcanvas.js ($Rev: 2602 $)";
 };
 
 // Function: setUiStrings
