@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <?php
 /*
  * fileopen.php
@@ -17,6 +17,9 @@
 	$output = file_get_contents($file);
 	
 	$type = $_REQUEST['type'];
+	if (!in_array($type, array('load_svg', 'import_svg', 'import_img'))) {
+		exit;
+	}
 	
 	$prefix = '';
 	
@@ -26,6 +29,11 @@
 		$prefix = 'data:' . $info['mime'] . ';base64,';
 	}
 ?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8" />
 <script>
-window.top.window.svgEditor.processFile("<?php echo $prefix . base64_encode($output); ?>", "<?php echo htmlentities($type); ?>");
+window.top.window.svgEditor.processFile("<?php echo $prefix . base64_encode($output); ?>", "<?php echo $type; ?>");
 </script>
+</head><body></body>
+</html>

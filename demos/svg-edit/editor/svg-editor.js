@@ -1654,7 +1654,7 @@
 							var label = $('#g_title')[0];
 							label.value = title;
 							setInputWidth(label);
-							label.prop('disabled', el_name == 'use');
+							$('#g_title').prop('disabled', el_name == 'use');
 						}
 					}
 					menu_items[(el_name === 'g' ? 'en' : 'dis') + 'ableContextMenuItems']('#ungroup');
@@ -4604,7 +4604,7 @@
 				updateCanvas(true);
 // 			});
 
-		//	var revnums = "svg-editor.js ($Rev: 2602 $) ";
+		//	var revnums = "svg-editor.js ($Rev: 2611 $) ";
 		//	revnums += svgCanvas.getVersion();
 		//	$('#copyright')[0].setAttribute('title', revnums);
 
@@ -4612,7 +4612,7 @@
 			try {
 				window.addEventListener('message', function(e) {
 					// We accept and post strings for the sake of IE9 support
-					if (typeof e.data !== 'string') {
+					if (typeof e.data !== 'string' || e.data.charAt() === '|') {
 						return;
 					}
 					var data = JSON.parse(e.data);
