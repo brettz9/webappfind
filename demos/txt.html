@@ -4,7 +4,8 @@
     <meta charset="utf-8" />
     <title>WebAppFind text editor demo</title>
     <!-- WebAppFind -->
-    <link href="javascript.css" rel="stylesheet" type="text/css" />    
+    <link href="javascript.css" rel="stylesheet" type="text/css" />
+    <script src="register.js"></script>
     <script>
 /*
 TODOS:
@@ -51,13 +52,22 @@ window.addEventListener('DOMContentLoaded', function () {
             return;
         }
         window.postMessage([saveMessage, pathID, $('#text').value], window.location.origin);
-    });    
+    });
+    
+/*
+    addRegistrationHandlers([{
+        type: 'edittxt', info: 'Protocol for viewing local TXT files',
+        instructions: 'Register this app as a handler for viewing local TXT files'
+    }], 'http://127.0.0.1/webappfind/demos/txt.html?uri=%s');
+*/
+
 });
 
 }());
     </script>
 </head>
 <body>
+<div id="actions"></div>
 <div id="toolbar">
     <button id="save" disabled="disabled">Save</button>
 </div>
