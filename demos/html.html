@@ -6,10 +6,12 @@
     <script src="../node_modules/jamilih/jml.js"></script>
     <script src="ckeditor/ckeditor.js"></script>
     <script src="ckeditor/samples/assets/uilanguages/languages.js"></script>
+    <script src="register.js"></script>
     <link rel="stylesheet" href="ckeditor/samples/sample.css" type="text/css" />
     <link rel="stylesheet" href="html.css" type="text/css" />
 </head>
 <body>
+    <div id="actions"></div>
     <div>
         <form id="editorForm">
             <div id="outer-toolbar">
@@ -25,7 +27,7 @@
 <script>
 /*globals jml, CKEDITOR */
 (function () {'use strict';
-var i, editor, languages,
+var i, editor, languages, backgroundColor,
     // Could pass option 'readOnly' if determine from protocol that this is view mode only
     pathID,
     saveMessage = 'webapp-save',
@@ -52,7 +54,12 @@ function listenForMessages() {
                 }
                 break;
             case 'webapp-save-end':
-                alert('save complete for pathID ' + e.data[1] + '!');
+                $('a.cke_button__save').style.backgroundColor = 'blue';
+                setTimeout(function () {
+                    $('a.cke_button__save').style.backgroundColor = backgroundColor;
+                }, 120);
+                
+                // alert('save complete for pathID ' + e.data[1] + '!');
                 break;
             default:
                 throw 'Unexpected method';
@@ -81,18 +88,41 @@ function createEditor(languageCode) {
                 if (!pathID) { // Disable save button before adding a listener until we get a path
                     $('a.cke_button__save').disabled = true;
                 }
+                backgroundColor = $('a.cke_button__save').style.backgroundColor;
+                /*
+                var command = editor.addCommand('save', {
+                    modes: { wysiwyg: 1, source: 1 },
+                    exec: function (editor) { // Add here custom function for the save button
+                        alert('You clicked the save button in CKEditor toolbar!');
+                    }
+                });
+                editor.ui.addButton('Save', { label: 'Save', command: 'save' });
+                */
+                
                 editor.on('beforeCommandExec', function (e) {
                     if (e.data.name === 'save') {
-                        throw 'Stop!!!'; // Neither return false, e.stop(), nor e.cancel() seems to work (not preventing the DOM equivalents in the save click listener), but this does
+                        throw '';
                     }
                 });
 
-                $('a.cke_button__save').addEventListener('click', function (e) {
+                function saveToDisk (e) {
+                    if (e.type === 'keypress' && (!e.ctrlKey || e.charCode !== 115)) {
+                        return;
+                    }
                     if (!pathID) {
                         alert('No pathID set by Firefox yet! Remember to invoke this file from an executable or command line and in edit mode.');
                         return;
                     }
                     window.postMessage([saveMessage, pathID, editor.getData()], window.location.origin);
+                }
+                $('a.cke_button__save').addEventListener('click', saveToDisk);
+                
+                editor.document.on('keydown', function (e) {
+                    if (e.data.$.keyCode == 83 && e.data.$.ctrlKey) {
+                        e.data.$.preventDefault(true);
+                        saveToDisk(e.data.$);
+                        return false;
+                    }
                 });
             }
         }
@@ -127,7 +157,14 @@ alert('cool');
 });
 }, 6000);
 */
-
+/*
+window.addEventListener('DOMContentLoaded', function () {
+    addRegistrationHandlers([{
+        type: 'edithtml', info: 'Protocol for viewing local HTML files',
+        instructions: 'Register this app as a handler for viewing local HTML files'
+    }], 'http://127.0.0.1/webappfind/demos/html.html?uri=%s');
+});
+*/
 }());
 
 </script>
