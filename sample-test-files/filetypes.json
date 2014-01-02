@@ -12,9 +12,11 @@
         ["\\.svg", "svgtype"],
         ["\\.webm", "webmvideotype"],
         ["\\.ogg", "oggaudiotype"],
+        ["\\.blockly", "blockly"],
         [".*", "mytype"]
     ],
     "hierarchy": {
+        "blockly": ["xml"],
         "mytype": ["json", "js", "txt"],
         "htmltype": ["txt"],
         "csstype": ["txt"],
@@ -37,6 +39,10 @@
         "xml": {
             "view": "http://brett-zamir.me/webappfind/xml.html?type=%type&method=%method&pathID=%pathID",
             "edit": "http://brett-zamir.me/webappfind/xml.html?editmode=true&type=%type&method=%method&pathID=%pathID"
+        },
+        "blockly": {
+            "view": "http://brett-zamir.me/webappfind/blockly.html?type=%type&method=%method&pathID=%pathID",
+            "edit": "http://brett-zamir.me/webappfind/blockly.html?editmode=true&type=%type&method=%method&pathID=%pathID"
         },
         "csstype": {
             "edit": "http://brett-zamir.me/webappfind/css.html?editmode=true&type=%type&method=%method&pathID=%pathID"
