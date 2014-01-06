@@ -12,7 +12,7 @@ Unlike a more generic solution, such as with a Firefox add-on or [AsYouWish](htt
 
 (For command line usage, see its API below.)
 
-It is hoped that the instructions below can be mostly automated and simplified once the [ExecuteBuilder](https://builder.addons.mozilla.org/package/204099/latest/) add-on is complete (this add-on is to optionally interact with WebAppFind to allow building and assignment of executable/batch files which can be designated for specific file types without the user needing to find the path of these executables as WebAppFind currently requires).
+It is hoped that the instructions below can be mostly automated and simplified once the [Executable Builder](https://github.com/brettz9/executable-builder) add-on is complete (this add-on is to optionally interact with WebAppFind to allow building and assignment of executable/batch files which can be designated for specific file types without the user needing to find the path of these executables as WebAppFind currently requires).
 
 ## Instructions
 
@@ -40,7 +40,7 @@ Currently preferences are global, whereas it may be desirable to allow users to 
 
 WebAppFind is triggered (currently Firefox only) through command line arguments passed to Firefox and handled by the WebAppFind add-on.
 
-It is my goal to complete work on [ExecuteBuilder](https://builder.addons.mozilla.org/package/204099/latest/) to facilitate the building of executables (probably batch scripts tied to cmd.exe) with icon for task bar usage, etc., but currently one must either use (or build) the executables included in the repository or call the command line oneself.
+It is my goal to complete work on [Executable Builder](https://github.com/brettz9/executable-builder) to facilitate the building of executables (probably batch scripts tied to cmd.exe) with icon for task bar usage, etc., but currently one must either use (or build) the executables included in the repository or call the command line oneself.
 
 The following process is subject to change and may potentially even be scrapped altogether if another approach is found to be easier for streamlining cross-browser invocation, but currently this API is available if someone wishes to build their own executables using the API or to simply be able to run commands manually from the command line.
 
@@ -193,12 +193,12 @@ The DeviceStorageAPI appears to allow more privileges (like [AsYouWish](https://
     functionality in a batch file manner without exposing privileges to web apps unless invoked from the desktop (as a workaround, one could use WebAppFind to open an AYW-enabled site, especially if it adds an eval-like ability and WebAppFind get support for passing in arbitrary command line args). Batch scripts (including the functionality to optionally receive file arguments or paths to JS files if AYW was used or XHR paths were used) could thus be written in JS and take advantage of FF cross-platform features (like [Node.js command line scripts](http://www.2ality.com/2011/12/nodejs-shell-scripting.html) but browser aware too). Could use in conjunction with proposed "hidden" flag to avoid adding a tab (or do so by default).
     1. Support optional "hidden" flag (in conjunction with, or only from, AsYouWish?) to embed a hidden DOM window script (use for batch-script-like functionality)
         1. Potentially privileged via AsYouWish, and aware of file path, could, e.g., create 10 copies of a supplied file name in the same directory or some other pipeline
-        1. Allow args to WebAppFind to avoid adding a window, e.g., for a type to handling .jsbatch files to cause a them to be launched with privileges (via AYW? though better to avoid need for any HTML--just JS) in a hidden window (or manage files to run on a schedule; integrate with a Windows task scheduler in case not open?), so work like AYW but without a footprint (but without working each restart as with "add-on sites"); may still be useful with other privs, e.g., to get (send to network) and save file contents, and if asking for privs, will prompt dialog (e.g., to read a file and then use privs--though this would be redundant, perhaps in this mode we can always pass the real path so it adds value, e.g., if script wants to do something in same directory); see also todos in ExecuteBuilder for more on
+        1. Allow args to WebAppFind to avoid adding a window, e.g., for a type to handling .jsbatch files to cause a them to be launched with privileges (via AYW? though better to avoid need for any HTML--just JS) in a hidden window (or manage files to run on a schedule; integrate with a Windows task scheduler in case not open?), so work like AYW but without a footprint (but without working each restart as with "add-on sites"); may still be useful with other privs, e.g., to get (send to network) and save file contents, and if asking for privs, will prompt dialog (e.g., to read a file and then use privs--though this would be redundant, perhaps in this mode we can always pass the real path so it adds value, e.g., if script wants to do something in same directory); see also todos in Executable Builder for more on
         command-line-like approach
     1. Support option for any web app to open by default in full-screen mode (could just let web app and user handle, but user may prefer to bake it in to a particular executable only)
-1. Complete [ExecuteBuilder](https://builder.addons.mozilla.org/package/204099/latest/)
-    1. Rewrite C++ exe's as batch scripts (particularly for the sake of [ExecuteBuilder](https://builder.addons.mozilla.org/package/204099/latest/)), but made executable by being tied to cmd.exe
-    1. Installer script to run to facilitate setting up of OpenWith per user choices (if ExecuteBuilder is not installed, it could link to it, and if it is, it could bring user through steps).
+1. Complete [Executable Builder](https://github.com/brettz9/executable-builder)
+    1. Rewrite C++ exe's as batch scripts (particularly for the sake of [Executable Builder](https://github.com/brettz9/executable-builder)), but made executable by being tied to cmd.exe
+    1. Installer script to run to facilitate setting up of OpenWith per user choices (if Executable Builder is not installed, it could link to it, and if it is, it could bring user through steps).
 1. Unregister command line handler, etc. on add-on uninstall
 1. Option to avoid or allow new tabs for same URI/method/filetype/path? (option to get the same tab or new tabs for them?); option to push to all open windows in different manner so can notify user of updates but not change focus, etc.
 1. Create tests with using registerProtocolHandler (also for JS/JSON/mytype)
@@ -214,7 +214,7 @@ The DeviceStorageAPI appears to allow more privileges (like [AsYouWish](https://
 1. Allow postMessage mechanism to receive content as entered in a dialog as opposed to a file (though with an optional file to save back)
 1. Create dialog to ask user for mode, etc., so executable doesn't have to bake it all in and can let the user decide at run-time.
 1. Command line flag additions:
-    1. See below and also possibly the notes within the [ExecuteBuilder](https://builder.addons.mozilla.org/package/204099/latest/) code
+    1. See below and also possibly the notes within the [Executable Builder](https://github.com/brettz9/executable-builder) code
     1. Support the "register" method from command line?
 1. Integrate functionality into https://github.com/brettz9/filebrowser-enhanced
 1. When [AsYouWish](https://github.com/brettz9/asyouwish/) is in use, allow path-reading as long as site is AYW-approved and the page is registered for the protocol--so one can bookmark a path and always load it or load with other approved paths (e.g., in different tabs within a webapp); also can remember paths to invoke upon FF start up ("website addons")
@@ -223,7 +223,7 @@ The DeviceStorageAPI appears to allow more privileges (like [AsYouWish](https://
 1. Option to confirm reading and/or saving of data upon each attempt and/or display the proposed diffs before saving. (See "Implementation notes" section).
 1. Piggyback on drag-and-drop file capabilities (or create own) to allow files dropped in this way to be saved back to disk and/or path provided to the app.
 1. Open up wiki for custom type documentation/links with "proposal", "accepted", etc. statuses similar to the WhatWG meta tags wiki? Even if filetypes.json is used with "register" on "defaultHandlers", it may be convenient to have a separate spec URL, including for cases where the file extension is used without filetypes.json.
-1. Allow filetypes.json to designate icon files (as well as suggested shortcut names?) for use with [ExecuteBuilder](https://builder.addons.mozilla.org/package/204099/latest/) executables so the user will not need to create their own icon? Would executables or batch files (or filebrowser-enhanced) be able to pre-read the current directory and parse the JSON file and then delegate to another executable associated with this icon?
+1. Allow filetypes.json to designate icon files (as well as suggested shortcut names?) for use with [Executable Builder](https://github.com/brettz9/executable-builder) executables so the user will not need to create their own icon? Would executables or batch files (or filebrowser-enhanced) be able to pre-read the current directory and parse the JSON file and then delegate to another executable associated with this icon?
 
 # Possible future mode additions
 
