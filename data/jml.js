@@ -146,9 +146,9 @@ Todos:
     /**
      * Creates an XHTML or HTML element (XHTML is preferred, but only in browsers that support);
      * Any element after element can be omitted, and any subsequent type or types added afterwards
-     * @requires shim: Array.isArray
-     * @requires shim: Array.prototype.reduce For returning a document fragment
-     * @requires shim: Element.prototype.dataset For dataset functionality (Will not work in IE <= 7)
+     * @requires polyfill: Array.isArray
+     * @requires polyfill: Array.prototype.reduce For returning a document fragment
+     * @requires polyfill: Element.prototype.dataset For dataset functionality (Will not work in IE <= 7)
      * @param {String} el The element to create (by lower-case name)
      * @param {Object} [atts] Attributes to add with the key as the attribute name and value as the
      *                                               attribute value; important for IE where the input element's type cannot
