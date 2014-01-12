@@ -164,11 +164,22 @@ A direct visit to the protocol (including through XSRF) should provide no side e
 
 # Comparison with similar WebAPI work
 
-[WebActivities](https://wiki.mozilla.org/WebAPI/WebActivities) is similar to WebAppFind in that both seek to allow delegation of certain behaviors such as "view" and "edit" to (potentially) different apps (where the user also has the freedom to choose any app to handle the given type of activity), but WebActivities does not operate on files.
+[WebActivities](https://wiki.mozilla.org/WebAPI/WebActivities) is similar to WebAppFind in that both seek to allow delegation of certain behaviors such as "view" and "edit" to (potentially) different apps (where the user also has the freedom to choose any app to handle the given type of activity), but WebActivities does not operate on files. Jonas Sicking indicated in a personal email response supportive of the concept of WebAppFind that WebActivities would be a good "way to dispatch the "view"/"edit" request to the appropriate web page, however WebActivities are still at an early stage and not ready for your use cases.".
 
-The [WebAPI](https://wiki.mozilla.org/WebAPI) has a [DeviceStorageAPI](https://wiki.mozilla.org/WebAPI/DeviceStorageAPI) which has certain file-related behaviors. The proposal at present appears to be limited, however, to files in a specific directory of one's hard drive. It does not allow one the freedom to store one's files wherever one likes on one's hard-drive for better organization purposes. It also does not seem to anticipate the activities being triggered from one's desktop, but rather if one is already within the app.
+These missing use cases (besides operating on files) might perhaps include:
+* The typing system of WebActivities does not seem to be made to be extensible by applications. It thus also doesn't allow specification of hierarchies of types (e.g., myJson->json->js) for fallbacks for as-yet-unregistered types or for alternate editor types.
+* WebActivities doesn't allow recommendation of default handlers when opening a file for the first time (though a WebActivities-supporting site could seek to register itself as such a handler).
 
-The DeviceStorageAPI appears to allow more privileges (like [AsYouWish](https://github.com/brettz9/asyouwish/)) whereas WebAppFind is currently focused on individual file reading and saving (though WebAppFind may add other actions in the future, such as listening for file change events).
+The [WebAPI](https://wiki.mozilla.org/WebAPI) has a [DeviceStorageAPI](https://wiki.mozilla.org/WebAPI/DeviceStorageAPI) which has certain file-related behaviors.
+
+Shortcomings (or differences) of the current DeviceStorageAPI relative to WebAppFind would appear to be:
+
+* It does not seem to anticipate the activities being triggered from one's desktop, but rather if one is already within a web app.
+* The proposal at present appears to be limited to files in a specific directory of one's hard drive. It thus does not allow one the freedom to store one's files wherever one likes on one's hard-drive for better organization purposes.
+
+The DeviceStorageAPI appears to allow more privileges (like [AsYouWish](https://github.com/brettz9/asyouwish/)) such as enumerating files in a directory, adding or deleting files, and listening for creation/deletion/modifications, whereas WebAppFind is currently focused on individual file reading and saving. However, WebAppFind may add other actions in the future, such as listening for file change events for version tracking or allowing for a web app to handle adding or deleting a file (in case it wishes to do related set-up/take-down work).
+
+Since WebAppFind executables pass along path information, WebAppFind can already be used with the AsYouWish add-on (if the user so configures that privilege-escalating add-on) to have it conduct the other privileged activities of the DeviceStorageAPI whether enumerating files in the file's directory, doing set-up or take-down work related to file creation or deletion, or such things as uploading the containing folder's contents.
 
 # Comparison with AsYouWish
 
