@@ -251,6 +251,7 @@ Besides "view", "binaryview", "edit", "binaryedit", "register", the following mo
 1. "preconvert" and "postconvert" - hooks to transform content before reading or writing, respectively (but before "validate")
 1. "splash" - for a splash page leading to the modes so that "register" can be exclusively for registering users? 
 1. "query" or "search" - For queries within file or within a folder, etc., optionally (?) filtered by file type; this might be used for "find-in-files" behavior (multiple file saving would be needed for "replace-in-files"). These queries could be hierarchical (as also defined in filetypes.json?) such that, for example, one might have "myType" JSON files queryable in a precise manner, e.g., to find all files (or records) containing a "publication date" between a range of dates, while also allowing more generic queries such as RQL, or if not available (or not desired), the user could default to full text search (since a superset of JSON could be the txt type which could allow full text search).
+1. "execute" - Although the OS would normally do its own execution, it is possible that privileged apps (as through AsYouWish) might be able to handle this at least partly on their own
 
 # Possible "Demos" todos
 
