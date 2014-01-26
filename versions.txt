@@ -1,3 +1,11 @@
+1.0.0
+
+* Breaking changes
+** Change command line -webapp-<mode> <path> to -webappdoc <path> and -webappmode <mode> (and with a new optional -webappcustommode <custom mode>); also change within executables
+** Change away from substituting individual variables to replacing a single `%s` with a single JSON-stringified object (in default handlers as well as occurs in protocol handlers)
+** Change terminology of "method" to "mode" (view, edit, etc.) including within the preference name noProtocolFallbackToRegistrationMode and executable source
+* Add path to document.title in the HTML demo
+
 0.2.1 (Post-AMO Builder release)
 
 * Fix bug with duplication of events upon additional opening of the same file

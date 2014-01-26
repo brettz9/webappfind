@@ -3,8 +3,8 @@
 #include <string>
 
 // Other possibilities: Delete, VersionControl, Query, Search, ExtensionTypeHierarchyHandler, PreConvert, PostConvert
-enum Method {Route, Create, View, BinaryView, Edit, BinaryEdit, Validate}; // prototype
-extern enum Method method;
+enum Mode {Route, Create, View, BinaryView, Edit, BinaryEdit, Validate}; // prototype
+extern enum Mode mode;
 extern const std::string browserPath;
 #endif
 

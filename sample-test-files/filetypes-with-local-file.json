@@ -7,7 +7,7 @@
     },
     "defaultHandlers": {
         "mytype": {
-            "view": "D:\\wamp\\www\\_servers\\me@brett-zamir.me\\webappfind\\javascript.html?type=%type&method=%method&pathID=&pathID",
+            "view": "D:\\wamp\\www\\_servers\\me@brett-zamir.me\\webappfind\\javascript.html?params=%s",
             "register": "http://example.com/register"
         },
         "json": {

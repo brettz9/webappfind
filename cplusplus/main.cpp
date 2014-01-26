@@ -29,37 +29,37 @@ NOTE: For Dev-C++ compiling, I disabled a console window by:
 */
 int main(int argc, char** argv) {
 	stringstream params;
-	string methodStr;
+	string modeStr;
 	
-	switch (method) {
+	switch (mode) {
 		case Route:
-			methodStr = "route"; // Not yet supported
+			modeStr = "route"; // Not yet supported
 			break;
 		case Create:
-			methodStr = "create"; // Not yet supported
+			modeStr = "create"; // Not yet supported
 			break;
 		case View:
-			methodStr = "view";
+			modeStr = "view";
 			break;
 		case BinaryView:
-			methodStr = "binaryview";
+			modeStr = "binaryview";
 			break;
 		case Edit:
-			methodStr = "edit";
+			modeStr = "edit";
 			break;
 		case BinaryEdit:
-			methodStr = "binaryedit";
+			modeStr = "binaryedit";
 			break;
 		case Validate:
-			methodStr = "validate"; // Not yet supported
+			modeStr = "validate"; // Not yet supported
 			break;
 	}
 	
 	// https://developer.mozilla.org/en-US/docs/Mozilla/Command_Line_Options
 	// http://www-archive.mozilla.org/unix/remote.html
 	params << "-remote \"openurl(about:newtab)\"" // Unlike "-silent", this param gives the Firefox window focus
-		<< " -webapp-" << methodStr
-		<< " \"" << argv[1] << "\"";
+		<< " -webappmode " << modeStr
+		<< " -webappdoc " << " \"" << argv[1] << "\"";
 
 
 	SHELLEXECUTEINFO sei={0};
