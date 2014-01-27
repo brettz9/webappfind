@@ -136,6 +136,13 @@ window.postMessage(['webapp-save', previouslySavedPathIDFromViewEvent, dataToSav
 
 Only windows with the URI approved by the process detailed above can successfully save such messages (and only for the supplied file).
 
+## Recognized file types and custom modes
+
+Although you are free to define your own file types and custom modes, in order to prevent future conflicts, it is recommended that you register your [file types](https://github.com/brettz9/webappfind/wiki/Registered-file-types) and [custom modes](https://github.com/brettz9/webappfind/wiki/Registered-custom-modes) (or at least namespace
+them well).
+
+Even if filetypes.json is used with "register" on "defaultHandlers", it may be convenient to have a separate spec URL detailed for your file type, including for cases where the file extension is used without filetypes.json.
+
 ## Rationale for filetypes.json design
 
 Although there may be some advantages to storing meta-data at the individual file level, I did not see a very convenient way in which Windows would allow the addition of arbitary meta-data which Firefox could easily query (Windows does not appear to offer arbitrary addition and editing of properties though programs, e.g., TortoiseGit, appear to be able to overlay the properties and are aware of file-level metadata while adding their own). Having a JSON file allows developers to add some type configuration (beyond the more generic info detectable by a file extension) within the directory containing the data files, allowing for introspection and modifications in a manner familiar to web developers.
@@ -201,7 +208,6 @@ Since WebAppFind executables pass along path information, WebAppFind can already
     1. Disable further save attempts with bad ID supplied in case a however previously approved site is attempting to guess at the paths of (if the user has enabled path transmission), or at the GUID representing, other non-approved files
     1. Check upon each save attempt that the loaded protocol is still registered as a handler (and remove usage notes above once implemented).
     1. Listen for unregistration of protocols to disable acting on future messages from them (only relevant for pages already loaded in this session).
-1. Open up wiki for custom type documentation/links with "proposal", "accepted", etc. statuses similar to the WhatWG meta tags wiki (and same for custom modes)? Even if filetypes.json is used with "register" on "defaultHandlers", it may be convenient to have a separate spec URL, including for cases where the file extension is used without filetypes.json.
 1. API changes/additions
     1. Allow command line to specify (or let WebAppFind determine according to some permutation of the file path) the exact window and possibly Panorama group and/or pinned status into which the web app with desktop file will be opened (the web app could handle moving itself instead but only if the web app were AsYouWish-based and the user preferences supplied the file path). Alternatively, the executable might have logic to determine the profile in a similarly automated (as opposed to hard-coded) manner. The advantage of either approach would be to allow the user a better web app grouping organization corresponding to the hierarchical organization they can find on the desktop.
     1. Support an optional, hard-coded web app URL (optionally looking for fallbacks if the supplied one is a protocol but not found) and/or hard-coded file type (to circumvent the normal detection procedures and always open with a given web app).
