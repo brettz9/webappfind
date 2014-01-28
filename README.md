@@ -297,3 +297,4 @@ Besides "view", "binaryview", "edit", "binaryedit", "register", the following mo
 1. "Todo" webapp demo
 1. Email/chat client which stores data locally (and optionally only locally); good open source options to adapt? Tie in together.js with chat (as in whiteboards) or even to write collaborative emails
 1. Do a concept for browsing or editing the file contents of a zip using the likes of http://stuk.github.io/jszip/ or those mentioned at http://stackoverflow.com/questions/2095697/unzip-files-using-javascript
+1. Since WebAppFind relies on files downloaded to the user's desktop, demonstrate with the HTML5 "download" attribute how sites might deliver a data file that the user could then place and call (and optionally also supplying a filetypes.json file). Also demonstrate (once functionality is complete), the downloading of a remote document file and subsequent optional PUT request back to the server to save it there.
