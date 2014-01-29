@@ -287,6 +287,7 @@ Besides "view", "binaryview", "edit", "binaryedit", "register", the following mo
 1. CKEditor support for popup or inline SVGEdit and SVGEdit support for CKEditor foreign objects (via foreignObject extension?)
 1. Add CodeMirror to SVG Edit XML view
 1. Sticky app
+    1. See https://gist.github.com/brettz9/8687257
     1. power-user support for form controls like checkboxes (underlying events currently supported better in Chrome than in Firefox), paperclip links, etc.
     1. Modify WebAppFind to support display of independent data files (for multiple stickies in this case); or don't only associate a file path with individual URLs (file: or http:), but also allow associations with tab groups or bookmark folders so that if saving a new StickyBrains/CKEditor/word-processing file, it will save to a folder where one's ideas are already grouped
     1. Offer grid-like edit ability using SVG Edit with HTML controls like checkboxes within foreignObject
