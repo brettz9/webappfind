@@ -296,6 +296,13 @@ Besides "view", "binaryview", "edit", "binaryedit", "register", the following mo
 1. Integrate HTML/SVG (and then others) with [Together.js](https://togetherjs.com/) to allow collaboration on one's local files
 1. Markdown editor (http://pagedown.googlecode.com/hg/demo/browser/demo.html for buttons or http://dillinger.io/ for syntax highlighting or integrate CodeMirror markdown into pagedown?). See also http://stackoverflow.com/questions/2357022/what-is-a-good-client-side-markdown-editor/
 1. "Todo" webapp demo
+1. Blockly for arbitrary JavaScript:
+    1. Object literals
+    1. Variables (arrays or objects like functions, etc.) with right side for property access (static (can be detected for pull-down) or dynamic)
+    1. new (with or w/o needing function definition)
+        new a()[new b()]
+        won't normally add new directly within property (and can't within static property)
+    1. invocation (w/o needing function definition)
 1. Email/chat client which stores data locally (and optionally only locally); good open source options to adapt? Tie in together.js with chat (as in whiteboards) or even to write collaborative emails
 1. Do a concept for browsing or editing the file contents of a zip using the likes of http://stuk.github.io/jszip/ or those mentioned at http://stackoverflow.com/questions/2095697/unzip-files-using-javascript
 1. Since WebAppFind relies on files downloaded to the user's desktop, demonstrate with the HTML5 "download" attribute how sites might deliver a data file that the user could then place and call (and optionally also supplying a filetypes.json file). Also demonstrate (once functionality is complete), the downloading of a remote document file and subsequent optional PUT request back to the server to save it there (and AsYouWish requesting to save multiple files at once in a particular directory or the zip example above).
