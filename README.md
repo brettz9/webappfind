@@ -248,6 +248,7 @@ Since WebAppFind executables pass along path information, WebAppFind can already
 1. Option (at the add-on level) to confirm reading and/or saving of data upon each attempt and/or display the proposed diffs before saving. (See "Implementation notes" section).
 1. Piggyback on HTML5 drag-and-drop file capabilities (or create own) to allow files dropped in this way to be saved back to disk and/or path provided to the app.
 1. Possibility of utilizing filetypes.json on the server side; see http://webviewers.org/xwiki/bin/view/Main/WebHome (utilize its format at all or reconcile?)
+1. Get to work in other OS and browser environments (if so, make PR to update https://github.com/marijnh/CodeMirror/blob/master/doc/realworld.html ).
 
 # Possible future mode additions
 
