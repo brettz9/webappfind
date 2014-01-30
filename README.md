@@ -319,3 +319,4 @@ Besides "view", "binaryview", "edit", "binaryedit", "register", the following mo
 1. Desktop file to desktop app demo (using filetypes.json)?
 1. Demo of same-domain, CORS, or AsYouWish client checking filetypes.json on a server to determine how to serve? (as opposed to WebAppFind)
 1. Demo of server detecting its own filetypes.json (see possible todo above)
+1. Give option for demos like txt to add `\r` back to `\r\n`
