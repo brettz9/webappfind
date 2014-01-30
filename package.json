@@ -1,4 +1,11 @@
 {
+    "name": "webappfind",
+    "fullName": "webappfind",
+    "id": "jid0-szJdB0Ri3FdiZ7BdwTP8QQCffWs",
+    "version": "1.0.1",
+    "author": "brettz9",
+    "url": "https://github.com/brettz9/webappfind",
+    "description": "Enables an experimental protocol system for allowing the user to supply local files for viewing and editing by web applications",
     "license": "MIT",
     "repository": {
         "type": "git", "url": "https://github.com/brettz9/webappfind.git"
@@ -63,13 +70,6 @@
         }
     ],
     "contributors": [],
-    "author": "brettz9",
-    "url": "",
-    "fullName": "webappfind",
-    "name": "webappfind",
-    "version": "1.0.0",
     "lib": "lib",
-    "main": "main",
-    "id": "jid0-szJdB0Ri3FdiZ7BdwTP8QQCffWs",
-    "description": "Enables an experimental protocol system for allowing the user to supply local files for viewing and editing by web applications"
+    "main": "main"
 }
