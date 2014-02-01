@@ -47,7 +47,7 @@ The following process is subject to change and may potentially even be scrapped 
 * `-webappdoc <path>` - Indicates the path of the file which will be made available to the web application (with the privileges designated by `-webappmode`)
 * `-webappmode <mode>` Indicates the fundamental mode under which the file will be opened up to the web app (i.e., "-webappmode view", "-webappmode binaryview", "-webappmode edit", or "-webappmode binaryedit").
 * `-webappcustommode <custom mode>` - Indicates a mode that supplements the fundamental mode (e.g., "source" added to the fundamental mode, "view" in order to specify that the document is being
-opened so as to view the source code). Custom modes will immediately follow the mode within the protocol.
+opened so as to view the source code). Custom modes will immediately follow the mode within the protocol. (Note that this API is expected to change)
 * `-remote "openurl(about:newtab)"` - This built-in Mozilla command line API allows Firefox (unlike "-silent") to gain focus without additional instructions to Windows. If the tab is determined to not be needed (e.g., if the user has opted to allow desktop opening of the file when no protocols are found), the add-on will simply auto-close the tab that this parameter opens.
 
 # For developers
@@ -170,6 +170,8 @@ Before discovering the command line handling, I originally sought to have the ex
 1. Depending on whether registerProtocolHandler will continue to be used, see about whether the HTML spec might be open to more tolerance within the allowed characters of a custom protocol beyond lower-case ASCII letters.
 1. Possible changes to parameters passed to registered protocol handlers and/or default handlers (if any, as may only be passed through postMessage or some other means)
     1. Add to what is passed within URL (beyond filetype, mode, custom mode, and path)? or just pass through postMessage? Bookmarkability vs. clean API?
+1. See higher priority todos for an anticipated change with custom modes and allowing for multiple
+modes at once.
 1. See todos below for possible additions to fundamental (functional) modes beyond just "view", "binaryview", "edit", and "binaryedit".
 
 ## Implementation notes
@@ -209,6 +211,11 @@ Since WebAppFind executables pass along path information, WebAppFind can already
     1. Check upon each save attempt that the loaded protocol is still registered as a handler (and remove usage notes above once implemented).
     1. Listen for unregistration of protocols to disable acting on future messages from them (only relevant for pages already loaded in this session).
 1. API changes/additions
+		1. Change custom modes to be prefixed with a colon in front of fundamental modes and then
+		allow multiple modes separated by whitespace (especially in preparation for support of a likely
+		frequent use case for combining a new fundamental mode, "export", along with an "edit" mode,
+		e.g., to allow saving of an SVG file as SVG or PNG, or saving CoffeeScript as CoffeeScript
+		of JavaScript).
     1. WebAppFind command line to resolve URL into content to be passed to web app or path/link (file: or c:\) for app or file
         1. Modify Executable Builder so an executable can cause a web file to be opened by a web or desktop app; and then save changes back via PUT or POST (check header for PUT support?); or should I instead just implement command line control for web->desktop add-ons and call that within an executable/Executable Builder (leading potentially back through WebAppFind command-line control)?
         1. Use server's filetypes.json also if present
@@ -305,6 +312,7 @@ Besides "view", "binaryview", "edit", "binaryedit", "register", the following mo
 1. Integrate HTML/SVG (and then others) with [Together.js](https://togetherjs.com/) to allow collaboration on one's local files
 1. Markdown editor (http://pagedown.googlecode.com/hg/demo/browser/demo.html for buttons or http://dillinger.io/ for syntax highlighting or integrate CodeMirror markdown into pagedown?). See also http://stackoverflow.com/questions/2357022/what-is-a-good-client-side-markdown-editor/
 1. "Todo" webapp demo
+1. CoffeeScript demo
 1. Blockly for arbitrary JavaScript:
     1. Object literals
     1. Variables (arrays or objects like functions, etc.) with right side for property access (static (can be detected for pull-down) or dynamic)
