@@ -264,6 +264,8 @@ Since WebAppFind executables pass along path information, WebAppFind can already
 1. As with how filebrowser-extended can open the folder of the currently opened file, add an optional icon in WebAppFind to open the containing directory of the currently opened document file path, e.g., if user used "Open with" on "C:\myfile.txt", it would open "c:\" (if allowed opening the file itself from the desktop and the current web app was also set as the default for that type, it would open another instance of the file in the browser, but may still want to allow this anyways).
 1. Build an executable to open a local executable/batch on the Windows desktop with a dialog asking for command line arguments (e.g., profile)? (as a workaround, one might use WebAppFind for this if an override will be provided to ensure it will launch back on the desktop)? Also allow a dialog to ask for WebAppFind arguments to web apps (could be at executable level or within the WebAppFind add-on).
 1. Exe's don't allow right-click Open with... though maybe Windows would allow even these files to be handled in some way (e.g., how Tortoise overlays the context menu).
+1. Create a shared add-on dependency for WebAppFind and AsYouWish exposing perhaps at least for privilege escalation with some of the underlying non-SDK APIs (e.g., a privilege to save
+only to a specific directory if WebAppFind adds such a fundamental mode).
 
 # Possible future mode additions
 
@@ -279,6 +281,12 @@ Besides "view", "binaryview", "edit", "binaryedit", "register", the following mo
 1. "splash" - for a splash page leading to the modes so that "register" can be exclusively for registering users? 
 1. "query" or "search" - For queries within file or within a folder, etc., optionally (?) filtered by file type; this might be used for "find-in-files" behavior (multiple file saving would be needed for "replace-in-files"). These queries could be hierarchical (as also defined in filetypes.json?) such that, for example, one might have "myType" JSON files queryable in a precise manner, e.g., to find all files (or records) containing a "publication date" between a range of dates, while also allowing more generic queries such as RQL, or if not available (or not desired), the user could default to full text search (since a superset of JSON could be the txt type which could allow full text search).
 1. "execute" - Although the OS would normally do its own execution, it is possible that privileged apps (as through AsYouWish) might be able to handle this at least partly on their own
+1. "export" - Exporting into a different format (and saving to a different target file) from
+the original source file. Once multiple modes may be supported, users might supply
+both "edit" and "export" privileges to a web app simultaneously so one could save back the original
+file as well as the export (e.g., to save SVG and a PNG export or to save a CoffeeScript file and its
+JavaScript export).
+1. Like "export", we might wish to allow a file to be opened with the privilege to save anywhere in a particular directory, etc.
 
 # Possible "Demos" todos
 
@@ -313,6 +321,8 @@ Besides "view", "binaryview", "edit", "binaryedit", "register", the following mo
 1. Markdown editor (http://pagedown.googlecode.com/hg/demo/browser/demo.html for buttons or http://dillinger.io/ for syntax highlighting or integrate CodeMirror markdown into pagedown?). See also http://stackoverflow.com/questions/2357022/what-is-a-good-client-side-markdown-editor/
 1. "Todo" webapp demo
 1. CoffeeScript demo
+1. PDF demo using https://github.com/mozilla/pdf.js
+1. CSV demo with sortable columns and contenteditable saving
 1. Blockly for arbitrary JavaScript:
     1. Object literals
     1. Variables (arrays or objects like functions, etc.) with right side for property access (static (can be detected for pull-down) or dynamic)
