@@ -13,6 +13,7 @@ svgEditor.addExtension("server_opensave", {
 		'use strict';
 		function getFileNameFromTitle () {
 			var title = svgCanvas.getDocumentTitle();
+			// Todo: We ought to be able to make this more lenient, e.g., /[\/\\:*?"<>|]/ to remove disallowed Win7 file name characters (or just use PHP expression in savefile.php as should be done on the server)
 			return $.trim(title).replace(/[^a-z0-9\.\_\-]+/gi, '_');
 		}
 		function clientDownloadSupport (filename, suffix, uri) {
