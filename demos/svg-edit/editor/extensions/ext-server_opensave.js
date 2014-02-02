@@ -13,8 +13,11 @@ svgEditor.addExtension("server_opensave", {
 		'use strict';
 		function getFileNameFromTitle () {
 			var title = svgCanvas.getDocumentTitle();
-			// Todo: We ought to be able to make this more lenient, e.g., /[\/\\:*?"<>|]/ to remove disallowed Win7 file name characters (or just use PHP expression in savefile.php as should be done on the server)
-			return $.trim(title).replace(/[^a-z0-9\.\_\-]+/gi, '_');
+			// We convert (to underscore) only those disallowed Win7 file name characters
+			return $.trim(title).replace(/[\/\\:*?"<>|]/g, '_');
+		}
+		function xhtmlEscape(str) {
+			return str.replace(/&(?!amp;)/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;'); // < is actually disallowed above anyways
 		}
 		function clientDownloadSupport (filename, suffix, uri) {
 			var a,
@@ -35,20 +38,19 @@ svgEditor.addExtension("server_opensave", {
 		$('<iframe name="output_frame" src="#"/>').hide().appendTo('body');
 		svgEditor.setCustomHandlers({
 			save: function(win, data) {
-				var svg = "<?xml version=\"1.0\"?>\n" + data,
+				var svg = '<?xml version="1.0" encoding="UTF-8"?>\n' + data, // Firefox doesn't seem to know it is UTF-8 (no matter whether we use or skip the clientDownload code) despite the Content-Disposition header containing UTF-8, but adding the encoding works
 					filename = getFileNameFromTitle();
 
-				//if (clientDownloadSupport(filename, '.svg', 'data:image/svg+xml,' + encodeURI(data))) { // Firefox limits size of file
-				if (clientDownloadSupport(filename, '.svg', 'data:image/svg+xml;base64,' + svgedit.utilities.encode64(data))) {
+				if (clientDownloadSupport(filename, '.svg', 'data:image/svg+xml;charset=UTF-8;base64,' + svgedit.utilities.encode64(svg))) {
 					return;
 				}
-				
+
 				$('<form>').attr({
 					method: 'post',
 					action: save_svg_action,
 					target: 'output_frame'
-				})	.append('<input type="hidden" name="output_svg" value="' + encodeURI(svg) + '">')
-					.append('<input type="hidden" name="filename" value="' + filename + '">')
+				}).append('<input type="hidden" name="output_svg" value="' + xhtmlEscape(svg) + '">')
+					.append('<input type="hidden" name="filename" value="' + xhtmlEscape(filename) + '">')
 					.appendTo('body')
 					.submit().remove();
 			},
@@ -71,8 +73,8 @@ svgEditor.addExtension("server_opensave", {
 						uiStrings = svgEditor.uiStrings,
 						note = '';
 					
-					// Check if there's issues
-					if(issues.length) {
+					// Check if there are issues
+					if (issues.length) {
 						pre = "\n \u2022 ";
 						note += ("\n\n" + pre + issues.join(pre));
 					} 
@@ -92,9 +94,9 @@ svgEditor.addExtension("server_opensave", {
 						method: 'post',
 						action: save_img_action,
 						target: 'output_frame'
-					})	.append('<input type="hidden" name="output_img" value="' + datauri + '">')
+					}).append('<input type="hidden" name="output_img" value="' + datauri + '">')
 						.append('<input type="hidden" name="mime" value="' + mimeType + '">')
-						.append('<input type="hidden" name="filename" value="' + filename + '">')
+						.append('<input type="hidden" name="filename" value="' + xhtmlEscape(filename) + '">')
 						.appendTo('body')
 						.submit().remove();
 				}});
@@ -102,9 +104,9 @@ svgEditor.addExtension("server_opensave", {
 				
 			}
 		});
-	
+
 		// Do nothing if client support is found
-		if(window.FileReader) {return;}
+		if (window.FileReader) {return;}
 		
 		// Change these to appropriate script file
 		open_svg_action = 'extensions/fileopen.php?type=load_svg';
@@ -114,7 +116,7 @@ svgEditor.addExtension("server_opensave", {
 		// Set up function for PHP uploader to use
 		svgEditor.processFile = function(str64, type) {
 			var xmlstr;
-			if(cancelled) {
+			if (cancelled) {
 				cancelled = false;
 				return;
 			}
@@ -156,7 +158,7 @@ svgEditor.addExtension("server_opensave", {
 		// Create image form
 		import_img_form = open_svg_form.clone().attr('action', import_img_action);
 		
-		// It appears necessory to rebuild this input every time a file is 
+		// It appears necessary to rebuild this input every time a file is 
 		// selected so the same file can be picked and the change event can fire.
 		function rebuildInput(form) {
 			form.empty();
