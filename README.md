@@ -323,6 +323,7 @@ JavaScript export).
 1. CoffeeScript demo
 1. PDF demo using https://github.com/mozilla/pdf.js
 1. CSV demo with sortable columns and contenteditable saving
+1. Web macro-script program for use with the web (including possibly AsYouWish)
 1. Blockly for arbitrary JavaScript:
     1. Object literals
     1. Variables (arrays or objects like functions, etc.) with right side for property access (static (can be detected for pull-down) or dynamic)
