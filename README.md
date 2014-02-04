@@ -211,14 +211,27 @@ Since WebAppFind executables pass along path information, WebAppFind can already
     1. Check upon each save attempt that the loaded protocol is still registered as a handler (and remove usage notes above once implemented).
     1. Listen for unregistration of protocols to disable acting on future messages from them (only relevant for pages already loaded in this session).
 1. API changes/additions
-		1. Change custom modes to be prefixed with a colon in front of fundamental modes and then
-		allow multiple modes separated by whitespace (especially in preparation for support of a likely
-		frequent use case for combining a new fundamental mode, "export", along with an "edit" mode,
-		e.g., to allow saving of an SVG file as SVG or PNG, or saving CoffeeScript as CoffeeScript
-		of JavaScript).
-    1. WebAppFind command line to resolve URL into content to be passed to web app or path/link (file: or c:\) for app or file
+    1. Change custom modes to be prefixed with a colon in front of fundamental modes and then
+        allow multiple modes separated by whitespace (especially in preparation for support of a likely
+        frequent use case for combining a new fundamental mode, "export", along with an "edit" mode,
+        e.g., to allow saving of an SVG file as SVG or PNG, or saving CoffeeScript as CoffeeScript
+        of JavaScript). Allow multiple custom modes attached to a single fundamental mode?
+    1. In addition to regular expressions, use the presence or specific values for custom modes to determine file type?
+    1. WebAppFind command line or filetypes.json to resolve URL into content to be passed to web app or path/link (file: or c:\) for app or file
         1. Modify Executable Builder so an executable can cause a web file to be opened by a web or desktop app; and then save changes back via PUT or POST (check header for PUT support?); or should I instead just implement command line control for web->desktop add-ons and call that within an executable/Executable Builder (leading potentially back through WebAppFind command-line control)?
         1. Use server's filetypes.json also if present
+    1. Allow command line args to be piped into a string to be supplied to the web app (including result of another webappfind invocation?); if "edit" or "binaryedit" mode is given, allow command line instructions to be invoked with the result posted back from the web app as a parameter.
+    1. Mention how profile selection logic would probably ideally occur before opening Firefox as with
+    any complex type-determination logic, taking place within the executable (built by Executable Builder?), though ensure that the new proposed command line and web app pipelining features would be able to replicate this if necessary
+    1. Demo of Firefox being used merely to interpret filetypes.json and simply return a command line instruction back to a desktop app (in a hard-coded rather than fallback manner).
+    1. Allow type to be supplied without a path so as to just open the right web app
+    1. Web app pipelining: Allow a hard-coded web app URL (or supply a path or file type in order to discover a web app) to be supplied (along with its own mode, custom mode, arguments, etc.) which will be opened (optionally in a hidden window) and when its response its received, pipeline the string result to another web app URL. Yes, the apps could instead communicate directly with each other via postMessage, but this approach allows the user to do their own coupling rather than be dependent
+    on a particular integration of services.
+    1. Replace "export" mode by allowing not just one, but multiple file/URL/command line/web app/etc. arguments to be passed into
+    the web application (e.g., for preferences, privilege level simulation or request information, schema,
+    etc.) as an array of objects with the string results of obtaining the file in the specified mode (or
+    custom mode in the case of a web app) placed as one of the keys on the object, with the other
+    keys optionally indicating: 1) the source and nature of the string data (e.g., the path (with fundamental mode under which it was obtained or at least whether the data was obtained as binary or non-binary), URL, command line instructions, web app URL with arguments), 2) type meta-data about the file (as opposed to arguments supplied to that file) which could be used by the receiving application (e.g., to indicate which file is providing preferences, which is providing a schema for validation, etc.). Could leverage the information within this array of objects in a generic server-side application as well.
     1. Allow command line to specify (or let WebAppFind determine according to some permutation of the file path) the exact window and possibly Panorama group and/or pinned status into which the web app with desktop file will be opened (the web app could handle moving itself instead but only if the web app were AsYouWish-based and the user preferences supplied the file path). Alternatively, the executable might have logic to determine the profile in a similarly automated (as opposed to hard-coded) manner. The advantage of either approach would be to allow the user a better web app grouping organization corresponding to the hierarchical organization they can find on the desktop.
     1. Support an optional, hard-coded web app URL (optionally looking for fallbacks if the supplied one is a protocol but not found) and/or hard-coded file type (to circumvent the normal detection procedures and always open with a given web app).
     1. Arbitrary command line args to pass on to webapps
