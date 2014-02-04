@@ -345,6 +345,7 @@ JavaScript export).
 to editor which allows for introspection of the JavaScript to store for later evaluation and then will
 put into its own localStorage as an add-on. Could make the demo post the add-on origin site (and possibly code) back to the server (if not indicated as known within client code) and allow these to be discoverable by other users (though allow opting out of such reporting for privacy reasons).
 1. [Ocrad](http://antimatter15.github.io/ocrad.js/demo.html) for text OCR export of an image (once export mode supported)
+1. SVG OpenType Font editor (adapt https://github.com/edf825/SVG-OpenType-Utils ? See https://wiki.mozilla.org/SVGOpenTypeFonts )
 1. Blockly for arbitrary JavaScript:
     1. Object literals
     1. Variables (arrays or objects like functions, etc.) with right side for property access (static (can be detected for pull-down) or dynamic)
