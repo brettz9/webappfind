@@ -215,7 +215,7 @@ Since WebAppFind executables pass along path information, WebAppFind can already
         allow multiple modes separated by whitespace (especially in preparation for support of a likely
         frequent use case for combining a new fundamental mode, "export", along with an "edit" mode,
         e.g., to allow saving of an SVG file as SVG or PNG, or saving CoffeeScript as CoffeeScript
-        of JavaScript). Allow multiple custom modes attached to a single fundamental mode?
+        of JavaScript, [Ocrad](http://antimatter15.github.io/ocrad.js/demo.html) for text OCR export of an image, etc.). Allow multiple custom modes attached to a single fundamental mode?
     1. In addition to regular expressions, use the presence or specific values for custom modes to determine file type?
     1. WebAppFind command line or filetypes.json to resolve URL into content to be passed to web app or path/link (file: or c:\) for app or file
         1. Modify Executable Builder so an executable can cause a web file to be opened by a web or desktop app; and then save changes back via PUT or POST (check header for PUT support?); or should I instead just implement command line control for web->desktop add-ons and call that within an executable/Executable Builder (leading potentially back through WebAppFind command-line control)?
@@ -227,11 +227,11 @@ Since WebAppFind executables pass along path information, WebAppFind can already
     1. Allow type to be supplied without a path so as to just open the right web app
     1. Web app pipelining: Allow a hard-coded web app URL (or supply a path or file type in order to discover a web app) to be supplied (along with its own mode, custom mode, arguments, etc.) which will be opened (optionally in a hidden window) and when its response its received, pipeline the string result to another web app URL. Yes, the apps could instead communicate directly with each other via postMessage, but this approach allows the user to do their own coupling rather than be dependent
     on a particular integration of services.
-    1. Replace "export" mode by allowing not just one, but multiple file/URL/command line/web app/etc. arguments to be passed into
+    1. Allow not just one, but multiple, file/URL/command line/web app/etc. arguments to be passed into
     the web application (e.g., for preferences, privilege level simulation or request information, schema,
     etc.) as an array of objects with the string results of obtaining the file in the specified mode (or
     custom mode in the case of a web app) placed as one of the keys on the object, with the other
-    keys optionally indicating: 1) the source and nature of the string data (e.g., the path (with fundamental mode under which it was obtained or at least whether the data was obtained as binary or non-binary), URL, command line instructions, web app URL with arguments), 2) type meta-data about the file (as opposed to arguments supplied to that file) which could be used by the receiving application (e.g., to indicate which file is providing preferences, which is providing a schema for validation, etc.). Could leverage the information within this array of objects in a generic server-side application as well.
+    keys optionally indicating: 1) the source and nature of the string data (e.g., the path (with fundamental mode under which it was obtained or at least whether the data was obtained as binary or non-binary), URL, command line instructions, web app URL with arguments), 2) type meta-data about the file (as opposed to arguments supplied to that file) which could be used by the receiving application (e.g., to indicate which file is providing preferences, which is providing a schema for validation, etc.). Could leverage the information within this array of objects in a generic server-side application as well. Should be able to work with export mode as well for multiple or alternate outputs.
     1. Allow command line to specify (or let WebAppFind determine according to some permutation of the file path) the exact window and possibly Panorama group and/or pinned status into which the web app with desktop file will be opened (the web app could handle moving itself instead but only if the web app were AsYouWish-based and the user preferences supplied the file path). Alternatively, the executable might have logic to determine the profile in a similarly automated (as opposed to hard-coded) manner. The advantage of either approach would be to allow the user a better web app grouping organization corresponding to the hierarchical organization they can find on the desktop.
     1. Support an optional, hard-coded web app URL (optionally looking for fallbacks if the supplied one is a protocol but not found) and/or hard-coded file type (to circumvent the normal detection procedures and always open with a given web app).
     1. Arbitrary command line args to pass on to webapps
@@ -334,12 +334,13 @@ JavaScript export).
 1. Markdown editor (http://pagedown.googlecode.com/hg/demo/browser/demo.html for buttons or http://dillinger.io/ for syntax highlighting or integrate CodeMirror markdown into pagedown?). See also http://stackoverflow.com/questions/2357022/what-is-a-good-client-side-markdown-editor/
 1. "Todo" webapp demo
 1. CoffeeScript demo
-1. PDF demo using https://github.com/mozilla/pdf.js
+1. PDF demo using https://github.com/mozilla/pdf.js or https://github.com/coolwanglu/pdf2htmlEX/ for reading; for writing could use https://github.com/MrRio/jsPDF (see http://parall.ax/products/jspdf with HTML renderer demo), integrated into CodeMirror or even CKEditor if modified to support generation of the right format; if the same HTML format could be generated and accepted by the likes of pdf2htmlEX and jsPDF, there might be some round-tripping potential.
 1. CSV demo with sortable columns and contenteditable saving
 1. Web macro-script program for use with the web (including possibly AsYouWish), esp. for text processing (allowing XPath/CSS selectors or raw text searches, testing for content or replacing)
 1. Make especially the text and HTML editor demos extensible via postMessage from add-on site
 to editor which allows for introspection of the JavaScript to store for later evaluation and then will
 put into its own localStorage as an add-on. Could make the demo post the add-on origin site (and possibly code) back to the server (if not indicated as known within client code) and allow these to be discoverable by other users (though allow opting out of such reporting for privacy reasons).
+1. [Ocrad](http://antimatter15.github.io/ocrad.js/demo.html) for text OCR export of an image (once export mode supported)
 1. Blockly for arbitrary JavaScript:
     1. Object literals
     1. Variables (arrays or objects like functions, etc.) with right side for property access (static (can be detected for pull-down) or dynamic)
