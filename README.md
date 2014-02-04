@@ -323,7 +323,10 @@ JavaScript export).
 1. CoffeeScript demo
 1. PDF demo using https://github.com/mozilla/pdf.js
 1. CSV demo with sortable columns and contenteditable saving
-1. Web macro-script program for use with the web (including possibly AsYouWish)
+1. Web macro-script program for use with the web (including possibly AsYouWish), esp. for text processing (allowing XPath/CSS selectors or raw text searches, testing for content or replacing)
+1. Make especially the text and HTML editor demos extensible via postMessage from add-on site
+to editor which allows for introspection of the JavaScript to store for later evaluation and then will
+put into its own localStorage as an add-on. Could make the demo post the add-on origin site (and possibly code) back to the server (if not indicated as known within client code) and allow these to be discoverable by other users (though allow opting out of such reporting for privacy reasons).
 1. Blockly for arbitrary JavaScript:
     1. Object literals
     1. Variables (arrays or objects like functions, etc.) with right side for property access (static (can be detected for pull-down) or dynamic)
