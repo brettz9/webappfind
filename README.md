@@ -338,7 +338,8 @@ JavaScript export).
 1. Markdown editor (http://pagedown.googlecode.com/hg/demo/browser/demo.html for buttons or http://dillinger.io/ for syntax highlighting or integrate CodeMirror markdown into pagedown?). See also http://stackoverflow.com/questions/2357022/what-is-a-good-client-side-markdown-editor/
 1. "Todo" webapp demo
 1. CoffeeScript demo
-1. PDF demo using https://github.com/mozilla/pdf.js or https://github.com/coolwanglu/pdf2htmlEX/ for reading; for writing could use https://github.com/MrRio/jsPDF (see http://parall.ax/products/jspdf with HTML renderer demo), integrated into CodeMirror or even CKEditor if modified to support generation of the right format; if the same HTML format could be generated and accepted by the likes of pdf2htmlEX and jsPDF, there might be some round-tripping potential.
+1. Modify the OCR demo to support detection (by WebAppFind-injected URL params) of various image formats, SVG, canvas (or even HTML-to-canvas?) images to OCR
+1. PDF demo; might use https://github.com/MrRio/jsPDF (see http://parall.ax/products/jspdf with HTML renderer demo) for writing, integrated into CodeMirror or even CKEditor if modified to support generation of the right format; if the same HTML format could be generated and accepted by the likes of [pdf2htmlEX](https://github.com/coolwanglu/pdf2htmlEX/) and jsPDF, there might be some round-tripping potential.
 1. CSV demo with sortable columns and contenteditable saving
 1. Web macro-script program for use with the web (including possibly AsYouWish), esp. for text processing (allowing XPath/CSS selectors or raw text searches, testing for content or replacing)
 1. Make especially the text and HTML editor demos extensible via postMessage from add-on site
