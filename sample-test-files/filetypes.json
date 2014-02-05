@@ -10,6 +10,7 @@
         ["\\.gif", "giftype"],
         ["\\.ico", "icotype"],
         ["\\.svg", "svgtype"],
+        ["\\.pdf", "pdftype"],
         ["\\.webm", "webmvideotype"],
         ["\\.ogg", "oggaudiotype"],
         ["\\.blockly", "blockly"],
@@ -65,6 +66,9 @@
         },
         "svgtype": {
             "edit": "http://brett-zamir.me/webappfind/svg-edit/editor/svg-editor.html?extensions=ext-markers.js,ext-connector.js,ext-eyedropper.js,ext-shapes.js,ext-imagelib.js,ext-grid.js,ext-polygon.js,ext-star.js,ext-webappfind.js&params=%s"
+        },
+        "pdftype": {
+            "binaryview": "http://brett-zamir.me/webappfind/ocr.html?params=%s"
         },
         "oggaudiotype": {
             "binaryview": "http://brett-zamir.me/webappfind/ogg.html?params=%s"
