@@ -284,6 +284,7 @@ Since WebAppFind executables pass along path information, WebAppFind can already
 1. Exe's don't allow right-click Open with... though maybe Windows would allow even these files to be handled in some way (e.g., how Tortoise overlays the context menu).
 1. Create a shared add-on dependency for WebAppFind and AsYouWish exposing perhaps at least for privilege escalation with some of the underlying non-SDK APIs (e.g., a privilege to save
 only to a specific directory if WebAppFind adds such a fundamental mode).
+1. Create complementary Firefox add-on to add desktop listeners to file changes to ensure WebAppFind files stay up to date within the app (ensure app also checks whether the user wishes to reconcile the new push with any changes already made); tie into proposed version control mode?
 
 # Possible future mode additions
 
