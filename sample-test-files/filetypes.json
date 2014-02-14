@@ -5,6 +5,7 @@
         ["\\.json", "json"],
         ["\\.xml", "xml"],
         ["\\.css", "csstype"],
+        ["\\.csv", "csvtype"],
         ["\\.jpe?g", "jpegtype"],
         ["\\.png", "pngtype"],
         ["\\.gif", "giftype"],
@@ -48,7 +49,10 @@
         "csstype": {
             "edit": "http://brett-zamir.me/webappfind/demos/css.html?params=%s"
         },
-		"jpegtype": {
+        "csvtype": {
+            "edit": "http://brett-zamir.me/webappfind/demos/csv.html?params=%s"
+        },
+        "jpegtype": {
             "binaryview": "http://brett-zamir.me/webappfind/demos/jpeg.html?params=%s",
             "binaryedit": "http://brett-zamir.me/webappfind/demos/jpeg-edit.html?params=%s"
         },

@@ -336,13 +336,13 @@ JavaScript export).
 1. Create demo supporting docx format (rather than requiring export to HTML for Word docs)
 1. Demonstrate approach of allowing data files for download (so can store them anywhere)--if not AYW approach for namespaced shared browser access--as well as data files chosen from File selector (and save over such a file if within the protocol and user permits)
 1. Ability to build [JHTML](http://brettz9.github.com/jhtml) with autocomplete (usable for saving as JSON or saving as HTML) once spec finalized (once <i> approach used)
-1. Integrate HTML/SVG (and then others) with [Together.js](https://togetherjs.com/) to allow collaboration on one's local files
+1. Integrate HTML/SVG (and then others) with [Together.js](https://togetherjs.com/) to allow peer-to-peer collaboration on one's local files
 1. Markdown editor (http://pagedown.googlecode.com/hg/demo/browser/demo.html for buttons or http://dillinger.io/ for syntax highlighting or integrate CodeMirror markdown into pagedown?). See also http://stackoverflow.com/questions/2357022/what-is-a-good-client-side-markdown-editor/
 1. "Todo" webapp demo
 1. CoffeeScript demo
 1. Modify the OCR demo to support detection (by WebAppFind-injected URL params) of various image formats, SVG, and as per the Ocrad demo, drawing on a canvas which could in turn be saved to disk as an image or exported as a text file (or even [HTML-to](http://robert.ocallahan.org/2011/11/drawing-dom-content-to-canvas.html)[-canvas](http://people.mozilla.org/~roc/rendering-HTML-elements-to-canvas.html)?) images to OCR; also modify to allow clicks/keypress on arrow buttons to browse the PDF page-by-page
 1. PDF demo; might use https://github.com/MrRio/jsPDF (see http://parall.ax/products/jspdf with HTML renderer demo) for writing, integrated into CodeMirror or even CKEditor if modified to support generation of the right format; if the same HTML format could be generated and accepted by the likes of [pdf2htmlEX](https://github.com/coolwanglu/pdf2htmlEX/) and jsPDF, there might be some round-tripping potential.
-1. CSV demo with sortable columns and contenteditable saving
+1. Get CKeditor to allow WYSIWYG tables to be sortable for sake of CSV demo? Create view-only demo (i.e., just build table and insert)
 1. Web macro-script program for use with the web (including possibly AsYouWish), esp. for text processing (allowing XPath/CSS selectors or raw text searches, testing for content or replacing)
 1. Make especially the text and HTML editor demos extensible via postMessage from add-on site
 to editor which allows for introspection of the JavaScript to store for later evaluation and then will

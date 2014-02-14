@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>WebAppFind CSV editor demo</title>
+    <script src="../node_modules/jamilih/jml.js"></script>
+    <script src="ckeditor/ckeditor.js"></script>
+    <script src="ckeditor/samples/assets/uilanguages/languages.js"></script>
+    <script>
+    function $ (sel) {
+        return document.querySelector(sel);
+    }
+    </script>
+    <script src="jquery.csv.js"></script>
+    <link rel="stylesheet" href="ckeditor/samples/sample.css" type="text/css" />
+    <link rel="stylesheet" href="html.css" type="text/css" />
+</head>
+<body>
+    <div id="actions"></div>
+    <div>
+        <form id="editorForm">
+            <div id="outer-toolbar">
+                <label for="languages">Available languages (<span id="count"></span> languages):</label>
+                <select id="languages" disabled="disabled">
+                </select>
+            </div>
+            <div>
+                <textarea cols="80" id="editor1" name="editor1" rows="10"></textarea>
+            </div>
+        </form>
+    </div>
+<script>
+/*globals jml, CKEDITOR */
+(function () {'use strict';
+var i, editor, languages, backgroundColor,
+    // Could pass option 'readOnly' if determine from protocol that this is view mode only
+    pathID,
+    saveMessage = 'webapp-save',
+    excludedMessages = [saveMessage];
+
+function listenForMessages() {
+    window.addEventListener('message', function(e) {
+        if (e.origin !== window.location.origin || // PRIVACY AND SECURITY! (for viewing and saving, respectively)
+            (!Array.isArray(e.data) || excludedMessages.indexOf(e.data[0]) > -1) // Validate format and avoid our post below
+        ) {
+            return;
+        }
+        var messageType = e.data[0];
+        switch (messageType) {
+            case 'webapp-view':
+                // Populate the contents
+                pathID = e.data[1];
+                document.title += ': ' + pathID;
+                editor.setData('<table border="1">' + e.data[2].split(/\r?\n/).map(function (line) {
+                    if (line.length) {
+                        // Does not work when newlines exist within a cell
+                        return '<tr><td>' + $.csv.toArray(line).join('</td><td>') + '</td></tr>';
+                    }
+                    return '';
+                }).join('') + '</table>');
+                if ($('a.cke_button__save')) {
+                    $('a.cke_button__save').disabled = false;
+                }
+                break;
+            case 'webapp-save-end':
+                $('a.cke_button__save').style.backgroundColor = 'blue';
+                setTimeout(function () {
+                    $('a.cke_button__save').style.backgroundColor = backgroundColor;
+                }, 120);
+                
+                // alert('save complete for pathID ' + e.data[1] + '!');
+                break;
+            default:
+                throw 'Unexpected mode';
+        }
+    }, false);
+}
+
+
+function createEditor(languageCode) {
+    if (editor) {
+        editor.destroy();
+    }
+
+    // Replace the <textarea id="editor"> with an CKEditor
+    // instance, using default configurations.
+    editor = CKEDITOR.replace('editor1', {
+        language: languageCode,
+        on: {
+            instanceReady: function() {
+                // Wait for the editor to be ready to set
+                // the language combo.
+                editor.execCommand('maximize'); // Full screen mode
+                var languages = document.getElementById('languages');
+                languages.value = this.langCode;
+                languages.disabled = false;
+                if (!pathID) { // Disable save button before adding a listener until we get a path
+                    $('a.cke_button__save').disabled = true;
+                }
+                backgroundColor = $('a.cke_button__save').style.backgroundColor;
+                /*
+                var command = editor.addCommand('save', {
+                    modes: { wysiwyg: 1, source: 1 },
+                    exec: function (editor) { // Add here custom function for the save button
+                        alert('You clicked the save button in CKEditor toolbar!');
+                    }
+                });
+                editor.ui.addButton('Save', { label: 'Save', command: 'save' });
+                */
+                
+                editor.on('beforeCommandExec', function (e) {
+                    if (e.data.name === 'save') {
+                        throw '';
+                    }
+                });
+
+                function saveToDisk (e) {
+                    if (e.type === 'keypress' && (!e.ctrlKey || e.charCode !== 115)) {
+                        return;
+                    }
+                    if (!pathID) {
+                        alert('No pathID set by Firefox yet! Remember to invoke this file from an executable or command line and in edit mode.');
+                        return;
+                    }
+                    
+                    var csv = [].slice.call(
+                        new DOMParser().parseFromString(editor.getData(), 'text/html').documentElement.querySelectorAll('table tr')
+                    ).map(function (tr) {
+                        return [].slice.call(tr.querySelectorAll('td')).map(function (td) {
+                            if (td.innerHTML.search(/[\n\r,"]/) > -1) {
+                                return '"' + td.innerHTML.replace(/"/g, '""') + '"';
+                            }
+                            return td.innerHTML;
+                        }).join(',');
+                    }).join('\n') + '\n';
+                    window.postMessage([saveMessage, pathID, csv], window.location.origin);
+                }
+                $('a.cke_button__save').addEventListener('click', saveToDisk);
+                
+                editor.document.on('keydown', function (e) {
+                    if (e.data.$.keyCode == 83 && e.data.$.ctrlKey) {
+                        e.data.$.preventDefault(true);
+                        saveToDisk(e.data.$);
+                        return false;
+                    }
+                });
+            }
+        }
+    });
+}
+
+listenForMessages(); 
+languages = $('#languages');
+for (i = 0; i < window.CKEDITOR_LANGS.length ; i++ ) {
+    jml('option', {value: window.CKEDITOR_LANGS[i].code}, [
+        window.CKEDITOR_LANGS[i].name
+    ], languages);
+}
+
+// Set the number of languages.
+jml('span', [String(window.CKEDITOR_LANGS.length)], $('#count')); // Todo: Avoid Jamilih requiring explicit string conversion
+
+languages.addEventListener('change', function () {
+    createEditor(this.value);
+});
+
+// At page startup, load the default language:
+createEditor('');
+
+/*
+window.addEventListener('DOMContentLoaded', function () {
+    addRegistrationHandlers([{
+        type: 'edithtml', info: 'Protocol for viewing local CSV files',
+        instructions: 'Register this app as a handler for viewing local CSV files'
+    }], 'http://127.0.0.1/webappfind/demos/csv.html?uri=%s');
+});
+*/
+}());
+
+</script>
+</body>
+</html>
