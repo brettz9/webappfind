@@ -1,4 +1,5 @@
-/*globals svgEditor, svgCanvas, canvg, $*/
+/*globals svgEditor, svgedit, svgCanvas, canvg, $*/
+/*jslint eqeq: true*/
 /*
  * ext-server_opensave.js
  *
@@ -30,8 +31,8 @@ svgEditor.addExtension("server_opensave", {
 		}
 		var open_svg_action, import_svg_action, import_img_action,
 			open_svg_form, import_svg_form, import_img_form,
-			save_svg_action = 'extensions/filesave.php',
-			save_img_action = 'extensions/filesave.php',
+			save_svg_action = svgEditor.curConfig.extPath + 'filesave.php',
+			save_img_action = svgEditor.curConfig.extPath + 'filesave.php',
 			// Create upload target (hidden iframe)
 			cancelled = false;
 	
@@ -70,7 +71,7 @@ svgEditor.addExtension("server_opensave", {
 				canvg(c, data.svg, {renderCallback: function() {
 					var pre, filename, suffix,
 						datauri = quality ? c.toDataURL(mimeType, quality) : c.toDataURL(mimeType),
-						uiStrings = svgEditor.uiStrings,
+						// uiStrings = svgEditor.uiStrings,
 						note = '';
 					
 					// Check if there are issues
@@ -109,9 +110,9 @@ svgEditor.addExtension("server_opensave", {
 		if (window.FileReader) {return;}
 		
 		// Change these to appropriate script file
-		open_svg_action = 'extensions/fileopen.php?type=load_svg';
-		import_svg_action = 'extensions/fileopen.php?type=import_svg';
-		import_img_action = 'extensions/fileopen.php?type=import_img';
+		open_svg_action = svgEditor.curConfig.extPath + 'fileopen.php?type=load_svg';
+		import_svg_action = svgEditor.curConfig.extPath + 'fileopen.php?type=import_svg';
+		import_img_action = svgEditor.curConfig.extPath + 'fileopen.php?type=import_img';
 		
 		// Set up function for PHP uploader to use
 		svgEditor.processFile = function(str64, type) {
@@ -166,7 +167,7 @@ svgEditor.addExtension("server_opensave", {
 			
 			
 			function submit() {
-				// This submits the form, which returns the file data using svgEditor.uploadSVG
+				// This submits the form, which returns the file data using svgEditor.processFile()
 				form.submit();
 				
 				rebuildInput(form);
@@ -189,7 +190,7 @@ svgEditor.addExtension("server_opensave", {
 				});
 			} else {
 				inp.change(function() {
-					// This submits the form, which returns the file data using svgEditor.uploadSVG
+					// This submits the form, which returns the file data using svgEditor.processFile()
 					submit();
 				});
 			}
