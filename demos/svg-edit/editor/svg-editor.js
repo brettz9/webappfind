@@ -537,6 +537,9 @@ TO-DOS
 			var extFunc = function() {
 				$.each(curConfig.extensions, function() {
 					var extname = this;
+					if (!extname.match(/^ext-.*\.js/)) { // Ensure URL cannot specify some other unintended file in the extPath
+						return;
+					}
 					$.getScript(curConfig.extPath + extname, function(d) {
 						// Fails locally in Chrome 5
 						if (!d) {
@@ -4945,7 +4948,7 @@ TO-DOS
 				updateCanvas(true);
 //			});
 
-		//	var revnums = "svg-editor.js ($Rev: 2711 $) ";
+		//	var revnums = "svg-editor.js ($Rev: 2712 $) ";
 		//	revnums += svgCanvas.getVersion();
 		//	$('#copyright')[0].setAttribute('title', revnums);
 
