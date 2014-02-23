@@ -1,5 +1,5 @@
 // Obtained from http://code.google.com/p/jquery-csv/source/browse/src/jquery.csv.js
-// Provided a global export at top
+// Provided a global export of $ at bottom
 /**
  * jQuery-csv (jQuery Plugin)
  * version: 0.70 (2012-11-04)
@@ -44,16 +44,6 @@ RegExp.escape= function(s) {
   } else {
     $ = {};
   }
-
-  if (typeof module === 'undefined' || !module.exports) {
-    if (this.$) {
-      $ = this.$;
-    }
-    else {
-      this.$ = $;
-    }
-  }
-
 
   /**
    * jQuery.csv.defaults
@@ -984,6 +974,9 @@ RegExp.escape= function(s) {
   // CommonJS module is defined
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = $.csv;
+  }
+  else if (!this.$) { // Export in case we created "$" locally
+    this.$ = $;
   }
 
 }).call( this );
