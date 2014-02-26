@@ -296,6 +296,9 @@ execute with web app
 1. API for XPath/XQuery (+ [HTTPQuery](https://github.com/brettz9/httpquery)) like targeted updating within documents, so data decoupled as with files (XSS-safe or unsafe versions); PATCH header for more generic updates?
 1. PUT for specific site only (or data within a site as per targeted updating item)
 1. SQLite (e.g., for localStorage); could be wrapped by targeted updating API and used with PUT; send schema URL in header to inform that the update must be tabular, not otherwise hierarchical
+1. Allow command line for temporary file or designated file saving
+of string contents in webappfind as well (with dialog to approve
+there as in atyourcommand if would cause an overwrite).
 
 # Possible future todos
 
