@@ -138,7 +138,7 @@ Only windows with the URI approved by the process detailed above can successfull
 
 ## Recognized file types and custom modes
 
-Although you are free to define your own file types and custom modes, in order to prevent future conflicts, it is recommended that you register your [file types](https://github.com/brettz9/webappfind/wiki/Registered-file-types) and [custom modes](https://github.com/brettz9/webappfind/wiki/Registered-custom-modes) (or at least namespace
+Although you are free to define your own file types and custom modes, in order to prevent future conflicts, it is recommended that you register your [file types](./doc/Registered-file-types.md) and [custom modes](./doc/Registered-custom-modes.md) (or at least namespace
 them well).
 
 Even if filetypes.json is used with "register" on "defaultHandlers", it may be convenient to have a separate spec URL detailed for your file type, including for cases where the file extension is used without filetypes.json.
