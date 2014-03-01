@@ -130,11 +130,6 @@ opened so as to view the source code). Custom modes will immediately follow the 
 
 # Tips for usage with other tools
 
-If you want to go in the other direction, from web documents to the desktop
-(or from arbitrary web documents to web apps), you might watch
-[AtYourCommand](https://github.com/brettz9/atyourcommand) which when
-finished should help users to do this.
-
 As mentioned,
 [Executable Builder](https://github.com/brettz9/executable-builder)
 is a project which ought to open up further options to WebAppFind
@@ -163,6 +158,11 @@ of interest (to which you can easily get in Notepad++ by "Open
 Containing Folder in Explorer" and then adding the file by right-click
 and opening it); otherwise, you may get a message in a Firefox tab
 that a handler was not found for the supplied file's extension.
+
+If you want to go in the other direction, from web documents to the desktop
+(or from arbitrary web documents to web apps), you might watch
+[AtYourCommand](https://github.com/brettz9/atyourcommand) which when
+finished should help users to do this.
 
 # For developers
 
@@ -337,7 +337,10 @@ data files. The filetypes.json file is similarly non-committal in
 terminology or behavior about where the files will be opened,
 so desktop apps could (and, I believe, ought) to utilize filetypes.json
 when seeking to detect type information (beyond just reading the
-file extension).
+file extension). (It is a potential to-do of this project to allow
+filetypes.json to allow designation of local command line
+arguments to apps besides Firefox as well, but this would
+require first routing the request through Firefox.)
 
 The allowance for custom modes in addition to fundamental modes
 helps the user avoid the need to swap handlers (or modify
@@ -448,12 +451,12 @@ a number of areas:
         of JavaScript, [Ocrad](http://antimatter15.github.io/ocrad.js/demo.html) for text OCR export of an image, etc.). Allow multiple custom modes attached to a single fundamental mode?
     1. In addition to regular expressions, use the presence or specific values for custom modes to determine file type?
     1. WebAppFind command line or filetypes.json to resolve URL into content to be passed to web app or path/link (file: or c:\) for app or file
-        1. Modify Executable Builder so an executable can cause a web file to be opened by a web or desktop app; and then save changes back via PUT or POST (check header for PUT support?); or should I instead just implement command line control for web->desktop add-ons and call that within an executable/Executable Builder (leading potentially back through WebAppFind command-line control)?
+        1. Modify Executable Builder so an executable can cause a web file to be opened by a web or desktop app; and then save changes back via PUT or POST (check header for PUT support?); or should I instead just implement command line control for web->desktop add-ons and call that within an executable/Executable Builder (leading potentially back through WebAppFind command-line control)? Integrate with [atyourcommand](https://github.com/brettz9/atyourcommand)
         1. Use server's filetypes.json also if present
     1. Allow command line args to be piped into a string to be supplied to the web app (including result of another webappfind invocation?); if "edit" or "binaryedit" mode is given, allow command line instructions to be invoked with the result posted back from the web app as a parameter.
     1. Mention how profile selection logic would probably ideally occur before opening Firefox as with
     any complex type-determination logic, taking place within the executable (built by Executable Builder?), though ensure that the new proposed command line and web app pipelining features would be able to replicate this if necessary
-    1. Demo of Firefox being used merely to interpret filetypes.json and simply return a command line instruction back to a desktop app (in a hard-coded rather than fallback manner).
+    1. Demo of Firefox being used merely to interpret filetypes.json and simply return a command line instruction back to a desktop app (in a hard-coded rather than fallback manner). Although AsYouWish could do this, better to bake it in so other desktop apps can leverage (including Notepad++, etc.).
     1. Allow type to be supplied without a path so as to just open the right web app
     1. Web app pipelining: Allow a hard-coded web app URL (or supply a path or file type in order to discover a web app) to be supplied (along with its own mode, custom mode, arguments, etc.) which will be opened (optionally in a hidden window) and when its response its received, pipeline the string result to another web app URL. Yes, the apps could instead communicate directly with each other via postMessage, but this approach allows the user to do their own coupling rather than be dependent
     on a particular integration of services.
@@ -485,7 +488,8 @@ a number of areas:
 
 # Medium term priority todos
 
-1. See <https://github.com/brettz9/atyourcommand>. Firefox add-on to allow
+1. See [atyourcommand](https://github.com/brettz9/atyourcommand),
+a Firefox add-on to allow
 creation of context menu items, including invoking a process with
 arguments with the selected text, right-clicked URL, or current URL
 as arguments (with the URL potentially being first retrieved as text and
@@ -532,7 +536,8 @@ and used with PUT; send schema URL in header to inform that the update
 must be tabular, not otherwise hierarchical
 1. Allow command line for temporary file or designated file saving
 of string contents in webappfind as well (with dialog to approve
-there as in atyourcommand if would cause an overwrite).
+there as in [atyourcommand](https://github.com/brettz9/atyourcommand)
+if would cause an overwrite).
 1. Support a global user filetypes.json file (at a chosen directory
 specified within Firefox?) which can override or provide defaults for
 local filetypes.json files (especially for defaults since sites might
