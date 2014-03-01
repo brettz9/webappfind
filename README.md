@@ -1,48 +1,126 @@
 # webappfind
 
-Are you a fan of web apps, but want the freedom to place your data files where you like on your desktop and thus be able to work offline and own your data rather than keeping it in the cloud? Do you want the freedom to just double-click (or right-click) a file on your desktop so that it opens in a web app, saving you the trouble of having to copy the file path, move from your desktop to the web app, and paste the path in a file finder? Do you want to avoid dragging files into your web app when modifications to the files cannot be saved back directly to your hard drive?
+Are you a fan of web apps, but want the freedom to place your data files
+where you like on your desktop and thus be able to work offline and own
+your data rather than keeping it in the cloud? Do you want the freedom
+to just double-click (or right-click) a file on your desktop so that it opens
+in a web app, saving you the trouble of having to copy the file path,
+move from your desktop to the web app, and paste the path in a file
+finder? Do you want to avoid dragging files into your web app when
+modifications to the files cannot be saved back directly to your hard
+drive?
 
-WebAppFind addresses these use cases by allowing you to double-click (or use "Open with..." right-click) on "view" or "edit" executable files on your desktop (currently, executables are for Windows only), sending the file path details to Firefox (via command line arguments) which are then intercepted by a Firefox add-on which checks for an *optional* filetypes.json file within the same directory as the right-clicked file to determine more precise handling (the file extension will be used to determine the type otherwise). Based on what is chosen/found and on user preferences, a handler web site will be sought in Firefox to open the file of the designated type (whether a generic or custom type) as well as allow saves to be made back to the file if the "edit" type was the type chosen and a suitable handler site was found to send back a save event.
+WebAppFind addresses these use cases by allowing you to double-click (or
+use "Open with..." right-click) on "view" or "edit" executable files on your
+desktop (currently, executables are for Windows only), sending the file
+path details to Firefox (via command line arguments) which are then
+intercepted by a Firefox add-on which checks for an *optional* filetypes.json
+file within the same directory as the right-clicked file to determine more
+precise handling (the file extension will be used to determine the type
+otherwise). Based on what is chosen/found and on user preferences,
+a handler web site will be sought in Firefox to open the file of the
+designated type (whether a generic or custom type) as well as allow
+saves to be made back to the file if the "edit" type was the type chosen
+and a suitable handler site was found to send back a save event.
 
-WebAppFind allow you to make your data files accessible to other programs and to give your users peace of mind to not be locked into your application alone. It also allows your users to open your custom data files in your program immediately and intelligently, using whatever file extension you prefer, even if the file extension is a generic one such as "json" or "js" while your own data file follows a particular format or schema.
+WebAppFind allow you to make your data files accessible to other
+programs and to give your users peace of mind to not be locked
+into your application alone. It also allows your users to open your
+custom data files in your program immediately and intelligently,
+using whatever file extension you prefer, even if the file extension
+is a generic one such as "json" or "js" while your own data file
+follows a particular format or schema.
 
-Unlike a more generic solution, such as with a Firefox add-on or [AsYouWish](https://github.com/brettz9/asyouwish/)-enabled site, *webappfind* minimizes security and privacy risks by only allowing files designated in the above manner to be available to the relevant web application.
+Unlike a more generic solution, such as with a Firefox add-on or
+[AsYouWish](https://github.com/brettz9/asyouwish/)-enabled site,
+*webappfind* minimizes security and privacy risks by only allowing
+files designated in the above manner to be available to the relevant
+web application.
 
 # Executable usage notes
 
 (For command line usage, see its API below.)
 
-It is hoped that the instructions below can be mostly automated and simplified once the [Executable Builder](https://github.com/brettz9/executable-builder) add-on is complete (this add-on is to optionally interact with WebAppFind to allow building and assignment of executable/batch files which can be designated for specific file types without the user needing to find the path of these executables as WebAppFind currently requires).
+It is hoped that the instructions below can be mostly automated
+and simplified once the
+[Executable Builder](https://github.com/brettz9/executable-builder)
+add-on is complete (this add-on is to optionally interact with WebAppFind
+to allow building and assignment of executable/batch files which can be
+designated for specific file types without the user needing to find the
+path of these executables as WebAppFind currently requires).
 
 ## Instructions
 
-Note that you must first install the Firefox add-on (the XPI file) so that the following steps will work (the add-on has not yet been submitted to the Addons site, so for now, you will have to either build the XPI from source or use the pre-built XPI included with the repository).
+Note that you must first install the Firefox add-on (the XPI file) so that
+the following steps will work (the add-on has not yet been submitted
+to the Addons site, so for now, you will have to either build the XPI
+from source or use the pre-built XPI included with the repository).
 
 1. Right-click on a file.
-    1. If you want to use WebAppFind without disturbing your defaults for that file extension, select "Open with"->"Choose default program..." if present (or if not present, open the file and choose "Select a program from a list of installed programs") and then make sure "Always use the selected program to open this kind of file" is not checked.
-    1. If you always want to use WebAppFind when handling files of this extension, click "Properties", then click "Change..." next to "Opens with:" in the General tab of the dialog.
+    1. If you want to use WebAppFind without disturbing your defaults
+    for that file extension, select "Open with"->"Choose default program..."
+    if present (or if not present, open the file and choose "Select a program
+    from a list of installed programs") and then make sure "Always use the
+    selected program to open this kind of file" is not checked.
+    1. If you always want to use WebAppFind when handling files of this
+    extension, click "Properties", then click "Change..." next to
+    "Opens with:" in the General tab of the dialog.
 1. Click "Browse".
-1. Navigate to an executable within the "cplusplus" folder of this [WebAppFind](https://github.com/brettz9/webappfind) repository (or, if you prefer, you can build the executables yourself with the source code included in this repository). If you want web apps to open this file in view-only mode, choose "WebAppFinder-view-mode-Firefox.exe" (or "WebAppFinder-binaryview-mode-Firefox.exe" if this is for a program needing to open a file in binary mode, such as images, sound files, or videos). If you want to grant the webapp read and write access for this file (or type of file if you chose option 1.2) you open via WebAppFind, choose "WebAppFinder-edit-mode-Firefox.exe" (or "WebAppFinder-binaryedit-mode-Firefox.exe" for editing binary files).
+1. Navigate to an executable within the "cplusplus" folder of this
+[WebAppFind](https://github.com/brettz9/webappfind) repository (or, if
+you prefer, you can build the executables yourself with the source code
+included in this repository). If you want web apps to open this file in
+view-only mode, choose "WebAppFinder-view-mode-Firefox.exe" (or
+"WebAppFinder-binaryview-mode-Firefox.exe" if this is for a program
+needing to open a file in binary mode, such as images, sound files, or
+videos). If you want to grant the webapp read and write access for this
+file (or type of file if you chose option 1.2) you open via WebAppFind,
+choose "WebAppFinder-edit-mode-Firefox.exe" (or
+"WebAppFinder-binaryedit-mode-Firefox.exe" for editing binary files).
 1. Select "Ok".
-1. If you used "Open with" (as per step 1.1 above), your file should have already opened with WebAppFind. If you opted for "Properties" (step 1.2 above), you should now be able to double-click any file possessing the same extension to open it with WebAppFind.
+1. If you used "Open with" (as per step 1.1 above), your file should have
+already opened with WebAppFind. If you opted for "Properties" (step 1.2
+above), you should now be able to double-click any file possessing the
+same extension to open it with WebAppFind.
 
-If an edit web+local protocol is enabled and open and then disabled in the same session, it will keep having save access (though within that window session only). One must currently close any open tabs for that web application if one no longer wishes to allow access (though as noted elsewhere in the documentation, the app only has access to the files to which it was permitted access).
+If an edit web+local protocol is enabled and open and then disabled in
+the same session, it will keep having save access (though within that
+window session only). One must currently close any open tabs for that
+web application if one no longer wishes to allow access (though as noted
+elsewhere in the documentation, the app only has access to the files to
+which it was permitted access).
 
 # Some use case scenarios
 
-1. Work on Git on your desktop while being able to open HTML files for WYSIWYG editing in a (CKEditor) web app which you can easily modify to add buttons for snippets you like to add? Do you want to use CodeMirror for syntax highlighting of your JavaScript and CSS? (Demos are included which do all of these.)
+1. Work on Git on your desktop while being able to open HTML files for
+WYSIWYG editing in a (CKEditor) web app which you can easily modify
+to add buttons for snippets you like to add? Do you want to use CodeMirror
+for syntax highlighting of your JavaScript and CSS? (Demos are included
+which do all of these.)
 
 # Possible future user preference changes
 
-Currently preferences are global, whereas it may be desirable to allow users to customize their preferences by type/protocol in addition to the current default global ones.
+Currently preferences are global, whereas it may be desirable to allow users
+to customize their preferences by type/protocol in addition to the current
+default global ones.
 
 # Command line API
 
-WebAppFind is triggered (currently Firefox only) through command line arguments passed to Firefox and handled by the WebAppFind add-on.
+WebAppFind is triggered (currently Firefox only) through command line
+arguments passed to Firefox and handled by the WebAppFind add-on.
 
-It is my goal to complete work on [Executable Builder](https://github.com/brettz9/executable-builder) to facilitate the building of executables (probably batch scripts tied to cmd.exe) with icon for task bar usage, etc., but currently one must either use (or build) the executables included in the repository or call the command line oneself.
+It is my goal to complete work on
+[Executable Builder](https://github.com/brettz9/executable-builder) to
+facilitate the building of executables (probably batch scripts tied to
+cmd.exe) with icon for task bar usage, etc., but currently one must
+either use (or build) the executables included in the repository or call
+the command line oneself.
 
-The following process is subject to change and may potentially even be scrapped altogether if another approach is found to be easier for streamlining cross-browser invocation, but currently this API is available if someone wishes to build their own executables using the API or to simply be able to run commands manually from the command line.
+The following process is subject to change and may potentially even
+be scrapped altogether if another approach is found to be easier for
+streamlining cross-browser invocation, but currently this API is available
+if someone wishes to build their own executables using the API or to
+simply be able to run commands manually from the command line.
 
 * `-webappdoc <path>` - Indicates the path of the file which will be made available to the web application (with the privileges designated by `-webappmode`)
 * `-webappmode <mode>` Indicates the fundamental mode under which the file will be opened up to the web app (i.e., "-webappmode view", "-webappmode binaryview", "-webappmode edit", or "-webappmode binaryedit").
@@ -50,15 +128,68 @@ The following process is subject to change and may potentially even be scrapped 
 opened so as to view the source code). Custom modes will immediately follow the mode within the protocol. (Note that this API is expected to change)
 * `-remote "openurl(about:newtab)"` - This built-in Mozilla command line API allows Firefox (unlike "-silent") to gain focus without additional instructions to Windows. If the tab is determined to not be needed (e.g., if the user has opted to allow desktop opening of the file when no protocols are found), the add-on will simply auto-close the tab that this parameter opens.
 
+# Tips for usage with other tools
+
+If you want to go in the other direction, from web documents to the desktop
+(or from arbitrary web documents to web apps), you might watch
+[AtYourCommand](https://github.com/brettz9/atyourcommand) which when
+finished should help users to do this.
+
+As mentioned,
+[Executable Builder](https://github.com/brettz9/executable-builder)
+is a project which ought to open up further options to WebAppFind
+users when complete.
+
+If you wish to open desktop files into web apps but which for those web apps
+to have higher privileges than just writing back to the opened file, see
+[AsYouWish](https://github.com/brettz9/asyouwish/).
+
+Remember that besides being able to launch WebAppFind from the desktop,
+you can also launch from the command line, including from within the likes of
+desktop apps as well, such as [Notepad++](http://notepad-plus-plus.org/).
+
+In the case of Notepad++, one can go to the "Run" menu and choose the
+"Run..." item, and then specify the path of the relevant WebAppFind
+executable followed by a space and `"$(FULL_CURRENT_PATH)"`. This
+will allow you to open the current file in a web app. You may
+also wish to click the "save" button there which allows specifying a hot
+key. If you wish to supply other arguments, see the relevant
+[Notepad++ wiki page](http://sourceforge.net/apps/mediawiki/notepad-plus/index.php?title=External_Programs).
+Note that as WebAppFind does not yet support a global user filetypes.json
+file, you will first need to allow a site to register itself as a protocol
+handler for the types of files you wish to open (based on file
+extension) or add a filetypes.json file within the directory of the file
+of interest (to which you can easily get in Notepad++ by "Open
+Containing Folder in Explorer" and then adding the file by right-click
+and opening it); otherwise, you may get a message in a Firefox tab
+that a handler was not found for the supplied file's extension.
+
 # For developers
 
 ## Important security notes
 
-When developing a web app for use with WebAppFind, it is even more important to protect the privacy and security of your users since your web app may inadvertently be exposing data they have saved on their desktops or even overwriting it.
+When developing a web app for use with WebAppFind, it is even more
+important to protect the privacy and security of your users since your
+web app may inadvertently be exposing data they have saved on their
+desktops or even overwriting it.
 
-1. Please note the security comments within the API comments below for details on how to make communiction with the add-on safely (via `postMessage`).
-1. As with any web app, do not trust user-supplied data (e.g., to paste it using `innerHTML`), especially if that data is supplied via the URL (to which hackers can link or cause their visitors to visit such pages). See https://en.wikipedia.org/wiki/Cross-site_scripting for some of the concerns.
-1. There should be no side effects upon the opening of a link to your web app (and whether or not your app is opened as a URL, protocol, or protocol-opened-through-WebAppFind), so for example, you should not automatically save file contents back to disk (at least without user approval). (An exception might be made in the future if AsYouWish is installed and the user wished to bookmark privileged but harmless or per-use-confirmed processes, e.g., to visit a link to package up some files as part of a build process.) See https://en.wikipedia.org/wiki/Cross-site_request_forgery for some of the concerns.
+1. Please note the security comments within the API comments below for
+details on how to make communiction with the add-on safely (via
+`postMessage`).
+1. As with any web app, do not trust user-supplied data (e.g., to paste
+it using `innerHTML`), especially if that data is supplied via the URL (to
+which hackers can link or cause their visitors to visit such pages). See
+https://en.wikipedia.org/wiki/Cross-site_scripting for some of the concerns.
+1. There should be no side effects upon the opening of a link to your web app
+(and whether or not your app is opened as a URL, protocol, or
+protocol-opened-through-WebAppFind), so for example, you should not
+automatically save file contents back to disk (at least without user
+approval). (An exception might be made in the future if AsYouWish is
+installed and the user wished to bookmark privileged but harmless or
+per-use-confirmed processes, e.g., to visit a link to package up some
+files as part of a build process.) See
+https://en.wikipedia.org/wiki/Cross-site_request_forgery for some
+of the concerns.
 
 ## API: file type finding
 
@@ -113,15 +244,25 @@ Only windows with the URI approved by the process detailed above will be able to
 
 ## API: saving back to the originally supplied file path (for the "edit" mode only)
 
-A save will be performed by sending a 'webapp-save' to the add-on (see the code below).
+A save will be performed by sending a 'webapp-save' to the add-on
+(see the code below).
 
-A pathID will be needed when making a save of file contents back to the add-on (which will save back to disk). You can obtain this before making saves, by listening for the 'webapp-view' message (described under "API: reading file contents" above); the 2nd value of the first (array) argument (`previouslySavedPathIDFromViewEvent`) will contain this information.
+A pathID will be needed when making a save of file contents back to
+the add-on (which will save back to disk). You can obtain this before
+making saves, by listening for the 'webapp-view' message (described
+under "API: reading file contents" above); the 2nd value of the first (array)
+argument (`previouslySavedPathIDFromViewEvent`) will contain this
+information.
 
-This pathID is intended to allow for sites to handle multiple files in a single session (although WebAppFind currently will always open the file in a new tab as a new instance).
+This pathID is intended to allow for sites to handle multiple files in a
+single session (although WebAppFind currently will always open the file
+in a new tab as a new instance).
 
 Note the important comment below about ensuring your users' privacy.
 
-Once a save has been performed, a message, 'webapp-save-end', will be sent from the add-on back to the WebAppFind-opened app (in case the app would like to inform the user in some manner).
+Once a save has been performed, a message, 'webapp-save-end', will be
+sent from the add-on back to the WebAppFind-opened app (in case the
+app would like to inform the user in some manner).
 
 ```javascript
 // For your user's privacy, you should only post the
@@ -134,32 +275,98 @@ Once a save has been performed, a message, 'webapp-save-end', will be sent from 
 window.postMessage(['webapp-save', previouslySavedPathIDFromViewEvent, dataToSaveAsString], window.location.origin);
 ```
 
-Only windows with the URI approved by the process detailed above can successfully save such messages (and only for the supplied file).
+Only windows with the URI approved by the process detailed above
+can successfully save such messages (and only for the supplied file).
 
 ## Recognized file types and custom modes
 
-Although you are free to define your own file types and custom modes, in order to prevent future conflicts, it is recommended that you register your [file types](./doc/Registered-file-types.md) and [custom modes](./doc/Registered-custom-modes.md) (or at least namespace
+Although you are free to define your own file types and custom modes,
+in order to prevent future conflicts, it is recommended that you register
+your [file types](./doc/Registered-file-types.md) and
+[custom modes](./doc/Registered-custom-modes.md) (or at least namespace
 them well).
 
-Even if filetypes.json is used with "register" on "defaultHandlers", it may be convenient to have a separate spec URL detailed for your file type, including for cases where the file extension is used without filetypes.json.
+Even if filetypes.json is used with "register" on "defaultHandlers", it may be
+convenient to have a separate spec URL detailed for your file type, including
+for cases where the file extension is used without filetypes.json.
 
 ## Rationale for filetypes.json design
 
-Although there may be some advantages to storing meta-data at the individual file level, I did not see a very convenient way in which Windows would allow the addition of arbitary meta-data which Firefox could easily query (Windows does not appear to offer arbitrary addition and editing of properties though programs, e.g., TortoiseGit, appear to be able to overlay the properties and are aware of file-level metadata while adding their own). Having a JSON file allows developers to add some type configuration (beyond the more generic info detectable by a file extension) within the directory containing the data files, allowing for introspection and modifications in a manner familiar to web developers.
+Although there may be some advantages to storing meta-data at the individual
+file level, I did not see a very convenient way in which Windows would allow
+the addition of arbitary meta-data which Firefox could easily query (Windows
+does not appear to offer arbitrary addition and editing of properties though
+programs, e.g., TortoiseGit, appear to be able to overlay the properties and
+are aware of file-level metadata while adding their own). Having a JSON file
+allows developers to add some type configuration (beyond the more generic
+info detectable by a file extension) within the directory containing the data
+files, allowing for introspection and modifications in a manner familiar to
+web developers.
 
-The "fileMatches" array is an array of arrays as opposed to object literal in order to ensure matches occur in reliable order across systems (since ECMAScript does not guarantee iteration order across implementations). Other fields are keyed to type name (noting that these must all be lower-case ASCII letters since web protocols only allow these to work after the "web+").
+The "fileMatches" array is an array of arrays as opposed to object
+literal in order to ensure matches occur in reliable order across
+systems (since ECMAScript does not guarantee iteration order across
+implementations). Other fields are keyed to type name (noting that
+these must all be lower-case ASCII letters since web protocols only
+allow these to work after the "web+").
 
-Although I would eventually like to allow the add-on to accept hard-coded URLs for the web apps (so that users or vendors could ensure that their "Open With" instruction went to a particular URL regardless of add-on settings) and while filetypes.json does provide for *default*Handlers, filetypes.json deliberately avoids providing a mechanism for obligating the add-on to utilize a specific web app URL when opening files of a given type. This is by design as I believe the open nature of operating systems letting you choose what application to use for a given data file ought to be maintained by default with web apps (and be unlike the even worse status quo where websites not only don't allow other apps to read their data but host your data exclusively at their own site, even if they at least allow offline capability). I am interested, however, in seeing the possibility for registering "validate" modes independently from editors (but even here, I don't think I'd want to allow hard-coding of validators). But again, I do intend to allow hard-coding at the add-on level to provide some means of obligating the use of a particular URL.
+Although I would eventually like to allow the add-on to accept hard-coded
+URLs for the web apps (so that users or vendors could ensure that their
+"Open With" instruction went to a particular URL regardless of add-on
+settings) and while filetypes.json does provide for *default*Handlers,
+filetypes.json deliberately avoids providing a mechanism for obligating
+the add-on to utilize a specific web app URL when opening files of a
+given type. This is by design as I believe the open nature of operating
+systems letting you choose what application to use for a given data file
+ought to be maintained by default with web apps (and be unlike the even
+worse status quo where websites not only don't allow other apps to read
+their data but host your data exclusively at their own site, even if they at
+least allow offline capability). I am interested, however, in seeing the
+possibility for registering "validate" modes independently from editors (but
+even here, I don't think I'd want to allow hard-coding of validators). But
+again, I do intend to allow hard-coding at the add-on level to provide
+some means of obligating the use of a particular URL.
 
-Note that although this particular collection of "Open With..." executables and a (currently Firefox-only) add-on is called "WebAppFind", the protocols are prefixed to begin with the more generic phrasing "web+local" so as to allow openness to the possibility that non-browser desktop apps could also handle reading and editing of these offline-available, type-aware data files. The filetypes.json file is similarly non-committal in terminology or behavior about where the files will be opened, so desktop apps could (and, I believe, ought) to utilize filetypes.json when seeking to detect type information (beyond just reading the file extension).
+Note that although this particular collection of "Open With..."
+executables and a (currently Firefox-only) add-on is called
+"WebAppFind", the protocols are prefixed to begin with the
+more generic phrasing "web+local" so as to allow openness
+to the possibility that non-browser desktop apps could also
+handle reading and editing of these offline-available, type-aware
+data files. The filetypes.json file is similarly non-committal in
+terminology or behavior about where the files will be opened,
+so desktop apps could (and, I believe, ought) to utilize filetypes.json
+when seeking to detect type information (beyond just reading the
+file extension).
 
-The allowance for custom modes in addition to fundamental modes helps the user avoid the need to swap handlers (or modify filetypes.json) whenever they wish to go directly to an app (or a part of an app) which brings the precise functionality they are seeking at the moment. It allows niche apps (such as HTML source viewers) to avoid registering themselves as handlers in a manner that would conflict with other normally more useful apps that would act on the same file type (e.g., a WYSIWYG HTML viewer). Fundamental modes are limited to those which genuinely require a distinct mode of transmission or privileges (e.g., editing vs. viewing or normal vs. binary) whereas custom modes imply no difference at the file processing level; the information is only meaningful to web apps. (Hyphens or such would have been useful for namespacing between the two types of modes, but the current HTML spec does not allow protocols to be registered with them present.)
+The allowance for custom modes in addition to fundamental modes
+helps the user avoid the need to swap handlers (or modify
+filetypes.json) whenever they wish to go directly to an app (or a
+part of an app) which brings the precise functionality they are
+seeking at the moment. It allows niche apps (such as HTML
+source viewers) to avoid registering themselves as handlers in a
+manner that would conflict with other normally more useful apps
+that would act on the same file type (e.g., a WYSIWYG HTML
+viewer). Fundamental modes are limited to those which genuinely
+require a distinct mode of transmission or privileges (e.g., editing
+vs. viewing or normal vs. binary) whereas custom modes imply
+no difference at the file processing level; the information is only
+meaningful to web apps. (Hyphens or such would have been
+useful for namespacing between the two types of modes, but
+the current HTML spec does not allow protocols to be registered
+with them present.)
 
 ## Rationale for API design
 
-`postMessage` was chosen for having a familiar API and already designed for potentially untrusted collaboration sources. (See the section "Comparison with similar WebAPI work" for other possibilities.)
+`postMessage` was chosen for having a familiar API and already
+designed for potentially untrusted collaboration sources. (See the
+section "Comparison with similar WebAPI work" for other possibilities.)
 
-Before discovering the command line handling, I originally sought to have the executable create a temp file containing an ID and path and mode info while supplying that to the add-on via a URL which would in turn check the temp file (this approach might work for other browsers if they do not allow add-ons to check command line arguments).
+Before discovering the command line handling, I originally sought to
+have the executable create a temp file containing an ID and path
+and mode info while supplying that to the add-on via a URL which
+would in turn check the temp file (this approach might work for other
+browsers if they do not allow add-ons to check command line arguments).
 
 ## Possible future API/filestypes.json changes
 
@@ -186,20 +393,39 @@ These missing use cases (besides operating on files) might perhaps include:
 * The typing system of WebActivities does not seem to be made to be extensible by applications. It thus also doesn't allow specification of hierarchies of types (e.g., myJson->json->js) for fallbacks for as-yet-unregistered types or for alternate editor types.
 * WebActivities doesn't allow recommendation of default handlers when opening a file for the first time (though a WebActivities-supporting site could seek to register itself as such a handler).
 
-The [WebAPI](https://wiki.mozilla.org/WebAPI) has a [DeviceStorageAPI](https://wiki.mozilla.org/WebAPI/DeviceStorageAPI) which has certain file-related behaviors.
+The [WebAPI](https://wiki.mozilla.org/WebAPI) has a
+[DeviceStorageAPI](https://wiki.mozilla.org/WebAPI/DeviceStorageAPI)
+which has certain file-related behaviors.
 
-Shortcomings (or differences) of the current DeviceStorageAPI relative to WebAppFind would appear to be:
+Shortcomings (or differences) of the current DeviceStorageAPI
+relative to WebAppFind would appear to be:
 
 * It does not seem to anticipate the activities being triggered from one's desktop, but rather if one is already within a web app.
 * The proposal at present appears to be limited to files in a specific directory of one's hard drive. It thus does not allow one the freedom to store one's files wherever one likes on one's hard-drive for better organization purposes.
 
-The DeviceStorageAPI appears to allow more privileges (like [AsYouWish](https://github.com/brettz9/asyouwish/)) such as enumerating files in a directory, adding or deleting files, and listening for creation/deletion/modifications, whereas WebAppFind is currently focused on individual file reading and saving. However, WebAppFind may add other actions in the future, such as listening for file change events for version tracking or allowing for a web app to handle adding or deleting a file (in case it wishes to do related set-up/take-down work).
+The DeviceStorageAPI appears to allow more privileges (like
+[AsYouWish](https://github.com/brettz9/asyouwish/)) such as
+enumerating files in a directory, adding or deleting files, and listening
+for creation/deletion/modifications, whereas WebAppFind is currently
+focused on individual file reading and saving. However, WebAppFind
+may add other actions in the future, such as listening for file change
+events for version tracking or allowing for a web app to handle adding
+or deleting a file (in case it wishes to do related set-up/take-down work).
 
-Since WebAppFind executables pass along path information, WebAppFind can already be used with the AsYouWish add-on (if the user so configures that privilege-escalating add-on) to have it conduct the other privileged activities of the DeviceStorageAPI whether enumerating files in the file's directory, doing set-up or take-down work related to file creation or deletion, or such things as uploading the containing folder's contents (and especially if WebAppFind is modified to allow for opening a hidden window, AsYouWish could be used for batch-like operations).
+Since WebAppFind executables pass along path information, WebAppFind
+can already be used with the AsYouWish add-on (if the user so configures
+that privilege-escalating add-on) to have it conduct the other privileged
+activities of the DeviceStorageAPI whether enumerating files in the file's
+directory, doing set-up or take-down work related to file creation or
+deletion, or such things as uploading the containing folder's contents
+(and especially if WebAppFind is modified to allow for opening a hidden
+window, AsYouWish could be used for batch-like operations).
 
 # Comparison with AsYouWish
 
-[AsYouWish](https://github.com/brettz9/asyouwish/) allows a higher-than-normal privilege level to websites, but it differs in a number of areas:
+[AsYouWish](https://github.com/brettz9/asyouwish/) allows a
+higher-than-normal privilege level to websites, but it differs in
+a number of areas:
 
 1. AsYouWish sites ask for permission, and once approved, can then immediately do their work. WebAppFind currently allows sites to ask for permission to register themselves as handlers, but their work will only become relevant when the user opens a file via WebAppFind.
 2. AsYouWish allows for a vast number of possible privileges (though subject to user approval) including potentially arbitrary file reading and writing (as with Firefox extensions), while WebAppFind is limited to file reading and writing (though it may expand to certain other circumscribed, user-initated file-related activities in the future) and only for those files so opened as opened by the user.
@@ -259,26 +485,29 @@ Since WebAppFind executables pass along path information, WebAppFind can already
 
 # Medium term priority todos
 
-1. See <https://github.com/brettz9/atyourcommand>. Firefox add-on to allow creation of context
-menu items, including invoking a process with arguments with the selected text,
-right-clicked URL, or current URL as arguments (with the URL potentially being
-first retrieved as text and then sent as arguments?). Besides allowing the reverse
-behavior of WebAppFind (allowing one to selectively choose files on the web or
-text to supply to a desktop app instead of supplying desktop files or command line
-text to a web app, e.g., opening a file from the web in Notepad++), it would even
-allow WebAppFind to be invoked (for the use case of passing text or URL content
-to a web app); the web app could, if opened in edit mode, place a (privileged
+1. See <https://github.com/brettz9/atyourcommand>. Firefox add-on to allow
+creation of context menu items, including invoking a process with
+arguments with the selected text, right-clicked URL, or current URL
+as arguments (with the URL potentially being first retrieved as text and
+then sent as arguments?). Besides allowing the reverse behavior of
+WebAppFind (allowing one to selectively choose files on the web or
+text to supply to a desktop app instead of supplying desktop files or
+command line text to a web app, e.g., opening a file from the web in
+Notepad++), it would even allow WebAppFind to be invoked (for the
+use case of passing text or URL content to a web app); the web app
+could, if opened in edit mode, place a (privileged
 cross-domain) PUT request on behalf of the web app for a save-back,
 allowing users the choice of application for saving files back to the web
 (also allow a desktop executable the ability to launch such a site file in
 a hard-coded app or web-app--in this case, the executable would be clicked
-directly since it was hard-coding both the data file (a web file) and the handling
-app (which in this case could also be a desktop app)). Also support a content-type
-handler and protocol handler for opening exe/batch files (or option to install first
-(with platform-specific choices) if not already installed, but with privacy guards
-not to report whether already installed), passing arguments (or shell commands),
-so web can get access to desktop. Let protocol or content-type handler support
-either URLs (so specific data files can be read) or the content itself be passed
+directly since it was hard-coding both the data file (a web file) and the
+handling app (which in this case could also be a desktop app)). Also support
+a content-type handler and protocol handler for opening exe/batch files (or
+option to install first (with platform-specific choices) if not already
+installed, but with privacy guards not to report whether already
+installed), passing arguments (or shell commands), so web can get
+access to desktop. Let protocol or content-type handler support either
+URLs (so specific data files can be read) or the content itself be passed
 but without a need for something heavy like Java or Silverlight (or whatever
 people use to do this) to do the delegation to the desktop files (plug-ins
 themselves support swapping of data files (for reading or writing) in
@@ -293,12 +522,22 @@ Also right-click to add text or URL contents as itself a context menu
 script. Ensure add-ons support file: and native paths to: open folder
 on desktop, open folder in Firefox file browser, execute on desktop,
 execute with web app
-1. API for XPath/XQuery (+ [HTTPQuery](https://github.com/brettz9/httpquery)) like targeted updating within documents, so data decoupled as with files (XSS-safe or unsafe versions); PATCH header for more generic updates?
-1. PUT for specific site only (or data within a site as per targeted updating item)
-1. SQLite (e.g., for localStorage); could be wrapped by targeted updating API and used with PUT; send schema URL in header to inform that the update must be tabular, not otherwise hierarchical
+1. API for XPath/XQuery (+ [HTTPQuery](https://github.com/brettz9/httpquery))
+like targeted updating within documents, so data decoupled as with files
+(XSS-safe or unsafe versions); PATCH header for more generic updates?
+1. PUT for specific site only (or data within a site as per targeted
+updating item)
+1. SQLite (e.g., for localStorage); could be wrapped by targeted updating API
+and used with PUT; send schema URL in header to inform that the update
+must be tabular, not otherwise hierarchical
 1. Allow command line for temporary file or designated file saving
 of string contents in webappfind as well (with dialog to approve
 there as in atyourcommand if would cause an overwrite).
+1. Support a global user filetypes.json file (at a chosen directory
+specified within Firefox?) which can override or provide defaults for
+local filetypes.json files (especially for defaults since sites might
+not have registered handlers, and a user might not wish to have to
+put a filetypes.json file within each directory).
 
 # Possible future todos
 
