@@ -458,7 +458,13 @@ a number of areas:
     any complex type-determination logic, taking place within the executable (built by Executable Builder?), though ensure that the new proposed command line and web app pipelining features would be able to replicate this if necessary
     1. Demo of Firefox being used merely to interpret filetypes.json and simply return a command line instruction back to a desktop app (in a hard-coded rather than fallback manner). Although AsYouWish could do this, better to bake it in so other desktop apps can leverage (including Notepad++, etc.).
     1. Allow type to be supplied without a path so as to just open the right web app
-    1. Web app pipelining: Allow a hard-coded web app URL (or supply a path or file type in order to discover a web app) to be supplied (along with its own mode, custom mode, arguments, etc.) which will be opened (optionally in a hidden window) and when its response its received, pipeline the string result to another web app URL. Yes, the apps could instead communicate directly with each other via postMessage, but this approach allows the user to do their own coupling rather than be dependent
+    1. Web app pipelining: Allow a hard-coded web app URL (or supply a path or
+    file type in order to discover a web app) to be supplied (along with its own
+    mode, custom mode, arguments, etc.) which will be opened (optionally in
+    a hidden window) and when its response its received, pipeline the string
+    result to another web app URL. Yes, the apps could instead communicate
+    directly with each other via postMessage, but this approach allows the
+    user to do their own coupling rather than be dependent
     on a particular integration of services.
     1. Allow not just one, but multiple, file/URL/command line/web app/etc. arguments to be passed into
     the web application (e.g., for preferences, privilege level simulation or request information, schema,
@@ -466,7 +472,13 @@ a number of areas:
     custom mode in the case of a web app) placed as one of the keys on the object, with the other
     keys optionally indicating: 1) the source and nature of the string data (e.g., the path (with fundamental mode under which it was obtained or at least whether the data was obtained as binary or non-binary), URL, command line instructions, web app URL with arguments), 2) type meta-data about the file (as opposed to arguments supplied to that file) which could be used by the receiving application (e.g., to indicate which file is providing preferences, which is providing a schema for validation, etc.). Could leverage the information within this array of objects in a generic server-side application as well. Should be able to work with export mode as well for multiple or alternate outputs.
     1. Allow command line to specify (or let WebAppFind determine according to some permutation of the file path) the exact window and possibly Panorama group and/or pinned status into which the web app with desktop file will be opened (the web app could handle moving itself instead but only if the web app were AsYouWish-based and the user preferences supplied the file path). Alternatively, the executable might have logic to determine the profile in a similarly automated (as opposed to hard-coded) manner. The advantage of either approach would be to allow the user a better web app grouping organization corresponding to the hierarchical organization they can find on the desktop.
-    1. Support an optional, hard-coded web app URL (optionally looking for fallbacks if the supplied one is a protocol but not found) and/or hard-coded file type (to circumvent the normal detection procedures and always open with a given web app).
+    1. Support an optional, hard-coded web app URL (optionally looking for
+    fallbacks if the supplied one is a protocol but not found) and/or
+    hard-coded file type (to circumvent the normal detection procedures
+    and always open with a given web app).
+        1. Demo this hard-coding usage within FireFTP opening of remote
+        files (or better yet, implement an AsYouWish-based web FTP client
+        which can do it)
     1. Arbitrary command line args to pass on to webapps
         1. Command line args to web apps even without data file (and without special HTTP headers)
         1. Update webappfind wiki on custom modes once arguments can be passed (advise to use instead if minor)
@@ -549,6 +561,7 @@ it as well.
 # Possible future todos
 
 1. Allow genuine POST or other non-GET or header-dependent requests (ala curl)?
+1. Allow files opened by FTP for remote editing to be used.
 1. Allow postMessage mechanism to receive content as entered in a dialog as opposed to a file (though with an optional file to save back)
 1. Create dialog to ask user for mode, etc., so executable doesn't have to bake it all in and can let the user decide at run-time.
 1. Command line flag additions:
