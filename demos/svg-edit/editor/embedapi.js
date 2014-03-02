@@ -69,13 +69,17 @@ function addCallback (t, data) {
 }
 
 function messageListener (e) {
-  // We accept and post strings as opposed to objets for the sake of IE9 support; this
+  // We accept and post strings as opposed to objects for the sake of IE9 support; this
   //   will most likely be changed in the future
   if (typeof e.data !== 'string') {
     return;
   }
-  var data = e.data && JSON.parse(e.data);
-  if (!data || typeof data !== 'object' || data.namespace !== 'svg-edit') {
+  var allowedOrigins = this.allowedOrigins,
+    data = e.data && JSON.parse(e.data);
+  if (!data || typeof data !== 'object' || data.namespace !== 'svg-edit' ||
+      e.source !== this.frame.contentWindow ||
+      (allowedOrigins.indexOf('*') === -1 && allowedOrigins.indexOf(e.origin) === -1)
+  ) {
     return;
   }
   addCallback(this, data);
@@ -87,10 +91,17 @@ function getMessageListener (t) {
 	};
 }
 
-function EmbeddedSVGEdit (frame) {
+/**
+* @param {HTMLIFrameElement} frame
+* @param {array} [allowedOrigins=[]] Array of origins from which incoming
+*     messages will be allowed when same origin is not used; defaults to none.
+*     If supplied, it should probably be the same as svgEditor's allowedOrigins
+*/
+function EmbeddedSVGEdit (frame, allowedOrigins) {
   if (!(this instanceof EmbeddedSVGEdit)) { // Allow invocation without 'new' keyword
     return new EmbeddedSVGEdit(frame);
   }
+  this.allowedOrigins = allowedOrigins || [];
   // Initialize communication
   this.frame = frame;
   this.callbacks = {};
