@@ -73,7 +73,7 @@ window.addEventListener('DOMContentLoaded', function () {
     var pathID,
         breakpointsClass = 'CodeMirror-breakpoints',
         urlThemePattern = /[?&]theme=(.*?)(?:&|$)/,
-        cookieThemePattern = /^theme=([^;]*)(?:;|$)/,
+        cookieThemePattern = /(?:^|;)\s*theme=([^;]*)(?:;|$)/,
         cm = CodeMirror.fromTextArea($('#javascript'), {
             autofocus: true,
             lineNumbers: true,
@@ -153,7 +153,7 @@ window.addEventListener('DOMContentLoaded', function () {
         var theme = this.options[this.selectedIndex].value,
             cookie = 'theme=' + encodeURIComponent(theme);
         cm.setOption('theme', theme);
-        document.cookie = document.cookie ? document.cookie.replace(cookieThemePattern, cookie) : cookie;
+        document.cookie = cookie;
         // Todo: We might change the site location (or opportunity to copy-paste the link) to provide a chance to bookmark the theme
     }
     $('#themes').addEventListener('click', themes);
