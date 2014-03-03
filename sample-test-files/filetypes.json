@@ -2,6 +2,7 @@
     "fileMatches": [
         ["\\.html", "htmltype"],
         ["\\.txt", "txt"],
+        ["\\.js", "js"],
         ["\\.json", "json"],
         ["\\.xml", "xml"],
         ["\\.css", "csstype"],
@@ -33,6 +34,10 @@
         "txt": {
             "view": "http://brett-zamir.me/webappfind/demos/txt.html?params=%s",
             "edit": "http://brett-zamir.me/webappfind/demos/txt.html?params=%s"
+        },
+        "js": {
+            "view": "http://brett-zamir.me/webappfind/demos/javascript.html?params=%s",
+            "edit": "http://brett-zamir.me/webappfind/demos/javascript.html?params=%s"
         },
         "json": {
             "view": "http://brett-zamir.me/webappfind/demos/json.html?params=%s",
