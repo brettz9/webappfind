@@ -8,8 +8,8 @@
 
 /* Automatic vertical sizing with a minimum height */
 .CodeMirror {
-    min-height: 200px;
-    height: auto;
+    min-height: 585px;
+/*    height: auto; This has the problem of not causing scrolls with page-up page down */
 }
 .CodeMirror-scroll {
     overflow-y: hidden;
@@ -38,7 +38,7 @@
     background-repeat: repeat-x;
 }
 .CodeMirror-focused .cm-matchhighlight:not(.CodeMirror-selectedtext) { /* Don't apply background if this is the highlighted word itself */
-    background-color: blue;
+    background-color: lightblue;
     color:white;
 }
 
