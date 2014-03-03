@@ -1,5 +1,4 @@
 var b = true;
-alert('okedoke');
 var a = 3 & 4;
 var widgets = [];
 function updateHints() {
