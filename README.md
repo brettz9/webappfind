@@ -556,7 +556,8 @@ local filetypes.json files (especially for defaults since sites might
 not have registered handlers, and a user might not wish to have to
 put a filetypes.json file within each directory). Ensure it is in a location
 readily detectable by other desktop apps which may wish to check
-it as well.
+it as well (or to be opened in WebAppFind itself) (and demo it
+with Greasemonkey editing once done).
 
 # Possible future todos
 
