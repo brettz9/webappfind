@@ -3275,7 +3275,7 @@ TO-DOS
 				if (val) {
 					zoomChanged(window, val);
 				} else {
-					changeZoom({value: parseInt(item.text(), 10)});
+					changeZoom({value: parseFloat(item.text())});
 				}
 			}, true);
 
@@ -4948,7 +4948,7 @@ TO-DOS
 					editor.openPrep(function(ok) {
 						if (!ok) {return;}
 						svgCanvas.clear();
-						if (f.files.length==1) {
+						if (f.files.length === 1) {
 							$.process_cancel(uiStrings.notification.loadingImage);
 							var reader = new FileReader();
 							reader.onloadend = function(e) {
@@ -4969,7 +4969,7 @@ TO-DOS
 				updateCanvas(true);
 //			});
 
-			//	var revnums = "svg-editor.js ($Rev: 2714 $) ";
+			//	var revnums = "svg-editor.js ($Rev: 2732 $) ";
 			//	revnums += svgCanvas.getVersion();
 			//	$('#copyright')[0].setAttribute('title', revnums);
 
