@@ -1,3 +1,16 @@
+1.1.0
+* Report more error-checking info
+* i18n-ize
+* Minor: README and doc updates
+* Minor: Sample filetypes.json updates
+* Demo updates
+** SVG-Edit demo updates
+** OCR demo (GOCR/Ocrad) using pdf.js
+** CSV demo
+** CodeMirror update
+** Fix themes/cookies in CodeMirror demos
+** javascript.css changes
+
 1.0.1
 * Make package.json more readable
 
