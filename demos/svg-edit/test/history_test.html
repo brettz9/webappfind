@@ -5,6 +5,7 @@
   <title>Unit Tests for history.js</title>
   <link rel='stylesheet' href='qunit/qunit.css' type='text/css'/>
   <script src='../editor/jquery.js'></script>
+  <script src='../editor/svgedit.js'></script>
   <script src='../editor/history.js'></script>
   <script src='qunit/qunit.js'></script>
   <script>
@@ -20,9 +21,9 @@
     svgedit.utilities.getRotationAngle = function(elem) { return 0; };
 
     // log function
-    QUnit.log = function(result, message) {
+    QUnit.log = function(details) {
       if (window.console && window.console.log) {
-        window.console.log(result +' :: '+ message);
+        window.console.log(details.result +' :: '+ details.message);
       }
     };
 

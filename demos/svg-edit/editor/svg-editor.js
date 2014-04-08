@@ -1,4 +1,4 @@
-/*globals svgEditor:true, globalStorage, widget, svgedit, canvg, jQuery, $, DOMParser, FileReader */
+/*globals saveAs:true, svgEditor:true, globalStorage, widget, svgedit, canvg, jsPDF, svgElementToPdf, jQuery, $, DOMParser, FileReader, URL */
 /*jslint vars: true, eqeq: true, todo: true, forin: true, continue: true, regexp: true */
 /*
  * svg-editor.js
@@ -19,7 +19,7 @@
 // 3) svgcanvas.js
 
 /*
-TO-DOS
+TODOS
 1. JSDoc
 */
 
@@ -391,7 +391,7 @@ TO-DOS
 		*	- inform user of any issues supplied via the "issues" property
 		*	- convert the "svg" property SVG string into an image for export;
 		*		utilize the properties "type" (currently 'PNG', 'JPEG', 'BMP',
-		*		'WEBP'), "mimeType", and "quality" (for 'JPEG' and 'WEBP'
+		*		'WEBP', 'PDF'), "mimeType", and "quality" (for 'JPEG' and 'WEBP'
 		*		types) to determine the proper output.
 		*/
 		editor.setCustomHandlers = function (opts) {
@@ -405,8 +405,8 @@ TO-DOS
 					editor.showSaveWarning = false;
 					svgCanvas.bind('saved', opts.save);
 				}
-				if (opts.exportImage || opts.pngsave) { // Deprecating pngsave
-					svgCanvas.bind('exported', opts.exportImage || opts.pngsave);
+				if (opts.exportImage) {
+					svgCanvas.bind('exported', opts.exportImage);
 				}
 				customHandlers = opts;
 			});
@@ -501,8 +501,6 @@ TO-DOS
 						}
 						if (src) {
 							if (src.indexOf('data:') === 0) {
-								// plusses get replaced by spaces, so re-insert
-								src = src.replace(/ /g, '+');
 								editor.loadFromDataURI(src);
 							} else {
 								editor.loadFromString(src);
@@ -1071,6 +1069,36 @@ TO-DOS
 				}
 			};
 
+			// Export global for use by jsPDF
+			saveAs = function (blob, options) {
+				var blobUrl = URL.createObjectURL(blob);
+				try {
+					// This creates a bookmarkable data URL,
+					// but it doesn't currently work in
+					// Firefox, and although it works in Chrome,
+					// Chrome doesn't make the full "data:" URL
+					// visible unless you right-click to "Inspect
+					// element" and then right-click on the element
+					// to "Copy link address".
+					var xhr = new XMLHttpRequest();
+					xhr.responseType = 'blob';
+					xhr.onload = function() {
+						var recoveredBlob = xhr.response;
+						var reader = new FileReader();
+						reader.onload = function() {
+							var blobAsDataUrl = reader.result;
+							exportWindow.location.href = blobAsDataUrl;
+						};
+						reader.readAsDataURL(recoveredBlob);
+					};
+					xhr.open('GET', blobUrl);
+					xhr.send();
+				}
+				catch (e) {
+					exportWindow.location.href = blobUrl;
+				}
+			};
+
 			var exportHandler = function(win, data) {
 				var issues = data.issues,
 					type = data.type || 'PNG',
@@ -1080,7 +1108,23 @@ TO-DOS
 					$('<canvas>', {id: 'export_canvas'}).hide().appendTo('body');
 				}
 				var c = $('#export_canvas')[0];
-
+				if (type === 'PDF') {
+					var res = svgCanvas.getResolution();
+					var orientation = res.w > res.h ? 'landscape' : 'portrait';
+					var units = 'pt'; // curConfig.baseUnit; // We could use baseUnit, but that is presumably not intended for export purposes
+					var doc = new jsPDF(orientation, units, [res.w, res.h]); // Todo: Give options to use predefined jsPDF formats like "a4", etc. from pull-down (with option to keep customizable)
+					var docTitle = svgCanvas.getDocumentTitle();
+					doc.setProperties({
+						title: docTitle/*,
+						subject: '',
+						author: '',
+						keywords: '',
+						creator: ''*/
+					});
+					svgElementToPdf(data.svg, doc, {});
+					doc.save(docTitle + '.pdf');
+					return;
+				}
 				c.width = svgCanvas.contentW;
 				c.height = svgCanvas.contentH;
 				canvg(c, data.svg, {renderCallback: function() {
@@ -2348,7 +2392,7 @@ TO-DOS
 
 				var rule_elem = $('#tool_size_rules');
 				if (!rule_elem.length) {
-					rule_elem = $('<style id="tool_size_rules"><\/style>').appendTo('head');
+					rule_elem = $('<style id="tool_size_rules"></style>').appendTo('head');
 				} else {
 					rule_elem.empty();
 				}
@@ -2741,7 +2785,7 @@ TO-DOS
 
 							// {sel:'#tool_rect', fn: clickRect, evt: 'mouseup', key: 4, parent: '#tools_rect', icon: 'rect'}
 
-							var pos  = ('position' in opts) ? opts.position : 'last';
+							var pos = ('position' in opts) ? opts.position : 'last';
 							var len = flyout_holder.children().length;
 
 							// Add at given position or end
@@ -3583,15 +3627,17 @@ TO-DOS
 					// See http://kangax.github.io/jstests/toDataUrl_mime_type_test/ for a useful list of MIME types and browser support
 					// 'ICO', // Todo: Find a way to preserve transparency in SVG-Edit if not working presently and do full packaging for x-icon; then switch back to position after 'PNG'
 					'PNG',
-					'JPEG', 'BMP', 'WEBP'
+					'JPEG', 'BMP', 'WEBP', 'PDF'
 				], function (imgType) { // todo: replace hard-coded msg with uiStrings.notification.
 					if (!imgType) {
 						return;
 					}
 					// Open placeholder window (prevents popup)
-					if (!customHandlers.exportImage && !customHandlers.pngsave) {
+					if (!customHandlers.exportImage) {
 						var str = uiStrings.notification.loadingImage;
-						exportWindow = window.open('data:text/html;charset=utf-8,<title>' + str + '<\/title><h1>' + str + '<\/h1>');
+						exportWindow = window.open(
+							'data:text/html;charset=utf-8,' + encodeURIComponent('<title>' + str + '</title><h1>' + str + '</h1>')
+						);
 					}
 					var quality = parseInt($('#image-slider').val(), 10)/100;
 					if (window.canvg) {
@@ -3667,7 +3713,7 @@ TO-DOS
 				if (supportsNonSS) {return;}
 				var wf_rules = $('#wireframe_rules');
 				if (!wf_rules.length) {
-					wf_rules = $('<style id="wireframe_rules"><\/style>').appendTo('head');
+					wf_rules = $('<style id="wireframe_rules"></style>').appendTo('head');
 				} else {
 					wf_rules.empty();
 				}
@@ -4969,7 +5015,7 @@ TO-DOS
 				updateCanvas(true);
 //			});
 
-			//	var revnums = "svg-editor.js ($Rev: 2732 $) ";
+			//	var revnums = "svg-editor.js ($Rev: 2800 $) ";
 			//	revnums += svgCanvas.getVersion();
 			//	$('#copyright')[0].setAttribute('title', revnums);
 
@@ -5095,9 +5141,19 @@ TO-DOS
 
 		editor.loadFromDataURI = function(str) {
 			editor.ready(function() {
-				var pre = 'data:image/svg+xml;base64,';
-				var src = str.substring(pre.length);
-				loadSvgString(Utils.decode64(src));
+				var base64 = false;
+				var pre = str.match(/^data:image\/svg\+xml;base64,/);
+				if (pre) {
+					base64 = true;
+				}
+				else {
+					pre = str.match(/^data:image\/svg\+xml(?:;(?:utf8)?)?,/);
+				}
+				if (pre) {
+					pre = pre[0];
+				}
+				var src = str.slice(pre.length);
+				loadSvgString(base64 ? Utils.decode64(src) : decodeURIComponent(src));
 			});
 		};
 
