@@ -559,6 +559,20 @@ put a filetypes.json file within each directory). Ensure it is in a location
 readily detectable by other desktop apps which may wish to check
 it as well (or to be opened in WebAppFind itself) (and demo it
 with Greasemonkey editing once done).
+1. Allow a command-line "prompt" fundamental mode: will allow the
+user to determine mode at run-time (Firefox (or other opening app)
+can provide a prompt to the user to ask which mode to use before
+opening the file in that chosen mode). Modify filetypes.json to support
+optional default mode or suggested modes (though Firefox should
+not prevent other modes from being used since the whole idea is that
+the user controls the mode under which they wish to open the file).
+1. Allow a command-line "any" mode to let the web app choose the mode.
+1. Provide meta-data in filetypes.json to cause the web app to be passed
+awareness of the desire by the user to be prompted for the selection of
+specific *custom* mode, along with an optional default custom mode and
+suggested custom modes along with any explicitly passed. Thus, an app
+might use this information to ask on WebAppFind invocation, "Do you
+wish to view this file or view its source?".
 
 # Possible future todos
 
@@ -585,6 +599,7 @@ with Greasemonkey editing once done).
 1. Create a shared add-on dependency for WebAppFind and AsYouWish exposing perhaps at least for privilege escalation with some of the underlying non-SDK APIs (e.g., a privilege to save
 only to a specific directory if WebAppFind adds such a fundamental mode).
 1. Create complementary Firefox add-on to add desktop listeners to file changes to ensure WebAppFind files stay up to date within the app (ensure app also checks whether the user wishes to reconcile the new push with any changes already made); tie into proposed version control mode?
+1. Allow filetypes.json to support a hierarchy of custom types (e.g., schema->jsonschema) for meta-data purposes (possibly passing to applications, perhaps useful for namespacing)
 
 # Possible future mode additions
 
@@ -606,6 +621,8 @@ both "edit" and "export" privileges to a web app simultaneously so one could sav
 file as well as the export (e.g., to save SVG and a PNG export or to save a CoffeeScript file and its
 JavaScript export).
 1. Like "export", we might wish to allow a file to be opened with the privilege to save anywhere in a particular directory, etc.
+1. "prompt" mode; see to-do above.
+1. "any" mode; see to-do above.
 
 # Possible "Demos" todos
 
