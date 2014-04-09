@@ -113,7 +113,7 @@ TODOS
 					opacity: 1
 				},
 				initOpacity: 1,
-				colorPickerCSS: null,
+				colorPickerCSS: null, // Defaults to 'left' with a position equal to that of the fill_color or stroke_color element minus 140, and a 'bottom' equal to 40
 				initTool: 'select',
 				wireframe: false,
 				showlayers: false,
@@ -200,6 +200,20 @@ TODOS
 					callback(false);
 				});
 			}
+		}
+		
+		function checkCanvg (callCanvg) {
+			return function (win, data) {
+				if (window.canvg) {
+					callCanvg(win, data);
+				} else { // Might not be set up yet
+					$.getScript('canvg/rgbcolor.js', function() {
+						$.getScript('canvg/canvg.js', function() {
+							callCanvg(win, data);
+						});
+					});
+				}
+			};
 		}
 
 		/**
@@ -406,7 +420,7 @@ TODOS
 					svgCanvas.bind('saved', opts.save);
 				}
 				if (opts.exportImage) {
-					svgCanvas.bind('exported', opts.exportImage);
+					svgCanvas.bind('exported', checkCanvg(opts.exportImage));
 				}
 				customHandlers = opts;
 			});
@@ -487,7 +501,7 @@ TODOS
 						}
 					);
 
-					editor.setConfig(urldata, {overwrite: false}); // Note: source, url, and paramurl (as with storagePrompt later) are not set on config but are used below
+					editor.setConfig(urldata, {overwrite: false}); // Note: source and url (as with storagePrompt later) are not set on config but are used below
 					
 					setupCurConfig();
 
@@ -505,11 +519,6 @@ TODOS
 							} else {
 								editor.loadFromString(src);
 							}
-							return;
-						}
-						if (qstr.indexOf('paramurl=') !== -1) {
-							// Get parameter URL (use full length of remaining location.href)
-							editor.loadFromURL(qstr.substr(9));
 							return;
 						}
 						if (urldata.url) {
@@ -1104,6 +1113,7 @@ TODOS
 					type = data.type || 'PNG',
 					dataURLType = (type === 'ICO' ? 'BMP' : type).toLowerCase();
 
+				exportWindow = window.open('', data.exportWindowName); // A hack to get the window via JSON-able name without opening a new one
 				if (!$('#export_canvas').length) {
 					$('<canvas>', {id: 'export_canvas'}).hide().appendTo('body');
 				}
@@ -1127,6 +1137,7 @@ TODOS
 				}
 				c.width = svgCanvas.contentW;
 				c.height = svgCanvas.contentH;
+				
 				canvg(c, data.svg, {renderCallback: function() {
 					var datauri = data.quality ? c.toDataURL('image/' + dataURLType, data.quality) : c.toDataURL('image/' + dataURLType);
 					exportWindow.location.href = datauri;
@@ -2553,10 +2564,10 @@ TODOS
 							html = '<label' + cont_id + '>'
 								+ '<select id="' + tool.id + '">';
 							$.each(tool.options, function(val, text) {
-								var sel = (val == tool.defval) ? " selected":"";
+								var sel = (val == tool.defval) ? ' selected' : '';
 								html += '<option value="'+val+'"' + sel + '>' + text + '</option>';
 							});
-							html += "</select></label>";
+							html += '</select></label>';
 							// Creates the tool, hides & adds it, returns the select element
 							var sel = $(html).appendTo(panel).find('select');
 
@@ -2591,7 +2602,7 @@ TODOS
 								+ '<span id="' + tool.id + '_label">'
 								+ tool.label + ':</span>'
 								+ '<input id="' + tool.id + '" title="' + tool.title
-								+ '" size="' + (tool.size || "4") + '" value="' + (tool.defval || "") + '" type="text"/></label>';
+								+ '" size="' + (tool.size || '4') + '" value="' + (tool.defval || '') + '" type="text"/></label>';
 
 							// Creates the tool, hides & adds it, returns the select element
 
@@ -2775,12 +2786,12 @@ TODOS
 							// TODO: Find way to set the current icon using the iconloader if this is not default
 
 							// Include data for extension button as well as ref button
-							cur_h = holders['#'+flyout_holder[0].id] = [{
-								sel: '#'+id,
+							cur_h = holders['#' + flyout_holder[0].id] = [{
+								sel: '#' + id,
 								fn: btn.events.click,
 								icon: btn.id,
 								key: btn.key,
-								isDefault: btn.includeWith?btn.includeWith.isDefault:0
+								isDefault: btn.includeWith ? btn.includeWith.isDefault : 0
 							}, ref_data];
 
 							// {sel:'#tool_rect', fn: clickRect, evt: 'mouseup', key: 4, parent: '#tools_rect', icon: 'rect'}
@@ -2885,7 +2896,7 @@ TODOS
 			svgCanvas.bind('transition', elementTransition);
 			svgCanvas.bind('changed', elementChanged);
 			svgCanvas.bind('saved', saveHandler);
-			svgCanvas.bind('exported', exportHandler);
+			svgCanvas.bind('exported', checkCanvg(exportHandler));
 			svgCanvas.bind('zoomed', zoomChanged);
 			svgCanvas.bind('contextset', contextChanged);
 			svgCanvas.bind('extension_added', extAdded);
@@ -3636,19 +3647,12 @@ TODOS
 					if (!customHandlers.exportImage) {
 						var str = uiStrings.notification.loadingImage;
 						exportWindow = window.open(
-							'data:text/html;charset=utf-8,' + encodeURIComponent('<title>' + str + '</title><h1>' + str + '</h1>')
+							'data:text/html;charset=utf-8,' + encodeURIComponent('<title>' + str + '</title><h1>' + str + '</h1>'),
+							'svg-edit-exportWindow'
 						);
 					}
 					var quality = parseInt($('#image-slider').val(), 10)/100;
-					if (window.canvg) {
-						svgCanvas.rasterExport(imgType, quality);
-					} else {
-						$.getScript('canvg/rgbcolor.js', function() {
-							$.getScript('canvg/canvg.js', function() {
-								svgCanvas.rasterExport(imgType, quality);
-							});
-						});
-					}
+					svgCanvas.rasterExport(imgType, quality, (exportWindow && exportWindow.name));
 				}, function () {
 					var sel = $(this);
 					if (sel.val() === 'JPEG' || sel.val() === 'WEBP') {
@@ -4021,7 +4025,7 @@ TODOS
 				var pos = elem.offset();
 				$('#color_picker')
 					.draggable({cancel: '.jGraduate_tabs, .jGraduate_colPick, .jGraduate_gradPick, .jPicker', containment: 'window'})
-					.css(curConfig.colorPickerCSS || {'left': pos.left-140, 'bottom': 40})
+					.css(curConfig.colorPickerCSS || {'left': pos.left - 140, 'bottom': 40})
 					.jGraduate(
 					{
 						paint: paint,
@@ -4346,7 +4350,7 @@ TODOS
 				$('#layerpanel').width('+=' + delta);
 				rulerX.css('right', parseInt(rulerX.css('right'), 10) + delta);
 				workarea.css('right', parseInt(workarea.css('right'), 10) + delta);
-				svgCanvas.runExtensions("workareaResized");
+				svgCanvas.runExtensions('workareaResized');
 			};
 
 			var resizeSidePanel = function(evt) {
@@ -5015,7 +5019,7 @@ TODOS
 				updateCanvas(true);
 //			});
 
-			//	var revnums = "svg-editor.js ($Rev: 2800 $) ";
+			//	var revnums = "svg-editor.js ($Rev: 2797 $) ";
 			//	revnums += svgCanvas.getVersion();
 			//	$('#copyright')[0].setAttribute('title', revnums);
 

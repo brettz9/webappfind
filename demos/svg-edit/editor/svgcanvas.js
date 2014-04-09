@@ -810,7 +810,7 @@ var copyElem = function(el) {
 	var new_el = document.createElementNS(el.namespaceURI, el.nodeName);
 	$.each(el.attributes, function(i, attr) {
 		if (attr.localName != '-moz-math-font-style') {
-			new_el.setAttributeNS(attr.namespaceURI, attr.nodeName, attr.nodeValue);
+			new_el.setAttributeNS(attr.namespaceURI, attr.nodeName, attr.value);
 		}
 	});
 	// set the copied element's new id
@@ -4166,7 +4166,7 @@ this.svgToString = function(elem, indent) {
 			var attr_names = ['width', 'height', 'xmlns', 'x', 'y', 'viewBox', 'id', 'overflow'];
 			while (i--) {
 				attr = attrs.item(i);
-				var attrVal = toXml(attr.nodeValue);
+				var attrVal = toXml(attr.value);
 				
 				// Namespaces have already been dealt with, so skip
 				if (attr.nodeName.indexOf('xmlns:') === 0) {continue;}
@@ -4188,7 +4188,7 @@ this.svgToString = function(elem, indent) {
 			var moz_attrs = ['-moz-math-font-style', '_moz-math-font-style'];
 			for (i = attrs.length - 1; i >= 0; i--) {
 				attr = attrs.item(i);
-				var attrVal = toXml(attr.nodeValue);
+				var attrVal = toXml(attr.value);
 				//remove bogus attributes added by Gecko
 				if (moz_attrs.indexOf(attr.localName) >= 0) {continue;}
 				if (attrVal != '') {
@@ -4332,7 +4332,7 @@ this.save = function(opts) {
 // Function: rasterExport
 // Generates a Data URL based on the current image, then calls "exported" 
 // with an object including the string, image information, and any issues found
-this.rasterExport = function(imgType, quality) {
+this.rasterExport = function(imgType, quality, exportWindowName) {
 	var mimeType = 'image/' + imgType.toLowerCase();
 
 	// remove the selected outline before serializing
@@ -4361,7 +4361,7 @@ this.rasterExport = function(imgType, quality) {
 	});
 
 	var str = this.svgCanvasToString();
-	call('exported', {svg: str, issues: issues, type: imgType, mimeType: mimeType, quality: quality});
+	call('exported', {svg: str, issues: issues, type: imgType, mimeType: mimeType, quality: quality, exportWindowName: exportWindowName});
 };
 
 // Function: getSvgString
@@ -4987,7 +4987,7 @@ this.importSvgString = function(xmlString) {
 			var i;
 			for (i = 0; i < attrs.length; i++) {
 				var attr = attrs[i];
-				symbol.setAttribute(attr.nodeName, attr.nodeValue);
+				symbol.setAttribute(attr.nodeName, attr.value);
 			}
 			symbol.id = getNextId();
 			
@@ -5460,7 +5460,7 @@ this.getZoom = function(){return current_zoom;};
 // Function: getVersion
 // Returns a string which describes the revision number of SvgCanvas.
 this.getVersion = function() {
-	return 'svgcanvas.js ($Rev: 2791 $)';
+	return 'svgcanvas.js ($Rev: 2822 $)';
 };
 
 // Function: setUiStrings
@@ -7636,7 +7636,7 @@ this.updateCanvas = function(w, h) {
 	}
 	
 	selectorManager.selectorParentGroup.setAttribute('transform', 'translate(' + x + ',' + y + ')');
-	 runExtensions('canvasUpdated',{new_x:x, new_y:y, old_x:old_x, old_y:old_y, d_x:x - old_x, d_y:y - old_y});
+	runExtensions('canvasUpdated', {new_x:x, new_y:y, old_x:old_x, old_y:old_y, d_x:x - old_x, d_y:y - old_y});
 	return {x:x, y:y, old_x:old_x, old_y:old_y, d_x:x - old_x, d_y:y - old_y};
 };
 
