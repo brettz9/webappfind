@@ -5019,7 +5019,7 @@ TODOS
 				updateCanvas(true);
 //			});
 
-			//	var revnums = "svg-editor.js ($Rev: 2797 $) ";
+			//	var revnums = "svg-editor.js ($Rev: 2825 $) ";
 			//	revnums += svgCanvas.getVersion();
 			//	$('#copyright')[0].setAttribute('title', revnums);
 
