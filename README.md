@@ -457,7 +457,8 @@ a number of areas:
     1. Mention how profile selection logic would probably ideally occur before opening Firefox as with
     any complex type-determination logic, taking place within the executable (built by Executable Builder?), though ensure that the new proposed command line and web app pipelining features would be able to replicate this if necessary
     1. Demo of Firefox being used merely to interpret filetypes.json and simply return a command line instruction back to a desktop app (in a hard-coded rather than fallback manner). Although AsYouWish could do this, better to bake it in so other desktop apps can leverage (including Notepad++, etc.).
-    1. Allow type to be supplied without a path so as to just open the right web app
+    1. Allow type to be supplied via command line without fileMatches calculations so as to just open the right web app for the type
+    1. Allow type to be supplied without any file so as to just open the web app for the supplied type (without a file)
     1. Web app pipelining: Allow a hard-coded web app URL (or supply a path or
     file type in order to discover a web app) to be supplied (along with its own
     mode, custom mode, arguments, etc.) which will be opened (optionally in
@@ -470,7 +471,9 @@ a number of areas:
     the web application (e.g., for preferences, privilege level simulation or request information, schema,
     etc.) as an array of objects with the string results of obtaining the file in the specified mode (or
     custom mode in the case of a web app) placed as one of the keys on the object, with the other
-    keys optionally indicating: 1) the source and nature of the string data (e.g., the path (with fundamental mode under which it was obtained or at least whether the data was obtained as binary or non-binary), URL, command line instructions, web app URL with arguments), 2) type meta-data about the file (as opposed to arguments supplied to that file) which could be used by the receiving application (e.g., to indicate which file is providing preferences, which is providing a schema for validation, etc.). Could leverage the information within this array of objects in a generic server-side application as well. Should be able to work with export mode as well for multiple or alternate outputs.
+    keys optionally indicating: 1) the source and nature of the string data (e.g., the path (with fundamental mode under which it was obtained or at least whether the data was obtained as binary or non-binary), URL, command line instructions, web app URL with arguments), 2) type meta-data about the file (as opposed to arguments supplied to that file) which could be used by the receiving application (e.g., to indicate which file is providing preferences, which is providing a schema for validation, etc. even while (ideally wiki-standardized) custom modes should normally be used for this). Could leverage the information within this array of objects in a generic server-side application as well. Should be able to work with export mode as well for multiple or alternate outputs.
+        1. Privileges could be optionally supplied automatically or on demand (with postMessage by site).
+        1. Also support designation of additional resource file access for a given file in filetypes.json; allow regex (including subfolders or even ancestor/sibling ones?) to map files (by regexp) or file types to additional resources
     1. Allow command line to specify (or let WebAppFind determine according to some permutation of the file path) the exact window and possibly Panorama group and/or pinned status into which the web app with desktop file will be opened (the web app could handle moving itself instead but only if the web app were AsYouWish-based and the user preferences supplied the file path). Alternatively, the executable might have logic to determine the profile in a similarly automated (as opposed to hard-coded) manner. The advantage of either approach would be to allow the user a better web app grouping organization corresponding to the hierarchical organization they can find on the desktop.
     1. Support an optional, hard-coded web app URL (optionally looking for
     fallbacks if the supplied one is a protocol but not found) and/or
@@ -496,7 +499,7 @@ a number of areas:
     1. Installer script to run to facilitate setting up of OpenWith per user choices (if Executable Builder is not installed, it could link to it, and if it is, it could bring user through steps).
 1. Unregister command line handler, etc. on add-on uninstall
 1. Option to avoid or allow new tabs for same URI/mode/filetype/path? (option to get the same tab or new tabs for them?); option to push to all open windows in different manner so can notify user of updates but not change focus, etc.
-1. Create tests with using registerProtocolHandler (also for JS/JSON/mytype)
+1. Create tests using registerProtocolHandler (also for JS/JSON/mytype)
 1. Submit to AMO, Bower, etc.
 
 # Medium term priority todos
@@ -600,6 +603,7 @@ wish to view this file or view its source?".
 only to a specific directory if WebAppFind adds such a fundamental mode).
 1. Create complementary Firefox add-on to add desktop listeners to file changes to ensure WebAppFind files stay up to date within the app (ensure app also checks whether the user wishes to reconcile the new push with any changes already made); tie into proposed version control mode?
 1. Allow filetypes.json to support a hierarchy of custom types (e.g., schema->jsonschema) for meta-data purposes (possibly passing to applications, perhaps useful for namespacing)
+1. Allow defaultHandlers to be optionally added inline with fileMatches in filetypes.json?
 
 # Possible future mode additions
 
