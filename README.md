@@ -685,4 +685,4 @@ put into its own localStorage as an add-on. Could make the demo post the add-on 
 1. Demo of same-domain, CORS, or AsYouWish client checking filetypes.json on a server to determine how to serve? (as opposed to WebAppFind)
 1. Demo of server detecting its own filetypes.json (see possible todo above)
 1. Give option for demos like txt to add `\r` back to `\r\n`
-1. Utilize https://github.com/brettz9/octokit.js to allow HTML, SVG, etc. demos to be pushed directly to a Github repo (no universal REST Git API?)
+1. Utilize https://github.com/brettz9/octokit.js to allow HTML, SVG, etc. demos to be pushed directly to a Github repo (no universal REST Git API?); could also use with AsYouWish and command line to update a local repo as well
