@@ -2,6 +2,7 @@
     "fileMatches": [
         ["\\.html", "htmltype"],
         ["\\.txt", "txt"],
+        ["\\.asm\\.js", "asm"],
         ["\\.js", "js"],
         ["\\.json", "json"],
         ["\\.xml", "xml"],
@@ -20,6 +21,7 @@
     ],
     "hierarchy": {
         "blockly": ["xml"],
+        "asm": ["js"],
         "mytype": ["json", "js", "txt"],
         "htmltype": ["txt"],
         "csstype": ["txt"],
@@ -38,6 +40,10 @@
         "js": {
             "view": "http://brett-zamir.me/webappfind/demos/javascript.html?params=%s",
             "edit": "http://brett-zamir.me/webappfind/demos/javascript.html?params=%s"
+        },
+        "asm": {
+            "view": "http://brett-zamir.me/webappfind/demos/asm.html?params=%s",
+            "edit": "http://brett-zamir.me/webappfind/demos/asm.html?params=%s"
         },
         "json": {
             "view": "http://brett-zamir.me/webappfind/demos/json.html?params=%s",
