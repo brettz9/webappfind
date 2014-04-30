@@ -557,7 +557,7 @@ not have registered handlers, and a user might not wish to have to
 put a filetypes.json file within each directory). Ensure it is in a location
 readily detectable by other desktop apps which may wish to check
 it as well (or to be opened in WebAppFind itself) (and demo it
-with Greasemonkey editing once done).
+with Greasemonkey editing once done, and add support to Stylish).
 1. Allow a command-line "prompt" fundamental mode: will allow the
 user to determine mode at run-time (Firefox (or other opening app)
 can provide a prompt to the user to ask which mode to use before
@@ -683,3 +683,5 @@ put into its own localStorage as an add-on. Could make the demo post the add-on 
 1. Give option for demos like txt to add `\r` back to `\r\n`
 1. Utilize https://github.com/brettz9/octokit.js to allow HTML, SVG, etc. demos to be pushed directly to a Github repo (no universal REST Git API?); could also use with AsYouWish and command line to update a local repo as well (and use cdn.rawgit.com for public
 sharing of content).
+1. Demo WebAppFind usage with http://kb.mozillazine.org/View_source.editor.external and http://kb.mozillazine.org/View_source.editor.path
+1. Demo WebAppFind usage with external editing editor for textareas using [It's All Text! add-on](https://addons.mozilla.org/en-US/firefox/addon/its-all-text/) ([repo](https://github.com/docwhat/itsalltext/)); or adapt to allow optional embedding of web app in place in iframe?
