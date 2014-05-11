@@ -543,6 +543,10 @@ like targeted updating within documents, so data decoupled as with files
 (XSS-safe or unsafe versions); PATCH header for more generic updates?
 1. PUT for specific site only (or data within a site as per targeted
 updating item)
+1. Allow PUT/POST back to Atyourcommand to have side effects such as
+modifying in place higlighted right-clicking text (without the user seeing
+the web app open), e.g., to convert JS to CoffeeScript in a document
+one is viewing.
 1. SQLite (e.g., for localStorage); could be wrapped by targeted updating API
 and used with PUT; send schema URL in header to inform that the update
 must be tabular, not otherwise hierarchical
