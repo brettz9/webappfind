@@ -604,6 +604,7 @@ only to a specific directory if WebAppFind adds such a fundamental mode).
 1. Create complementary Firefox add-on to add desktop listeners to file changes to ensure WebAppFind files stay up to date within the app (ensure app also checks whether the user wishes to reconcile the new push with any changes already made); tie into proposed version control mode?
 1. Allow filetypes.json to support a hierarchy of custom types (e.g., schema->jsonschema) for meta-data purposes (possibly passing to applications, perhaps useful for namespacing)
 1. Allow defaultHandlers to be optionally added inline with fileMatches in filetypes.json?
+1. Option to open HTML in chrome mode so one can do things like cross-domain toDataURL on an image canvas without errors (the proposed change to AsYouWish to allow sites to be reopened in this mode could be a workaround).
 
 # Possible future mode additions
 
