@@ -252,7 +252,7 @@ svgedit.utilities.init({
 	getSelectedElements: function() { return selectedElements; },
 	getSVGContent: function() { return svgcontent; },
 	getBaseUnit: function() { return curConfig.baseUnit; },
-	getStepSize: function() { return curConfig.stepSize; }
+	getSnappingStep: function() { return curConfig.snappingStep; }
 });
 var findDefs = canvas.findDefs = svgedit.utilities.findDefs;
 var getUrlFromAttr = canvas.getUrlFromAttr = svgedit.utilities.getUrlFromAttr;
@@ -5460,7 +5460,7 @@ this.getZoom = function(){return current_zoom;};
 // Function: getVersion
 // Returns a string which describes the revision number of SvgCanvas.
 this.getVersion = function() {
-	return 'svgcanvas.js ($Rev: 2822 $)';
+	return 'svgcanvas.js ($Rev: 2845 $)';
 };
 
 // Function: setUiStrings
@@ -7236,6 +7236,9 @@ var pushGroupProperties = this.pushGroupProperties = function(g, undoable) {
 // significant recalculations to apply group's transforms, etc to its children
 this.ungroupSelectedElement = function() {
 	var g = selectedElements[0];
+	if (!g) {
+		return;
+	}
 	if ($(g).data('gsvg') || $(g).data('symbol')) {
 		// Is svg, so actually convert to group
 		convertToGroup(g);

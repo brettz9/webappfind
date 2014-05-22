@@ -22,7 +22,7 @@
 TODOS
 1. JSDoc
 */
-
+var saveAs;
 (function() {
 
 	if (window.svgEditor) {
@@ -42,8 +42,8 @@ TODOS
 		var svgCanvas, urldata,
 			Utils = svgedit.utilities,
 			isReady = false,
+			customExportImage = false,
 			callbacks = [],
-			customHandlers = {},
 			/**
 			* PREFS AND CONFIG
 			*/
@@ -396,7 +396,7 @@ TODOS
 		* opts.open's responsibilities are:
 		*	- invoke a file chooser dialog in 'open' mode
 		*	- let user pick a SVG file
-		*	- calls setCanvas.setSvgString() with the string contents of that file
+		*	- calls svgCanvas.setSvgString() with the string contents of that file
 		*  opts.save's responsibilities are:
 		*	- accept the string contents of the current document
 		*	- invoke a file chooser dialog in 'save' mode
@@ -420,9 +420,9 @@ TODOS
 					svgCanvas.bind('saved', opts.save);
 				}
 				if (opts.exportImage) {
-					svgCanvas.bind('exported', checkCanvg(opts.exportImage));
+					customExportImage = opts.exportImage;
+					svgCanvas.bind('exported', checkCanvg(customExportImage));
 				}
-				customHandlers = opts;
 			});
 		};
 
@@ -1079,41 +1079,46 @@ TODOS
 			};
 
 			// Export global for use by jsPDF
-			saveAs = function (blob, options) {
-				var blobUrl = URL.createObjectURL(blob);
-				try {
-					// This creates a bookmarkable data URL,
-					// but it doesn't currently work in
-					// Firefox, and although it works in Chrome,
-					// Chrome doesn't make the full "data:" URL
-					// visible unless you right-click to "Inspect
-					// element" and then right-click on the element
-					// to "Copy link address".
-					var xhr = new XMLHttpRequest();
-					xhr.responseType = 'blob';
-					xhr.onload = function() {
-						var recoveredBlob = xhr.response;
-						var reader = new FileReader();
-						reader.onload = function() {
-							var blobAsDataUrl = reader.result;
-							exportWindow.location.href = blobAsDataUrl;
+			if (!saveAs) {
+				saveAs = function (blob, options) {
+					var blobUrl = URL.createObjectURL(blob);
+					try {
+						// This creates a bookmarkable data URL,
+						// but it doesn't currently work in
+						// Firefox, and although it works in Chrome,
+						// Chrome doesn't make the full "data:" URL
+						// visible unless you right-click to "Inspect
+						// element" and then right-click on the element
+						// to "Copy link address".
+						var xhr = new XMLHttpRequest();
+						xhr.responseType = 'blob';
+						xhr.onload = function() {
+							var recoveredBlob = xhr.response;
+							var reader = new FileReader();
+							reader.onload = function() {
+								var blobAsDataUrl = reader.result;
+								exportWindow.location.href = blobAsDataUrl;
+							};
+							reader.readAsDataURL(recoveredBlob);
 						};
-						reader.readAsDataURL(recoveredBlob);
-					};
-					xhr.open('GET', blobUrl);
-					xhr.send();
-				}
-				catch (e) {
-					exportWindow.location.href = blobUrl;
-				}
-			};
+						xhr.open('GET', blobUrl);
+						xhr.send();
+					}
+					catch (e) {
+						exportWindow.location.href = blobUrl;
+					}
+				};
+			}
 
 			var exportHandler = function(win, data) {
 				var issues = data.issues,
 					type = data.type || 'PNG',
+					exportWindowName = data.exportWindowName,
 					dataURLType = (type === 'ICO' ? 'BMP' : type).toLowerCase();
 
-				exportWindow = window.open('', data.exportWindowName); // A hack to get the window via JSON-able name without opening a new one
+				if (exportWindowName) {
+					exportWindow = window.open('', exportWindowName); // A hack to get the window via JSON-able name without opening a new one
+				}
 				if (!$('#export_canvas').length) {
 					$('<canvas>', {id: 'export_canvas'}).hide().appendTo('body');
 				}
@@ -2306,7 +2311,7 @@ TODOS
 //						'height': {s: '22px', l: '42px', xl: '64px'}
 //					},
 					'#tools_top': {
-						'left': 50,
+						'left': 50 + $('#main_button').width(),
 						'height': 72
 					},
 					'#tools_left': {
@@ -3644,7 +3649,7 @@ TODOS
 						return;
 					}
 					// Open placeholder window (prevents popup)
-					if (!customHandlers.exportImage) {
+					if (!customExportImage) {
 						var str = uiStrings.notification.loadingImage;
 						exportWindow = window.open(
 							'data:text/html;charset=utf-8,' + encodeURIComponent('<title>' + str + '</title><h1>' + str + '</h1>'),
@@ -3981,8 +3986,8 @@ TODOS
 				var all_tools = '';
 				var cur_class = 'tool_button_current';
 
-				$.each(toolnames, function(i,item) {
-					all_tools += '#tool_' + item + (i == toolnames.length-1 ? ',' : '');
+				$.each(toolnames, function(i, item) {
+					all_tools += (i ? ',' : '') + '#tool_' + item;
 				});
 
 				$(all_tools).mousedown(function() {
@@ -5019,7 +5024,7 @@ TODOS
 				updateCanvas(true);
 //			});
 
-			//	var revnums = "svg-editor.js ($Rev: 2825 $) ";
+			//	var revnums = "svg-editor.js ($Rev: 2846 $) ";
 			//	revnums += svgCanvas.getVersion();
 			//	$('#copyright')[0].setAttribute('title', revnums);
 
