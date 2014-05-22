@@ -34,7 +34,8 @@ svgEditor.addExtension("server_opensave", {
 			save_svg_action = svgEditor.curConfig.extPath + 'filesave.php',
 			save_img_action = svgEditor.curConfig.extPath + 'filesave.php',
 			// Create upload target (hidden iframe)
-			cancelled = false;
+			cancelled = false,
+			Utils = svgedit.utilities;
 	
 		$('<iframe name="output_frame" src="#"/>').hide().appendTo('body');
 		svgEditor.setCustomHandlers({
@@ -42,7 +43,7 @@ svgEditor.addExtension("server_opensave", {
 				var svg = '<?xml version="1.0" encoding="UTF-8"?>\n' + data, // Firefox doesn't seem to know it is UTF-8 (no matter whether we use or skip the clientDownload code) despite the Content-Disposition header containing UTF-8, but adding the encoding works
 					filename = getFileNameFromTitle();
 
-				if (clientDownloadSupport(filename, '.svg', 'data:image/svg+xml;charset=UTF-8;base64,' + svgedit.utilities.encode64(svg))) {
+				if (clientDownloadSupport(filename, '.svg', 'data:image/svg+xml;charset=UTF-8;base64,' + Utils.encode64(svg))) {
 					return;
 				}
 
@@ -55,6 +56,7 @@ svgEditor.addExtension("server_opensave", {
 					.appendTo('body')
 					.submit().remove();
 			},
+			// Todo: Add exportPDF!
 			exportImage: function(win, data) {
 				var c,
 					issues = data.issues,
@@ -68,41 +70,41 @@ svgEditor.addExtension("server_opensave", {
 				
 				c.width = svgCanvas.contentW;
 				c.height = svgCanvas.contentH;
-				canvg(c, data.svg, {renderCallback: function() {
-					var pre, filename, suffix,
-						datauri = quality ? c.toDataURL(mimeType, quality) : c.toDataURL(mimeType),
-						// uiStrings = svgEditor.uiStrings,
-						note = '';
-					
-					// Check if there are issues
-					if (issues.length) {
-						pre = "\n \u2022 ";
-						note += ("\n\n" + pre + issues.join(pre));
-					} 
-					
-					if(note.length) {
-						alert(note);
-					}
-					
-					filename = getFileNameFromTitle();
-					suffix = '.' + data.type.toLowerCase();
-					
-					if (clientDownloadSupport(filename, suffix, datauri)) {
-						return;
-					}
+				Utils.buildCanvgCallback(function () {
+					canvg(c, data.svg, {renderCallback: function() {
+						var pre, filename, suffix,
+							datauri = quality ? c.toDataURL(mimeType, quality) : c.toDataURL(mimeType),
+							// uiStrings = svgEditor.uiStrings,
+							note = '';
+						
+						// Check if there are issues
+						if (issues.length) {
+							pre = "\n \u2022 ";
+							note += ("\n\n" + pre + issues.join(pre));
+						} 
+						
+						if(note.length) {
+							alert(note);
+						}
+						
+						filename = getFileNameFromTitle();
+						suffix = '.' + data.type.toLowerCase();
+						
+						if (clientDownloadSupport(filename, suffix, datauri)) {
+							return;
+						}
 
-					$('<form>').attr({
-						method: 'post',
-						action: save_img_action,
-						target: 'output_frame'
-					}).append('<input type="hidden" name="output_img" value="' + datauri + '">')
-						.append('<input type="hidden" name="mime" value="' + mimeType + '">')
-						.append('<input type="hidden" name="filename" value="' + xhtmlEscape(filename) + '">')
-						.appendTo('body')
-						.submit().remove();
-				}});
-	
-				
+						$('<form>').attr({
+							method: 'post',
+							action: save_img_action,
+							target: 'output_frame'
+						}).append('<input type="hidden" name="output_img" value="' + datauri + '">')
+							.append('<input type="hidden" name="mime" value="' + mimeType + '">')
+							.append('<input type="hidden" name="filename" value="' + xhtmlEscape(filename) + '">')
+							.appendTo('body')
+							.submit().remove();
+					}});
+				})();
 			}
 		});
 
@@ -125,7 +127,7 @@ svgEditor.addExtension("server_opensave", {
 			$('#dialog_box').hide();
 
 			if (type !== 'import_img') {
-				xmlstr = svgedit.utilities.decode64(str64);
+				xmlstr = Utils.decode64(str64);
 			}
 			
 			switch (type) {

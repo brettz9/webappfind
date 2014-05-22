@@ -1,4 +1,4 @@
-/*globals saveAs:true, svgEditor:true, globalStorage, widget, svgedit, canvg, jsPDF, svgElementToPdf, jQuery, $, DOMParser, FileReader, URL */
+/*globals svgEditor:true, globalStorage, widget, svgedit, canvg, svgElementToPdf, jQuery, $, DOMParser, FileReader */
 /*jslint vars: true, eqeq: true, todo: true, forin: true, continue: true, regexp: true */
 /*
  * svg-editor.js
@@ -22,7 +22,6 @@
 TODOS
 1. JSDoc
 */
-var saveAs;
 (function() {
 
 	if (window.svgEditor) {
@@ -35,6 +34,7 @@ var saveAs;
 		//
 		// STATE MAINTENANCE PROPERTIES
 		editor.tool_scale = 1; // Dependent on icon size, so any use to making configurable instead? Used by JQuerySpinBtn.js
+		editor.exportWindowCt = 0;
 		editor.langChanged = false;
 		editor.showSaveWarning = false;
 		editor.storagePromptClosed = false; // For use with ext-storage.js
@@ -43,6 +43,7 @@ var saveAs;
 			Utils = svgedit.utilities,
 			isReady = false,
 			customExportImage = false,
+			customExportPDF = false,
 			callbacks = [],
 			/**
 			* PREFS AND CONFIG
@@ -115,6 +116,7 @@ var saveAs;
 				initOpacity: 1,
 				colorPickerCSS: null, // Defaults to 'left' with a position equal to that of the fill_color or stroke_color element minus 140, and a 'bottom' equal to 40
 				initTool: 'select',
+				exportWindowType: 'new', // 'same' (todo: also support 'download')
 				wireframe: false,
 				showlayers: false,
 				no_save_warning: false,
@@ -202,20 +204,6 @@ var saveAs;
 			}
 		}
 		
-		function checkCanvg (callCanvg) {
-			return function (win, data) {
-				if (window.canvg) {
-					callCanvg(win, data);
-				} else { // Might not be set up yet
-					$.getScript('canvg/rgbcolor.js', function() {
-						$.getScript('canvg/canvg.js', function() {
-							callCanvg(win, data);
-						});
-					});
-				}
-			};
-		}
-
 		/**
 		* EXPORTS
 		*/
@@ -421,7 +409,11 @@ var saveAs;
 				}
 				if (opts.exportImage) {
 					customExportImage = opts.exportImage;
-					svgCanvas.bind('exported', checkCanvg(customExportImage));
+					svgCanvas.bind('exported', Utils.buildCanvgCallback(customExportImage));
+				}
+				if (opts.exportPDF) {
+					customExportPDF = opts.exportPDF;
+					svgCanvas.bind('exportedPDF', Utils.buildJSPDFCallback(customExportPDF));					
 				}
 			});
 		};
@@ -1078,43 +1070,10 @@ var saveAs;
 				}
 			};
 
-			// Export global for use by jsPDF
-			if (!saveAs) {
-				saveAs = function (blob, options) {
-					var blobUrl = URL.createObjectURL(blob);
-					try {
-						// This creates a bookmarkable data URL,
-						// but it doesn't currently work in
-						// Firefox, and although it works in Chrome,
-						// Chrome doesn't make the full "data:" URL
-						// visible unless you right-click to "Inspect
-						// element" and then right-click on the element
-						// to "Copy link address".
-						var xhr = new XMLHttpRequest();
-						xhr.responseType = 'blob';
-						xhr.onload = function() {
-							var recoveredBlob = xhr.response;
-							var reader = new FileReader();
-							reader.onload = function() {
-								var blobAsDataUrl = reader.result;
-								exportWindow.location.href = blobAsDataUrl;
-							};
-							reader.readAsDataURL(recoveredBlob);
-						};
-						xhr.open('GET', blobUrl);
-						xhr.send();
-					}
-					catch (e) {
-						exportWindow.location.href = blobUrl;
-					}
-				};
-			}
-
 			var exportHandler = function(win, data) {
 				var issues = data.issues,
 					type = data.type || 'PNG',
-					exportWindowName = data.exportWindowName,
-					dataURLType = (type === 'ICO' ? 'BMP' : type).toLowerCase();
+					exportWindowName = data.exportWindowName;
 
 				if (exportWindowName) {
 					exportWindow = window.open('', exportWindowName); // A hack to get the window via JSON-able name without opening a new one
@@ -1123,27 +1082,11 @@ var saveAs;
 					$('<canvas>', {id: 'export_canvas'}).hide().appendTo('body');
 				}
 				var c = $('#export_canvas')[0];
-				if (type === 'PDF') {
-					var res = svgCanvas.getResolution();
-					var orientation = res.w > res.h ? 'landscape' : 'portrait';
-					var units = 'pt'; // curConfig.baseUnit; // We could use baseUnit, but that is presumably not intended for export purposes
-					var doc = new jsPDF(orientation, units, [res.w, res.h]); // Todo: Give options to use predefined jsPDF formats like "a4", etc. from pull-down (with option to keep customizable)
-					var docTitle = svgCanvas.getDocumentTitle();
-					doc.setProperties({
-						title: docTitle/*,
-						subject: '',
-						author: '',
-						keywords: '',
-						creator: ''*/
-					});
-					svgElementToPdf(data.svg, doc, {});
-					doc.save(docTitle + '.pdf');
-					return;
-				}
 				c.width = svgCanvas.contentW;
 				c.height = svgCanvas.contentH;
 				
 				canvg(c, data.svg, {renderCallback: function() {
+					var dataURLType = (type === 'ICO' ? 'BMP' : type).toLowerCase();
 					var datauri = data.quality ? c.toDataURL('image/' + dataURLType, data.quality) : c.toDataURL('image/' + dataURLType);
 					exportWindow.location.href = datauri;
 					var done = $.pref('export_notice_done');
@@ -2901,7 +2844,14 @@ var saveAs;
 			svgCanvas.bind('transition', elementTransition);
 			svgCanvas.bind('changed', elementChanged);
 			svgCanvas.bind('saved', saveHandler);
-			svgCanvas.bind('exported', checkCanvg(exportHandler));
+			svgCanvas.bind('exported', Utils.buildCanvgCallback(exportHandler));
+			svgCanvas.bind('exportedPDF', function (win, data) {
+				var exportWindowName = data.exportWindowName;
+				if (exportWindowName) {
+					exportWindow = window.open('', exportWindowName); // A hack to get the window via JSON-able name without opening a new one
+				}
+				exportWindow.location.href = data.dataurlstring;
+			});
 			svgCanvas.bind('zoomed', zoomChanged);
 			svgCanvas.bind('contextset', contextChanged);
 			svgCanvas.bind('extension_added', extAdded);
@@ -3649,15 +3599,31 @@ var saveAs;
 						return;
 					}
 					// Open placeholder window (prevents popup)
-					if (!customExportImage) {
+					var exportWindowName;
+					function openExportWindow () {
 						var str = uiStrings.notification.loadingImage;
+						if (curConfig.exportWindowType === 'new') {
+							editor.exportWindowCt++;
+						}
+						exportWindowName = curConfig.canvasName + editor.exportWindowCt;
 						exportWindow = window.open(
 							'data:text/html;charset=utf-8,' + encodeURIComponent('<title>' + str + '</title><h1>' + str + '</h1>'),
-							'svg-edit-exportWindow'
+							exportWindowName
 						);
 					}
-					var quality = parseInt($('#image-slider').val(), 10)/100;
-					svgCanvas.rasterExport(imgType, quality, (exportWindow && exportWindow.name));
+					if (imgType === 'PDF') {
+						if (!customExportPDF) {
+							openExportWindow();
+						}
+						svgCanvas.exportPDF(exportWindowName);
+					}
+					else {
+						if (!customExportImage) {
+							openExportWindow();
+						}
+						var quality = parseInt($('#image-slider').val(), 10)/100;
+						svgCanvas.rasterExport(imgType, quality, exportWindowName);
+					}
 				}, function () {
 					var sel = $(this);
 					if (sel.val() === 'JPEG' || sel.val() === 'WEBP') {
@@ -4938,6 +4904,10 @@ var saveAs;
 					if (!file) {
 						return;
 					}
+					/* if (file.type === 'application/pdf') { // Todo: Handle PDF imports
+						
+					}
+					else */
 					if (file.type.indexOf('image') != -1) {
 						// Detected an image
 						// svg handling
@@ -4976,7 +4946,7 @@ var saveAs;
 									svgCanvas.alignSelectedElements('c', 'page');
 									updateContextPanel();
 								};
-									// create dummy img so we know the default dimensions
+								// create dummy img so we know the default dimensions
 								var imgWidth = 100;
 								var imgHeight = 100;
 								var img = new Image();
@@ -5024,7 +4994,7 @@ var saveAs;
 				updateCanvas(true);
 //			});
 
-			//	var revnums = "svg-editor.js ($Rev: 2846 $) ";
+			//	var revnums = "svg-editor.js ($Rev: 2862 $) ";
 			//	revnums += svgCanvas.getVersion();
 			//	$('#copyright')[0].setAttribute('title', revnums);
 
