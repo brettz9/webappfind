@@ -1,2 +1,4 @@
 demos/svg-edit/.svn
 *.lnk
+demos/svg-edit/editor/config.js
+demos/svg-edit/editor/custom.css

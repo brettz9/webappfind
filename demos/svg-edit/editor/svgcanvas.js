@@ -4389,7 +4389,7 @@ this.exportPDF = function (exportWindowName, outputType) {
 		});
 		var issues = getIssues();
 		var str = that.svgCanvasToString();
-		svgElementToPdf(str, doc, {});
+		jsPDF.API.addSVG(str, 0, 0);
 
 		// doc.output('save'); // Works to open in a new
 		//  window; todo: configure this and other export
@@ -4962,7 +4962,7 @@ this.importSvgString = function(xmlString) {
 			}
 		}
 		
-		var batchCmd = new svgedit.history.BatchCommand('Import SVG');
+		var batchCmd = new svgedit.history.BatchCommand('Import Image');
 		var symbol;
 		if (useExisting) {
 			symbol = import_ids[uid].symbol;
@@ -5498,7 +5498,7 @@ this.getZoom = function(){return current_zoom;};
 // Function: getVersion
 // Returns a string which describes the revision number of SvgCanvas.
 this.getVersion = function() {
-	return 'svgcanvas.js ($Rev: 2862 $)';
+	return 'svgcanvas.js ($Rev: 2867 $)';
 };
 
 // Function: setUiStrings
