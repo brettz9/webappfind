@@ -440,7 +440,16 @@ a number of areas:
     1. Check upon each save attempt that the loaded protocol is still registered as a handler (and remove usage notes above once implemented).
     1. Listen for unregistration of protocols to disable acting on future messages from them (only relevant for pages already loaded in this session).
 1. API changes/additions
-    1. Change custom modes to be prefixed with a colon in front of fundamental modes and then
+	1. Use objects in `postMessage()` communications for greater
+	extensibility, and add a property to indicate the method (as
+	opposed to mode) as "webappfind", so as to distinguish
+	file://-based client-side GET-like code or server-side GET or POST-driven
+	content (which should also provide a "untrusted" property or the like
+	so as to distinguish code with side effects and those without).
+	Develop boilerplate code to work in all possible environments (except
+	for dumb clients or clients with JavaScript disabled making POST
+	requests)
+	1. Change custom modes to be prefixed with a colon in front of fundamental modes and then
         allow multiple modes separated by whitespace (especially in preparation for support of a likely
         frequent use case for combining a new fundamental mode, "export", along with an "edit" mode,
         e.g., to allow saving of an SVG file as SVG or PNG, or saving CoffeeScript as CoffeeScript
