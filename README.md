@@ -448,7 +448,8 @@ a number of areas:
 	so as to distinguish code with side effects and those without).
 	Develop boilerplate code to work in all possible environments (except
 	for dumb clients or clients with JavaScript disabled making POST
-	requests)
+	requests). Utilize with [URI templates](http://tools.ietf.org/html/rfc6570)
+	for discovery?
 	1. Change custom modes to be prefixed with a colon in front of fundamental modes and then
         allow multiple modes separated by whitespace (especially in preparation for support of a likely
         frequent use case for combining a new fundamental mode, "export", along with an "edit" mode,
