@@ -616,6 +616,7 @@ only to a specific directory if WebAppFind adds such a fundamental mode).
 1. Could allow type to be determined by schema (e.g., JSON Schema based on `$schema` value with JSON document, XML Schema for XML, etc.).
 1. Allow defaultHandlers to be optionally added inline with fileMatches in filetypes.json?
 1. Option to open HTML in chrome mode so one can do things like cross-domain toDataURL on an image canvas without errors (the proposed change to AsYouWish to allow sites to be reopened in this mode could be a workaround).
+1. Once API stabilizes, file feature request to get the functionality built into Firefox.
 
 # Possible future mode additions
 
