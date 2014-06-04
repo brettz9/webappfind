@@ -142,6 +142,8 @@ to have higher privileges than just writing back to the opened file, see
 Remember that besides being able to launch WebAppFind from the desktop,
 you can also launch from the command line, including from within the likes of
 desktop apps as well, such as [Notepad++](http://notepad-plus-plus.org/).
+(See also [atyourcommand](https://github.com/brettz9/atyourcommand) for
+some desired todos regarding standardizing argument types.)
 
 In the case of Notepad++, one can go to the "Run" menu and choose the
 "Run..." item, and then specify the path of the relevant WebAppFind
@@ -340,7 +342,11 @@ when seeking to detect type information (beyond just reading the
 file extension). (It is a potential to-do of this project to allow
 filetypes.json to allow designation of local command line
 arguments to apps besides Firefox as well, but this would
-require first routing the request through Firefox.)
+require first routing the request through Firefox or some
+batch/executable which did more pre-processing including
+JSON parsing; see also
+[atyourcommand](https://github.com/brettz9/atyourcommand)
+for more ideas about this.)
 
 The allowance for custom modes in addition to fundamental modes
 helps the user avoid the need to swap handlers (or modify
@@ -449,7 +455,10 @@ a number of areas:
 	Develop boilerplate code to work in all possible environments (except
 	for dumb clients or clients with JavaScript disabled making POST
 	requests). Utilize with [URI templates](http://tools.ietf.org/html/rfc6570)
-	for discovery?
+	for server-side discovery and a special API for postMessage
+	client-side discovery (e.g., if [atyourcommand](https://github.com/brettz9/atyourcommand)
+	were to make known to you the modes available in an app
+	when one is designing a command to shuffle off content to it)?
 	1. Change custom modes to be prefixed with a colon in front of fundamental modes and then
         allow multiple modes separated by whitespace (especially in preparation for support of a likely
         frequent use case for combining a new fundamental mode, "export", along with an "edit" mode,
