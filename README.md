@@ -458,7 +458,10 @@ a number of areas:
 	for server-side discovery and a special API for postMessage
 	client-side discovery (e.g., if [atyourcommand](https://github.com/brettz9/atyourcommand)
 	were to make known to you the modes available in an app
-	when one is designing a command to shuffle off content to it)?
+	when one is designing a command to shuffle off content to it)? Make
+	this perhaps a mode itself also so that files from the desktop could also
+	be opened in a manner that the web app displays the available modes (and
+	can post them back optionally to a callin app, again, like atyourcommand).
 	1. Change custom modes to be prefixed with a colon in front of fundamental modes and then
         allow multiple modes separated by whitespace (especially in preparation for support of a likely
         frequent use case for combining a new fundamental mode, "export", along with an "edit" mode,
