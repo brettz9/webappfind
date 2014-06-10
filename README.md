@@ -512,7 +512,7 @@ a number of areas:
         command-line-like approach
     1. Prompt user for a web app URL if no app set for file type
     1. Support option for any web app to open by default in full-screen mode (could just let web app and user handle, but user may prefer to bake it in to a particular executable only)
-	1. Supply own filetypes.json by command line
+	1. Supply own filetypes.json by command line including a remote one
 1. Complete [Executable Builder](https://github.com/brettz9/executable-builder)
     1. Rewrite C++ exe's as batch scripts (particularly for the sake of [Executable Builder](https://github.com/brettz9/executable-builder)); convert to shortcut tied to cmd.exe for sake of getting an icon
     1. Installer script to run to facilitate setting up of OpenWith per user choices (if Executable Builder is not installed, it could link to it, and if it is, it could bring user through steps).
