@@ -116,6 +116,7 @@
         enumerable: false,
         get: function () {
             // Get the overridden getAttribute() result
+            // Todo: any way around deprecated ownerElement property?
             return this.ownerElement.getAttribute(this.name);
         }/*,
         set: function (val) {

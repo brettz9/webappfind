@@ -1,3 +1,6 @@
+            lowerCaseCSSPropertiesForIE = function (n0, n1) {
+                return n1.toLowerCase() + ' ';
+            }
                                     if (tagAttributes[i].name === 'style') {
                                         // This doesn't work as we need to sort the rules in a predictable order as IE varies them
                                         /*

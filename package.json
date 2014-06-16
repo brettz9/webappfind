@@ -8,6 +8,9 @@
     "url": "https://github.com/brettz9/webappfind",
     "description": "Enables an experimental protocol system for allowing the user to supply local files for viewing and editing by web applications",
     "license": "MIT",
+	"dependencies": {
+		"jamilih": "0.x.x"
+	},
     "repository": {
         "type": "git", "url": "https://github.com/brettz9/webappfind.git"
     },

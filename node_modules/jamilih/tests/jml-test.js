@@ -95,9 +95,11 @@ var trsFragment = jml('tr', [
     null
 );
 
+var ser = new XMLSerializer();
+ser.$overrideNative = true;
 assert.matches(
-    new XMLSerializer().serializeToString(trsFragment.childNodes[0]) +
-    new XMLSerializer().serializeToString(trsFragment.childNodes[1]),
+    ser.serializeToString(trsFragment.childNodes[0]) +
+    ser.serializeToString(trsFragment.childNodes[1]),
     '<tr xmlns="http://www.w3.org/1999/xhtml"><td>row 1 cell 1</td><td>row 1 cell 2</td></tr><tr xmlns="http://www.w3.org/1999/xhtml" class="anotherRowSibling"><td>row 2 cell 1</td><td>row 2 cell 2</td></tr>'
 );
 

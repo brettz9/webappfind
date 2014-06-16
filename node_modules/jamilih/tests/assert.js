@@ -24,7 +24,9 @@ var assert = {
         this.matchesXMLString(lastInsert, item2);
     },
     matchesXMLString: function (item1, item2) {
-        item1 = new XMLSerializer().serializeToString(item1);
+        var ser = new XMLSerializer();
+        ser.$overrideNative = true;
+        item1 = ser.serializeToString(item1);
         this.matches(item1, item2);
     }
 };

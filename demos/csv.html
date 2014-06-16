@@ -158,7 +158,7 @@ for (i = 0; i < window.CKEDITOR_LANGS.length ; i++ ) {
 }
 
 // Set the number of languages.
-jml('span', [String(window.CKEDITOR_LANGS.length)], $('#count')); // Todo: Avoid Jamilih requiring explicit string conversion
+jml('span', [window.CKEDITOR_LANGS.length], $('#count'));
 
 languages.addEventListener('change', function () {
     createEditor(this.value);
