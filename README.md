@@ -660,6 +660,7 @@ JavaScript export).
 1. Like "export", we might wish to allow a file to be opened with the privilege to save anywhere in a particular directory, etc.
 1. "prompt" mode; see to-do above.
 1. "any" mode; see to-do above.
+1. Support local or remote stream inputs
 
 # Possible "Demos" todos
 
