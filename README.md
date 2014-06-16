@@ -627,7 +627,10 @@ wish to view this file or view its source?".
 1. Build an executable to open a local executable/batch on the Windows desktop with a dialog asking for command line arguments (e.g., profile)? (as a workaround, one might use WebAppFind for this if an override will be provided to ensure it will launch back on the desktop)? Also allow a dialog to ask for WebAppFind arguments to web apps (could be at executable level or within the WebAppFind add-on).
 1. Exe's don't allow right-click Open with... though maybe Windows would allow even these files to be handled in some way (e.g., how Tortoise overlays the context menu).
 1. Create a shared add-on dependency for WebAppFind and AsYouWish exposing perhaps at least for privilege escalation with some of the underlying non-SDK APIs (e.g., a privilege to save
-only to a specific directory if WebAppFind adds such a fundamental mode).
+only to a specific directory if WebAppFind adds such a fundamental mode). Perhaps any AsYouWish directive could be exposed
+if part of a filetypes.json directive and/or command line flag (and not blocked by user preferences) or expose AYW API to
+other add-ons or command line for adding sites and privileges and use that; could be useful for add-ons as well as sites to provide
+alternative views/editing interfaces for the same shared data.
 1. Create complementary Firefox add-on to add desktop listeners to file changes to ensure WebAppFind files stay up to date within the app (ensure app also checks whether the user wishes to reconcile the new push with any changes already made); tie into proposed version control mode?
 1. Allow filetypes.json to support a hierarchy of custom types (e.g., schema->jsonschema) for meta-data purposes (possibly passing to applications, perhaps useful for namespacing)
 1. Could allow type to be determined by schema (e.g., JSON Schema based on `$schema` value with JSON document, XML Schema for XML, etc.).
