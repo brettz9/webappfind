@@ -664,6 +664,8 @@ JavaScript export).
 
 # Possible "Demos" todos
 
+1. Make scrollbars easier to use in CodeMirror demos
+1. Utilize https://github.com/brettz9/requirejs-codemirror in CodeMirror demos for cleaner HTML
 1. Demos ought to use cookie-using full screen option for HTML and SVG
 1. Get HTML CodeMirror to use closetag, html5complete, matchTags (in addition to JS ones if mixed mode can support), use the preview option?; http://codemirror.net/demo/widget.html for line bars in linting (html, css, javascript)? linting for HTML? (JSLint can do some); ensure JSLint (and CSSLint?) applied to mixed HTML
 1. JS enhancement: CodeMirror tern support? can this work or be made to work with JSDoc?
