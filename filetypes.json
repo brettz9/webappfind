@@ -1,0 +1,14 @@
+{
+    "fileMatches": [
+        [".md", "markdown"]
+    ],
+    "hierarchy": {
+        "markdown": ["txt"]
+    },
+    "defaultHandlers": {
+        "markdown": {
+            "view": "http://brett-zamir.me/webappfind/demos/markdown.html?params=%s",
+            "edit": "http://brett-zamir.me/webappfind/demos/markdown.html?params=%s"
+        }
+    }
+}

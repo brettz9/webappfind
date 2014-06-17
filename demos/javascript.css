@@ -8,7 +8,7 @@
 
 /* Automatic vertical sizing with a minimum height */
 .CodeMirror {
-    min-height: 585px;
+    min-height: 575px;
 /*    height: auto; This has the problem of not causing scrolls with page-up page down */
 }
 .CodeMirror-scroll {
