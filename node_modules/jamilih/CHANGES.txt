@@ -1,3 +1,9 @@
+0.6.0
+* Breaking change to allow `on`-prefixed event handlers to become
+set as direct properties rather than through `addEventListener`. If
+you need the latter, use the `$on` object syntax.
+* Allow decimal character references to be supplied as numbers
+
 0.5.0
 * Number and boolean children converted to text nodes
 

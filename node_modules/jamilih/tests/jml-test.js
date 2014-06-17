@@ -26,6 +26,10 @@ assert.matchesXMLString(
     jml('input'),
     '<input xmlns="http://www.w3.org/1999/xhtml" />'
 );
+assert.matchesXMLString(
+	jml('input', null),
+	'<input xmlns="http://www.w3.org/1999/xhtml" />'
+);
 
 assert.matchesXMLString(
     jml('input', {type:'password', id: 'my_pass'}),
@@ -178,7 +182,6 @@ assert.matches(str, 'worked2');
 
 input2.click();
 assert.matches(str, 'worked3');
-
 
 assert.matchesXMLString(
     jml('div', [

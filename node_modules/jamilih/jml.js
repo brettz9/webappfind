@@ -248,10 +248,10 @@ Todos:
                         case '&':
                             nodes[nodes.length] = _createSafeReference('entity', '', argv[++i]);
                             break;
-                        case '#': // // Decimal character reference - '#', ['01234'] // &#01234; // probably easier to use JavaScript Unicode escapes
-                            nodes[nodes.length] = _createSafeReference('decimal', arg, argv[++i]);
+                        case '#': // // Decimal character reference - ['#', '01234'] // &#01234; // probably easier to use JavaScript Unicode escapes
+                            nodes[nodes.length] = _createSafeReference('decimal', arg, String(argv[++i]));
                             break;
-                        case '#x': // Hex character reference - '#x', ['123a'] // &#x123a; // probably easier to use JavaScript Unicode escapes
+                        case '#x': // Hex character reference - ['#x', '123a'] // &#x123a; // probably easier to use JavaScript Unicode escapes
                             nodes[nodes.length] = _createSafeReference('hexadecimal', arg, argv[++i]);
                             break;
                         case '![':
@@ -368,7 +368,8 @@ Todos:
                                     break;
                                 default:
                                     if (p.match(/^on/)) {
-                                        _addEvent(elem, p.slice(2), attVal, false);
+                                        elem[p] = attVal;
+                                        // _addEvent(elem, p.slice(2), attVal, false); // This worked, but perhaps the user wishes only one event
                                         break;
                                     }
                                     if (p === 'style') { // setAttribute will work, but erases any existing styles
