@@ -520,6 +520,11 @@ a number of areas:
 1. Complete [Executable Builder](https://github.com/brettz9/executable-builder)
     1. Rewrite C++ exe's as batch scripts (particularly for the sake of [Executable Builder](https://github.com/brettz9/executable-builder)); convert to shortcut tied to cmd.exe for sake of getting an icon
     1. Installer script to run to facilitate setting up of OpenWith per user choices (if Executable Builder is not installed, it could link to it, and if it is, it could bring user through steps).
+1. Options to have Windows
+"[verb](http://msdn.microsoft.com/en-us/library/bb165967.aspx)"
+(i.e., Open, Edit, Print, Play, Preview or custom) be treated as
+modes/custom modes or to otherwise detect and interact with
+them?
 1. Unregister command line handler, etc. on add-on uninstall
 1. Option to avoid or allow new tabs for same URI/mode/filetype/path? (option to get the same tab or new tabs for them?); option to push to all open windows in different manner so can notify user of updates but not change focus, etc.
 1. Create tests using registerProtocolHandler (also for JS/JSON/mytype)
