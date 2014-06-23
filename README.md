@@ -446,23 +446,23 @@ a number of areas:
     1. Check upon each save attempt that the loaded protocol is still registered as a handler (and remove usage notes above once implemented).
     1. Listen for unregistration of protocols to disable acting on future messages from them (only relevant for pages already loaded in this session).
 1. API changes/additions
-	1. Use objects in `postMessage()` communications for greater
-	extensibility, and add a property to indicate the method (as
-	opposed to mode) as "webappfind", so as to distinguish
-	file://-based client-side GET-like code or server-side GET or POST-driven
-	content (which should also provide a "untrusted" property or the like
-	so as to distinguish code with side effects and those without).
-	Develop boilerplate code to work in all possible environments (except
-	for dumb clients or clients with JavaScript disabled making POST
-	requests). Utilize with [URI templates](http://tools.ietf.org/html/rfc6570)
-	for server-side discovery and a special API for postMessage
-	client-side discovery (e.g., if [atyourcommand](https://github.com/brettz9/atyourcommand)
-	were to make known to you the modes available in an app
-	when one is designing a command to shuffle off content to it)? Make
-	this perhaps a mode itself also so that files from the desktop could also
-	be opened in a manner that the web app displays the available modes (and
-	can post them back optionally to a callin app, again, like atyourcommand).
-	1. Change custom modes to be prefixed with a colon in front of fundamental modes and then
+    1. Use objects in `postMessage()` communications for greater
+    extensibility, and add a property to indicate the method (as
+    opposed to mode) as "webappfind", so as to distinguish
+    file://-based client-side GET-like code or server-side GET or POST-driven
+    content (which should also provide a "untrusted" property or the like
+    so as to distinguish code with side effects and those without).
+    Develop boilerplate code to work in all possible environments (except
+    for dumb clients or clients with JavaScript disabled making POST
+    requests). Utilize with [URI templates](http://tools.ietf.org/html/rfc6570)
+    for server-side discovery and a special API for postMessage
+    client-side discovery (e.g., if [atyourcommand](https://github.com/brettz9/atyourcommand)
+    were to make known to you the modes available in an app
+    when one is designing a command to shuffle off content to it)? Make
+    this perhaps a mode itself also so that files from the desktop could also
+    be opened in a manner that the web app displays the available modes (and
+    can post them back optionally to a callin app, again, like atyourcommand).
+    1. Change custom modes to be prefixed with a colon in front of fundamental modes and then
         allow multiple modes separated by whitespace (especially in preparation for support of a likely
         frequent use case for combining a new fundamental mode, "export", along with an "edit" mode,
         e.g., to allow saving of an SVG file as SVG or PNG, or saving CoffeeScript as CoffeeScript
@@ -512,11 +512,11 @@ a number of areas:
         command-line-like approach
     1. Prompt user for a web app URL if no app set for file type
     1. Support option for any web app to open by default in full-screen mode (could just let web app and user handle, but user may prefer to bake it in to a particular executable only)
-	1. Supply own filetypes.json by command line including a remote one
-		1. If a directory or other file is supplied, convert it to the child
-		or sibling filetypes.json file respectively? (would be convenient for
-		atyourcommand to supply a right-clicked file and have WebAppFind
-		detect it's own remote filetypes.json)
+    1. Supply own filetypes.json by command line including a remote one
+        1. If a directory or other file is supplied, convert it to the child
+        or sibling filetypes.json file respectively? (would be convenient for
+        atyourcommand to supply a right-clicked file and have WebAppFind
+        detect it's own remote filetypes.json)
 1. Complete [Executable Builder](https://github.com/brettz9/executable-builder)
     1. Rewrite C++ exe's as batch scripts (particularly for the sake of [Executable Builder](https://github.com/brettz9/executable-builder)); convert to shortcut tied to cmd.exe for sake of getting an icon
     1. Installer script to run to facilitate setting up of OpenWith per user choices (if Executable Builder is not installed, it could link to it, and if it is, it could bring user through steps).
@@ -526,6 +526,8 @@ a number of areas:
 modes/custom modes or to otherwise detect and interact with
 them?
 1. Unregister command line handler, etc. on add-on uninstall
+1. Support processing of filetypes.json for directories (e.g., a
+"directoryMatches" property to be added to filetypes.json).
 1. Option to avoid or allow new tabs for same URI/mode/filetype/path? (option to get the same tab or new tabs for them?); option to push to all open windows in different manner so can notify user of updates but not change focus, etc.
 1. Create tests using registerProtocolHandler (also for JS/JSON/mytype)
 1. Submit to AMO, Bower, etc.
