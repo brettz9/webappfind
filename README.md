@@ -210,7 +210,8 @@ The following steps may currently be altered by user preference.
     1. If the filetypes.json file contains a top-level "defaultHandlers" property object, this object will be checked against the type name and if a subobject for this type is found:
         1. that object will be checked to see whether the "register" mode is present (and the add-on user has not opted out of visiting these links), and if yes, the user would be forwarded to it (to allow a site the ability to register itself as a handler for any number of modes and/or be a portal to those modes) and these steps would stop. Otherwise, continue.
         1. that object will be checked to see whether the requested open mode is also present (i.e., "view", "binaryview", "edit", or "binaryedit" optionally followed by a supplied extensible custom mode such as "source" to view or edit source only).
-            1. If the open mode key is present, its value will be used as the site to open. (Currently, %s found in the URL will be substituted with the equivalent protocol scheme (e.g., "web+localeditjs:") followed by a JSON-stringify'd object (containing *fileType*, *mode*, *customMode*, and *pathID* properties); note that user preferences may determine that the path ID is not the actual path but a mere GUID.) Although this may be changed in the future, file:// URLs currently do not work with WebAppFind message posting (due to current privacy leaks in Firefox with add-on-to-file-protocol-webpage communication) (As I recall, custom DOM events didn't work with file:, and there is apparently no other method of communicating with an add-on (without injecting a global) that we could use like allowing sites to open a chrome:// URL (restartless might be able to get such URLs via chrome.manifest or dynamically but this is not allowed from the file: protocol)).
+            1. If the open mode key is present, its value will be used as the site to open. (Currently, %s found in the URL will be substituted with the equivalent protocol scheme (e.g., "web+localeditjs:") followed by a JSON-stringify'd object (containing *fileType*, *mode*, *customMode*, and *pathID* properties); note that user preferences may determine that the path ID is not the actual path but a mere GUID.) Although this may be changed in the future, file:// URLs currently do not work with WebAppFind message posting (due to current privacy leaks in Firefox with add-on-to-file-protocol-webpage communication) (As I recall, custom DOM events didn't work with file:, and there is apparently no other method of communicating with an add-on (without injecting a global) that we could use like allowing sites to open a chrome:// URL (restartless might be able to get such URLs via chrome.manifest or dynamically but this is not allowed from the file: protocol)). (Note: For security reasons
+            one should not rely on the URL parameters; it is better to utilize the message listening approach shown below.)
     1. If the filetypes.json file contains a top level "hierarchy" property object and if a suitable mode was not found, the hierarchy object may be checked for the type name to see what types might be acceptable alternatives (in decreasing order of preference) to determine the type to check in future steps below.
     1. If no other information is present in the filetypes.json file, if the file is not present, or if a specific default site was not found, depending on user settings, depending on user setting, the browser may attempt to open the file. Depending on user settings, the user may delegate the opening of the file back to the desktop (the default, however, is not to do so). If the user has not permitted either of these behaviors, an error message will be displayed.
 
@@ -242,7 +243,9 @@ window.addEventListener('message', function(e) {
 });
 ```
 
-Only windows with the URI approved by the process detailed above will be able to successfully receive such messages (and only for the supplied file).
+Only windows with the URI approved by the process detailed above
+will be able to successfully receive such messages (and only for the
+supplied file).
 
 ## API: saving back to the originally supplied file path (for the "edit" mode only)
 
@@ -280,6 +283,54 @@ window.postMessage(['webapp-save', previouslySavedPathIDFromViewEvent, dataToSav
 Only windows with the URI approved by the process detailed above
 can successfully save such messages (and only for the supplied file).
 
+## API: Obtaining a directory path
+
+If one adds something like the following file:
+
+```Batchfile
+"%ProgramFiles(x86)%\Mozilla Firefox\firefox.exe" -remote "openurl(about:newtab)" -webappdir "%1" -webappsite "http://brett-zamir.me/webappfind/demos/dir.html?path=%path"
+```
+
+...and copies it into the Windows "SendTo" folder (which can be found by
+opening `shell:SendTo`), you can right click folders to send its path to
+your web app (change the URL above to that of your web application).
+
+You do not need the path in the URL, and, as for files, for security
+reasons, should not rely on this, but it is provided for convenience.
+The recommended method for listening for the path is instead in
+the following manner:
+
+```javascript
+window.addEventListener('message', function(e) {
+        if (e.origin !== window.location.origin || // PRIVACY AND SECURITY! (for viewing and saving, respectively)
+            (!Array.isArray(e.data)))
+        ) {
+            return;
+        }
+        var messageType = e.data[0];
+        if (messageType === 'webapp-directoryPath') {
+            var path = e.data[1];
+
+            // Now do something with "path" here!
+
+        }
+    }, false);
+```
+
+WebAppFind may be modified in the future
+to allow file writing to all files within a supplied directory, but for now
+the most likely use case for using this API is within an AsYouWish
+app which could request privileges to process the supplied directory's
+contents.
+
+Note that for convenience, a batch file (that does not even require
+WebAppFind) is packaged with WebAppFind
+in the "batch" folder that can similarly be used if placed in the
+"SendTo" folder to allow
+opening a right-clicked directory into Firefox's file browser (including
+if you have overlaid its default browser with
+[filebrowser-enhanced](https://github.com/brettz9/filebrowser-enhanced)).
+
 ## Recognized file types and custom modes
 
 Although you are free to define your own file types and custom modes,
@@ -296,9 +347,10 @@ for cases where the file extension is used without filetypes.json.
 
 Although there may be some advantages to storing meta-data at the individual
 file level, I did not see a very convenient way in which Windows would allow
-the addition of arbitary meta-data which Firefox could easily query (Windows
-does not appear to offer arbitrary addition and editing of properties though
-programs, e.g., TortoiseGit, appear to be able to overlay the properties and
+the addition of arbitary meta-data which Firefox could easily query (besides
+the registry, Windows does not appear to offer arbitrary addition and editing
+of properties through its UI though programs, e.g., TortoiseGit, are
+able to overlay the properties and
 are aware of file-level metadata while adding their own). Having a JSON file
 allows developers to add some type configuration (beyond the more generic
 info detectable by a file extension) within the directory containing the data
