@@ -493,6 +493,7 @@ a number of areas:
 
 # Higher priority todos planned
 
+1. Contemplate option of auto-applying WebAppFind to all local file:// URLs loaded in the browser (redirecting to designated web app)
 1. Added security
     1. Disable further save attempts with bad ID supplied in case a however previously approved site is attempting to guess at the paths of (if the user has enabled path transmission), or at the GUID representing, other non-approved files
     1. Check upon each save attempt that the loaded protocol is still registered as a handler (and remove usage notes above once implemented).
