@@ -665,6 +665,8 @@ wish to view this file or view its source?".
 
 # Possible future todos
 
+1. Query OS user groups to determine permissions in place of or in addition
+to filetypes.json and the Firefox add-on preferences?
 1. Allow genuine POST or other non-GET or header-dependent requests (ala curl)?
 1. Allow files opened by FTP for remote editing to be used.
 1. Allow postMessage mechanism to receive content as entered in a dialog as opposed to a file (though with an optional file to save back)
