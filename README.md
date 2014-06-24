@@ -578,7 +578,8 @@ a number of areas:
 (i.e., Open, Edit, Print, Play, Preview or custom) be treated as
 modes/custom modes or to otherwise detect and interact with
 them?
-1. Consider encouraging use of MIME types for file type names.
+1. Consider encouraging use of MIME types for file type names (perhaps
+more in harmony with emerging Web Wishes specification).
 1. Unregister command line handler, etc. on add-on uninstall
 1. Support processing of filetypes.json for directories (e.g., a
 "directoryMatches" property to be added to filetypes.json).
