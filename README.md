@@ -772,9 +772,7 @@ put into its own localStorage as an add-on. Could make the demo post the add-on 
     1. Object literals
     1. Variables (arrays or objects like functions, etc.) with right side for property access (static (can be detected for pull-down) or dynamic)
     1. `new` (with or w/o needing function definition)
-```javascript
-new a()[new b()]
-```
+        `new a()[new b()]`
         won't normally add new directly within property (and can't within static property)
     1. invocation (w/o needing function definition)
 1. Email/chat client which stores data locally (and optionally only locally); good open source options to adapt? Tie in together.js with chat (as in whiteboards) or even to write collaborative emails
