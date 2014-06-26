@@ -672,6 +672,7 @@ wish to view this file or view its source?".
 to filetypes.json and the Firefox add-on preferences?
 1. Allow genuine POST or other non-GET or header-dependent requests (ala curl)?
 1. Allow files opened by FTP for remote editing to be used.
+1. Allow stylesheets or scripts to be clicked to be injected into web apps?
 1. Allow postMessage mechanism to receive content as entered in a dialog as opposed to a file (though with an optional file to save back)
 1. Create dialog to ask user for mode, etc., so executable doesn't have to bake it all in and can let the user decide at run-time.
 1. Command line flag additions:
