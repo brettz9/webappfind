@@ -6,53 +6,34 @@
     <!-- WebAppFind -->
     <link href="javascript.css" rel="stylesheet" type="text/css" />
     <script src="register.js"></script>
+    <script src="webappfind.js"></script>
     <script>
+/*globals WebAppFind*/
 /*
 TODOS:
 1. We could allow separate tabs when new pathIDs are obtained via our message listener
 */
-
 (function () {'use strict';
-
-var saveMessage = 'webapp-save',
-    excludedMessages = [saveMessage];
 
 function $ (sel) {
     return document.querySelector(sel);
 }
 
-window.addEventListener('DOMContentLoaded', function () {
-    var pathID;
-    
-    window.addEventListener('message', function(e) {
-        if (e.origin !== window.location.origin || // PRIVACY AND SECURITY! (for viewing and saving, respectively)
-            (!Array.isArray(e.data) || excludedMessages.indexOf(e.data[0]) > -1) // Validate format and avoid our post below
-        ) {
-            return;
-        }
-        var messageType = e.data[0];
-        switch (messageType) {
-            case 'webapp-view':
-                // Populate the contents
-                pathID = e.data[1];
-                $('#text').value = e.data[2];
-                $('#save').disabled = false;
-                break;
-            case 'webapp-save-end':
-                alert('save complete for pathID ' + e.data[1] + '!');
-                break;
-            default:
-                throw 'Unexpected mode';
-        }
-    }, false);
+var waf = new WebAppFind({
+    view: function (content) {
+        $('#text').value = content;
+        $('#save').disabled = false;
+    },
+    saveEnd: function (pathID) {
+        alert('save complete for pathID ' + pathID + '!');
+    }
+});
 
+window.addEventListener('DOMContentLoaded', function () {
     $('#save').addEventListener('click', function () {
-        if (!pathID) {
-            alert('No pathID set by Firefox yet! Remember to invoke this file from an executable or command line and in edit mode.');
-            return;
-        }
-        window.postMessage([saveMessage, pathID, $('#text').value], window.location.origin);
+        waf.save($('#text').value);
     });
+});
     
 /*
     addRegistrationHandlers([{
@@ -60,8 +41,6 @@ window.addEventListener('DOMContentLoaded', function () {
         instructions: 'Register this app as a handler for viewing local TXT files'
     }], 'http://127.0.0.1/webappfind/demos/txt.html?uri=%s');
 */
-
-});
 
 }());
     </script>
