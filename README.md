@@ -673,6 +673,7 @@ to filetypes.json and the Firefox add-on preferences?
 1. Allow genuine POST or other non-GET or header-dependent requests (ala curl)?
 1. Allow files opened by FTP for remote editing to be used.
 1. Allow stylesheets or scripts to be clicked to be injected into web apps?
+(could use if app isn't accepting them as additional file arguments already)
 1. Allow postMessage mechanism to receive content as entered in a dialog as opposed to a file (though with an optional file to save back)
 1. Create dialog to ask user for mode, etc., so executable doesn't have to bake it all in and can let the user decide at run-time.
 1. Command line flag additions:
@@ -795,3 +796,4 @@ sharing of content).
 1. Demo WebAppFind usage with external editing editor for textareas using [It's All Text! add-on](https://addons.mozilla.org/en-US/firefox/addon/its-all-text/) ([repo](https://github.com/docwhat/itsalltext/)); or adapt to allow optional embedding of web app in place in iframe?
 1. Demo use of [Speech Synthesis](https://dvcs.w3.org/hg/speech-api/raw-file/tip/speechapi.html#tts-section) with an HTML or text file (see [HTML5Rocks](http://updates.html5rocks.com/2014/01/Web-apps-that-talk---Introduction-to-the-Speech-Synthesis-API)) and [Voice recognition](https://dvcs.w3.org/hg/speech-api/raw-file/tip/speechapi.html#speechreco-section) from an audio file. Also allow voice recognition as feature in normal text/HTML demos.
 1. Demo to use SendTo webappdir functionality to make a zip within the passed path (using [JSZip](https://github.com/Stuk/jszip)) from right-click (would require no local files besides WebAppFind/AsYouWish and the SendTo batch file).
+1. Abstract the message listening and posting into a simpler utility class to reduce demo code
