@@ -1,6 +1,9 @@
 /*globals self*/
+/*jslint todo:true*/
+(function () {'use strict';
+
 // We have to use document.defaultView for now per https://addons.mozilla.org/en-US/developers/docs/sdk/latest/dev-guide/guides/content-scripts/communicating-with-other-scripts.html#Using%20the%20DOM%20postMessage%20API
-var addedMessageListener, disableAdditionalRequests, permittedPathToContentDict = {};
+var addedMessageListener; // , permittedPathToContentDict = {};
 
 function l (msg) {
     console.log(msg);
@@ -17,7 +20,7 @@ self.port.on('webappfindSaveEnd', function (path) {
     document.defaultView.postMessage(['webapp-save-end', path], window.location.origin);
 });
 
-self.port.on('webappfindStart', function (result) {'use strict';
+self.port.on('webappfindStart', function (result) {
 
     if (!addedMessageListener) {
         document.defaultView.addEventListener('message', function (e) {
@@ -47,11 +50,16 @@ l('made it past uri check' + uri);
     //permittedPathToContentDict[path] = content;
     
 
-    // Todo: make option to enable but indicate this is a major privacy leak!
+    // Todo: make option to enable but indicate this is a major privacy leak! (at least until such time as a null origin is allowed)
     if (0 && uri.match(/file:/)) {
 l('file protocol');
         // Todo: We could (and should) set this message to the relevant URL if file: support is added
-        document.defaultView.postMessage(['webapp-view', pathID, content], '*'); // window.location.href); // Gives security error while window.location.origin is null for file:
+        try {
+            document.defaultView.postMessage(['webapp-view', pathID, content], '*'); // window.location.href); // Gives security error while window.location.origin is null for file:
+        }
+        catch(e) {
+            l('file protocol err: '+e);
+        }
     }
     else {
 l(pathID);
@@ -59,3 +67,5 @@ l('contentlen'+content.length);
         document.defaultView.postMessage(['webapp-view', pathID, content], window.location.origin);
     }
 });
+
+}());
