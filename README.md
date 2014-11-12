@@ -480,7 +480,13 @@ activities of the DeviceStorageAPI whether enumerating files in the file's
 directory, doing set-up or take-down work related to file creation or
 deletion, or such things as uploading the containing folder's contents
 (and especially if WebAppFind is modified to allow for opening a hidden
-window, AsYouWish could be used for batch-like operations).
+window, AsYouWish could be used for batch-like operations). Another
+possibility is remembering a file path, e.g., for an equivalent to Windows
+"Pin to Start" if you wish to create something like Windows 8's drag-and-drop
+Start menu as an AsYouWish app, with local desktop apps (and web apps)
+launchable from your web app, allowing you to extend your native OS
+desktop (when not using say [filebrowser-enhanced](https://github.com/brettz9/filebrowser-enhanced)),
+to plug into your web app (which can mimic the desktop itself if you wish).
 
 # Comparison with AsYouWish
 
