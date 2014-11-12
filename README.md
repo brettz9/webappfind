@@ -285,10 +285,10 @@ can successfully save such messages (and only for the supplied file).
 
 ## API: Obtaining a directory path
 
-If one adds something like the following file:
+If one adds something like the following Windows batch file:
 
 ```Batchfile
-"%ProgramFiles(x86)%\Mozilla Firefox\firefox.exe" -remote "openurl(about:newtab)" -webappdir "%1" -webappsite "http://brett-zamir.me/webappfind/demos/dir.html?path=%path"
+"%ProgramFiles(x86)%\Mozilla Firefox\firefox.exe" -remote "openurl(about:newtab)" -webappdir "%1" -webappsite "http://brett-zamir.me/webappfind/demos/dir.html?path=%1"
 ```
 
 ...and copies it into the Windows "SendTo" folder (which can be found by
