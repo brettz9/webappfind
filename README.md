@@ -521,6 +521,13 @@ a number of areas:
     this perhaps a mode itself also so that files from the desktop could also
     be opened in a manner that the web app displays the available modes (and
     can post them back optionally to a callin app, again, like atyourcommand).
+    1. Allow not just one, but multiple, file/URL/command line/web app/etc. arguments to be passed into
+    the web application (e.g., for preferences, privilege level simulation or request information, schema,
+    etc.) as an array of objects with the string results of obtaining the file in the specified mode (or
+    custom mode in the case of a web app) placed as one of the keys on the object, with the other
+    keys optionally indicating: 1) the source and nature of the string data (e.g., the path (with fundamental mode under which it was obtained or at least whether the data was obtained as binary or non-binary), URL, command line instructions, web app URL with arguments), 2) type meta-data about the file (as opposed to arguments supplied to that file) which could be used by the receiving application (e.g., to indicate which file is providing preferences, which is providing a schema for validation, etc. even while (ideally wiki-standardized) custom modes should normally be used for this). Could leverage the information within this array of objects in a generic server-side application as well. Should be able to work with export mode as well for multiple or alternate outputs.
+        1. Privileges could be optionally supplied automatically or on demand (with postMessage by site).
+        1. Also support designation of additional resource file access for a given file in filetypes.json; allow regex (including subfolders or even ancestor/sibling ones?) to map files (by regexp) or file types to additional resources
     1. Change custom modes to be prefixed with a colon in front of fundamental modes and then
         allow multiple modes separated by whitespace (especially in preparation for support of a likely
         frequent use case for combining a new fundamental mode, "export", along with an "edit" mode,
@@ -544,13 +551,6 @@ a number of areas:
     directly with each other via postMessage, but this approach allows the
     user to do their own coupling rather than be dependent
     on a particular integration of services.
-    1. Allow not just one, but multiple, file/URL/command line/web app/etc. arguments to be passed into
-    the web application (e.g., for preferences, privilege level simulation or request information, schema,
-    etc.) as an array of objects with the string results of obtaining the file in the specified mode (or
-    custom mode in the case of a web app) placed as one of the keys on the object, with the other
-    keys optionally indicating: 1) the source and nature of the string data (e.g., the path (with fundamental mode under which it was obtained or at least whether the data was obtained as binary or non-binary), URL, command line instructions, web app URL with arguments), 2) type meta-data about the file (as opposed to arguments supplied to that file) which could be used by the receiving application (e.g., to indicate which file is providing preferences, which is providing a schema for validation, etc. even while (ideally wiki-standardized) custom modes should normally be used for this). Could leverage the information within this array of objects in a generic server-side application as well. Should be able to work with export mode as well for multiple or alternate outputs.
-        1. Privileges could be optionally supplied automatically or on demand (with postMessage by site).
-        1. Also support designation of additional resource file access for a given file in filetypes.json; allow regex (including subfolders or even ancestor/sibling ones?) to map files (by regexp) or file types to additional resources
     1. Allow command line to specify (or let WebAppFind determine according to some permutation of the file path) the exact window and possibly Panorama group and/or pinned status into which the web app with desktop file will be opened (the web app could handle moving itself instead but only if the web app were AsYouWish-based and the user preferences supplied the file path). Alternatively, the executable might have logic to determine the profile in a similarly automated (as opposed to hard-coded) manner. The advantage of either approach would be to allow the user a better web app grouping organization corresponding to the hierarchical organization they can find on the desktop.
     1. Support an optional, hard-coded web app URL (optionally looking for
     fallbacks if the supplied one is a protocol but not found) and/or
