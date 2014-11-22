@@ -529,6 +529,14 @@ a number of areas:
         1. Privileges could be optionally supplied automatically or on demand (with postMessage by site).
         1. Also support designation of additional resource file access for a given file in filetypes.json; allow regex (including subfolders or even ancestor/sibling ones?) to map files (by regexp) or file types to additional resources
         1. Make note that Windows doesn't apparently allow OpenWith when multiple files are selected on the desktop though things can work with filetypes.json
+        1. Develop system for converting file names into multiple resource
+        files, e.g., opening a file `brett.schema.dbjson` could by default
+        look for a "dbjson" web app handler while also giving permission to
+        that web app to read/write a file named "brett.schema" in the same
+        directory as "brett.schema.dbjson". Besides dot-separated additional
+        resource files, within an entry, a hyphen could indicate a
+        subdirectory, e.g., "brett.schemas-schema.dbjson" could allow access
+        to a file in "schemas/brett.schema" relative to the "dbjson" file.
     1. Change custom modes to be prefixed with a colon in front of fundamental modes and then
         allow multiple modes separated by whitespace (especially in preparation for support of a likely
         frequent use case for combining a new fundamental mode, "export", along with an "edit" mode,
@@ -601,6 +609,8 @@ more in harmony with emerging Web Wishes specification).
 
 # Medium term priority todos
 
+1. Document comparison between WebAppFind and routers/controllers in
+typical web apps whose verbs are indicated via URL query string parameters.
 1. See [atyourcommand](https://github.com/brettz9/atyourcommand),
 a Firefox add-on to allow
 creation of context menu items, including invoking a process with
