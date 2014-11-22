@@ -537,6 +537,7 @@ a number of areas:
         resource files, within an entry, a hyphen could indicate a
         subdirectory, e.g., "brett.schemas-schema.dbjson" could allow access
         to a file in "schemas/brett.schema" relative to the "dbjson" file.
+        A hyphen at the beginning could allow access to parent directories.
     1. Change custom modes to be prefixed with a colon in front of fundamental modes and then
         allow multiple modes separated by whitespace (especially in preparation for support of a likely
         frequent use case for combining a new fundamental mode, "export", along with an "edit" mode,
