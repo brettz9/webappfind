@@ -591,6 +591,9 @@ a number of areas:
 	across browser is other browsers will be supported in the future) but
 	could allow WAF to work with some legacy apps that do not have the
 	message listening code.
+1. Develop utility wrapper library for API to store to disk via WebAppFind
+and/or to store to `localStorage`, IndexedDB, and/or remote POST/PUT (since
+may wish to keep and possibly synchronize local copy or remote back-up).
 1. Complete [Executable Builder](https://github.com/brettz9/executable-builder)
     1. Rewrite C++ exe's as batch scripts (particularly for the sake of [Executable Builder](https://github.com/brettz9/executable-builder)); convert to shortcut tied to cmd.exe for sake of getting an icon
     1. Installer script to run to facilitate setting up of OpenWith per user choices (if Executable Builder is not installed, it could link to it, and if it is, it could bring user through steps).
