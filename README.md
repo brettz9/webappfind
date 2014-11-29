@@ -527,14 +527,8 @@ Besides "view", "binaryview", "edit", "binaryedit", "register", the following mo
 1. "query" or "search" - For queries within file or within a folder, etc., optionally (?) filtered by file type; this might be used for "find-in-files" behavior (multiple file saving would be needed for "replace-in-files"). These queries could be hierarchical (as also defined in filetypes.json?) such that, for example, one might have "myType" JSON files queryable in a precise manner, e.g., to find all files (or records) containing a "publication date" between a range of dates, while also allowing more generic queries such as RQL, or if not available (or not desired), the user could default to full text search (since a superset of JSON could be the txt type which could allow full text search). Also for simple file listing (see SendTo info for how to get a batch file to process a folder by right-click
 within the desktop)
 1. "execute" - Although the OS would normally do its own execution, it is possible that privileged apps (as through AsYouWish) might be able to handle this at least partly on their own
-1. "export" - Exporting into a different format (and saving to a different target file) from
-the original source file. Once multiple modes may be supported, users might supply
-both "edit" and "export" privileges to a web app simultaneously so one could save back the original
-file as well as the export (e.g., to save SVG and a PNG export or to save a CoffeeScript file and its
-JavaScript export).
-1. Like "export", we might wish to allow a file to be opened with the privilege to save anywhere in a particular directory, etc.
-1. "prompt" mode; see to-do above.
-1. "any" mode; see to-do above.
+1. "prompt" mode; see to-do below.
+1. "any" mode; see to-do below.
 1. Support local or remote stream inputs
 
 ## Higher priority todos planned
@@ -578,6 +572,12 @@ JavaScript export).
         subdirectory, e.g., "brett.schemas-schema.dbjson" could allow access
         to a file in "schemas/brett.schema" relative to the "dbjson" file.
         A hyphen at the beginning could allow access to parent directories.
+        1. "export" - Exporting into a different format (and saving to a different target file) from
+the original source file. Once multiple modes may be supported, users might supply
+both "edit" and "export" privileges to a web app simultaneously so one could save back the original
+file as well as the export (e.g., to save SVG and a PNG export or to save a CoffeeScript file and its
+JavaScript export).
+        1. Like "export", we might wish to allow a file to be opened with the privilege to save anywhere in a particular directory, etc.
     1. Change custom modes to be prefixed with a colon in front of fundamental modes and then
         allow multiple modes separated by whitespace (especially in preparation for support of a likely
         frequent use case for combining a new fundamental mode, "export", along with an "edit" mode,
