@@ -432,16 +432,19 @@ browsers if they do not allow add-ons to check command line arguments).
 
 ## Possible future API/filestypes.json changes
 
-1. Allow filetypes.json to designate profiles or windows so C++ executable or batch file could do its own filetypes.json processing to determine target profile or window?
-1. Allow filetypes.json to designate icon files (as well as suggested shortcut names?) for use with [Executable Builder](https://github.com/brettz9/executable-builder) executables so the user will not need to create their own icon? Executables or batch files (or filebrowser-enhanced) might pre-read the current directory and parse the JSON file and then delegate to another shortcut/executable associated with this icon
-1. Change filetypes.json to .filetypes.json or at least support the latter for those not wishing to distract users or let them mess things up.
-1. Since web protocols are not meant to be used to have the privilege of reading from or writing to files (unless they belong to reserved protocols which, per the HTML spec, cannot be registered from the web anyways), the current approach of allowing web sites to register themselves as handlers might need to be modified to use some other mechanism which can at least provide warnings to users about the capabilities they are thereby approving (perhaps as within [AsYouWish](https://github.com/brettz9/asyouwish/) when sites themselves can do the requesting for privileges). However, since WebAppFind chose to start with the web protocol approach not only because it is an existing method for sites to register themselves for later potential use, but because the data security and privacy issues are confined to data files which are explicitly opened from the desktop when using the WebAppFind approach.
-1. Depending on whether registerProtocolHandler will continue to be used, see about whether the HTML spec might be open to more tolerance within the allowed characters of a custom protocol beyond lower-case ASCII letters.
-1. Possible changes to parameters passed to registered protocol handlers and/or default handlers (if any, as may only be passed through postMessage or some other means)
-    1. Add to what is passed within URL (beyond filetype, mode, custom mode, and path)? or just pass through postMessage? Bookmarkability vs. clean API?
-1. See higher priority todos for an anticipated change with custom modes and allowing for multiple
-modes at once.
-1. See todos below for possible additions to fundamental (functional) modes beyond just "view", "binaryview", "edit", and "binaryedit".
+1. Mode and parameter changes
+    1. See higher priority todos for an anticipated change with custom modes and allowing for multiple
+modes (and file access) at once.
+    1. See "Possible future mode additions" section below for possible additions to fundamental (functional) modes beyond just "view", "binaryview", "edit", and "binaryedit".
+    1. Possible changes to parameters passed to registered protocol handlers and/or default handlers (if any, as may only be passed through postMessage or some other means)
+        1. Add to what is passed within URL (beyond filetype, mode, custom mode, and path)? or just pass through postMessage? Bookmarkability vs. clean API?
+1. filetypes.json changes
+    1. Change filetypes.json to .filetypes.json or at least support the latter for those not wishing to distract users or let them mess things up.
+    1. Allow filetypes.json to designate profiles or windows so C++ executable or batch file could do its own filetypes.json processing to determine target profile or window?
+    1. Allow filetypes.json to designate icon files (as well as suggested shortcut names?) for use with [Executable Builder](https://github.com/brettz9/executable-builder) executables so the user will not need to create their own icon? Executables or batch files (or filebrowser-enhanced) might pre-read the current directory and parse the JSON file and then delegate to another shortcut/executable associated with this icon
+1. Protocol handler changes
+    1. Since web protocols are not meant to be used to have the privilege of reading from or writing to files (unless they belong to reserved protocols which, per the HTML spec, cannot be registered from the web anyways), the current approach of allowing web sites to register themselves as handlers might need to be modified to use some other mechanism which can at least provide warnings to users about the capabilities they are thereby approving (perhaps as within [AsYouWish](https://github.com/brettz9/asyouwish/) when sites themselves can do the requesting for privileges). However, since WebAppFind chose to start with the web protocol approach not only because it is an existing method for sites to register themselves for later potential use, but because the data security and privacy issues are confined to data files which are explicitly opened from the desktop when using the WebAppFind approach.
+    1. Depending on whether registerProtocolHandler will continue to be used, see about whether the HTML spec might be open to more tolerance within the allowed characters of a custom protocol beyond lower-case ASCII letters.
 
 ## Implementation notes
 
