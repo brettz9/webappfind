@@ -344,6 +344,61 @@ Even if filetypes.json is used with "register" on "defaultHandlers", it may be
 convenient to have a separate spec URL detailed for your file type, including
 for cases where the file extension is used without filetypes.json.
 
+## Implementation notes
+
+A direct visit to the protocol (including through XSRF) should provide no side effects. However, it is possible that a malicious handler opened by the user in "edit" mode could provide immediate side effects by saving back data to overwrite the supplied file. This might be mitigated by a configurable option to require the user's consent upon each save and/or to inform the user of the proposed diffs before saving. But again this will only be possible upon user initiation, only for the specific file or files approved in a given session, and a site will only be usable as a handler if the filetypes.json packaged with the data file designates it as a default handler for the data file (and the user maintains the preference to use this information) or if they have previously approved a protocol site for the given type.
+
+# Comparison with similar WebAPI work
+
+[WebActivities](https://wiki.mozilla.org/WebAPI/WebActivities) is similar to WebAppFind in that both seek to allow delegation of certain behaviors such as "view" and "edit" to (potentially) different apps (where the user also has the freedom to choose any app to handle the given type of activity), but WebActivities does not operate on files. Jonas Sicking indicated in a personal email response supportive of the concept of WebAppFind that WebActivities would be a good "way to dispatch the "view"/"edit" request to the appropriate web page, however WebActivities are still at an early stage and not ready for your use cases.".
+
+These missing use cases (besides operating on files) might perhaps include:
+* The typing system of WebActivities does not seem to be made to be extensible by applications. It thus also doesn't allow specification of hierarchies of types (e.g., myJson->json->js) for fallbacks for as-yet-unregistered types or for alternate editor types.
+* WebActivities doesn't allow recommendation of default handlers when opening a file for the first time (though a WebActivities-supporting site could seek to register itself as such a handler).
+
+The [WebAPI](https://wiki.mozilla.org/WebAPI) has a
+[DeviceStorageAPI](https://wiki.mozilla.org/WebAPI/DeviceStorageAPI)
+which has certain file-related behaviors.
+
+Shortcomings (or differences) of the current DeviceStorageAPI
+relative to WebAppFind would appear to be:
+
+* It does not seem to anticipate the activities being triggered from one's desktop, but rather if one is already within a web app.
+* The proposal at present appears to be limited to files in a specific directory of one's hard drive. It thus does not allow one the freedom to store one's files wherever one likes on one's hard-drive for better organization purposes.
+
+The DeviceStorageAPI appears to allow more privileges (like
+[AsYouWish](https://github.com/brettz9/asyouwish/)) such as
+enumerating files in a directory, adding or deleting files, and listening
+for creation/deletion/modifications, whereas WebAppFind is currently
+focused on individual file reading and saving. However, WebAppFind
+may add other actions in the future, such as listening for file change
+events for version tracking or allowing for a web app to handle adding
+or deleting a file (in case it wishes to do related set-up/take-down work).
+
+Since WebAppFind executables pass along path information, WebAppFind
+can already be used with the AsYouWish add-on (if the user so configures
+that privilege-escalating add-on) to have it conduct the other privileged
+activities of the DeviceStorageAPI whether enumerating files in the file's
+directory, doing set-up or take-down work related to file creation or
+deletion, or such things as uploading the containing folder's contents
+(and especially if WebAppFind is modified to allow for opening a hidden
+window, AsYouWish could be used for batch-like operations). Another
+possibility is remembering a file path, e.g., for an equivalent to Windows
+"Pin to Start" if you wish to create something like Windows 8's drag-and-drop
+Start menu as an AsYouWish app, with local desktop apps (and web apps)
+launchable from your web app, allowing you to extend your native OS
+desktop (when not using say [filebrowser-enhanced](https://github.com/brettz9/filebrowser-enhanced)),
+to plug into your web app (which can mimic the desktop itself if you wish).
+
+# Comparison with AsYouWish
+
+[AsYouWish](https://github.com/brettz9/asyouwish/) allows a
+higher-than-normal privilege level to websites, but it differs in
+a number of areas:
+
+1. AsYouWish sites ask for permission, and once approved, can then immediately do their work. WebAppFind currently allows sites to ask for permission to register themselves as handlers, but their work will only become relevant when the user opens a file via WebAppFind.
+2. AsYouWish allows for a vast number of possible privileges (though subject to user approval) including potentially arbitrary file reading and writing (as with Firefox extensions), while WebAppFind is limited to file reading and writing (though it may expand to certain other circumscribed, user-initated file-related activities in the future) and only for those files so opened as opened by the user.
+
 ## Rationale for filetypes.json design
 
 Although there may be some advantages to storing meta-data at the individual
@@ -446,60 +501,34 @@ modes (and file access) at once.
     1. Since web protocols are not meant to be used to have the privilege of reading from or writing to files (unless they belong to reserved protocols which, per the HTML spec, cannot be registered from the web anyways), the current approach of allowing web sites to register themselves as handlers might need to be modified to use some other mechanism which can at least provide warnings to users about the capabilities they are thereby approving (perhaps as within [AsYouWish](https://github.com/brettz9/asyouwish/) when sites themselves can do the requesting for privileges). However, since WebAppFind chose to start with the web protocol approach not only because it is an existing method for sites to register themselves for later potential use, but because the data security and privacy issues are confined to data files which are explicitly opened from the desktop when using the WebAppFind approach.
     1. Depending on whether registerProtocolHandler will continue to be used, see about whether the HTML spec might be open to more tolerance within the allowed characters of a custom protocol beyond lower-case ASCII letters.
 
-## Implementation notes
+# Possible future mode additions
 
-A direct visit to the protocol (including through XSRF) should provide no side effects. However, it is possible that a malicious handler opened by the user in "edit" mode could provide immediate side effects by saving back data to overwrite the supplied file. This might be mitigated by a configurable option to require the user's consent upon each save and/or to inform the user of the proposed diffs before saving. But again this will only be possible upon user initiation, only for the specific file or files approved in a given session, and a site will only be usable as a handler if the filetypes.json packaged with the data file designates it as a default handler for the data file (and the user maintains the preference to use this information) or if they have previously approved a protocol site for the given type.
+See higher priority todos for changes/additions planned for the (hopefully) near future.
 
-# Comparison with similar WebAPI work
+Besides "view", "binaryview", "edit", "binaryedit", "register", the following modes might be added in future versions (or made to correspond with WebDav commands?):
 
-[WebActivities](https://wiki.mozilla.org/WebAPI/WebActivities) is similar to WebAppFind in that both seek to allow delegation of certain behaviors such as "view" and "edit" to (potentially) different apps (where the user also has the freedom to choose any app to handle the given type of activity), but WebActivities does not operate on files. Jonas Sicking indicated in a personal email response supportive of the concept of WebAppFind that WebActivities would be a good "way to dispatch the "view"/"edit" request to the appropriate web page, however WebActivities are still at an early stage and not ready for your use cases.".
-
-These missing use cases (besides operating on files) might perhaps include:
-* The typing system of WebActivities does not seem to be made to be extensible by applications. It thus also doesn't allow specification of hierarchies of types (e.g., myJson->json->js) for fallbacks for as-yet-unregistered types or for alternate editor types.
-* WebActivities doesn't allow recommendation of default handlers when opening a file for the first time (though a WebActivities-supporting site could seek to register itself as such a handler).
-
-The [WebAPI](https://wiki.mozilla.org/WebAPI) has a
-[DeviceStorageAPI](https://wiki.mozilla.org/WebAPI/DeviceStorageAPI)
-which has certain file-related behaviors.
-
-Shortcomings (or differences) of the current DeviceStorageAPI
-relative to WebAppFind would appear to be:
-
-* It does not seem to anticipate the activities being triggered from one's desktop, but rather if one is already within a web app.
-* The proposal at present appears to be limited to files in a specific directory of one's hard drive. It thus does not allow one the freedom to store one's files wherever one likes on one's hard-drive for better organization purposes.
-
-The DeviceStorageAPI appears to allow more privileges (like
-[AsYouWish](https://github.com/brettz9/asyouwish/)) such as
-enumerating files in a directory, adding or deleting files, and listening
-for creation/deletion/modifications, whereas WebAppFind is currently
-focused on individual file reading and saving. However, WebAppFind
-may add other actions in the future, such as listening for file change
-events for version tracking or allowing for a web app to handle adding
-or deleting a file (in case it wishes to do related set-up/take-down work).
-
-Since WebAppFind executables pass along path information, WebAppFind
-can already be used with the AsYouWish add-on (if the user so configures
-that privilege-escalating add-on) to have it conduct the other privileged
-activities of the DeviceStorageAPI whether enumerating files in the file's
-directory, doing set-up or take-down work related to file creation or
-deletion, or such things as uploading the containing folder's contents
-(and especially if WebAppFind is modified to allow for opening a hidden
-window, AsYouWish could be used for batch-like operations). Another
-possibility is remembering a file path, e.g., for an equivalent to Windows
-"Pin to Start" if you wish to create something like Windows 8's drag-and-drop
-Start menu as an AsYouWish app, with local desktop apps (and web apps)
-launchable from your web app, allowing you to extend your native OS
-desktop (when not using say [filebrowser-enhanced](https://github.com/brettz9/filebrowser-enhanced)),
-to plug into your web app (which can mimic the desktop itself if you wish).
-
-# Comparison with AsYouWish
-
-[AsYouWish](https://github.com/brettz9/asyouwish/) allows a
-higher-than-normal privilege level to websites, but it differs in
-a number of areas:
-
-1. AsYouWish sites ask for permission, and once approved, can then immediately do their work. WebAppFind currently allows sites to ask for permission to register themselves as handlers, but their work will only become relevant when the user opens a file via WebAppFind.
-2. AsYouWish allows for a vast number of possible privileges (though subject to user approval) including potentially arbitrary file reading and writing (as with Firefox extensions), while WebAppFind is limited to file reading and writing (though it may expand to certain other circumscribed, user-initated file-related activities in the future) and only for those files so opened as opened by the user.
+1. Version control (also some discussion of possibilites for multiple file saving)
+    1. "create", "delete" - for any necessary set-up before creation or deletion of a file (as with saving, the protocol should not have side effects, so these should only bring one to the page to confirm the user wished to take such an action--and the browser might have its own confirmation for these actions).
+    1. "rename" and "move" (or cut or copy and paste)
+    1. "versioncontrol" - A mechanism could be added to request listening to events which would impact version control (though some means of determining scope would be needed--e.g., a folder and all its subfolders--as well as privacy/security considerations which expands beyond the current scope of individual file viewing and saving; similar concerns would need to be taken into account for other modes that may process multiple files like search or file packaging). These events could be used to open a (hidden?) web app to store data (e.g., via localStorage or a new "edit" mechanism which could save to disk, but circumscribed by file type so that, e.g., a repository binary could be modified without the user needing to explicitly open it) and build a file history for a "repository". This "versioncontrol" handlers ought to allow multiple listening apps in some manner; this would be both for the sake of allowing different versioncontrol storage mechanisms/repository types, for ensuring that any viewing apps get updated upon external changes, as well as for any apps storing meta-data related to a document or documents but not saved within them to be notified and respond accordingly (including possibly saving their own updates back to disk), e.g., for building up a history of commit messages (which would at least effectively need the completion of the todo to allow a single web app to handle multiple documents at once).
+1. "send to" or "mailer" - e.g., to put file contents and/or file attachment(s), subject, etc. into a mail viewer, ready to email (with equivalents for chatting)? See SendTo folder details [here](http://superuser.com/a/722699/156958)
+and [here](http://answers.microsoft.com/en-us/windows/forum/windows_vista-desktop/how-to-locate-the-sendto-folder-in-vista/78b16711-1135-4eb0-851a-8abae9bfe9ed);
+also accepting a folder as argument!
+1. "validate" - Before the save command of an "edit" mode process (and its response back to the app) is completed, it may be handy to have a separate protocol be called for any registered validators of a given file type to perform validation and conditionally reject a save. Instead of receiving the file path, they would be passed the proposed file contents for saving from "edit" to ensure proper well-formedness and validity before saving back to disk. It might be ideal for a validator to simply be a JavaScript file with a specific function, but for parity, we should probably implement this as another HTML file using a (secure) postMessage. If a file was found within a filetypes.json hierarchy, it may be desirable to ensure validators are sought up the hierarchy (at least if not found at the most specific level), e.g., to check that a "myType" file specified as being a JSON file is indeed a JSON file, or at least a JavaScript object if there is no JSON validator registered.
+1. "preconvert" and "postconvert" - hooks to transform content before reading or writing, respectively (but before "validate")
+1. "splash" - for a splash page leading to the modes so that "register" can be exclusively for registering users? 
+1. "query" or "search" - For queries within file or within a folder, etc., optionally (?) filtered by file type; this might be used for "find-in-files" behavior (multiple file saving would be needed for "replace-in-files"). These queries could be hierarchical (as also defined in filetypes.json?) such that, for example, one might have "myType" JSON files queryable in a precise manner, e.g., to find all files (or records) containing a "publication date" between a range of dates, while also allowing more generic queries such as RQL, or if not available (or not desired), the user could default to full text search (since a superset of JSON could be the txt type which could allow full text search). Also for simple file listing (see SendTo info for how to get a batch file to process a folder by right-click
+within the desktop)
+1. "execute" - Although the OS would normally do its own execution, it is possible that privileged apps (as through AsYouWish) might be able to handle this at least partly on their own
+1. "export" - Exporting into a different format (and saving to a different target file) from
+the original source file. Once multiple modes may be supported, users might supply
+both "edit" and "export" privileges to a web app simultaneously so one could save back the original
+file as well as the export (e.g., to save SVG and a PNG export or to save a CoffeeScript file and its
+JavaScript export).
+1. Like "export", we might wish to allow a file to be opened with the privilege to save anywhere in a particular directory, etc.
+1. "prompt" mode; see to-do above.
+1. "any" mode; see to-do above.
+1. Support local or remote stream inputs
 
 # Higher priority todos planned
 
@@ -733,33 +762,6 @@ alternative views/editing interfaces for the same shared data.
 1. Allow defaultHandlers to be optionally added inline with fileMatches in filetypes.json?
 1. Option to open HTML in chrome mode so one can do things like cross-domain toDataURL on an image canvas without errors (the proposed change to AsYouWish to allow sites to be reopened in this mode could be a workaround).
 1. Once API stabilizes, file feature request to get the functionality built into Firefox.
-
-# Possible future mode additions
-
-Besides "view", "binaryview", "edit", "binaryedit", "register", the following modes might be added in future versions (or made to correspond with WebDav commands?):
-
-1. Version control (also some discussion of possibilites for multiple file saving)
-    1. "create", "delete" - for any necessary set-up before creation or deletion of a file (as with saving, the protocol should not have side effects, so these should only bring one to the page to confirm the user wished to take such an action--and the browser might have its own confirmation for these actions).
-    1. "rename" and "move" (or cut or copy and paste)
-    1. "versioncontrol" - A mechanism could be added to request listening to events which would impact version control (though some means of determining scope would be needed--e.g., a folder and all its subfolders--as well as privacy/security considerations which expands beyond the current scope of individual file viewing and saving; similar concerns would need to be taken into account for other modes that may process multiple files like search or file packaging). These events could be used to open a (hidden?) web app to store data (e.g., via localStorage or a new "edit" mechanism which could save to disk, but circumscribed by file type so that, e.g., a repository binary could be modified without the user needing to explicitly open it) and build a file history for a "repository". This "versioncontrol" handlers ought to allow multiple listening apps in some manner; this would be both for the sake of allowing different versioncontrol storage mechanisms/repository types, for ensuring that any viewing apps get updated upon external changes, as well as for any apps storing meta-data related to a document or documents but not saved within them to be notified and respond accordingly (including possibly saving their own updates back to disk), e.g., for building up a history of commit messages (which would at least effectively need the completion of the todo to allow a single web app to handle multiple documents at once).
-1. "send to" or "mailer" - e.g., to put file contents and/or file attachment(s), subject, etc. into a mail viewer, ready to email (with equivalents for chatting)? See SendTo folder details [here](http://superuser.com/a/722699/156958)
-and [here](http://answers.microsoft.com/en-us/windows/forum/windows_vista-desktop/how-to-locate-the-sendto-folder-in-vista/78b16711-1135-4eb0-851a-8abae9bfe9ed);
-also accepting a folder as argument!
-1. "validate" - Before the save command of an "edit" mode process (and its response back to the app) is completed, it may be handy to have a separate protocol be called for any registered validators of a given file type to perform validation and conditionally reject a save. Instead of receiving the file path, they would be passed the proposed file contents for saving from "edit" to ensure proper well-formedness and validity before saving back to disk. It might be ideal for a validator to simply be a JavaScript file with a specific function, but for parity, we should probably implement this as another HTML file using a (secure) postMessage. If a file was found within a filetypes.json hierarchy, it may be desirable to ensure validators are sought up the hierarchy (at least if not found at the most specific level), e.g., to check that a "myType" file specified as being a JSON file is indeed a JSON file, or at least a JavaScript object if there is no JSON validator registered.
-1. "preconvert" and "postconvert" - hooks to transform content before reading or writing, respectively (but before "validate")
-1. "splash" - for a splash page leading to the modes so that "register" can be exclusively for registering users? 
-1. "query" or "search" - For queries within file or within a folder, etc., optionally (?) filtered by file type; this might be used for "find-in-files" behavior (multiple file saving would be needed for "replace-in-files"). These queries could be hierarchical (as also defined in filetypes.json?) such that, for example, one might have "myType" JSON files queryable in a precise manner, e.g., to find all files (or records) containing a "publication date" between a range of dates, while also allowing more generic queries such as RQL, or if not available (or not desired), the user could default to full text search (since a superset of JSON could be the txt type which could allow full text search). Also for simple file listing (see SendTo info for how to get a batch file to process a folder by right-click
-within the desktop)
-1. "execute" - Although the OS would normally do its own execution, it is possible that privileged apps (as through AsYouWish) might be able to handle this at least partly on their own
-1. "export" - Exporting into a different format (and saving to a different target file) from
-the original source file. Once multiple modes may be supported, users might supply
-both "edit" and "export" privileges to a web app simultaneously so one could save back the original
-file as well as the export (e.g., to save SVG and a PNG export or to save a CoffeeScript file and its
-JavaScript export).
-1. Like "export", we might wish to allow a file to be opened with the privilege to save anywhere in a particular directory, etc.
-1. "prompt" mode; see to-do above.
-1. "any" mode; see to-do above.
-1. Support local or remote stream inputs
 
 # Possible "Demos" todos
 
