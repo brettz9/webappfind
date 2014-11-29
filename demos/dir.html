@@ -8,36 +8,28 @@
 
 (function () {'use strict';
 
-var getDirectoryMessage = 'webapp-getDirectoryPath',
-    excludedMessages = [getDirectoryMessage];
-
 function $ (sel) {
     return document.querySelector(sel);
 }
 
 window.addEventListener('DOMContentLoaded', function () {
-    var path;
-    
     window.addEventListener('message', function(e) {
-        if (e.origin !== window.location.origin || // PRIVACY AND SECURITY! (for viewing and saving, respectively)
-            (!Array.isArray(e.data) || excludedMessages.indexOf(e.data[0]) > -1) // Validate format and avoid our post below
-        ) {
+        if (e.origin !== window.location.origin) { // PRIVACY AND SECURITY! (for viewing and saving, respectively)
             return;
         }
-        var messageType = e.data[0];
-        switch (messageType) {
-            case 'webapp-directoryPath':
-                // Populate the contents
-                path = e.data[1];
-                $('#dir').value = path;
-                break;
-            default:
-                throw 'Unexpected type';
+        var path;
+        try {
+            path = e.data.webappfind.directoryPath;
         }
+        catch (undesiredMessageFormat) {
+            return;
+        }
+        $('#dir').value = path;
     }, false);
     
-    // This is not necessary, nor probably useful since the supplied path is not going to change!
-    window.postMessage([getDirectoryMessage], window.location.origin);
+    // Requesting the path in the following is not necessary, nor probably
+    //   useful since the supplied path is not going to change!
+    window.postMessage({webappfind: {command: 'directoryPath'}}, window.location.origin);
 });
 
 }());

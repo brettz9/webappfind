@@ -297,23 +297,24 @@ your web app (change the URL above to that of your web application).
 
 You do not need the path in the URL, and, as for files, for security
 reasons, should not rely on this, but it is provided for convenience.
-The recommended method for listening for the path is instead in
+The recommended method for listening for the directory path is instead in
 the following manner:
 
 ```javascript
 window.addEventListener('message', function(e) {
-        if (e.origin !== window.location.origin || // PRIVACY AND SECURITY! (for viewing and saving, respectively)
-            (!Array.isArray(e.data)))
-        ) {
+        if (e.origin !== window.location.origin) { // PRIVACY AND SECURITY! (for viewing and saving, respectively)
             return;
         }
-        var messageType = e.data[0];
-        if (messageType === 'webapp-directoryPath') {
-            var path = e.data[1];
-
-            // Now do something with "path" here!
-
+        try {
+            var path = e.data.webappfind.directoryPath;
         }
+        catch (undesiredMessageFormat) {
+            return;
+        }
+
+        // Now do something with "path" here!
+
+
     }, false);
 ```
 

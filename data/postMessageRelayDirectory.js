@@ -5,7 +5,13 @@ function l (msg) {
 }
 
 document.defaultView.addEventListener('message', function (e) {
-    if (e.origin !== window.location.origin || !Array.isArray(e.data) || e.data[0] !== 'webapp-getDirectoryPath') {
+    try {
+        if (e.origin !== window.location.origin ||
+            e.data.webappfind.command !== 'directoryPath') {
+            return;
+        }
+    }
+    catch (undesiredMessageFormat) {
         return;
     }
     self.port.emit('webappfindGetDirectoryPath');
@@ -13,7 +19,7 @@ document.defaultView.addEventListener('message', function (e) {
 
 self.port.on('webappfindDirectoryPath', function (result) {
     var path = result.path;
-    document.defaultView.postMessage(['webapp-directoryPath', path], window.location.origin);
+    document.defaultView.postMessage({webappfind: {directoryPath: path}}, window.location.origin);
 });
 
 }());
