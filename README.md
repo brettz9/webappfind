@@ -342,6 +342,9 @@ If one adds something like the following Windows batch file:
 opening `shell:SendTo`), you can right click folders to send its path to
 your web app (change the URL above to that of your web application).
 
+(See SendTo folder details [here](http://superuser.com/a/722699/156958)
+and [here](http://answers.microsoft.com/en-us/windows/forum/windows_vista-desktop/how-to-locate-the-sendto-folder-in-vista/78b16711-1135-4eb0-851a-8abae9bfe9ed).)
+
 You do not need the path in the URL, and, as for files, for security
 reasons, should not rely on this, but it is provided for convenience.
 The recommended method for listening for the directory path is instead in
@@ -517,9 +520,7 @@ Besides "view", "binaryview", "edit", "binaryedit", "register", the following mo
     1. "create", "delete" - for any necessary set-up before creation or deletion of a file (as with saving, the protocol should not have side effects, so these should only bring one to the page to confirm the user wished to take such an action--and the browser might have its own confirmation for these actions).
     1. "rename" and "move" (or cut or copy and paste)
     1. "versioncontrol" - A mechanism could be added to request listening to events which would impact version control (though some means of determining scope would be needed--e.g., a folder and all its subfolders--as well as privacy/security considerations which expands beyond the current scope of individual file viewing and saving; similar concerns would need to be taken into account for other modes that may process multiple files like search or file packaging). These events could be used to open a (hidden?) web app to store data (e.g., via localStorage or a new "edit" mechanism which could save to disk, but circumscribed by file type so that, e.g., a repository binary could be modified without the user needing to explicitly open it) and build a file history for a "repository". This "versioncontrol" handlers ought to allow multiple listening apps in some manner; this would be both for the sake of allowing different versioncontrol storage mechanisms/repository types, for ensuring that any viewing apps get updated upon external changes, as well as for any apps storing meta-data related to a document or documents but not saved within them to be notified and respond accordingly (including possibly saving their own updates back to disk), e.g., for building up a history of commit messages (which would at least effectively need the completion of the todo to allow a single web app to handle multiple documents at once).
-1. "send to" or "mailer" - e.g., to put file contents and/or file attachment(s), subject, etc. into a mail viewer, ready to email (with equivalents for chatting)? See SendTo folder details [here](http://superuser.com/a/722699/156958)
-and [here](http://answers.microsoft.com/en-us/windows/forum/windows_vista-desktop/how-to-locate-the-sendto-folder-in-vista/78b16711-1135-4eb0-851a-8abae9bfe9ed);
-also accepting a folder as argument!
+1. "send to" or "mailer" but with file (and folder) contents instead of just a path - e.g., to put file contents and/or file attachment(s), subject, etc. into a mail viewer, ready to email (with equivalents for chatting)?
 1. "validate" - Before the save command of an "edit" mode process (and its response back to the app) is completed, it may be handy to have a separate protocol be called for any registered validators of a given file type to perform validation and conditionally reject a save. Instead of receiving the file path, they would be passed the proposed file contents for saving from "edit" to ensure proper well-formedness and validity before saving back to disk. It might be ideal for a validator to simply be a JavaScript file with a specific function, but for parity, we should probably implement this as another HTML file using a (secure) postMessage. If a file was found within a filetypes.json hierarchy, it may be desirable to ensure validators are sought up the hierarchy (at least if not found at the most specific level), e.g., to check that a "myType" file specified as being a JSON file is indeed a JSON file, or at least a JavaScript object if there is no JSON validator registered.
 1. "preconvert" and "postconvert" - hooks to transform content before reading or writing, respectively (but before "validate")
 1. "splash" - for a splash page leading to the modes so that "register" can be exclusively for registering users? 
@@ -560,7 +561,7 @@ JavaScript export).
     this perhaps a mode itself also so that files from the desktop could also
     be opened in a manner that the web app displays the available modes (and
     can post them back optionally to a callin app, again, like atyourcommand).
-    1. Allow not just one, but multiple, file/URL/command line/web app/etc. arguments to be passed into
+    1. Allow not just one, but multiple, file/URL/folder/command-line/web app/etc. arguments to be passed into
     the web application (e.g., for preferences, privilege level simulation or request information, schema,
     etc.) as an array of objects with the string results of obtaining the file in the specified mode (or
     custom mode in the case of a web app) placed as one of the keys on the object, with the other
