@@ -37,7 +37,68 @@ Unlike a more generic solution, such as with a Firefox add-on or
 files designated in the above manner to be available to the relevant
 web application.
 
-# Executable usage notes
+# Some use case scenarios
+
+1. Work on Git on your desktop while being able to open HTML files for
+WYSIWYG editing in a (CKEditor) web app which you can easily modify
+to add buttons for snippets you like to add? Do you want to use CodeMirror
+for syntax highlighting of your JavaScript and CSS? (Demos are included
+which do all of these.)
+
+# Comparison to other standards and tools
+
+## Comparison with similar WebAPI work
+
+[WebActivities](https://wiki.mozilla.org/WebAPI/WebActivities) is similar to WebAppFind in that both seek to allow delegation of certain behaviors such as "view" and "edit" to (potentially) different apps (where the user also has the freedom to choose any app to handle the given type of activity), but WebActivities does not operate on files. Jonas Sicking indicated in a personal email response supportive of the concept of WebAppFind that WebActivities would be a good "way to dispatch the "view"/"edit" request to the appropriate web page, however WebActivities are still at an early stage and not ready for your use cases.".
+
+These missing use cases (besides operating on files) might perhaps include:
+* The typing system of WebActivities does not seem to be made to be extensible by applications. It thus also doesn't allow specification of hierarchies of types (e.g., myJson->json->js) for fallbacks for as-yet-unregistered types or for alternate editor types.
+* WebActivities doesn't allow recommendation of default handlers when opening a file for the first time (though a WebActivities-supporting site could seek to register itself as such a handler).
+
+The [WebAPI](https://wiki.mozilla.org/WebAPI) has a
+[DeviceStorageAPI](https://wiki.mozilla.org/WebAPI/DeviceStorageAPI)
+which has certain file-related behaviors.
+
+Shortcomings (or differences) of the current DeviceStorageAPI
+relative to WebAppFind would appear to be:
+
+* It does not seem to anticipate the activities being triggered from one's desktop, but rather if one is already within a web app.
+* The proposal at present appears to be limited to files in a specific directory of one's hard drive. It thus does not allow one the freedom to store one's files wherever one likes on one's hard-drive for better organization purposes.
+
+The DeviceStorageAPI appears to allow more privileges (like
+[AsYouWish](https://github.com/brettz9/asyouwish/)) such as
+enumerating files in a directory, adding or deleting files, and listening
+for creation/deletion/modifications, whereas WebAppFind is currently
+focused on individual file reading and saving. However, WebAppFind
+may add other actions in the future, such as listening for file change
+events for version tracking or allowing for a web app to handle adding
+or deleting a file (in case it wishes to do related set-up/take-down work).
+
+Since WebAppFind executables pass along path information, WebAppFind
+can already be used with the AsYouWish add-on (if the user so configures
+that privilege-escalating add-on) to have it conduct the other privileged
+activities of the DeviceStorageAPI whether enumerating files in the file's
+directory, doing set-up or take-down work related to file creation or
+deletion, or such things as uploading the containing folder's contents
+(and especially if WebAppFind is modified to allow for opening a hidden
+window, AsYouWish could be used for batch-like operations). Another
+possibility is remembering a file path, e.g., for an equivalent to Windows
+"Pin to Start" if you wish to create something like Windows 8's drag-and-drop
+Start menu as an AsYouWish app, with local desktop apps (and web apps)
+launchable from your web app, allowing you to extend your native OS
+desktop (when not using say [filebrowser-enhanced](https://github.com/brettz9/filebrowser-enhanced)),
+to plug into your web app (which can mimic the desktop itself if you wish).
+
+## Comparison with AsYouWish
+
+[AsYouWish](https://github.com/brettz9/asyouwish/) allows a
+higher-than-normal privilege level to websites, but it differs in
+a number of areas:
+
+1. AsYouWish sites ask for permission, and once approved, can then immediately do their work. WebAppFind currently allows sites to ask for permission to register themselves as handlers, but their work will only become relevant when the user opens a file via WebAppFind.
+2. AsYouWish allows for a vast number of possible privileges (though subject to user approval) including potentially arbitrary file reading and writing (as with Firefox extensions), while WebAppFind is limited to file reading and writing (though it may expand to certain other circumscribed, user-initated file-related activities in the future) and only for those files so opened as opened by the user.
+
+# End-user usage notes
 
 (For command line usage, see its API below.)
 
@@ -83,50 +144,12 @@ already opened with WebAppFind. If you opted for "Properties" (step 1.2
 above), you should now be able to double-click any file possessing the
 same extension to open it with WebAppFind.
 
-If an edit web+local protocol is enabled and open and then disabled in
+If an edit `web+local` protocol is enabled and open and then disabled in
 the same session, it will keep having save access (though within that
 window session only). One must currently close any open tabs for that
 web application if one no longer wishes to allow access (though as noted
 elsewhere in the documentation, the app only has access to the files to
 which it was permitted access).
-
-# Some use case scenarios
-
-1. Work on Git on your desktop while being able to open HTML files for
-WYSIWYG editing in a (CKEditor) web app which you can easily modify
-to add buttons for snippets you like to add? Do you want to use CodeMirror
-for syntax highlighting of your JavaScript and CSS? (Demos are included
-which do all of these.)
-
-# Possible future user preference changes
-
-Currently preferences are global, whereas it may be desirable to allow users
-to customize their preferences by type/protocol in addition to the current
-default global ones.
-
-# Command line API
-
-WebAppFind is triggered (currently Firefox only) through command line
-arguments passed to Firefox and handled by the WebAppFind add-on.
-
-It is my goal to complete work on
-[Executable Builder](https://github.com/brettz9/executable-builder) to
-facilitate the building of executables (probably batch scripts tied to
-cmd.exe) with icon for task bar usage, etc., but currently one must
-either use (or build) the executables included in the repository or call
-the command line oneself.
-
-The following process is subject to change and may potentially even
-be scrapped altogether if another approach is found to be easier for
-streamlining cross-browser invocation, but currently this API is available
-if someone wishes to build their own executables using the API or to
-simply be able to run commands manually from the command line.
-
-* `-webappdoc <path>` - Indicates the path of the file which will be made available to the web application (with the privileges designated by `-webappmode`)
-* `-webappmode <mode>` Indicates the fundamental mode under which the file will be opened up to the web app (i.e., "-webappmode view", "-webappmode binaryview", "-webappmode edit", or "-webappmode binaryedit").
-* `-webappcustommode <custom mode>` - Indicates a mode that supplements the fundamental mode (e.g., "source" added to the fundamental mode, "view" in order to specify that the document is being
-opened so as to view the source code). Custom modes will immediately follow the mode within the protocol. (Note that this API is expected to change)
-* `-remote "openurl(about:newtab)"` - This built-in Mozilla command line API allows Firefox (unlike "-silent") to gain focus without additional instructions to Windows. If the tab is determined to not be needed (e.g., if the user has opted to allow desktop opening of the file when no protocols are found), the add-on will simply auto-close the tab that this parameter opens.
 
 # Tips for usage with other tools
 
@@ -165,6 +188,30 @@ If you want to go in the other direction, from web documents to the desktop
 (or from arbitrary web documents to web apps), you might watch
 [AtYourCommand](https://github.com/brettz9/atyourcommand) which when
 finished should help users to do this.
+
+# Command line API
+
+WebAppFind is triggered (currently Firefox only) through command line
+arguments passed to Firefox and handled by the WebAppFind add-on.
+
+It is my goal to complete work on
+[Executable Builder](https://github.com/brettz9/executable-builder) to
+facilitate the building of executables (probably batch scripts tied to
+cmd.exe) with icon for task bar usage, etc., but currently one must
+either use (or build) the executables included in the repository or call
+the command line oneself.
+
+The following process is subject to change and may potentially even
+be scrapped altogether if another approach is found to be easier for
+streamlining cross-browser invocation, but currently this API is available
+if someone wishes to build their own executables using the API or to
+simply be able to run commands manually from the command line.
+
+* `-webappdoc <path>` - Indicates the path of the file which will be made available to the web application (with the privileges designated by `-webappmode`)
+* `-webappmode <mode>` Indicates the fundamental mode under which the file will be opened up to the web app (i.e., "-webappmode view", "-webappmode binaryview", "-webappmode edit", or "-webappmode binaryedit").
+* `-webappcustommode <custom mode>` - Indicates a mode that supplements the fundamental mode (e.g., "source" added to the fundamental mode, "view" in order to specify that the document is being
+opened so as to view the source code). Custom modes will immediately follow the mode within the protocol. (Note that this API is expected to change)
+* `-remote "openurl(about:newtab)"` - This built-in Mozilla command line API allows Firefox (unlike "-silent") to gain focus without additional instructions to Windows. If the tab is determined to not be needed (e.g., if the user has opted to allow desktop opening of the file when no protocols are found), the add-on will simply auto-close the tab that this parameter opens.
 
 # For developers
 
@@ -344,60 +391,11 @@ Even if filetypes.json is used with "register" on "defaultHandlers", it may be
 convenient to have a separate spec URL detailed for your file type, including
 for cases where the file extension is used without filetypes.json.
 
+# Design choices
+
 ## Implementation notes
 
 A direct visit to the protocol (including through XSRF) should provide no side effects. However, it is possible that a malicious handler opened by the user in "edit" mode could provide immediate side effects by saving back data to overwrite the supplied file. This might be mitigated by a configurable option to require the user's consent upon each save and/or to inform the user of the proposed diffs before saving. But again this will only be possible upon user initiation, only for the specific file or files approved in a given session, and a site will only be usable as a handler if the filetypes.json packaged with the data file designates it as a default handler for the data file (and the user maintains the preference to use this information) or if they have previously approved a protocol site for the given type.
-
-# Comparison with similar WebAPI work
-
-[WebActivities](https://wiki.mozilla.org/WebAPI/WebActivities) is similar to WebAppFind in that both seek to allow delegation of certain behaviors such as "view" and "edit" to (potentially) different apps (where the user also has the freedom to choose any app to handle the given type of activity), but WebActivities does not operate on files. Jonas Sicking indicated in a personal email response supportive of the concept of WebAppFind that WebActivities would be a good "way to dispatch the "view"/"edit" request to the appropriate web page, however WebActivities are still at an early stage and not ready for your use cases.".
-
-These missing use cases (besides operating on files) might perhaps include:
-* The typing system of WebActivities does not seem to be made to be extensible by applications. It thus also doesn't allow specification of hierarchies of types (e.g., myJson->json->js) for fallbacks for as-yet-unregistered types or for alternate editor types.
-* WebActivities doesn't allow recommendation of default handlers when opening a file for the first time (though a WebActivities-supporting site could seek to register itself as such a handler).
-
-The [WebAPI](https://wiki.mozilla.org/WebAPI) has a
-[DeviceStorageAPI](https://wiki.mozilla.org/WebAPI/DeviceStorageAPI)
-which has certain file-related behaviors.
-
-Shortcomings (or differences) of the current DeviceStorageAPI
-relative to WebAppFind would appear to be:
-
-* It does not seem to anticipate the activities being triggered from one's desktop, but rather if one is already within a web app.
-* The proposal at present appears to be limited to files in a specific directory of one's hard drive. It thus does not allow one the freedom to store one's files wherever one likes on one's hard-drive for better organization purposes.
-
-The DeviceStorageAPI appears to allow more privileges (like
-[AsYouWish](https://github.com/brettz9/asyouwish/)) such as
-enumerating files in a directory, adding or deleting files, and listening
-for creation/deletion/modifications, whereas WebAppFind is currently
-focused on individual file reading and saving. However, WebAppFind
-may add other actions in the future, such as listening for file change
-events for version tracking or allowing for a web app to handle adding
-or deleting a file (in case it wishes to do related set-up/take-down work).
-
-Since WebAppFind executables pass along path information, WebAppFind
-can already be used with the AsYouWish add-on (if the user so configures
-that privilege-escalating add-on) to have it conduct the other privileged
-activities of the DeviceStorageAPI whether enumerating files in the file's
-directory, doing set-up or take-down work related to file creation or
-deletion, or such things as uploading the containing folder's contents
-(and especially if WebAppFind is modified to allow for opening a hidden
-window, AsYouWish could be used for batch-like operations). Another
-possibility is remembering a file path, e.g., for an equivalent to Windows
-"Pin to Start" if you wish to create something like Windows 8's drag-and-drop
-Start menu as an AsYouWish app, with local desktop apps (and web apps)
-launchable from your web app, allowing you to extend your native OS
-desktop (when not using say [filebrowser-enhanced](https://github.com/brettz9/filebrowser-enhanced)),
-to plug into your web app (which can mimic the desktop itself if you wish).
-
-# Comparison with AsYouWish
-
-[AsYouWish](https://github.com/brettz9/asyouwish/) allows a
-higher-than-normal privilege level to websites, but it differs in
-a number of areas:
-
-1. AsYouWish sites ask for permission, and once approved, can then immediately do their work. WebAppFind currently allows sites to ask for permission to register themselves as handlers, but their work will only become relevant when the user opens a file via WebAppFind.
-2. AsYouWish allows for a vast number of possible privileges (though subject to user approval) including potentially arbitrary file reading and writing (as with Firefox extensions), while WebAppFind is limited to file reading and writing (though it may expand to certain other circumscribed, user-initated file-related activities in the future) and only for those files so opened as opened by the user.
 
 ## Rationale for filetypes.json design
 
@@ -485,6 +483,14 @@ and mode info while supplying that to the add-on via a URL which
 would in turn check the temp file (this approach might work for other
 browsers if they do not allow add-ons to check command line arguments).
 
+# Todos and possible changes
+
+## Possible future user preference changes
+
+Currently preferences are global, whereas it may be desirable to allow users
+to customize their preferences by type/protocol in addition to the current
+default global ones.
+
 ## Possible future API/filestypes.json changes
 
 1. Mode and parameter changes
@@ -501,7 +507,7 @@ modes (and file access) at once.
     1. Since web protocols are not meant to be used to have the privilege of reading from or writing to files (unless they belong to reserved protocols which, per the HTML spec, cannot be registered from the web anyways), the current approach of allowing web sites to register themselves as handlers might need to be modified to use some other mechanism which can at least provide warnings to users about the capabilities they are thereby approving (perhaps as within [AsYouWish](https://github.com/brettz9/asyouwish/) when sites themselves can do the requesting for privileges). However, since WebAppFind chose to start with the web protocol approach not only because it is an existing method for sites to register themselves for later potential use, but because the data security and privacy issues are confined to data files which are explicitly opened from the desktop when using the WebAppFind approach.
     1. Depending on whether registerProtocolHandler will continue to be used, see about whether the HTML spec might be open to more tolerance within the allowed characters of a custom protocol beyond lower-case ASCII letters.
 
-# Possible future mode additions
+## Possible future mode additions
 
 See higher priority todos for changes/additions planned for the (hopefully) near future.
 
@@ -530,7 +536,7 @@ JavaScript export).
 1. "any" mode; see to-do above.
 1. Support local or remote stream inputs
 
-# Higher priority todos planned
+## Higher priority todos planned
 
 1. Contemplate option of auto-applying WebAppFind to all local file:// URLs loaded in the browser (redirecting to designated web app)
 1. Added security
@@ -644,7 +650,7 @@ more in harmony with emerging Web Wishes specification).
 1. Create tests using registerProtocolHandler (also for JS/JSON/mytype)
 1. Submit to AMO, Bower, etc.
 
-# Medium term priority todos
+## Medium term priority todos
 
 1. Document comparison between WebAppFind and routers/controllers in
 typical web apps whose verbs are indicated via URL query string parameters.
@@ -725,7 +731,7 @@ suggested custom modes along with any explicitly passed. Thus, an app
 might use this information to ask on WebAppFind invocation, "Do you
 wish to view this file or view its source?".
 
-# Possible future todos
+## Possible future todos
 
 1. Query OS user groups to determine permissions in place of or in addition
 to filetypes.json and the Firefox add-on preferences?
@@ -763,7 +769,7 @@ alternative views/editing interfaces for the same shared data.
 1. Option to open HTML in chrome mode so one can do things like cross-domain toDataURL on an image canvas without errors (the proposed change to AsYouWish to allow sites to be reopened in this mode could be a workaround).
 1. Once API stabilizes, file feature request to get the functionality built into Firefox.
 
-# Possible "Demos" todos
+## Possible "Demos" todos
 
 1. Make scrollbars easier to use in CodeMirror demos
 1. Utilize https://github.com/brettz9/requirejs-codemirror in CodeMirror demos for cleaner HTML
