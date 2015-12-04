@@ -275,7 +275,7 @@ window.addEventListener('message', function(e) {
     // ['webapp-view', '{1e5c754e-95d3-4431-a08c-5364db753d97}', 'the loaded file contents will be here!']
     // ...or if the user has checked the option "Reveal selected file paths to scripts", it may look like this:
     // ['webapp-view', 'C:\\Users\\Brett\\someDataFile.txt', 'the loaded file contents will be here!']
-    
+
     if (e.origin !== window.location.origin || // We are only interested in a message sent as though within this URL by our Firefox add-on
         (!Array.isArray(e.data) || // Validate format
             e.data[0] === 'webapp-save') // Avoid our post below (other messages might be possible in the future which may also need to be excluded if your subsequent code makes assumptions on the type of message this is)
@@ -523,7 +523,7 @@ Besides "view", "binaryview", "edit", "binaryedit", "register", the following mo
 1. "send to" or "mailer" but with file (and folder) contents instead of just a path - e.g., to put file contents and/or file attachment(s), subject, etc. into a mail viewer, ready to email (with equivalents for chatting)?
 1. "validate" - Before the save command of an "edit" mode process (and its response back to the app) is completed, it may be handy to have a separate protocol be called for any registered validators of a given file type to perform validation and conditionally reject a save. Instead of receiving the file path, they would be passed the proposed file contents for saving from "edit" to ensure proper well-formedness and validity before saving back to disk. It might be ideal for a validator to simply be a JavaScript file with a specific function, but for parity, we should probably implement this as another HTML file using a (secure) postMessage. If a file was found within a filetypes.json hierarchy, it may be desirable to ensure validators are sought up the hierarchy (at least if not found at the most specific level), e.g., to check that a "myType" file specified as being a JSON file is indeed a JSON file, or at least a JavaScript object if there is no JSON validator registered.
 1. "preconvert" and "postconvert" - hooks to transform content before reading or writing, respectively (but before "validate")
-1. "splash" - for a splash page leading to the modes so that "register" can be exclusively for registering users? 
+1. "splash" - for a splash page leading to the modes so that "register" can be exclusively for registering users?
 1. "query" or "search" - For queries within file or within a folder, etc., optionally (?) filtered by file type; this might be used for "find-in-files" behavior (multiple file saving would be needed for "replace-in-files"). These queries could be hierarchical (as also defined in filetypes.json?) such that, for example, one might have "myType" JSON files queryable in a precise manner, e.g., to find all files (or records) containing a "publication date" between a range of dates, while also allowing more generic queries such as RQL, or if not available (or not desired), the user could default to full text search (since a superset of JSON could be the txt type which could allow full text search). Also for simple file listing (see SendTo info for how to get a batch file to process a folder by right-click
 within the desktop)
 1. "execute" - Although the OS would normally do its own execution, it is possible that privileged apps (as through AsYouWish) might be able to handle this at least partly on their own
@@ -799,7 +799,7 @@ alternative views/editing interfaces for the same shared data.
     1. Offer grid-like edit ability using SVG Edit with HTML controls like checkboxes within foreignObject
 1. Create demo supporting docx format (rather than requiring export to HTML for Word docs)
 1. Demonstrate approach of allowing data files for download (so can store them anywhere)--if not AYW approach for namespaced shared browser access--as well as data files chosen from File selector (and save over such a file if within the protocol and user permits)
-1. Ability to build [JHTML](http://brettz9.github.com/jhtml) with autocomplete (usable for saving as JSON or saving as HTML) once spec finalized (once <i> approach used)
+1. Ability to build [JHTML](http://brettz9.github.com/jhtml) with autocomplete (usable for saving as JSON or saving as HTML) once spec finalized (once &lt;i> approach used)
 1. Integrate HTML/SVG (and then others) with [Together.js](https://togetherjs.com/) to allow peer-to-peer collaboration on one's local files
 1. Add http://pagedown.googlecode.com/hg/demo/browser/demo.html buttons to Markdown editor?
 1. "Todo" webapp demo
