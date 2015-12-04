@@ -1,4 +1,4 @@
-/*globals PDFJS, OCRAD, GOCR, Uint8Array, ArrayBuffer*/
+/*globals PDFJS, OCRAD, GOCR, FileReader, Uint8Array, ArrayBuffer*/
 /*jslint todo: true, vars: true*/
 
 /*
@@ -92,7 +92,23 @@ function setPDF (doc) {
       $('#end').addEventListener('change', resetPDF);
   });
 }
+
 window.addEventListener('DOMContentLoaded', function () {
+    
+    $('#pdfFile').addEventListener('change', function (ev) {
+    
+        var f = ev.target.files[0];
+        
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            var arrayBuffer = e.target.result;
+            var array = new Uint8Array(arrayBuffer);
+            setPDF(array);
+        };
+        reader.readAsArrayBuffer(f);
+    });
+    
+    
     var pathID;
     
     window.addEventListener('message', function(e) {
