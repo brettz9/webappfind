@@ -1,14 +1,12 @@
 # webappfind
 
 ***This add-on does not work in current versions of Firefox, and I
-don't have time to debug. Given also how Firefox has been in a race
-to emasculate itself (in particular the ability to create powerful
-add-ons) and also shows, from my perspective, insufficient regard for
-maintaining backward-compatibility for developers, I also don't think
-my efforts will be worthwhile. Maybe a node-webkit-based browser
-could provide a base for such power and API stability, though I haven't
-explored whether node-webkit provides command line web hooks to implement
-webappfind's particular functionality.***
+don't have time to debug. Although I have been disappointed at
+Firefox's many changes breaking backward compatibility and sometimes declining
+support for powerful features, I am heartened by the
+cross-browser [WebExtensions](https://developer.mozilla.org/en-US/Add-ons/WebExtensions)
+initiative, including its support for [Native messaging](https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Native_messaging) and its viability as a [potential solution for WebAppFind](https://bugzilla.mozilla.org/show_bug.cgi?id=1308814).
+I am not sure when I may have time to attempt to reimplement.***
 
 Are you a fan of web apps, but want the freedom to place your data files
 where you like on your desktop and thus be able to work offline and own
