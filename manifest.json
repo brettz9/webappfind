@@ -11,7 +11,7 @@
     },
 
     "background": {
-        "scripts": ["index.js"]
+        "scripts": ["addon.js"]
     },
 
     "applications": {
