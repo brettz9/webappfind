@@ -12,7 +12,7 @@ port.onMessage.addListener((response) => {
     console.log("Received: " + response);
 });
 
-// Todo: open tabs, etc. (see old WebAppFind code)
+// Todo: open tabs, etc. (see old WebAppFind code) and listen to page for write commands (if has write access)
 
 
 // We can post back to app (but for file writing, we can probably do this better here in this file instead)
