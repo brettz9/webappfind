@@ -3,7 +3,8 @@ Code todos
 
 0. Dynamically generate "path" in waf.json
 
-1. Listen for arguments and pass on
+1. Listen for arguments when invoked and pass on
+2. Keep this listening persistent
 */
 
 
