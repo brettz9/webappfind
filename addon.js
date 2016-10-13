@@ -3,13 +3,13 @@ console.log('started webappfind');
 /**
 On startup, connect to the "webappfind" app.
 */
-var port = browser.runtime.connectNative("webappfind");
+var port = browser.runtime.connectNative('webappfind');
 
 /**
 Listen for messages from the webappfind app (which listens for command line invocations, ala "Open"/"Open with...").
 */
 port.onMessage.addListener((response) => {
-    console.log("Received: " + response);
+    console.log('Received: ' + response);
 });
 
 // Todo: open tabs, etc. (see old WebAppFind code) and listen to page for write commands (if has write access)
