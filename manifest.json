@@ -10,6 +10,10 @@
         "96": "icons/icon96.png"
     },
 
+    "background": {
+        "scripts": ["index.js"]
+    },
+
     "applications": {
         "gecko": {
             "id": "webappfind@brett-zamir.me",
