@@ -2,16 +2,28 @@
     "name": "webappfind",
     "title": "webappfind",
     "id": "jid0-szJdB0Ri3FdiZ7BdwTP8QQCffWs@jetpack",
-    "version": "2.0.0",
-    "author": "brettz9",
+    "version": "3.0.0",
+    "author": "Brett Zamir",
     "contributors": [],
-    "main": "lib/main",
+    "main": "index",
     "url": "https://github.com/brettz9/webappfind",
+    "homepage": "https://github.com/brettz9/webappfind",
     "description": "Enables an experimental protocol system for allowing the user to supply local files for viewing and editing by web applications",
     "license": "MIT",
-	"devDependencies": {
-		"jamilih": "0.x.x"
-	},
+    "scripts": {
+        "windows-copy": "copy \"tmp\\nexe\\nodejs\\latest\\node-v6.8.0\\Release\\node.exe\" \"bin\\waf.exe\"",
+        "build": "nexe -i index.js -o bin -f"
+    },
+    "engines": {
+        "node": "*"
+    },
+    "dependencies": {
+    },
+    "devDependencies": {
+        "nexe": "*"
+    },
+    "keywords": [],
+    "bugs": "https://github.com/brettz9/webappfind/issues",
     "repository": {
         "type": "git", "url": "https://github.com/brettz9/webappfind.git"
     },

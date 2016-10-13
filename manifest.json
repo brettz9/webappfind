@@ -1,0 +1,21 @@
+{
+    "manifest_version": 2,
+
+    "name": "webappfind",
+    "version": "3.0.0",
+    "description": "Open desktop files into web apps",
+
+    "icons": {
+        "48": "icons/icon48.png",
+        "96": "icons/icon96.png"
+    },
+
+    "applications": {
+        "gecko": {
+            "id": "webappfind@brett-zamir.me",
+            "strict_min_version": "50.0"
+        }
+    },
+
+    "permissions": ["nativeMessaging"]
+}
