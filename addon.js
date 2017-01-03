@@ -16,4 +16,4 @@ port.onMessage.addListener((response) => {
 
 
 // We can post back to app (but for file writing, we can probably do this better here in this file instead)
-// port.postMessage("ping");
+port.postMessage("ping");

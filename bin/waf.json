@@ -1,7 +1,7 @@
 {
   "name": "webappfind",
   "description": "WebAppFind host for native messaging",
-  "path": "C:\\wamp\\www\\webappfind\\bin\\waf.exe",
+  "path": "C:\\wamp\\www\\webappfind-data\\bin\\index.bat",
   "type": "stdio",
   "allowed_extensions": [ "webappfind@brett-zamir.me" ]
 }
