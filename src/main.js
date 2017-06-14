@@ -11,12 +11,13 @@ const browsers = ['Chrome', 'Chromium', 'Firefox'];
 const extensionName = 'webappfind'; // Also used for JSON file name
 
 const fs = require('fs');
+const os = require('os');
 const mkdirp = require('mkdirp');
 
 const isWin = /^win/.test(process.platform);
 const isMac = process.platform === 'darwin';
 const isLinux = process.platform === 'linux';
-const os = isMac ? 'Mac' : (isWin ? 'Windows' : 'Linux');
+const osType = isMac ? 'Mac' : (isWin ? 'Windows' : 'Linux');
 if (!(isWin || isMac || isLinux)) {
     console.log('Unsupported OS!');
     process.exit();
@@ -56,12 +57,14 @@ const pathMatrix = {
 
 // Todo: Test all browser/platform combos
 browsers.forEach((browser) => {
-    const appManifestDirectory = isWin ? __dirname : pathMatrix[browser][os][userType];
+    const appManifestDirectory = isWin
+        ? __dirname
+        : pathMatrix[browser][osType][userType].replace(/^~/, (n0) => os.homedir());
 
     mkdirp(appManifestDirectory, (err) => {
         if (err && err.code !== 'EEXIST') {
             console.log(
-                `Error saving ${browser} app manifest directory (${os})`,
+                `Error saving ${browser} app manifest directory (${osType})`,
                 err
             );
         }
