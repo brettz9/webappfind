@@ -4,84 +4,126 @@ See:
 - **Chrome**: https://developer.chrome.com/extensions/nativeMessaging#native-messaging-host-location
 */
 
+// CONFIG
 const allUsers = !!process.argv[2];
-const fs = require('fs');
-
+const userType = allUsers ? 'allUsers' : 'singleUser';
+const browsers = ['Chrome', 'Chromium', 'Firefox'];
 const extensionName = 'webappfind'; // Also used for JSON file name
+
+const fs = require('fs');
+const mkdirp = require('mkdirp');
 
 const isWin = /^win/.test(process.platform);
 const isMac = process.platform === 'darwin';
 const isLinux = process.platform === 'linux';
+const os = isMac ? 'Mac' : (isWin ? 'Windows' : 'Linux');
 if (!(isWin || isMac || isLinux)) {
     console.log('Unsupported OS!');
     process.exit();
 }
-
-const appManifestDirectory = isMac
-    ? (allUsers ? '' : '~') +
-        `/Library/Application Support/Mozilla/NativeMessagingHosts/`
-    : (isWin
-        ? __dirname
-        // Todo: Untested on Linux (but should be ok)
-        : (allUsers
-            ? '/usr/lib/' // Could also be '/usr/lib64/'
-            : '~/.'
-        ) + `mozilla/native-messaging-hosts/`
-    );
-
-fs.mkdir(appManifestDirectory, (err) => {
-    if (err && err.code !== 'EEXIST') {
-        console.log(
-            'Error saving app manifest directory (' +
-            (isMac ? 'Mac' : 'Linux') + ')',
-            err
-        );
-    }
-    const appManifest = {
-        name: 'webappfind',
-        description: 'WebAppFind host for native messaging',
-        type: 'stdio',
-        allowed_extensions: [ 'webappfind@brett-zamir.me' ],
-        path: '' // Todo: Executable path
-    };
-    const appManifestPath = `${appManifestDirectory + extensionName}.json`;
-    fs.writeFile(
-        appManifestPath,
-        JSON.stringify(appManifest, null, 2),
-        (err) => {
-            if (err) {
-                console.log('Error writing app manifest file', err);
-                return;
-            }
-            console.log('ok');
-            if (isWin) {
-                writeToWindowRegistery(appManifestPath);
-            }
+const pathMatrix = {
+    Chrome: {
+        Linux: {
+            allUsers: '/etc/opt/chrome/native-messaging-hosts/',
+            singleUser: '~/.config/google-chrome/NativeMessagingHosts/'
+        },
+        Mac: {
+            allUsers: '/Library/Google/Chrome/NativeMessagingHosts/',
+            singleUser: '~/Library/Application Support/Google/Chrome/NativeMessagingHosts/'
         }
-    );
-});
+    },
+    Chromium: {
+        Linux: {
+            allUsers: '/etc/chromium/native-messaging-hosts/',
+            singleUser: '~/.config/chromium/NativeMessagingHosts/'
+        },
+        Mac: {
+            allUsers: '/Library/Application Support/Chromium/NativeMessagingHosts/',
+            singleUser: '~/Library/Application Support/Chromium/NativeMessagingHosts/'
+        }
+    },
+    Firefox: {
+        Linux: {
+            allUsers: '/usr/lib/mozilla/native-messaging-hosts/', // Could also begin with '/usr/lib64/'
+            singleUser: '~/.mozilla/native-messaging-hosts/'
+        },
+        Mac: {
+            allUsers: '/Library/Application Support/Mozilla/NativeMessagingHosts/',
+            singleUser: '~/Library/Application Support/Mozilla/NativeMessagingHosts/'
+        }
+    }
+};
 
-function writeToWindowRegistery (appManifestPath) {
-    if (isWin) {
-        // Todo: UNTESTED!!!
-        const regedit = require('regedit');
-        const regKey = (allUsers
-            ? 'HKEY_LOCAL_MACHINE'
-            : 'HKEY_CURRENT_USER'
-        ) + `\\SOFTWARE\\Mozilla\\NativeMessagingHosts\\${extensionName}`;
-        regedit.putValue({
-            [regKey]: {
-                appManifestPath: { // Name (here `appManifestPath`) is unused for defaults
-                    value: appManifestPath, // e.g., C:\\webappfind/src/webappfind.json
-                    type: 'REG_DEFAULT'
+// Todo: Test all browser/platform combos
+browsers.forEach((browser) => {
+    const appManifestDirectory = isWin ? __dirname : pathMatrix[browser][os][userType];
+
+    mkdirp(appManifestDirectory, (err) => {
+        if (err && err.code !== 'EEXIST') {
+            console.log(
+                `Error saving ${browser} app manifest directory (${os})`,
+                err
+            );
+        }
+        const appManifest = {
+            name: `${extensionName}`,
+            description: 'Node bridge for native messaging',
+            type: 'stdio',
+            path: '' // Todo: Executable path
+        };
+        switch (browser) {
+        case 'Firefox':
+            appManifest.allowed_extensions = [`${extensionName}@brett-zamir.me`];
+            break;
+        case 'Chrome': case 'Chromium':
+            appManifest.allowed_origins = [`chrome-extension://${extensionName}`];
+            break;
+        }
+        const appManifestPath = `${appManifestDirectory + extensionName}.json`;
+        fs.writeFile(
+            appManifestPath,
+            JSON.stringify(appManifest, null, 2),
+            (err) => {
+                if (err) {
+                    console.log('Error writing app manifest file', err);
+                    return;
+                }
+                console.log('ok');
+                if (isWin) {
+                    if (browsers.includes('Chrome') && browsers.include('Chromium') &&
+                        browser === 'Chromium') {
+                        // Only need one run
+                        return;
+                    }
+                    writeToWindowRegistery(browser, appManifestPath);
                 }
             }
-        }, (err) => {
-            if (err) {
-                console.log('Erroring saving to (Windows) registry.');
-                return;
+        );
+    });
+});
+
+function writeToWindowRegistery (browser, appManifestPath) {
+    // Todo: UNTESTED!!!
+    const regedit = require('regedit');
+    const regKey = (allUsers
+        ? 'HKEY_LOCAL_MACHINE'
+        : 'HKEY_CURRENT_USER'
+    ) + `\\SOFTWARE\\` + (browser === 'Firefox'
+        ? `Mozilla\\NativeMessagingHosts\\${extensionName}`
+        : `Google\\Chrome\\NativeMessagingHosts\\`
+    );
+    regedit.putValue({
+        [regKey]: {
+            appManifestPath: { // Name (here `appManifestPath`) is unused for defaults
+                value: appManifestPath, // e.g., C:\\webappfind/src/webappfind.json
+                type: 'REG_DEFAULT'
             }
-            console.log('Saved to Windows registry');
-        });
-    }
+        }
+    }, (err) => {
+        if (err) {
+            console.log('Erroring saving to (Windows) registry.');
+            return;
+        }
+        console.log('Saved to Windows registry');
+    });
 }
