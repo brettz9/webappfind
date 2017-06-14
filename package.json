@@ -11,7 +11,7 @@
   "description": "Enables an experimental protocol system for allowing the user to supply local files for viewing and editing by web applications",
   "license": "MIT",
   "scripts": {
-      "build": "pkg src/main"
+    "build": "pkg src/main"
   },
   "engines": {
     "node": "*"
@@ -20,7 +20,15 @@
     "webextension-polyfill": "^0.1.1"
   },
   "optionalDependencies": {
-      "regedit": "2.2.7"
+    "regedit": "2.2.7"
+  },
+  "devDependencies": {
+      "eslint": "3.19.0",
+      "eslint-config-standard": "10.2.1",
+      "eslint-plugin-import": "2.3.0",
+      "eslint-plugin-node": "4.2.2",
+      "eslint-plugin-promise": "3.5.0",
+      "eslint-plugin-standard": "3.0.1"
   },
   "keywords": [],
   "bugs": "https://github.com/brettz9/webappfind/issues",
