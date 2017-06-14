@@ -60,6 +60,6 @@ VERSION INCOMPLETE!!!
 
 1. Test with "Open with..." to open file in a Node script which communicates via Node WebSockets
 
-1. Add back demos from old `webappfind`
+1. Add back demos and sample files from old `webappfind`
 
 1. Remove old `webappfind` files/info (e.g., on `filetypes.json`) if making package more agnostic
