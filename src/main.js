@@ -38,7 +38,7 @@ if (isWin) {
         console.log('Saved to Windows registry');
     });
 } else if (isMac || isLinux) {
-    const manifestDirectory = isMac
+    const appManifestDirectory = isMac
         ? (allUsers ? '' : '~') +
             `/Library/Application Support/Mozilla/NativeMessagingHosts/`
         // Todo: Untested on Linux (but should be ok)
@@ -47,12 +47,31 @@ if (isWin) {
             : '~/.'
         ) + `mozilla/native-messaging-hosts/`;
 
-    fs.mkdir(manifestDirectory, (err) => {
+    fs.mkdir(appManifestDirectory, (err) => {
         if (err && err.code !== 'EEXIST') {
-            console.log('Error saving manifest directory (' + (isMac ? 'Mac' : 'Linux') + ')', err);
+            console.log(
+                'Error saving app manifest directory (' +
+                (isMac ? 'Mac' : 'Linux') + ')',
+                err
+            );
         }
-        fs.createReadStream(`${path.join(__dirname, extensionName)}.json`).pipe(
-            fs.createWriteStream(`${manifestDirectory + extensionName}.json`)
+        const appManifest = {
+            name: 'webappfind',
+            description: 'WebAppFind host for native messaging',
+            type: 'stdio',
+            allowed_extensions: [ 'webappfind@brett-zamir.me' ],
+            path: '' // Todo: Executable path
+        };
+        fs.writeFile(
+            `${appManifestDirectory + extensionName}.json`,
+            JSON.stringify(appManifest, null, 2),
+            (err) => {
+                if (err) {
+                    console.log('Error writing app manifest file', err);
+                    return;
+                }
+                console.log('ok');
+            }
         );
     });
 } else {
