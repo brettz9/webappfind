@@ -18,7 +18,7 @@
     "build-installer-component": "npm run pkg",
     "copy-polyfill": "node ./copy-polyfill",
     "build-addon": "npm run copy-polyfill && npm run webext-build",
-    "build-installer": "npm run build-native-app && build-installer-component",
+    "build-installer": "npm run build-native-app && npm run build-installer-component",
     "build-native-app": "pkg native-app.js --targets node7-macos-x64 --out-path bin",
     "eslint": "eslint *.js src/",
     "webext-lint": "web-ext lint --ignore-files bin/ *.md src/ native-app.js filetypes.json package.json copy-polyfill.js",
