@@ -12,6 +12,7 @@ console.log(
     process.argv.slice(0, 2)
 );
 
+/*
 require('http').createServer((req, res) => {
     // Todo: Listen for arguments when invoked and pass on
 
@@ -21,6 +22,7 @@ require('http').createServer((req, res) => {
     s.on('error', function () {});
 }).listen(8085);
 console.log('Started server; open http://localhost:8085/test/ in the browser');
+*/
 
 process.stdin.setEncoding('utf8');
 

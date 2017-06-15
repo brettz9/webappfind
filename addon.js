@@ -1,4 +1,13 @@
 /* eslint-env webextensions */
+/*
+Note on polyfills:
+
+[webextension-polyfill](https://github.com/mozilla/webextension-polyfill)
+is available but see also:
+
+- <https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Chrome_incompatibilities>
+- <https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Browser_support_for_JavaScript_APIs>
+*/
 
 console.log('started webappfind');
 

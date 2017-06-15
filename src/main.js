@@ -107,7 +107,8 @@ browsers.forEach((browser) => {
 
 function writeToWindowRegistery (browser, appManifestPath) {
     // Todo: UNTESTED!!!
-    const regedit = require('regedit');
+    const regedit = require('regedit'); // https://github.com/ironSource/node-regedit
+    // For REG EDIT: see https://technet.microsoft.com/en-us/library/cc742162(v=ws.11).aspx
     const regKey = (allUsers
         ? 'HKEY_LOCAL_MACHINE'
         : 'HKEY_CURRENT_USER'

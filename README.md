@@ -41,11 +41,13 @@ VERSION INCOMPLETE!!!
 
 ### Installing development tools
 
-1. `npm -g i pkg`
+1. `npm -g i pkg` - Uses [pkg](https://github.com/zeit/pkg)
+1. `npm -g i web-ext` - Uses [web-ext](https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Getting_started_with_web-ext)
 
-### Building the Node executable
+### Testing
 
-1. `npm run build`
+1. `npm run lint` - Runs ESLint and `web-ext lint` (which uses `addons-linter`)
+1. `npm run build` - Building the Node executable
 
 ## To-dos
 
@@ -55,8 +57,6 @@ VERSION INCOMPLETE!!!
      listen and pass on to add-on (which will open website and `postMessage` into it and be able
      to handle opposite direction, including for writing file contents back to disk, but also
      for AtYourCommand functionality)
-
-1. Use `webextension-polyfill` to ensure working on FF and Chrome
 
 1. Refactor this extension to be a bridge between Node (including
     user-installed packages) and browser/browser add-ons/web-sites.
@@ -106,7 +106,8 @@ VERSION INCOMPLETE!!!
             desktop-file-opening behaviors)
 
         1. AsYouWish to allow websites to communicate into the browser or
-            to eval-able Node code
+            to eval-able Node code; at minimum start shared,
+            site-agnostic storage
 
 1. Add back demos and sample files from old `webappfind`
 

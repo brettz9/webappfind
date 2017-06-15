@@ -11,7 +11,11 @@
   "description": "Enables an experimental protocol system for allowing the user to supply local files for viewing and editing by web applications",
   "license": "MIT",
   "scripts": {
-    "build": "pkg src/main"
+    "pkg": "pkg src/main.js",
+    "build": "npm run pkg",
+    "eslint": "eslint *.js src/",
+    "web-ext": "web-ext lint",
+    "lint": "npm run eslint && npm run web-ext"
   },
   "engines": {
     "node": "*"
