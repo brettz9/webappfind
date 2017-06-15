@@ -48,16 +48,17 @@ This is a [WebExtensions](https://developer.mozilla.org/en-US/Add-ons/WebExtensi
 
 ### Testing
 
-1. `npm run build-installer` - Builds the Node executables for native messaging and
-    installations on the user machine
-1. `npm run execute` - Executes the installer
+1. `npm run installer` - Shortcut for the following two steps
+    1. `npm run build-installer` - Builds the Node executables for native messaging and
+        installations on the user machine
+    1. `npm run execute` - Executes the installer
 1. `npm run lint` - Runs ESLint and `web-ext lint` (which uses `addons-linter`)
 1. `npm run run` - Test the web extension in Firefox
 1. `npm run build-addon` - Building the add-on file for distribution, e.g., on AMO
 
 ## To-dos
 
-1. Build `native-app.js` as an executable and copy that instead
+1. Set executable permissions on `bin/native-app`
 
 1. Overcome "Cannot find module 'regedit'" error when building on non-Windows
 

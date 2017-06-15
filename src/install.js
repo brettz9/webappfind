@@ -61,7 +61,9 @@ browsers.forEach((browser) => {
     const appManifestDirectory = isWin
         ? __dirname
         : pathMatrix[browser][osType][userType].replace(/^~/, (n0) => os.homedir());
-    const mainNativeScriptPath = path.join(appManifestDirectory, 'native-app.js');
+    const executableSuffix = isMac ? '.app' : (isWin ? '.exe' : ''); // Todo: Address permissions for Linux
+    const nativeAppFileName = 'native-app' + executableSuffix;
+    const mainNativeScriptPath = path.join(appManifestDirectory, nativeAppFileName);
 
     mkdirp(appManifestDirectory, (err) => {
         if (err && err.code !== 'EEXIST') {
@@ -78,7 +80,7 @@ browsers.forEach((browser) => {
             /*
             Todo: Could add? Or just rely on default of it being added as an asset?
             "pkg": {
-                "scripts": ["native-app.js"]
+                "assets": ["bin/native-app"]
             },
             */
         };
@@ -103,7 +105,7 @@ browsers.forEach((browser) => {
                 //   can be discovered
                 fs.writeFile(
                     mainNativeScriptPath,
-                    fs.readFileSync(path.join(__dirname, '../native-app.js')),
+                    fs.readFileSync(path.join(__dirname, '../bin/native-app')),
                     (err) => {
                         if (err) {
                             console.log('Error writing main native messaging app file.');
