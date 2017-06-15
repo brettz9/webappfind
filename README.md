@@ -116,6 +116,8 @@ This is a [WebExtensions](https://developer.mozilla.org/en-US/Add-ons/WebExtensi
 
 ## To-dos (Lower priority)
 
+1. Use `bin` in `package.json` (allowing command line use)?
+
 1. `manifest.json` additions?
 
     1. Set `protocol_handlers: [{protocol: "ext+waf", name: "WebAppFind", uriTemplate: "https://...%s"}]`; e.g., for site to register itself for a type

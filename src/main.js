@@ -74,6 +74,12 @@ browsers.forEach((browser) => {
             description: 'Node bridge for native messaging',
             type: 'stdio',
             path: path.join(__dirname, '../index.js')
+            /*
+            Todo: Could add? Or just rely on default of it being added as an asset?
+            "pkg": {
+                "scripts": ["index.js"]
+            },
+            */
         };
         switch (browser) {
         case 'Firefox':
