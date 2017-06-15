@@ -3,6 +3,7 @@ See:
 - **Firefox, etc.**: https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Native_messaging
 - **Chrome**: https://developer.chrome.com/extensions/nativeMessaging#native-messaging-host-location
 */
+
 // CONFIG
 const allUsers = !!process.argv[2];
 const userType = allUsers ? 'allUsers' : 'singleUser';
@@ -60,7 +61,7 @@ browsers.forEach((browser) => {
     const appManifestDirectory = isWin
         ? __dirname
         : pathMatrix[browser][osType][userType].replace(/^~/, (n0) => os.homedir());
-    const mainNativeScriptPath = path.join(appManifestDirectory, 'index.js');
+    const mainNativeScriptPath = path.join(appManifestDirectory, 'native-app.js');
 
     mkdirp(appManifestDirectory, (err) => {
         if (err && err.code !== 'EEXIST') {
@@ -77,7 +78,7 @@ browsers.forEach((browser) => {
             /*
             Todo: Could add? Or just rely on default of it being added as an asset?
             "pkg": {
-                "scripts": ["index.js"]
+                "scripts": ["native-app.js"]
             },
             */
         };
@@ -102,7 +103,7 @@ browsers.forEach((browser) => {
                 //   can be discovered
                 fs.writeFile(
                     mainNativeScriptPath,
-                    fs.readFileSync(path.join(__dirname, '../index.js')),
+                    fs.readFileSync(path.join(__dirname, '../native-app.js')),
                     (err) => {
                         if (err) {
                             console.log('Error writing main native messaging app file.');

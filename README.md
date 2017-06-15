@@ -50,12 +50,13 @@ This is a [WebExtensions](https://developer.mozilla.org/en-US/Add-ons/WebExtensi
 
 1. `npm run lint` - Runs ESLint and `web-ext lint` (which uses `addons-linter`)
 1. `npm run build-addon` - Building the add-on file for distribution, e.g., on AMO
-1. `npm run build-installer` - Building the Node executable for installations on the user machine
+1. `npm run build-installer` - Builds the Node executables for native messaging and
+    installations on the user machine
 1. `npm run webext-run` - Test the web extension in Firefox
 
 ## To-dos
 
-1. Build `index.js` as an executable and copy that instead
+1. Build `native-app.js` as an executable and copy that instead
 
 1. In `pkg` file, after checking registry (how to avoid repeating??), set-up Node WebSockets to
      listen and pass on to add-on (which will open website and `postMessage` into it and be able
@@ -119,8 +120,6 @@ This is a [WebExtensions](https://developer.mozilla.org/en-US/Add-ons/WebExtensi
     making package more general purpose.
 
 ## To-dos (Lower priority)
-
-1. Use `bin` in `package.json` (allowing command line use)?
 
 1. `manifest.json` additions?
 
