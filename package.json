@@ -24,7 +24,8 @@
     "webext-lint": "web-ext lint --ignore-files bin/ *.md src/ native-app.js filetypes.json package.json copy-polyfill.js",
     "webext-run": "web-ext run --ignore-files bin/ *.md src/ native-app.js filetypes.json package.json copy-polyfill.js",
     "webext-build": "web-ext build --ignore-files bin/ *.md src/ native-app.js filetypes.json package.json copy-polyfill.js",
-    "lint": "npm run eslint && npm run webext-lint"
+    "run": "npm run copy-polyfill && npm run webext-run",
+    "lint": "npm run eslint && npm run copy-polyfill && npm run webext-lint"
   },
   "engines": {
     "node": "*"
