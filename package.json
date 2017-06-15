@@ -11,11 +11,15 @@
   "description": "Enables an experimental protocol system for allowing the user to supply local files for viewing and editing by web applications",
   "license": "MIT",
   "scripts": {
-    "pkg": "pkg src/main.js --targets node7-macos-x64",
+    "pkg": "pkg src/main.js --targets node7-macos-x64 --out-path bin",
+    "copy-polyfill": "node ./copy-polyfill",
+    "build-addon": "npm run copy-polyfill && npm run webext-build",
     "build": "npm run pkg",
     "eslint": "eslint *.js src/",
-    "web-ext": "web-ext lint",
-    "lint": "npm run eslint && npm run web-ext"
+    "webext-lint": "web-ext lint --ignore-files bin/ *.md src/ index.js filetypes.json package.json copy-polyfill.js",
+    "webext-run": "web-ext run --ignore-files bin/ *.md src/ index.js filetypes.json package.json copy-polyfill.js",
+    "webext-build": "web-ext build --ignore-files bin/ *.md src/ index.js filetypes.json package.json copy-polyfill.js",
+    "lint": "npm run eslint && npm run webext-lint"
   },
   "engines": {
     "node": "*"

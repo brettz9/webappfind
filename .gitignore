@@ -1,7 +1,12 @@
-*.lnk
+node_modules
+
+web-ext-artifacts
+# web-ext-artifacts/webappfind-*/
+bin
+
+# Copied from node_modules for build only
+browser-polyfill.js
+
 demos/svg-edit/.svn
 demos/svg-edit/editor/config.js
 demos/svg-edit/editor/custom.css
-
-tmp
-node_modules
