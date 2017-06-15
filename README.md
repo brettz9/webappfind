@@ -53,8 +53,6 @@ This is a [WebExtensions](https://developer.mozilla.org/en-US/Add-ons/WebExtensi
 
 ## To-dos
 
-1. Test `manifest.json` file, etc.
-
 1. In `pkg` file, after checking registry (how to avoid repeating??), set-up Node WebSockets to
      listen and pass on to add-on (which will open website and `postMessage` into it and be able
      to handle opposite direction, including for writing file contents back to disk, but also
@@ -111,6 +109,25 @@ This is a [WebExtensions](https://developer.mozilla.org/en-US/Add-ons/WebExtensi
             to eval-able Node code; at minimum start shared,
             site-agnostic storage
 
-1. Add back demos and sample files from old `webappfind`
+1. Add back demos and sample files from old `webappfind`.
 
-1. Remove old `webappfind` files/info (e.g., on `filetypes.json`) if making package more agnostic
+1. Remove old `webappfind` files/info (e.g., on `filetypes.json`) if
+    making package more general purpose.
+
+## To-dos (Lower priority)
+
+1. `manifest.json` additions?
+
+    1. Set `protocol_handlers: [{protocol: "ext+waf", name: "WebAppFind", uriTemplate: "https://...%s"}]`; e.g., for site to register itself for a type
+
+    1. Set `omnibox: {keyword: "waf"}` for special auto-complete to send to add-on
+
+    1. Set `options_ui: {page: "webappfind-options.html"}` and/or `sidebar_action`?
+
+    1. Set `permissions`/`optionalPermissions`
+
+    1. Set `incognito` on whether/how to work in Incognito mode
+
+    1. Set `devtools_page` in `manifest.json` to replicate Node console?
+
+    1. Use `web_accessible_resources` for exposing any resources to websites?

@@ -3,6 +3,10 @@
 
     "name": "webappfind",
     "version": "3.0.0",
+    "developer": {
+        "name": "Brett Zamir",
+        "url": "https://github.com/brettz9/webappfind"
+    },
     "description": "Open desktop files into web apps",
 
     "icons": {
