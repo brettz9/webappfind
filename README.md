@@ -49,7 +49,9 @@ This is a [WebExtensions](https://developer.mozilla.org/en-US/Add-ons/WebExtensi
 ### Testing
 
 1. `npm run lint` - Runs ESLint and `web-ext lint` (which uses `addons-linter`)
-1. `npm run build` - Building the Node executable
+1. `npm run build-addon` - Building the add-on file for distribution, e.g., on AMO
+1. `npm run build-installer` - Building the Node executable for installations on the user machine
+1. `npm run webext-run` - Test the web extension in Firefox
 
 ## To-dos
 

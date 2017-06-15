@@ -14,7 +14,7 @@
     "pkg": "pkg src/main.js --targets node7-macos-x64 --out-path bin",
     "copy-polyfill": "node ./copy-polyfill",
     "build-addon": "npm run copy-polyfill && npm run webext-build",
-    "build": "npm run pkg",
+    "build-installer": "npm run pkg",
     "eslint": "eslint *.js src/",
     "webext-lint": "web-ext lint --ignore-files bin/ *.md src/ index.js filetypes.json package.json copy-polyfill.js",
     "webext-run": "web-ext run --ignore-files bin/ *.md src/ index.js filetypes.json package.json copy-polyfill.js",
