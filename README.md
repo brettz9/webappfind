@@ -82,6 +82,11 @@ VERSION INCOMPLETE!!!
         browserToNode) and high-level permission (e.g., `postMessage`
         `contextMenu`).
 
+    1. Find best means possible (ideally even `eval`) to get full privileges
+        (whether originating from web-site as in AsYouWish, from desktop,
+        as in old WebAppFind, or from another add-on) out of
+        browser/browser add-on. If not, emulate own via `postMessage` messaging.
+
     1. Example "add-ons"
 
         1. The old WebAppFind behavior could be one of these add-ons
