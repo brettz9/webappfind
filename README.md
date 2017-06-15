@@ -58,7 +58,50 @@ VERSION INCOMPLETE!!!
 
 1. Use `webextension-polyfill` to ensure working on FF and Chrome
 
-1. Test with "Open with..." to open file in a Node script which communicates via Node WebSockets
+1. Refactor this extension to be a bridge between Node (including
+    user-installed packages) and browser/browser add-ons/web-sites.
+
+    1. Support passing from Node into other add-ons
+
+        1. Is there a way to overcome `allowed_extensions`/`allowed_origins`?
+            hard-coded limits; is the app manifest read on install only, on
+            browser start-up, or on each access? If the latter, could
+            restartlessly dynamically modify the file ourselves. Otherwise
+            users may have to bundle this code for each add-on.
+
+    1. Might rely on "add-ons" of `npm` packages designated to be installed
+        (and via `package.json` config or custom config?) run on start-up.
+
+    1. For an added security layer, might only let bridge work with
+        user-designated packages.
+
+    1. Use socket instead of stateless server to relay flexibly in either
+        direction? But call "add-on"'s main script once at start-up.
+
+    1. Have "add-ons" indicate their privilege level (e.g., nodeToBrowser,
+        browserToNode) and high-level permission (e.g., `postMessage`
+        `contextMenu`).
+
+    1. Example "add-ons"
+
+        1. The old WebAppFind behavior could be one of these add-ons
+
+            1. Extend `filetypes.json` to support passing into a specific
+                add-on?
+
+        1. Like the old WebAppFind behavior but allow for general
+            URL-opening mechanism (including for passing of messages)
+            in addition to specific `filetypes.json` approach and have
+            mechanism also for passing content into another add-on
+
+            1. Test with "Open with..." to open file in a Node script
+                which communicates via Node WebSockets
+
+        1. AtYourCommand to run once to set-up user's context menus (and
+            desktop-file-opening behaviors)
+
+        1. AsYouWish to allow websites to communicate into the browser or
+            to eval-able Node code
 
 1. Add back demos and sample files from old `webappfind`
 
