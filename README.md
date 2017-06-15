@@ -55,6 +55,8 @@ This is a [WebExtensions](https://developer.mozilla.org/en-US/Add-ons/WebExtensi
 
 ## To-dos
 
+1. Build `index.js` as an executable and copy that instead
+
 1. In `pkg` file, after checking registry (how to avoid repeating??), set-up Node WebSockets to
      listen and pass on to add-on (which will open website and `postMessage` into it and be able
      to handle opposite direction, including for writing file contents back to disk, but also
