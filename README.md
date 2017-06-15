@@ -2,6 +2,8 @@
 
 VERSION INCOMPLETE!!!
 
+This is a [WebExtensions](https://developer.mozilla.org/en-US/Add-ons/WebExtensions) application.
+
 ## Comparison with alternatives
 
 ### Relative disadvantages of alternatives

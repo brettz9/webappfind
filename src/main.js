@@ -11,6 +11,7 @@ const browsers = ['Chrome', 'Chromium', 'Firefox'];
 const extensionName = 'webappfind'; // Also used for JSON file name
 
 const fs = require('fs');
+const path = require('path');
 const os = require('os');
 const mkdirp = require('mkdirp');
 
@@ -72,7 +73,7 @@ browsers.forEach((browser) => {
             name: `${extensionName}`,
             description: 'Node bridge for native messaging',
             type: 'stdio',
-            path: '' // Todo: Executable path
+            path: path.join(__dirname, '../index.js')
         };
         switch (browser) {
         case 'Firefox':
