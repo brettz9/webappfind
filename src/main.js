@@ -3,7 +3,6 @@ See:
 - **Firefox, etc.**: https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Native_messaging
 - **Chrome**: https://developer.chrome.com/extensions/nativeMessaging#native-messaging-host-location
 */
-
 // CONFIG
 const allUsers = !!process.argv[2];
 const userType = allUsers ? 'allUsers' : 'singleUser';
@@ -26,32 +25,32 @@ if (!(isWin || isMac || isLinux)) {
 const pathMatrix = {
     Chrome: {
         Linux: {
-            allUsers: '/etc/opt/chrome/native-messaging-hosts/',
-            singleUser: '~/.config/google-chrome/NativeMessagingHosts/'
+            allUsers: '/etc/opt/chrome/native-messaging-hosts',
+            singleUser: '~/.config/google-chrome/NativeMessagingHosts'
         },
         Mac: {
-            allUsers: '/Library/Google/Chrome/NativeMessagingHosts/',
-            singleUser: '~/Library/Application Support/Google/Chrome/NativeMessagingHosts/'
+            allUsers: '/Library/Google/Chrome/NativeMessagingHosts',
+            singleUser: '~/Library/Application Support/Google/Chrome/NativeMessagingHosts'
         }
     },
     Chromium: {
         Linux: {
-            allUsers: '/etc/chromium/native-messaging-hosts/',
-            singleUser: '~/.config/chromium/NativeMessagingHosts/'
+            allUsers: '/etc/chromium/native-messaging-hosts',
+            singleUser: '~/.config/chromium/NativeMessagingHosts'
         },
         Mac: {
-            allUsers: '/Library/Application Support/Chromium/NativeMessagingHosts/',
-            singleUser: '~/Library/Application Support/Chromium/NativeMessagingHosts/'
+            allUsers: '/Library/Application Support/Chromium/NativeMessagingHosts',
+            singleUser: '~/Library/Application Support/Chromium/NativeMessagingHosts'
         }
     },
     Firefox: {
         Linux: {
-            allUsers: '/usr/lib/mozilla/native-messaging-hosts/', // Could also begin with '/usr/lib64/'
-            singleUser: '~/.mozilla/native-messaging-hosts/'
+            allUsers: '/usr/lib/mozilla/native-messaging-hosts', // Could also begin with '/usr/lib64/'
+            singleUser: '~/.mozilla/native-messaging-hosts'
         },
         Mac: {
-            allUsers: '/Library/Application Support/Mozilla/NativeMessagingHosts/',
-            singleUser: '~/Library/Application Support/Mozilla/NativeMessagingHosts/'
+            allUsers: '/Library/Application Support/Mozilla/NativeMessagingHosts',
+            singleUser: '~/Library/Application Support/Mozilla/NativeMessagingHosts'
         }
     }
 };
@@ -61,6 +60,7 @@ browsers.forEach((browser) => {
     const appManifestDirectory = isWin
         ? __dirname
         : pathMatrix[browser][osType][userType].replace(/^~/, (n0) => os.homedir());
+    const mainNativeScriptPath = path.join(appManifestDirectory, 'index.js');
 
     mkdirp(appManifestDirectory, (err) => {
         if (err && err.code !== 'EEXIST') {
@@ -73,7 +73,7 @@ browsers.forEach((browser) => {
             name: `${extensionName}`,
             description: 'Node bridge for native messaging',
             type: 'stdio',
-            path: path.join(__dirname, '../index.js')
+            path: mainNativeScriptPath
             /*
             Todo: Could add? Or just rely on default of it being added as an asset?
             "pkg": {
@@ -89,7 +89,7 @@ browsers.forEach((browser) => {
             appManifest.allowed_origins = [`chrome-extension://${extensionName}`];
             break;
         }
-        const appManifestPath = `${appManifestDirectory + extensionName}.json`;
+        const appManifestPath = path.join(appManifestDirectory, extensionName + '.json');
         fs.writeFile(
             appManifestPath,
             JSON.stringify(appManifest, null, 2),
@@ -98,15 +98,26 @@ browsers.forEach((browser) => {
                     console.log('Error writing app manifest file', err);
                     return;
                 }
-                console.log('ok');
-                if (isWin) {
-                    if (browsers.includes('Chrome') && browsers.include('Chromium') &&
-                        browser === 'Chromium') {
-                        // Only need one run
-                        return;
+                // We install this file where there is a known directory and so it
+                //   can be discovered
+                fs.writeFile(
+                    mainNativeScriptPath,
+                    fs.readFileSync(path.join(__dirname, '../index.js')),
+                    (err) => {
+                        if (err) {
+                            console.log('Error writing main native messaging app file.');
+                            return;
+                        }
+                        if (isWin) {
+                            if (browsers.includes('Chrome') && browsers.include('Chromium') &&
+                                browser === 'Chromium') {
+                                // Only need one run
+                                return;
+                            }
+                            writeToWindowRegistery(browser, appManifestPath);
+                        }
                     }
-                    writeToWindowRegistery(browser, appManifestPath);
-                }
+                );
             }
         );
     });
