@@ -14,6 +14,7 @@
       "native-app": "./bin/native-app"
   },
   "scripts": {
+    "installer": "npm run build-installer && npm run execute",
     "execute": "./bin/install",
     "pkg": "pkg src/install.js --targets node7-macos-x64 --out-path bin",
     "build-installer-component": "npm run pkg",
