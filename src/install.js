@@ -9,6 +9,7 @@ const allUsers = !!process.argv[2];
 const userType = allUsers ? 'allUsers' : 'singleUser';
 const browsers = ['Chrome', 'Chromium', 'Firefox'];
 const extensionName = 'webappfind'; // Also used for JSON file name
+const extensionID = 'efhdimmjkephclkpmlhpdhcikmmeohip';
 
 const path = require('path');
 const os = require('os');
@@ -91,7 +92,7 @@ Promise.all(browsers.map((browser) => {
                 appManifest.allowed_extensions = [`${extensionName}@brett-zamir.me`];
                 break;
             case 'Chrome': case 'Chromium':
-                appManifest.allowed_origins = [`chrome-extension://${extensionName}`];
+                appManifest.allowed_origins = [`chrome-extension://${extensionID}`];
                 break;
             }
             return Promise.all([
