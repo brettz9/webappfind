@@ -10,10 +10,9 @@ const userType = allUsers ? 'allUsers' : 'singleUser';
 const browsers = ['Chrome', 'Chromium', 'Firefox'];
 const extensionName = 'webappfind'; // Also used for JSON file name
 
-const fs = require('fs');
 const path = require('path');
 const os = require('os');
-const mkdirp = require('mkdirp');
+const {mkdirp, writeFile, copyExecutable, regedit} = require('./promise-wrappers');
 
 const isWin = /^win/.test(process.platform);
 const isMac = process.platform === 'darwin';
@@ -23,6 +22,7 @@ if (!(isWin || isMac || isLinux)) {
     console.log('Unsupported OS!');
     process.exit();
 }
+
 const pathMatrix = {
     Chrome: {
         Linux: {
@@ -57,78 +57,82 @@ const pathMatrix = {
 };
 
 // Todo: Test all browser/platform combos
-browsers.forEach((browser) => {
+Promise.all(browsers.map((browser) => {
     const appManifestDirectory = isWin
         ? __dirname
         : pathMatrix[browser][osType][userType].replace(/^~/, (n0) => os.homedir());
-    const executableSuffix = isMac ? '.app' : (isWin ? '.exe' : ''); // Todo: Address permissions for Linux
-    const nativeAppFileName = 'native-app' + executableSuffix;
+    // const executableSuffix = isMac ? '.app' : (isWin ? '.exe' : ''); // Todo: Address permissions for Linux
+    const nativeAppFileName = 'native-app'; // + executableSuffix;
     const mainNativeScriptPath = path.join(appManifestDirectory, nativeAppFileName);
+    const appManifestPath = path.join(appManifestDirectory, extensionName + '.json');
 
-    mkdirp(appManifestDirectory, (err) => {
-        if (err && err.code !== 'EEXIST') {
-            console.log(
-                `Error saving ${browser} app manifest directory (${osType})`,
-                err
-            );
-        }
-        const appManifest = {
-            name: `${extensionName}`,
-            description: 'Node bridge for native messaging',
-            type: 'stdio',
-            path: mainNativeScriptPath
-            /*
-            Todo: Could add? Or just rely on default of it being added as an asset?
-            "pkg": {
-                "assets": ["bin/native-app"]
-            },
-            */
-        };
-        switch (browser) {
-        case 'Firefox':
-            appManifest.allowed_extensions = [`${extensionName}@brett-zamir.me`];
-            break;
-        case 'Chrome': case 'Chromium':
-            appManifest.allowed_origins = [`chrome-extension://${extensionName}`];
-            break;
-        }
-        const appManifestPath = path.join(appManifestDirectory, extensionName + '.json');
-        fs.writeFile(
-            appManifestPath,
-            JSON.stringify(appManifest, null, 2),
-            (err) => {
-                if (err) {
-                    console.log('Error writing app manifest file', err);
-                    return;
-                }
-                // We install this file where there is a known directory and so it
-                //   can be discovered
-                fs.writeFile(
-                    mainNativeScriptPath,
-                    fs.readFileSync(path.join(__dirname, '../bin/native-app')),
-                    (err) => {
-                        if (err) {
-                            console.log('Error writing main native messaging app file.');
-                            return;
-                        }
-                        if (isWin) {
-                            if (browsers.includes('Chrome') && browsers.include('Chromium') &&
-                                browser === 'Chromium') {
-                                // Only need one run
-                                return;
-                            }
-                            writeToWindowRegistery(browser, appManifestPath);
-                        }
-                    }
-                );
+    // Todo: Avoid rewriting directory if Windows
+    return Promise.all([
+        mkdirp(appManifestDirectory)
+        .catch((err) => {
+            console.log(`Error saving ${browser} app manifest directory (${osType})`, err);
+            throw err;
+        })
+        .then(() => {
+            const appManifest = {
+                name: `${extensionName}`,
+                description: 'Node bridge for native messaging',
+                type: 'stdio',
+                path: mainNativeScriptPath
+                /*
+                Todo: Could add? Or just rely on default of it being added as an asset?
+                "pkg": {
+                    "assets": ["bin/native-app"]
+                },
+                */
+            };
+            switch (browser) {
+            case 'Firefox':
+                appManifest.allowed_extensions = [`${extensionName}@brett-zamir.me`];
+                break;
+            case 'Chrome': case 'Chromium':
+                appManifest.allowed_origins = [`chrome-extension://${extensionName}`];
+                break;
             }
-        );
-    });
+            return Promise.all([
+                writeFile(
+                    appManifestPath,
+                    JSON.stringify(appManifest, null, 2)
+                ).catch((err) => {
+                    if (err.code === 'EEXIST') {
+                        return;
+                    }
+                    console.log(
+                        `Error saving ${browser} app manifest file (${osType})`,
+                        err
+                    );
+                    throw err;
+                }),
+                copyExecutable(
+                    // We install this file where there is a known directory and so it
+                    //   can be discovered
+                    path.join(__dirname, '../bin/native-app'),
+                    mainNativeScriptPath
+                ).catch((err) => {
+                    console.log('Error copying native messaging executable.', err);
+                    throw err;
+                })
+            ]);
+        }),
+        (isWin && (!browsers.includes('Chrome') || !browsers.include('Chromium') ||
+            browser !== 'Chromium') // Avoid re-running for Chrome/Chromium
+            ? writeToWindowRegistery(browser, appManifestPath)
+            : Promise.resolve()
+        )
+    ]);
+})).then(() => {
+    console.log('Finished installation.');
+}).catch(() => {
+    console.log('Exiting with errors');
 });
 
 function writeToWindowRegistery (browser, appManifestPath) {
     // Todo: UNTESTED!!!
-    const regedit = require('regedit'); // https://github.com/ironSource/node-regedit
     // For REG EDIT: see https://technet.microsoft.com/en-us/library/cc742162(v=ws.11).aspx
     const regKey = (allUsers
         ? 'HKEY_LOCAL_MACHINE'
@@ -137,18 +141,15 @@ function writeToWindowRegistery (browser, appManifestPath) {
         ? `Mozilla\\NativeMessagingHosts\\${extensionName}`
         : `Google\\Chrome\\NativeMessagingHosts\\`
     );
-    regedit.putValue({
+    return regedit.putValue({
         [regKey]: {
             appManifestPath: { // Name (here `appManifestPath`) is unused for defaults
                 value: appManifestPath, // e.g., C:\\webappfind/src/webappfind.json
                 type: 'REG_DEFAULT'
             }
         }
-    }, (err) => {
-        if (err) {
-            console.log('Erroring saving to (Windows) registry.');
-            return;
-        }
-        console.log('Saved to Windows registry');
+    }).catch((err) => {
+        console.log('Erroring saving app manifest info to (Windows) registry.');
+        throw err;
     });
 }

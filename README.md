@@ -58,9 +58,7 @@ This is a [WebExtensions](https://developer.mozilla.org/en-US/Add-ons/WebExtensi
 
 ## To-dos
 
-1. Set executable permissions on `bin/native-app` (?) and have the OS-specific
-    executable be identified and bundled automatically, and copied properly
-    as binary
+1. Have the OS-specific executable of `bin/native-app` be identified and bundled automatically
 
 1. Overcome "Cannot find module 'regedit'" error when building on non-Windows
 
