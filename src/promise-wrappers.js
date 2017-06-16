@@ -30,20 +30,32 @@ const writeFile = (path, data) => {
     });
 };
 
+function copyFile (source, target) {
+    return copyFileUtil(source, target);
+}
+
 // Inspired by https://stackoverflow.com/a/14387791/271577
 function copyExecutable (source, target) {
-    return new Promise((resolve, reject) => {
-        let cbCalled = false;
-
-        const rd = fs.createReadStream(source, {flags: 'r', encoding: 'binary'});
-        rd.on('error', (err) => {
-            done(err);
-        });
-        const wr = fs.createWriteStream(target, {
+    return copyFileUtil(
+        source,
+        target,
+        {flags: 'r', encoding: 'binary'},
+        {
             flags: 'w',
             encoding: 'binary',
             mode: fs.constants.S_IRWXU // Readable, writable, executable by owner (user)
+        }
+    );
+}
+function copyFileUtil (source, target, readOptions, writeOptions) {
+    return new Promise((resolve, reject) => {
+        let cbCalled = false;
+
+        const rd = fs.createReadStream(source, readOptions);
+        rd.on('error', (err) => {
+            done(err);
         });
+        const wr = fs.createWriteStream(target, writeOptions);
         wr.on('error', (err) => {
             done(err);
         });
@@ -82,3 +94,4 @@ if (isWin) {
 exports.mkdirp = mkdirp;
 exports.writeFile = writeFile;
 exports.copyExecutable = copyExecutable;
+exports.copyFile = copyFile;

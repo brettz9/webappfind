@@ -1,20 +1,15 @@
-const fs = require('fs');
 const path = require('path');
+const {copyFile} = require('./src/promise-wrappers');
 const polyfillFile = 'browser-polyfill.js'; // could end in .min.js instead
-fs.writeFile(
-    path.join(__dirname, polyfillFile),
-    fs.readFileSync(
-        path.join(
-            __dirname,
-            'node_modules/webextension-polyfill/dist/',
-            polyfillFile
-        )
+copyFile(
+    path.join(
+        __dirname,
+        'node_modules/webextension-polyfill/dist/',
+        polyfillFile
     ),
-    (err) => {
-        if (err) {
-            console.log('Error copying polyfill file', err);
-            return;
-        }
-        console.log('Copied polyfill file.');
-    }
-);
+    path.join(__dirname, polyfillFile)
+).then(() => {
+    console.log('Copied polyfill file.');
+}).catch((err) => {
+    console.log('Error copying polyfill file', err);
+});
