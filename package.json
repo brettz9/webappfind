@@ -14,11 +14,12 @@
       "wafcli": "./bin/cli.js"
   },
   "scripts": {
+    "run-install-all": "wafcli install single-user buildInfoIntoName",
     "run-install": "wafcli install single-user",
     "build-installer-component-all": "wafcli installer all",
     "build-native-apps-all": "wafcli native-apps all",
     "build-installer-all": "npm run build-native-apps-all && npm run build-installer-component-all && npm link",
-    "installer-all": "npm run build-installer-all && npm run run-install",
+    "installer-all": "npm run build-installer-all && npm run run-install-all",
     "build-installer-component": "wafcli installer",
     "build-native-apps": "wafcli native-apps",
     "build-installer": "npm run build-native-apps && npm run build-installer-component && npm link",
@@ -40,15 +41,16 @@
   },
   "pkg": {
     "assets": [
+        "bin/native-app",
         "bin/node7-macos-x64-native-app",
-        "bin/node7-linux-x64",
-        "bin/node7-linux-x86",
-        "bin/node7-linux-armv6",
-        "bin/node7-linux-armv7",
-        "bin/node7-macos-x64",
-        "bin/node7-macos-x86",
-        "bin/node7-win-x64",
-        "bin/node7-win-x86"
+        "bin/node7-linux-x64-native-app",
+        "bin/node7-linux-x86-native-app",
+        "bin/node7-linux-armv6-native-app",
+        "bin/node7-linux-armv7-native-app",
+        "bin/node7-macos-x64-native-app",
+        "bin/node7-macos-x86-native-app",
+        "bin/node7-win-x64-native-app",
+        "bin/node7-win-x86-native-app"
     ]
   },
   "engines": {

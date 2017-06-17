@@ -1,5 +1,6 @@
 exports.localInstall = function localInstall ({
     userInstallType,
+    buildInfoIntoName = false,
     nodeVersion = process.version.match(/v(\d+)/)[1]
 }) {
     /*
@@ -70,7 +71,10 @@ exports.localInstall = function localInstall ({
             ? __dirname
             : pathMatrix[browser][osType][userType].replace(/^~/, (n0) => os.homedir());
         // const executableSuffix = isMac ? '.app' : (isWin ? '.exe' : ''); // Todo: Address permissions for Linux
-        const nativeAppFileName = 'node' + nodeVersion + '-' + osType + '-' + arch + '-native-app'; // + executableSuffix;
+        const nativeAppFileName = (buildInfoIntoName
+            ? 'node' + nodeVersion + '-' + osType + '-' + arch + '-'
+            : ''
+        ) + 'native-app'; // + executableSuffix;
         const mainNativeScriptPath = path.join(appManifestDirectory, nativeAppFileName);
         const appManifestPath = path.join(appManifestDirectory, extensionName + '.json');
 

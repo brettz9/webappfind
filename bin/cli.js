@@ -30,7 +30,8 @@ case 'native-apps': {
     break;
 } case 'install': {
     const userInstallType = process.argv[3];
-    localInstall({userInstallType});
+    const buildInfoIntoName = !!process.argv[4];
+    localInstall({userInstallType, buildInfoIntoName});
     break;
 } default: {
     console.log(

@@ -15,3 +15,14 @@ function messageHandler (msg, push, done) {
     push(msg);
     done();
 }
+
+const outputOut = new nativeMessage.Output();
+outputOut.write('aaa');
+outputOut.end('bbbb');
+outputOut.pipe(process.stdout);
+
+const outputOut2 = new nativeMessage.Output();
+outputOut2.write('yyy');
+outputOut2.write('zzz');
+outputOut2.pipe(process.stdout);
+outputOut2.write('000');
