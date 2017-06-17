@@ -10,8 +10,8 @@
   "description": "Enables an experimental protocol system for allowing the user to supply local files for viewing and editing by web applications",
   "license": "MIT",
   "bin": {
-      "webappfind": "./src/installer.js",
-      "wafcli": "./bin/cli.js"
+    "webappfind": "./src/installer.js",
+    "wafcli": "./bin/cli.js"
   },
   "scripts": {
     "run-install-all": "wafcli install single-user buildInfoIntoName",
@@ -41,16 +41,16 @@
   },
   "pkg": {
     "assets": [
-        "bin/native-app",
-        "bin/node7-macos-x64-native-app",
-        "bin/node7-linux-x64-native-app",
-        "bin/node7-linux-x86-native-app",
-        "bin/node7-linux-armv6-native-app",
-        "bin/node7-linux-armv7-native-app",
-        "bin/node7-macos-x64-native-app",
-        "bin/node7-macos-x86-native-app",
-        "bin/node7-win-x64-native-app",
-        "bin/node7-win-x86-native-app"
+      "bin/native-app",
+      "bin/node7-macos-x64-native-app",
+      "bin/node7-linux-x64-native-app",
+      "bin/node7-linux-x86-native-app",
+      "bin/node7-linux-armv6-native-app",
+      "bin/node7-linux-armv7-native-app",
+      "bin/node7-macos-x64-native-app",
+      "bin/node7-macos-x86-native-app",
+      "bin/node7-win-x64-native-app",
+      "bin/node7-win-x86-native-app"
     ]
   },
   "engines": {
@@ -59,7 +59,8 @@
   "dependencies": {
     "chrome-native-messaging": "0.2.0",
     "mkdirp": "^0.5.1",
-    "webextension-polyfill": "^0.1.1"
+    "webextension-polyfill": "^0.1.1",
+    "ws": "^3.0.0"
   },
   "optionalDependencies": {
     "regedit": "2.2.7"

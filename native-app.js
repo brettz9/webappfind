@@ -17,12 +17,14 @@ function messageHandler (msg, push, done) {
 }
 
 const outputOut = new nativeMessage.Output();
-outputOut.write('aaa');
-outputOut.end('bbbb');
 outputOut.pipe(process.stdout);
 
-const outputOut2 = new nativeMessage.Output();
-outputOut2.write('yyy');
-outputOut2.write('zzz');
-outputOut2.pipe(process.stdout);
-outputOut2.write('000');
+outputOut.write('Starting');
+const WebSocket = require('ws');
+const wss = new WebSocket.Server({ port: 8080 });
+wss.on('connection', (ws) => {
+    ws.on('message', (msg) => {
+        outputOut.write('server received: ' + msg);
+        ws.send('server sending something');
+    });
+});
