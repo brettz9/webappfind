@@ -11,7 +11,7 @@ process.stdin
     .pipe(process.stdout);
 
 function messageHandler (msg, push, done) {
-    // Just echo the message:
+    // We'll just echo the message for now
     push(msg);
     done();
 }

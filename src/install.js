@@ -9,7 +9,7 @@ const allUsers = !!process.argv[2];
 const userType = allUsers ? 'allUsers' : 'singleUser';
 const browsers = ['Chrome', 'Chromium', 'Firefox'];
 const extensionName = 'webappfind'; // Also used for JSON file name
-const extensionID = 'efhdimmjkephclkpmlhpdhcikmmeohip';
+const extensionID = 'efhdimmjkephclkpmlhpdhcikmmeohip'; // Todo: Set programmatically?
 
 const path = require('path');
 const os = require('os');
@@ -112,7 +112,7 @@ Promise.all(browsers.map((browser) => {
                 copyExecutable(
                     // We install this file where there is a known directory and so it
                     //   can be discovered
-                    path.join(__dirname, '../bin/native-app'),
+                    path.join(__dirname, '../bin/native-app'), // Hard-coded name here for `pkg`
                     mainNativeScriptPath
                 ).catch((err) => {
                     console.log('Error copying native messaging executable.', err);

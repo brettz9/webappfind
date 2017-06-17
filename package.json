@@ -10,8 +10,8 @@
   "description": "Enables an experimental protocol system for allowing the user to supply local files for viewing and editing by web applications",
   "license": "MIT",
   "bin": {
-      "webappfind": "./bin/install",
-      "native-app": "./bin/native-app"
+    "webappfind": "./bin/install",
+    "native-app": "./bin/native-app"
   },
   "scripts": {
     "installer": "npm run build-installer && npm run execute",
@@ -23,9 +23,9 @@
     "build-installer": "npm run build-native-app && npm run build-installer-component",
     "build-native-app": "pkg native-app.js --targets node7-macos-x64 --out-path bin",
     "eslint": "eslint addon.js copy-polyfill.js native-app.js src/",
-    "webext-lint": "web-ext lint --ignore-files bin/ *.md src/ native-app.js filetypes.json package.json copy-polyfill.js",
-    "webext-run": "web-ext run --ignore-files bin/ *.md src/ native-app.js filetypes.json package.json copy-polyfill.js",
-    "webext-build": "web-ext build --ignore-files bin/ *.md src/ native-app.js filetypes.json package.json copy-polyfill.js",
+    "webext-lint": "web-ext lint --ignore-files ignore/ bin/ *.md src/ native-app.js filetypes.json package.json copy-polyfill.js",
+    "webext-run": "web-ext run --ignore-files ignore/ bin/ *.md src/ native-app.js filetypes.json package.json copy-polyfill.js",
+    "webext-build": "web-ext build --ignore-files ignore/ bin/ *.md src/ native-app.js filetypes.json package.json copy-polyfill.js",
     "run": "npm run copy-polyfill && npm run webext-run",
     "lint": "npm run eslint && npm run copy-polyfill && npm run webext-lint"
   },
