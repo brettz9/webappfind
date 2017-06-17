@@ -10,24 +10,46 @@
   "description": "Enables an experimental protocol system for allowing the user to supply local files for viewing and editing by web applications",
   "license": "MIT",
   "bin": {
-    "webappfind": "./bin/install",
-    "native-app": "./bin/native-app"
+      "webappfind": "./src/installer.js",
+      "wafcli": "./bin/cli.js"
   },
   "scripts": {
-    "installer": "npm run build-installer && npm run execute",
-    "execute": "./bin/install",
-    "pkg": "pkg src/install.js --targets node7-macos-x64 --out-path bin",
-    "build-installer-component": "npm run pkg",
-    "copy-polyfill": "node ./copy-polyfill",
-    "build-addon": "npm run copy-polyfill && npm run webext-build",
-    "build-installer": "npm run build-native-app && npm run build-installer-component",
-    "build-native-app": "pkg native-app.js --targets node7-macos-x64 --out-path bin",
-    "eslint": "eslint addon.js copy-polyfill.js native-app.js src/",
+    "run-install": "wafcli install single-user",
+    "build-installer-component-all": "wafcli installer all",
+    "build-native-apps-all": "wafcli native-apps all",
+    "build-installer-all": "npm run build-native-apps-all && npm run build-installer-component-all && npm link",
+    "installer-all": "npm run build-installer-all && npm run run-install",
+    "build-installer-component": "wafcli installer",
+    "build-native-apps": "wafcli native-apps",
+    "build-installer": "npm run build-native-apps && npm run build-installer-component && npm link",
+    "installer": "npm run build-installer && npm run run-install",
     "webext-lint": "web-ext lint --ignore-files ignore/ bin/ *.md src/ native-app.js filetypes.json package.json copy-polyfill.js",
     "webext-run": "web-ext run --ignore-files ignore/ bin/ *.md src/ native-app.js filetypes.json package.json copy-polyfill.js",
     "webext-build": "web-ext build --ignore-files ignore/ bin/ *.md src/ native-app.js filetypes.json package.json copy-polyfill.js",
-    "run": "npm run copy-polyfill && npm run webext-run",
-    "lint": "npm run eslint && npm run copy-polyfill && npm run webext-lint"
+    "copy-polyfill": "node ./copy-polyfill",
+    "eslint": "eslint addon.js copy-polyfill.js native-app.js src/",
+    "lint": "npm run eslint && npm run copy-polyfill && npm run webext-lint",
+    "run": "npm run eslint && npm run copy-polyfill && npm run webext-run",
+    "addon": "npm run eslint && npm run copy-polyfill && npm run webext-build",
+    "installer-lint": "npm run installer && npm run lint",
+    "installer-run": "npm run installer && npm run run",
+    "installer-addon": "npm run installer && npm run addon",
+    "installer-all-lint": "npm run installer-all && npm run lint",
+    "installer-all-run": "npm run installer-all && npm run run",
+    "installer-all-addon": "npm run installer-all && npm run addon"
+  },
+  "pkg": {
+    "assets": [
+        "bin/node7-macos-x64-native-app",
+        "bin/node7-linux-x64",
+        "bin/node7-linux-x86",
+        "bin/node7-linux-armv6",
+        "bin/node7-linux-armv7",
+        "bin/node7-macos-x64",
+        "bin/node7-macos-x86",
+        "bin/node7-win-x64",
+        "bin/node7-win-x86"
+    ]
   },
   "engines": {
     "node": "*"

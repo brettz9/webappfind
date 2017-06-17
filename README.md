@@ -48,13 +48,17 @@ This is a [WebExtensions](https://developer.mozilla.org/en-US/Add-ons/WebExtensi
 
 ### Testing
 
-1. `npm run installer` - Shortcut for the following two steps
-    1. `npm run build-installer` - Builds the Node executables for native messaging and
-        installations on the user machine
-    1. `npm run execute` - Executes the installer
-1. `npm run lint` - Runs ESLint and `web-ext lint` (which uses `addons-linter`)
-1. `npm run run` - Test the web extension in Firefox
-1. `npm run build-addon` - Building the add-on file for distribution, e.g., on AMO
+*Note: The "all" options [do not currently work](https://github.com/zeit/pkg/issues/136#issuecomment-308794640)*
+
+1. `npm run installer(-all)-(lint|run|addon)` - Shortcut options for the following two steps
+    1. `npm run installer(-all)` - Shortcut for the following two steps
+        1. `npm run build-installer(-all)` - Builds the Node executables for native messaging and
+            installations on the user machine
+        1. `npm run run-install` - Executes the installer
+    1. One of:
+        1. `npm run lint` - Runs ESLint and `web-ext lint` (which uses `addons-linter`)
+        1. `npm run run` - Test the web extension in Firefox
+        1. `npm run addon` - Building the add-on file for distribution, e.g., on AMO
 
 ## To-dos
 

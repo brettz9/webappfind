@@ -2,7 +2,9 @@ node_modules
 
 web-ext-artifacts
 # web-ext-artifacts/webappfind-*/
-bin
+bin/*installer
+bin/*native-app
+
 
 # Copied from node_modules for build only
 browser-polyfill.js
