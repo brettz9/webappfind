@@ -2,7 +2,8 @@
 
 VERSION INCOMPLETE!!!
 
-This is a [WebExtensions](https://developer.mozilla.org/en-US/Add-ons/WebExtensions) application.
+This is a [WebExtensions](https://developer.mozilla.org/en-US/Add-ons/WebExtensions)
+application.
 
 ## Comparison with alternatives
 
@@ -50,10 +51,11 @@ This is a [WebExtensions](https://developer.mozilla.org/en-US/Add-ons/WebExtensi
 
 *Note: The "all" options [do not currently work](https://github.com/zeit/pkg/issues/136#issuecomment-308794640)*
 
-1. `npm run installer(-all)-(lint|run|addon)` - Shortcut options for the following two steps
+1. `npm run installer(-all)-(lint|run|addon)` - Shortcut options for the following
+    two steps
     1. `npm run installer(-all)` - Shortcut for the following two steps
-        1. `npm run build-installer(-all)` - Builds the Node executables for native messaging and
-            installations on the user machine
+        1. `npm run build-installer(-all)` - Builds the Node executables for native
+            messaging and installations on the user machine
         1. `npm run run-install` - Executes the installer
     1. One of:
         1. `npm run lint` - Runs ESLint and `web-ext lint` (which uses `addons-linter`)
@@ -62,14 +64,16 @@ This is a [WebExtensions](https://developer.mozilla.org/en-US/Add-ons/WebExtensi
 
 ## To-dos
 
-1. Have the OS-specific executable of `bin/native-app` be identified and bundled automatically
+1. Have the OS-specific executable of `bin/native-app` be identified and
+    bundled automatically
 
 1. Overcome "Cannot find module 'regedit'" error when building on non-Windows
 
-1. In `pkg` file, after checking registry (how to avoid repeating??), set-up Node WebSockets to
-     listen and pass on to add-on (which will open website and `postMessage` into it and be able
-     to handle opposite direction, including for writing file contents back to disk, but also
-     for AtYourCommand functionality)
+1. In `pkg` file, after checking registry (how to avoid repeating??), set-up
+    Node WebSockets to listen and pass on to add-on (which will open website
+    and `postMessage` into it and be able to handle opposite direction,
+    including for writing file contents back to disk, but also for
+    *AtYourCommand* functionality)
 
 1. Refactor this extension to be a bridge between Node (including
     user-installed packages) and browser/browser add-ons/web-sites.
