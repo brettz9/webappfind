@@ -67,6 +67,10 @@ application.
 1. Have the OS-specific executable of `bin/native-app` be identified and
     bundled automatically
 
+1. Make install script which avoids pkg bundling by assumes user has Node
+    installed (much smaller download and less memory, esp. if needing to
+    build executables for opening files too)
+
 1. Overcome "Cannot find module 'regedit'" error when building on non-Windows
 
 1. In `pkg` file, after checking registry (how to avoid repeating??), set-up
@@ -92,8 +96,7 @@ application.
     1. For an added security layer, might only let bridge work with
         user-designated packages.
 
-    1. Use socket instead of stateless server to relay flexibly in either
-        direction? But call "add-on"'s main script once at start-up.
+    1. Call "add-on"s' main scripts once at start-up.
 
     1. Have "add-ons" indicate their privilege level (e.g., nodeToBrowser,
         browserToNode) and high-level permission (e.g., `postMessage`
@@ -110,6 +113,8 @@ application.
 
             1. Extend `filetypes.json` to support passing into a specific
                 add-on?
+
+            1. See old code and all to-dos
 
         1. Like the old WebAppFind behavior but allow for general
             URL-opening mechanism (including for passing of messages)
