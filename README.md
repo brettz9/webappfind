@@ -136,6 +136,9 @@ application.
 1. Remove old `webappfind` files/info (e.g., on `filetypes.json`) if
     making package more general purpose.
 
+1. Complete [executable builder](https://github.com/brettz9/executable-builder)
+    and [atyourcommand](https://github.com/brettz9/atyourcommand) but for webextensions.
+
 ## To-dos (Lower priority)
 
 1. `manifest.json` additions?
