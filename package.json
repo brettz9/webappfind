@@ -20,6 +20,7 @@
     "wafcli": "./bin/cli.js"
   },
   "scripts": {
+    "test": "node test/ws-client.js",
     "run-install-all": "wafcli install single-user buildInfoIntoName",
     "run-install": "wafcli install single-user",
     "build-installer-component-all": "wafcli installer all",
