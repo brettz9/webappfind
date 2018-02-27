@@ -1,4 +1,5 @@
 const nativeMessage = require('chrome-native-messaging');
+const WebSocket = require('ws');
 
 const input = new nativeMessage.Input();
 const transform = new nativeMessage.Transform(messageHandler);
@@ -16,15 +17,15 @@ function messageHandler (msg, push, done) {
     done();
 }
 
-const outputOut = new nativeMessage.Output();
-outputOut.pipe(process.stdout);
+const backgroundScript = new nativeMessage.Output();
+backgroundScript.pipe(process.stdout);
 
-outputOut.write('Starting');
-const WebSocket = require('ws');
+backgroundScript.write('Starting (in native app)');
+
 const wss = new WebSocket.Server({ port: 8080 });
 wss.on('connection', (ws) => {
     ws.on('message', (msg) => {
-        outputOut.write('server received: ' + msg);
-        ws.send('server sending back: ' + msg);
+        backgroundScript.write('Native app server received: ' + msg);
+        ws.send('Native app server sending back: ' + msg);
     });
 });

@@ -13,7 +13,7 @@ describe('Native messaging communication', function () {
 
         ws.on('message', (data) => {
             // console.log('msg recd by client: ' + data);
-            expect(data).to.equal('server sending back: ' + clientMessage);
+            expect(data).to.equal('Native app server sending back: ' + clientMessage);
             ws.close();
             done();
         });
