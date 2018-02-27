@@ -69,6 +69,9 @@ machine—[do not currently work](https://github.com/zeit/pkg/issues/136#issueco
 
 ## To-dos
 
+1. Delete preferences from `ignore/old-preferences.json` after suitably
+    reimplemented
+
 1. Have the OS-specific executable of `bin/native-app` be identified and
     bundled automatically
 

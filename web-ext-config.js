@@ -9,6 +9,7 @@ module.exports = {
         '.remarkrc',
         '*.zip',
         '*.xpi',
+        'ignore/**',
         'web-ext-artifacts/**'
     ]
 };
