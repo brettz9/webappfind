@@ -25,6 +25,6 @@ const wss = new WebSocket.Server({ port: 8080 });
 wss.on('connection', (ws) => {
     ws.on('message', (msg) => {
         outputOut.write('server received: ' + msg);
-        ws.send('server sending something');
+        ws.send('server sending back: ' + msg);
     });
 });
