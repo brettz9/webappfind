@@ -1,3 +1,4 @@
+const fs = require('fs');
 const path = require('path');
 const os = require('os');
 const {mkdirp, writeFile, copyExecutable, regedit} = require('./promise-wrappers');
@@ -49,6 +50,7 @@ const pathMatrix = {
 exports.localInstall = function localInstall ({
     userInstallType,
     buildInfoIntoName = false,
+    pkg = false,
     nodeVersion = process.version.match(/v(\d+)/)[1]
 }) {
     /*
@@ -67,18 +69,32 @@ exports.localInstall = function localInstall ({
         throw new Error('Unsupported system architecture detected: ', arch);
     }
 
+    // const executableSuffix = isMac ? '.app' : (isWin ? '.exe' : ''); // Todo: Address permissions for Linux
+    const nativeAppFileName = (pkg && buildInfoIntoName
+        ? 'node' + nodeVersion + '-' + osType + '-' + arch + '-'
+        : ''
+    ) + 'native-app' + (pkg ? '' : (isWin ? '.bat' : '.sh')); // + executableSuffix;
+
     // Todo: Test all browser/platform combos
     return Promise.all(browsers.map((browser) => {
         const appManifestDirectory = isWin
             ? __dirname
             : pathMatrix[browser][osType][userType].replace(/^~/, (n0) => os.homedir());
-        // const executableSuffix = isMac ? '.app' : (isWin ? '.exe' : ''); // Todo: Address permissions for Linux
-        const nativeAppFileName = (buildInfoIntoName
-            ? 'node' + nodeVersion + '-' + osType + '-' + arch + '-'
-            : ''
-        ) + 'native-app'; // + executableSuffix;
         const mainNativeScriptPath = path.join(appManifestDirectory, nativeAppFileName);
         const appManifestPath = path.join(appManifestDirectory, extensionName + '.json');
+
+        if (!pkg) {
+            const mainNativeScriptJS = path.join(__dirname, '../native-app.js');
+            if (isMac || isLinux) {
+                fs.writeFileSync(mainNativeScriptPath, `#!/bin/bash
+node "${mainNativeScriptJS}"
+            `);
+            } else if (isWin) {
+                fs.writeFileSync(mainNativeScriptPath, `${mainNativeScriptJS}
+            `);
+            }
+            fs.chmodSync(mainNativeScriptPath, '755');
+        }
 
         // Todo: Avoid rewriting directory if Windows
         return Promise.all([
@@ -122,7 +138,7 @@ exports.localInstall = function localInstall ({
                             );
                             throw err;
                         }),
-                        copyExecutable(
+                        pkg ? copyExecutable(
                             // We install this file where there is a known directory and so it
                             //   can be discovered
                             path.join(__dirname, '../bin/', nativeAppFileName),
@@ -130,7 +146,7 @@ exports.localInstall = function localInstall ({
                         ).catch((err) => {
                             console.log('Error copying native messaging executable.', err);
                             throw err;
-                        })
+                        }) : Promise.resolve()
                     ]);
                 }),
             (isWin && (!browsers.includes('Chrome') || !browsers.include('Chromium') ||

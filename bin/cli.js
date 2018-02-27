@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+
 const {localInstall} = require('../src/install');
 const {execFile: execFileOriginal} = require('child_process');
 
@@ -22,16 +23,24 @@ const execFile = (file, args, options) =>
 const command = process.argv[2];
 console.log('RUNNING COMMAND', command);
 switch (command) {
-case 'native-apps': {
-    nativeApps();
+case 'pkg-native-apps': {
+    pkgNativeApps();
     break;
 } case 'installer': {
-    installer();
+    // TODO
+    break;
+} case 'pkg-installer': {
+    pkgInstaller();
     break;
 } case 'install': {
     const userInstallType = process.argv[3];
     const buildInfoIntoName = !!process.argv[4];
     localInstall({userInstallType, buildInfoIntoName});
+    break;
+} case 'pkg-install': {
+    const userInstallType = process.argv[3];
+    const buildInfoIntoName = !!process.argv[4];
+    localInstall({userInstallType, buildInfoIntoName, pkg: true});
     break;
 } default: {
     console.log(
@@ -71,7 +80,7 @@ function getAllTargets () {
     */
 }
 
-function nativeApps () {
+function pkgNativeApps () {
     const pkgFile = 'native-app.js';
     let targets = process.argv[3] || '';
     targets = targets === 'all' ? getAllTargets() : targets.split(',');
@@ -96,7 +105,7 @@ function nativeApps () {
     });
 }
 
-function installer () {
+function pkgInstaller () {
     // We need `pkg` config (for specifying dynamic require assets) so
     //    we set to `package.json` here.
     const pkgFile = 'package.json'; // 'src/installer.js';

@@ -4,6 +4,7 @@ web-ext-artifacts
 # web-ext-artifacts/webappfind-*/
 bin/*installer
 bin/*native-app
+bin/native-app.sh
 
 
 # Copied from node_modules for build only
