@@ -15,12 +15,13 @@ case 'client': {
     });
 
     ws.on('message', (data) => {
-        // console.log('msg recd by client: ' + data);
+        // console.log('msg recd back by client: ' + data);
         ws.close();
     });
     return;
 } case 'build-openwith-exec': {
     // Todo: Allow calling this functionality from within the add-on
+    // Todo: Allow baking in: 'file', 'directory', 'mode', 'site', 'args'
     return;
 }
 }
