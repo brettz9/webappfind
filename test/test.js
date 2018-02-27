@@ -5,15 +5,21 @@ describe('Native messaging communication', function () {
     it('should send and receive messages', (done) => {
         const WebSocket = require('ws');
         const ws = new WebSocket('ws://localhost:8080');
-        const clientMessage = 'msg from client';
+        const testFile = 'test123.js';
 
         ws.on('open', () => {
-            ws.send(clientMessage);
+            ws.send(JSON.stringify({
+                method: 'client',
+                file: testFile
+            }));
         });
 
-        ws.on('message', (data) => {
+        ws.on('message', (msg) => {
+            const msgObj = JSON.parse(msg);
+            const {prop, value} = msgObj;
             // console.log('msg recd by client: ' + data);
-            expect(data).to.equal('Native app server sending back: ' + clientMessage);
+            expect(prop, 'Native app server sending back: file property').to.equal('file');
+            expect(value, 'Native app server sending back: file value').to.equal(testFile);
             ws.close();
             done();
         });

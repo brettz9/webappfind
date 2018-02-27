@@ -1,17 +1,17 @@
 const nativeMessage = require('chrome-native-messaging');
 const WebSocket = require('ws');
 
-const argType = process.argv[2];
-const clientMessage = process.argv[3];
+const argv = require('minimist')(process.argv.slice(2));
+const {method} = argv;
 
 (() => {
-switch (argType) { // We're reusing this executable to accept messages for setting up a client
+switch (method) { // We're reusing this executable to accept messages for setting up a client
 case 'webappfind':
-case 'webappfind-client': {
+case 'client': {
     const ws = new WebSocket('ws://localhost:8080');
 
     ws.on('open', () => {
-        ws.send(clientMessage);
+        ws.send(JSON.stringify(argv));
     });
 
     ws.on('message', (data) => {
@@ -49,8 +49,20 @@ backgroundScript.write('Starting (in native app)');
 const wss = new WebSocket.Server({ port: 8080 });
 wss.on('connection', (ws) => {
     ws.on('message', (msg) => {
-        backgroundScript.write('Native app server received: ' + msg);
-        ws.send('Native app server sending back: ' + msg);
+        const msgObj = JSON.parse(msg);
+        const {method} = msgObj;
+        switch (method) {
+        case 'client': {
+            ['file', 'directory', 'mode', 'site', 'args'].forEach((prop) => {
+                const value = msgObj[prop];
+                if (value !== undefined) {
+                    backgroundScript.write('Native app server received: ' + prop + ' = ' + value);
+                    ws.send(JSON.stringify({prop, value}));
+                }
+            });
+            break;
+        }
+        }
     });
 });
 })();

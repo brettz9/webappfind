@@ -79,6 +79,7 @@
   },
   "dependencies": {
     "chrome-native-messaging": "0.2.0",
+    "minimist": "^1.2.0",
     "mkdirp": "^0.5.1",
     "webextension-polyfill": "^0.2.1",
     "ws": "^4.1.0"
