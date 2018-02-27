@@ -14,8 +14,8 @@
 
     "background": {
         "scripts": [
-            "addon.js",
-            "browser-polyfill.js"
+            "browser-polyfill.js",
+            "background.js"
         ]
     },
 

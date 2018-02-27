@@ -14,7 +14,7 @@ console.log('started webappfind');
 /**
 On startup, connect to the "webappfind" app.
 */
-const port = (typeof browser !== 'undefined' ? browser : chrome).runtime.connectNative('webappfind');
+const port = browser.runtime.connectNative('webappfind');
 
 /**
 Listen for messages from the webappfind app (which listens for command line invocations, ala "Open"/"Open with...").
