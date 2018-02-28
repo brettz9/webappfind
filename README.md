@@ -149,7 +149,9 @@ machine—[do not currently work](https://github.com/zeit/pkg/issues/136#issueco
 
 1. Allow building AppleScript to prompt for file dialog and supply that to
     the web socket client (or the "Open with..." AppleScript which has this baked in);
-    may be useful, e.g., on the dock
+    may be useful, e.g., on the dock; document usage of putting in dock for dragging
+    files onto it; make same file which checks for params and if none present,
+    prompt for file dialog.
 
 ## To-dos (Lower priority)
 
