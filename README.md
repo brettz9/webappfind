@@ -155,6 +155,9 @@ machine—[do not currently work](https://github.com/zeit/pkg/issues/136#issueco
 
 ## To-dos (Lower priority)
 
+1. Support passing entire directories with permission to re-reference IDs
+    (until revoked in a permissions dialog?)
+
 1. `manifest.json` additions?
 
     1. Set `protocol_handlers: [{protocol: "ext+waf", name: "WebAppFind", uriTemplate: "https://...%s"}]`; e.g., for site to register itself for a type
