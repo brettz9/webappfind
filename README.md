@@ -147,6 +147,10 @@ machine—[do not currently work](https://github.com/zeit/pkg/issues/136#issueco
 1. Complete [executable builder](https://github.com/brettz9/executable-builder)
     and [atyourcommand](https://github.com/brettz9/atyourcommand) but for webextensions.
 
+1. Allow building AppleScript to prompt for file dialog and supply that to
+    the web socket client (or the "Open with..." AppleScript which has this baked in);
+    may be useful, e.g., on the dock
+
 ## To-dos (Lower priority)
 
 1. `manifest.json` additions?
