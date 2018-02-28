@@ -2,6 +2,7 @@
 
 const fs = require('fs');
 const mkdirpOriginal = require('mkdirp');
+const {execFile: execFileOriginal} = require('child_process');
 
 const mkdirp = (dirPath) => {
     return new Promise((resolve, reject) => {
@@ -91,7 +92,23 @@ if (isWin) {
     exports.regedit = regedit;
 }
 
+const execFile = (file, args, options) =>
+    new Promise((resolve, reject) => {
+        execFileOriginal(file, args, options, (error, stdout, stderr) => {
+            if (error) {
+                const err = new Error('Exec error');
+                err.error = error;
+                err.stdout = stdout;
+                err.stderr = stderr;
+                reject(err);
+                return;
+            }
+            resolve([stdout, stderr]);
+        });
+    });
+
 exports.mkdirp = mkdirp;
 exports.writeFile = writeFile;
 exports.copyExecutable = copyExecutable;
 exports.copyFile = copyFile;
+exports.execFile = execFile;

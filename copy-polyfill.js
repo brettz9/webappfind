@@ -1,6 +1,6 @@
 const path = require('path');
-const {copyFile} = require('./src/promise-wrappers');
-const polyfillFile = 'browser-polyfill.js'; // could end in .min.js instead
+const {copyFile} = require('./polyfills/promise-wrappers');
+const polyfillFile = 'polyfills/browser-polyfill.js'; // could end in .min.js instead
 copyFile(
     path.join(
         __dirname,

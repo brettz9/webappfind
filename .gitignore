@@ -8,7 +8,7 @@ bin/native-app.sh
 
 
 # Copied from node_modules for build only
-browser-polyfill.js
+polyfills/browser-polyfill.js
 
 demos/svg-edit/.svn
 demos/svg-edit/editor/config.js

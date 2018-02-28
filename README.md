@@ -146,6 +146,7 @@ machine—[do not currently work](https://github.com/zeit/pkg/issues/136#issueco
 
 1. Complete [executable builder](https://github.com/brettz9/executable-builder)
     and [atyourcommand](https://github.com/brettz9/atyourcommand) but for webextensions.
+    1. Auto-add to dock
 
 1. Allow building AppleScript to prompt for file dialog and supply that to
     the web socket client (or the "Open with..." AppleScript which has this baked in);

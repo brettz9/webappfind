@@ -1,22 +1,7 @@
 #!/usr/bin/env node
 
 const {localInstall} = require('../src/install');
-const {execFile: execFileOriginal} = require('child_process');
-
-const execFile = (file, args, options) =>
-    new Promise((resolve, reject) => {
-        execFileOriginal(file, args, options, (error, stdout, stderr) => {
-            if (error) {
-                const err = new Error('Exec error');
-                err.error = error;
-                err.stdout = stdout;
-                err.stderr = stderr;
-                reject(err);
-                return;
-            }
-            resolve([stdout, stderr]);
-        });
-    });
+const {execFile} = require('../polyfills/promise-wrappers');
 
 // Todo: Switch to minimist, etc. for parsing args
 
