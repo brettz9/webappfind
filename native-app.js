@@ -69,7 +69,8 @@ on run {input}
     return input
 end run
 `;
-    // Todo: evaluate and compile to application, optionally associate to file type and/or add to dock
+    // Todo: test evaluation/compilation to application
+    // Todo: optionally associate to file type and/or add to dock
     console.log('appleScript', appleScript);
     execFile('osacompile', ['-o', 'output.app', '-e', appleScript]);
     return;
