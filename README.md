@@ -2,8 +2,58 @@
 
 VERSION INCOMPLETE/NOT YET FUNCTIONAL!!!
 
-This is a [WebExtensions](https://developer.mozilla.org/en-US/Add-ons/WebExtensions)
-application.
+A [WebExtensions](https://developer.mozilla.org/en-US/Add-ons/WebExtensions)
+application to allow opening of files from the desktop (by double-click using
+default file assocations or "Open with...") into web applications.
+
+## Introduction
+
+Are you a fan of web apps, but want the freedom to place your data files
+where you like on your desktop and thus be able to work offline and **own**
+your data rather than keeping it in the cloud? Do you want the freedom
+to just double-click (or right-click) a file on your desktop so that it opens
+in a web app, saving you the trouble of having to copy the file path,
+move from your desktop to the web app, and paste the path in a file
+finder? Do you want to avoid the wrist strain of dragging files into
+your web app when modifications to the files cannot even be saved back
+directly to your hard drive?
+
+WebAppFind addresses these use cases by allowing you to double-click (or
+use "Open with..." right-click) on "view" or "edit" executable files on your
+desktop (currently, executables are for Mac only), sending the file
+path details to the [native messaging](https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Native_messaging)
+component of the add-on (via command line arguments) which are then
+delivered into the main browser add-on which, if no site is hard-coded
+in the request, checks for an *optional* `filetypes.json` file within the
+same directory as the right-clicked file to determine more precise
+handling (the file extension will be used to determine the type otherwise).
+Based on what is chosen/found and in the addon's preferences,
+a handler web site will be sought in the browser to open the file of the
+designated type (whether a generic or custom type) as well as allow--if
+the "edit" type was the type chosen and a suitable handler site was
+found to send back a save event--saves to be made back to the file.
+
+WebAppFind allow you to make your data files accessible to other
+programs and to give your users peace of mind to not be locked
+into your application alone. It also allows your users to open your
+custom data files in your program immediately and intelligently,
+using whatever file extension you prefer, even if the file extension
+is a generic one such as "json" or "js" while your own data file
+follows a particular format or schema.
+
+Unlike an approach that would allow websites the ability to request
+local file access, *webappfind* minimizes security and privacy risks
+by only allowing files designated in the above manner of selection from
+your desktop to be available to the relevant web application; sites cannot
+gain such access without your running the process that grants permission.
+
+## Some use case scenarios
+
+1. Work on Git on your desktop while being able to open HTML files for
+WYSIWYG editing in a (CKEditor) web app which you can easily modify
+to add buttons for inserting code snippets? Do you want to use CodeMirror
+for syntax highlighting of your JavaScript and CSS? (Demos are available
+which do all of these.)
 
 ## Command line communication with add-on
 

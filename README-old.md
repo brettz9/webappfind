@@ -1,52 +1,5 @@
 - LOOK AT old-files, demos-samples BRANCHES for deleted info!!!
 
-# webappfind
-
-Are you a fan of web apps, but want the freedom to place your data files
-where you like on your desktop and thus be able to work offline and own
-your data rather than keeping it in the cloud? Do you want the freedom
-to just double-click (or right-click) a file on your desktop so that it opens
-in a web app, saving you the trouble of having to copy the file path,
-move from your desktop to the web app, and paste the path in a file
-finder? Do you want to avoid dragging files into your web app when
-modifications to the files cannot be saved back directly to your hard
-drive?
-
-WebAppFind addresses these use cases by allowing you to double-click (or
-use "Open with..." right-click) on "view" or "edit" executable files on your
-desktop (currently, executables are for Windows only), sending the file
-path details to Firefox (via command line arguments) which are then
-intercepted by a Firefox add-on which checks for an *optional* `filetypes.json`
-file within the same directory as the right-clicked file to determine more
-precise handling (the file extension will be used to determine the type
-otherwise). Based on what is chosen/found and on user preferences,
-a handler web site will be sought in Firefox to open the file of the
-designated type (whether a generic or custom type) as well as allow
-saves to be made back to the file if the "edit" type was the type chosen
-and a suitable handler site was found to send back a save event.
-
-WebAppFind allow you to make your data files accessible to other
-programs and to give your users peace of mind to not be locked
-into your application alone. It also allows your users to open your
-custom data files in your program immediately and intelligently,
-using whatever file extension you prefer, even if the file extension
-is a generic one such as "json" or "js" while your own data file
-follows a particular format or schema.
-
-Unlike a more generic solution, such as with a Firefox add-on or
-[AsYouWish](https://github.com/brettz9/asyouwish/)-enabled site,
-*webappfind* minimizes security and privacy risks by only allowing
-files designated in the above manner to be available to the relevant
-web application.
-
-# Some use case scenarios
-
-1. Work on Git on your desktop while being able to open HTML files for
-WYSIWYG editing in a (CKEditor) web app which you can easily modify
-to add buttons for snippets you like to add? Do you want to use CodeMirror
-for syntax highlighting of your JavaScript and CSS? (Demos are included
-which do all of these.)
-
 # Comparison to other standards and tools
 
 ## Comparison with similar WebAPI work
@@ -270,7 +223,7 @@ So, for example, if no `filetypes.json` file were present (or if the `filetypes.
 
 The 'webapp-view' message (see the example below) will be sent to the web app when a desktop file has been opened in the "view", "binaryview", "edit", or "binaryedit" mode. This message delivers the file contents (whether in binary form or not) to the web app.
 
-```javascript
+```js
 var pathID; // We might use an array to track multiple path IDs within the same app (once WebAppFind may be modified to support this capability!)
 window.addEventListener('message', function(e) {
     // e.data might be set to something like:
@@ -318,7 +271,7 @@ Once a save has been performed, a message, 'webapp-save-end', will be
 sent from the add-on back to the WebAppFind-opened app (in case the
 app would like to inform the user in some manner).
 
-```javascript
+```js
 // For your user's privacy, you should only post the
 //  file contents to this page itself (and this save
 //  will be picked up by the Firefox add-on), so do
@@ -352,7 +305,7 @@ reasons, should not rely on this, but it is provided for convenience.
 The recommended method for listening for the directory path is instead in
 the following manner:
 
-```javascript
+```js
 window.addEventListener('message', function(e) {
         if (e.origin !== window.location.origin) { // PRIVACY AND SECURITY! (for viewing and saving, respectively)
             return;
