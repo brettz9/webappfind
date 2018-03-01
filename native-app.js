@@ -32,12 +32,15 @@ case 'client': {
     const appleScript = `
 -- Command line usage example: open ./webappfind-as.app --args /Users/brett/myFile.txt
 --   Could pass in other flags at end too, but not usable with "open with"
-on open argv
+
+on open argv -- For "open with" and drag-and-drop (or baked in file or file selector when none present)
     getFile(argv)
 end open
-on run argv
+
+on run argv -- For direct command line (see example above)
     getFile(argv)
 end run
+
 on getFile (argv)
     try
         set input to item 1 of argv -- Not needed in Automator AS, but needed in normal AS
