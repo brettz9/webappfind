@@ -63,6 +63,10 @@ open ./webappfind-as.app
 - **fileSelectType** - When the generated script does not have a baked-in file
     and no file argument is passed to it, this argument, if present, will have
     the script insist on a particular file type in the resulting file dialog.
+    Must be an extension string without the leading period (e.g., "js" for ".js"
+    JavaScript files) or a
+    [Uniform Type Identifier](https://en.wikipedia.org/wiki/Uniform_Type_Identifier),
+    e.g., "public.image" or "com.apple.iwork.pages.sffpages".
 
 ## Comparison with alternatives
 
