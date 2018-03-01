@@ -259,7 +259,11 @@ machine—[do not currently work](https://github.com/zeit/pkg/issues/136#issueco
 
 1. Complete [executable builder](https://github.com/brettz9/executable-builder)
     and [atyourcommand](https://github.com/brettz9/atyourcommand) but for webextensions.
-    1. Auto-add to dock
+    1. Option to auto-add as file association and to dock
+    1. Reimplement to support Windows in new webappfind version (as batch scripts as possible);
+        convert to shortcut tied to cmd.exe for sake of getting an icon
+    1. Installer script to run to facilitate setting up of OpenWith per user choices (if Executable Builder is not installed, it could link to it, and if it is, it could bring user through steps).
+    1. Applescript-based executable builder also?
 
 1. Document usage of putting in dock for dragging files onto it
 

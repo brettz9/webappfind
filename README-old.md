@@ -1,4 +1,4 @@
-- LOOK AT old-files, demos-samples BRANCHES for deleted info!!!
+- LOOK AT old-files BRANCHES for deleted info!!!
 
 # Comparison to other standards and tools
 
@@ -146,6 +146,13 @@ finished should help users to do this.
 
 # Command line API
 
+----
+TODOS TO INCORPORATE AND ADD BELOW
+1. Window/tab targeting
+    1. Option to avoid or allow new tabs for same URI/mode/filetype/path? (option to get the same tab or new tabs for them?); option to push to all open windows in different manner so can notify user of updates but not change focus, etc.
+    1. Allow command line to specify (or let WebAppFind determine according to some permutation of the file path) the exact window and possibly Panorama group and/or pinned status into which the web app with desktop file will be opened (the web app could handle moving itself instead but only if the web app were AsYouWish-based and the user preferences supplied the file path). Alternatively, the executable might have logic to determine the profile in a similarly automated (as opposed to hard-coded) manner. The advantage of either approach would be to allow the user a better web app grouping organization corresponding to the hierarchical organization they can find on the desktop.
+----
+
 WebAppFind is triggered (currently Firefox only) through command line
 arguments passed to Firefox and handled by the WebAppFind add-on.
 
@@ -196,6 +203,12 @@ https://en.wikipedia.org/wiki/Cross-site_request_forgery for some
 of the concerns.
 
 ## API: file type finding
+
+----
+POSSIBLE TODOS TO INCORPORATE BELOW
+1. Support processing of `filetypes.json` for directories (e.g., a
+"directoryMatches" property to be added to `filetypes.json`).
+----
 
 The following steps may currently be altered by user preference.
 
@@ -449,11 +462,91 @@ Currently preferences are global, whereas it may be desirable to allow users
 to customize their preferences by type/protocol in addition to the current
 default global ones.
 
-## Possible future API/filestypes.json changes
+## Possible future API/filetypes.json changes
 
+1. Consider encouraging use of MIME types for file type names.
 1. Mode and parameter changes
-    1. See higher priority todos for an anticipated change with custom modes and allowing for multiple
-modes (and file access) at once.
+    1. API changes/additions (Anticipated change with custom modes and allowing for multiple modes (and file access) at once.)
+        1. Allow not just one, but multiple, file/URL/folder/command-line/web app/etc. arguments to be passed into
+        the web application (e.g., for preferences, privilege level simulation or request information, schema,
+        etc.) as an array of objects with the string results of obtaining the file in the specified mode (or custom mode in the case of a web app) placed as one of the keys
+        on the object, with the other
+        keys optionally indicating: 1) the source and nature of the string data (e.g., the path (with fundamental mode under which it was obtained or at least whether the data was obtained as binary or non-binary), URL, command line instructions, web app URL with arguments), 2) type meta-data about the file (as opposed to arguments supplied to that file) which could be used by the receiving application (e.g., to indicate which file is providing preferences, which is providing a schema for validation, etc. even while (ideally wiki-standardized) custom modes should normally be used for this). Could leverage the information within this array of objects in a generic server-side application as well. Should be able to work with export mode as well for multiple or alternate outputs.
+            1. Get this to work with SendTo so that an entire folder's files can be sent with privileges through regular desktop without need for manual command line or `filetypes.json`
+            1. Privileges could be optionally supplied automatically or on demand (with postMessage by site).
+            1. Also support designation of additional resource file access for a given file in `filetypes.json`; allow regex (including subfolders or even ancestor/sibling ones?) to map files (by regexp) or file types to additional resources
+            1. Make note that Windows doesn't apparently allow OpenWith when multiple files are selected on the desktop though things can work with `filetypes.json`
+            1. Develop system for converting file names into multiple resource
+            files, e.g., opening a file `brett.schema.dbjson` could by default
+            look for a "dbjson" web app handler while also giving permission to
+            that web app to read/write a file named "brett.schema" in the same
+            directory as "brett.schema.dbjson". Besides dot-separated additional
+            resource files, within an entry, a hyphen could indicate a
+            subdirectory, e.g., "brett.schemas-schema.dbjson" could allow access
+            to a file in "schemas/brett.schema" relative to the "dbjson" file.
+            A hyphen at the beginning could allow access to parent directories.
+            1. "export" - Exporting into a different format (and saving to a different target file) from
+    the original source file. Once multiple modes may be supported, users might supply
+    both "edit" and "export" privileges to a web app simultaneously so one could save back the original
+    file as well as the export (e.g., to save SVG and a PNG export or to save a CoffeeScript file and its JavaScript export).
+            1. Like "export", we might wish to allow a file to be opened with the privilege to save anywhere in a particular directory, etc.
+        1. Change custom modes to be prefixed with a colon in front of fundamental modes and then
+            allow multiple modes separated by whitespace (especially in preparation for support of a likely
+            frequent use case for combining a new fundamental mode, "export", along with an "edit" mode,
+            e.g., to allow saving of an SVG file as SVG or PNG, or saving CoffeeScript as CoffeeScript
+            of JavaScript, [Ocrad](http://antimatter15.github.io/ocrad.js/demo.html) for text OCR export of an image, etc.). Allow multiple custom modes attached to a single fundamental mode?
+        1. In addition to regular expressions, use the presence or specific values for custom modes to determine file type?
+        1. WebAppFind command line or `filetypes.json` to resolve URL into content to be passed to web app or path/link (file: or c:\) for app or file
+            1. Modify Executable Builder so an executable can cause a web file to be opened by a web or desktop app; and then save changes back via PUT or POST (check header for PUT support?); or should I instead just implement command line control for web->desktop add-ons and call that within an executable/Executable Builder (leading potentially back through WebAppFind command-line control)? Integrate with [atyourcommand](https://github.com/brettz9/atyourcommand)
+            1. Use server's `filetypes.json` also if present
+        1. Allow command line args to be piped into a string to be supplied to the web app (including result of another webappfind invocation?); if "edit" or "binaryedit" mode is given, allow command line instructions to be invoked with the result posted back from the web app as a parameter.
+        1. Mention how profile selection logic would probably ideally occur before opening Firefox as with
+        any complex type-determination logic, taking place within the executable (built by Executable Builder?), though ensure that the new proposed command line and web app pipelining features would be able to replicate this if necessary
+        1. Demo of Firefox being used merely to interpret `filetypes.json` and simply return a command line instruction back to a desktop app (in a hard-coded rather than fallback manner). Although AsYouWish could do this, better to bake it in so other desktop apps can leverage (including Notepad++, etc.).
+        1. Allow type to be supplied via command line without fileMatches calculations so as to just open the right web app for the type
+        1. Allow type to be supplied without any file so as to just open the web app for the supplied type (without a file)
+        1. Web app pipelining: Allow a hard-coded web app URL (or supply a path or
+        file type in order to discover a web app) to be supplied (along with its own
+        mode, custom mode, arguments, etc.) which will be opened (optionally in
+        a hidden window) and when its response its received, pipeline the string
+        result to another web app URL. Yes, the apps could instead communicate
+        directly with each other via postMessage, but this approach allows the
+        user to do their own coupling rather than be dependent
+        on a particular integration of services.
+        1. Support an optional, hard-coded web app URL (optionally looking for
+        fallbacks if the supplied one is a protocol but not found) and/or
+        hard-coded file type (to circumvent the normal detection procedures
+        and always open with a given web app).
+            1. Demo this hard-coding usage within FireFTP opening of remote
+            files (or better yet, implement an AsYouWish-based web FTP client
+            which can do it)
+        1. Arbitrary command line args to pass on to webapps
+            1. Command line args to web apps even without data file (and without special HTTP headers)
+            1. Update webappfind wiki on custom modes once arguments can be passed (advise to use instead if minor)
+        1. Allow eval-able strings (or JS file paths) as arguments (with or without the usual WebAppFind
+        file contents/paths) which Firefox then evaluates so as to provide AYW-like privileged
+        functionality in a batch file manner without exposing privileges to web apps unless invoked from the desktop (as a workaround, one could use WebAppFind to open an AYW-enabled site, especially if it adds an eval-like ability and WebAppFind get support for passing in arbitrary command line args). Batch scripts (including the functionality to optionally receive file arguments or paths to JS files if AYW was used or XHR paths were used) could thus be written in JS and take advantage of FF cross-platform features (like [Node.js command line scripts](http://www.2ality.com/2011/12/nodejs-shell-scripting.html) but browser aware too). Could use in conjunction with proposed "hidden" flag to avoid adding a tab (or do so by default).
+        1. Support optional "hidden" flag (in conjunction with, or only from, AsYouWish?) to embed a hidden DOM window script (use for batch-script-like functionality)
+            1. Potentially privileged via AsYouWish, and aware of file path, could, e.g., create 10 copies of a supplied file name in the same directory or some other pipeline
+            1. Allow args to WebAppFind to avoid adding a window, e.g., for a type to handling .jsbatch files to cause a them to be launched with privileges (via AYW? though better to avoid need for any HTML--just JS) in a hidden window (or manage files to run on a schedule; integrate with a Windows task scheduler in case not open?), so work like AYW but without a footprint (but without working each restart as with "add-on sites"); may still be useful with other privs, e.g., to get (send to network) and save file contents, and if asking for privs, will prompt dialog (e.g., to read a file and then use privs--though this would be redundant, perhaps in this mode we can always pass the real path so it adds value, e.g., if script wants to do something in same directory); see also todos in Executable Builder for more on
+            command-line-like approach
+        1. Prompt user for a web app URL if no app set for file type
+        1. Support option for any web app to open by default in full-screen mode (could just let web app and user handle, but user may prefer to bake it in to a particular executable only)
+        1. Supply own `filetypes.json` by command line including a remote one
+            1. If a directory or other file is supplied, convert it to the child
+            or sibling `filetypes.json` file respectively? (would be convenient for
+            atyourcommand to supply a right-clicked file and have WebAppFind
+            detect it's own remote `filetypes.json`)
+      1. Allow optional param substitution of content within the URL? May
+      present problems if running into URL length limits (which may differ
+      across browser is other browsers will be supported in the future) but
+      could allow WAF to work with some legacy apps that do not have the
+      message listening code.
+        1. Consider off-by-default mechanism for websites to not only ask to handle filetypes, but to ask to
+        set up built-in executables or specific executables for OpenWith or default execution of a given file type/extension.
+        Consider alternative with WAF in defining content types for handling by browser and then with sites registering themselves via [registerContentHandler()](https://developer.mozilla.org/en-US/docs/Web/API/Navigator.registerContentHandler). See,
+        however, [bug 391286](https://bugzilla.mozilla.org/show_bug.cgi?id=391286) for current lack of arbitrary MIME support in Firefox.
+
     1. See "Possible future mode additions" section below for possible additions to fundamental (functional) modes beyond just "view", "binaryview", "edit", and "binaryedit".
     1. Possible changes to parameters passed to registered protocol handlers and/or default handlers (if any, as may only be passed through postMessage or some other means)
         1. Add to what is passed within URL (beyond filetype, mode, custom mode, and path)? or just pass through postMessage? Bookmarkability vs. clean API?
@@ -467,11 +560,17 @@ modes (and file access) at once.
 
 ## Possible future mode additions
 
-See higher priority todos for changes/additions planned for the (hopefully) near future.
+See "Possible future API/filestypes.json changes" for changes/additions planned for the (hopefully) near future.
+
+1. Options to have Windows
+"[verb](http://msdn.microsoft.com/en-us/library/bb165967.aspx)"
+(i.e., Open, Edit, Print, Play, Preview or custom) be treated as
+modes/custom modes or to otherwise detect and interact with
+them?
 
 Besides "view", "binaryview", "edit", "binaryedit", "register", the following modes might be added in future versions (or made to correspond with WebDav commands?):
 
-1. Version control (also some discussion of possibilites for multiple file saving)
+1. Version control (also some discussion of possibilities for multiple file saving)
     1. "create", "delete" - for any necessary set-up before creation or deletion of a file (as with saving, the protocol should not have side effects, so these should only bring one to the page to confirm the user wished to take such an action--and the browser might have its own confirmation for these actions).
     1. "rename" and "move" (or cut or copy and paste)
     1. "versioncontrol" - A mechanism could be added to request listening to events which would impact version control (though some means of determining scope would be needed--e.g., a folder and all its subfolders--as well as privacy/security considerations which expands beyond the current scope of individual file viewing and saving; similar concerns would need to be taken into account for other modes that may process multiple files like search or file packaging). These events could be used to open a (hidden?) web app to store data (e.g., via localStorage or a new "edit" mechanism which could save to disk, but circumscribed by file type so that, e.g., a repository binary could be modified without the user needing to explicitly open it) and build a file history for a "repository". This "versioncontrol" handlers ought to allow multiple listening apps in some manner; this would be both for the sake of allowing different versioncontrol storage mechanisms/repository types, for ensuring that any viewing apps get updated upon external changes, as well as for any apps storing meta-data related to a document or documents but not saved within them to be notified and respond accordingly (including possibly saving their own updates back to disk), e.g., for building up a history of commit messages (which would at least effectively need the completion of the todo to allow a single web app to handle multiple documents at once).
@@ -492,107 +591,8 @@ within the desktop)
     1. Disable further save attempts with bad ID supplied in case a however previously approved site is attempting to guess at the paths of (if the user has enabled path transmission), or at the GUID representing, other non-approved files
     1. Check upon each save attempt that the loaded protocol is still registered as a handler (and remove usage notes above once implemented).
     1. Listen for unregistration of protocols to disable acting on future messages from them (only relevant for pages already loaded in this session).
-1. Window/tab targeting
-    1. Option to avoid or allow new tabs for same URI/mode/filetype/path? (option to get the same tab or new tabs for them?); option to push to all open windows in different manner so can notify user of updates but not change focus, etc.
-    1. Allow command line to specify (or let WebAppFind determine according to some permutation of the file path) the exact window and possibly Panorama group and/or pinned status into which the web app with desktop file will be opened (the web app could handle moving itself instead but only if the web app were AsYouWish-based and the user preferences supplied the file path). Alternatively, the executable might have logic to determine the profile in a similarly automated (as opposed to hard-coded) manner. The advantage of either approach would be to allow the user a better web app grouping organization corresponding to the hierarchical organization they can find on the desktop.
-1. API changes/additions
-    1. Allow not just one, but multiple, file/URL/folder/command-line/web app/etc. arguments to be passed into
-    the web application (e.g., for preferences, privilege level simulation or request information, schema,
-    etc.) as an array of objects with the string results of obtaining the file in the specified mode (or
-    custom mode in the case of a web app) placed as one of the keys on the object, with the other
-    keys optionally indicating: 1) the source and nature of the string data (e.g., the path (with fundamental mode under which it was obtained or at least whether the data was obtained as binary or non-binary), URL, command line instructions, web app URL with arguments), 2) type meta-data about the file (as opposed to arguments supplied to that file) which could be used by the receiving application (e.g., to indicate which file is providing preferences, which is providing a schema for validation, etc. even while (ideally wiki-standardized) custom modes should normally be used for this). Could leverage the information within this array of objects in a generic server-side application as well. Should be able to work with export mode as well for multiple or alternate outputs.
-        1. Get this to work with SendTo so that an entire folder's files can be sent with privileges through regular desktop without need for manual command line or `filetypes.json`
-        1. Privileges could be optionally supplied automatically or on demand (with postMessage by site).
-        1. Also support designation of additional resource file access for a given file in `filetypes.json`; allow regex (including subfolders or even ancestor/sibling ones?) to map files (by regexp) or file types to additional resources
-        1. Make note that Windows doesn't apparently allow OpenWith when multiple files are selected on the desktop though things can work with `filetypes.json`
-        1. Develop system for converting file names into multiple resource
-        files, e.g., opening a file `brett.schema.dbjson` could by default
-        look for a "dbjson" web app handler while also giving permission to
-        that web app to read/write a file named "brett.schema" in the same
-        directory as "brett.schema.dbjson". Besides dot-separated additional
-        resource files, within an entry, a hyphen could indicate a
-        subdirectory, e.g., "brett.schemas-schema.dbjson" could allow access
-        to a file in "schemas/brett.schema" relative to the "dbjson" file.
-        A hyphen at the beginning could allow access to parent directories.
-        1. "export" - Exporting into a different format (and saving to a different target file) from
-the original source file. Once multiple modes may be supported, users might supply
-both "edit" and "export" privileges to a web app simultaneously so one could save back the original
-file as well as the export (e.g., to save SVG and a PNG export or to save a CoffeeScript file and its
-JavaScript export).
-        1. Like "export", we might wish to allow a file to be opened with the privilege to save anywhere in a particular directory, etc.
-    1. Change custom modes to be prefixed with a colon in front of fundamental modes and then
-        allow multiple modes separated by whitespace (especially in preparation for support of a likely
-        frequent use case for combining a new fundamental mode, "export", along with an "edit" mode,
-        e.g., to allow saving of an SVG file as SVG or PNG, or saving CoffeeScript as CoffeeScript
-        of JavaScript, [Ocrad](http://antimatter15.github.io/ocrad.js/demo.html) for text OCR export of an image, etc.). Allow multiple custom modes attached to a single fundamental mode?
-    1. In addition to regular expressions, use the presence or specific values for custom modes to determine file type?
-    1. WebAppFind command line or `filetypes.json` to resolve URL into content to be passed to web app or path/link (file: or c:\) for app or file
-        1. Modify Executable Builder so an executable can cause a web file to be opened by a web or desktop app; and then save changes back via PUT or POST (check header for PUT support?); or should I instead just implement command line control for web->desktop add-ons and call that within an executable/Executable Builder (leading potentially back through WebAppFind command-line control)? Integrate with [atyourcommand](https://github.com/brettz9/atyourcommand)
-        1. Use server's `filetypes.json` also if present
-    1. Allow command line args to be piped into a string to be supplied to the web app (including result of another webappfind invocation?); if "edit" or "binaryedit" mode is given, allow command line instructions to be invoked with the result posted back from the web app as a parameter.
-    1. Mention how profile selection logic would probably ideally occur before opening Firefox as with
-    any complex type-determination logic, taking place within the executable (built by Executable Builder?), though ensure that the new proposed command line and web app pipelining features would be able to replicate this if necessary
-    1. Demo of Firefox being used merely to interpret `filetypes.json` and simply return a command line instruction back to a desktop app (in a hard-coded rather than fallback manner). Although AsYouWish could do this, better to bake it in so other desktop apps can leverage (including Notepad++, etc.).
-    1. Allow type to be supplied via command line without fileMatches calculations so as to just open the right web app for the type
-    1. Allow type to be supplied without any file so as to just open the web app for the supplied type (without a file)
-    1. Web app pipelining: Allow a hard-coded web app URL (or supply a path or
-    file type in order to discover a web app) to be supplied (along with its own
-    mode, custom mode, arguments, etc.) which will be opened (optionally in
-    a hidden window) and when its response its received, pipeline the string
-    result to another web app URL. Yes, the apps could instead communicate
-    directly with each other via postMessage, but this approach allows the
-    user to do their own coupling rather than be dependent
-    on a particular integration of services.
-    1. Support an optional, hard-coded web app URL (optionally looking for
-    fallbacks if the supplied one is a protocol but not found) and/or
-    hard-coded file type (to circumvent the normal detection procedures
-    and always open with a given web app).
-        1. Demo this hard-coding usage within FireFTP opening of remote
-        files (or better yet, implement an AsYouWish-based web FTP client
-        which can do it)
-    1. Arbitrary command line args to pass on to webapps
-        1. Command line args to web apps even without data file (and without special HTTP headers)
-        1. Update webappfind wiki on custom modes once arguments can be passed (advise to use instead if minor)
-    1. Allow eval-able strings (or JS file paths) as arguments (with or without the usual WebAppFind
-    file contents/paths) which Firefox then evaluates so as to provide AYW-like privileged
-    functionality in a batch file manner without exposing privileges to web apps unless invoked from the desktop (as a workaround, one could use WebAppFind to open an AYW-enabled site, especially if it adds an eval-like ability and WebAppFind get support for passing in arbitrary command line args). Batch scripts (including the functionality to optionally receive file arguments or paths to JS files if AYW was used or XHR paths were used) could thus be written in JS and take advantage of FF cross-platform features (like [Node.js command line scripts](http://www.2ality.com/2011/12/nodejs-shell-scripting.html) but browser aware too). Could use in conjunction with proposed "hidden" flag to avoid adding a tab (or do so by default).
-    1. Support optional "hidden" flag (in conjunction with, or only from, AsYouWish?) to embed a hidden DOM window script (use for batch-script-like functionality)
-        1. Potentially privileged via AsYouWish, and aware of file path, could, e.g., create 10 copies of a supplied file name in the same directory or some other pipeline
-        1. Allow args to WebAppFind to avoid adding a window, e.g., for a type to handling .jsbatch files to cause a them to be launched with privileges (via AYW? though better to avoid need for any HTML--just JS) in a hidden window (or manage files to run on a schedule; integrate with a Windows task scheduler in case not open?), so work like AYW but without a footprint (but without working each restart as with "add-on sites"); may still be useful with other privs, e.g., to get (send to network) and save file contents, and if asking for privs, will prompt dialog (e.g., to read a file and then use privs--though this would be redundant, perhaps in this mode we can always pass the real path so it adds value, e.g., if script wants to do something in same directory); see also todos in Executable Builder for more on
-        command-line-like approach
-    1. Prompt user for a web app URL if no app set for file type
-    1. Support option for any web app to open by default in full-screen mode (could just let web app and user handle, but user may prefer to bake it in to a particular executable only)
-    1. Supply own `filetypes.json` by command line including a remote one
-        1. If a directory or other file is supplied, convert it to the child
-        or sibling `filetypes.json` file respectively? (would be convenient for
-        atyourcommand to supply a right-clicked file and have WebAppFind
-        detect it's own remote `filetypes.json`)
-  1. Allow optional param substitution of content within the URL? May
-  present problems if running into URL length limits (which may differ
-  across browser is other browsers will be supported in the future) but
-  could allow WAF to work with some legacy apps that do not have the
-  message listening code.
-    1. Consider off-by-default mechanism for websites to not only ask to handle filetypes, but to ask to
-    set up built-in executables or specific executables for OpenWith or default execution of a given file type/extension.
-    Consider alternative with WAF in defining content types for handling by browser and then with sites registering themselves via [registerContentHandler()](https://developer.mozilla.org/en-US/docs/Web/API/Navigator.registerContentHandler). See,
-    however, [bug 391286](https://bugzilla.mozilla.org/show_bug.cgi?id=391286) for current lack of arbitrary MIME support in Firefox.
-1. Submit to AMO, Bower, etc.
-
-## Medium priority todos
-
-1. Complete [Executable Builder](https://github.com/brettz9/executable-builder)
-    1. Rewrite C++ exe's as batch scripts (particularly for the sake of [Executable Builder](https://github.com/brettz9/executable-builder)); convert to shortcut tied to cmd.exe for sake of getting an icon
-    1. Installer script to run to facilitate setting up of OpenWith per user choices (if Executable Builder is not installed, it could link to it, and if it is, it could bring user through steps).
-1. Options to have Windows
-"[verb](http://msdn.microsoft.com/en-us/library/bb165967.aspx)"
-(i.e., Open, Edit, Print, Play, Preview or custom) be treated as
-modes/custom modes or to otherwise detect and interact with
-them?
-1. Consider encouraging use of MIME types for file type names (perhaps
-more in harmony with emerging Web Wishes specification).
-1. Support processing of `filetypes.json` for directories (e.g., a
-"directoryMatches" property to be added to `filetypes.json`).
-1. Create tests using registerProtocolHandler (also for JS/JSON/mytype)
+1. Submit to AMO, npm, etc.
+1. Create tests using `registerProtocolHandler` (also for JS/JSON/mytype)
 
 ## Lower priority todos
 
@@ -753,70 +753,3 @@ alternative views/editing interfaces for the same shared data.
 1. Allow defaultHandlers to be optionally added inline with fileMatches in filetypes.json?
 1. Option to open HTML in chrome mode so one can do things like cross-domain toDataURL on an image canvas without errors (the proposed change to AsYouWish to allow sites to be reopened in this mode could be a workaround).
 1. Once API stabilizes, file feature request to get the functionality built into Firefox.
-
-## Possible "Demos" todos
-
-1. Make scrollbars easier to use in CodeMirror demos
-1. Utilize https://github.com/brettz9/requirejs-codemirror in CodeMirror demos for cleaner HTML
-1. Demos ought to use cookie-using full screen option for HTML and SVG
-1. Get HTML CodeMirror to use closetag, html5complete, matchTags (in addition to JS ones if mixed mode can support), use the preview option?; http://codemirror.net/demo/widget.html for line bars in linting (html, css, javascript)? linting for HTML? (JSLint can do some); ensure JSLint (and CSSLint?) applied to mixed HTML
-1. JS enhancement: CodeMirror tern support? can this work or be made to work with JSDoc?
-1. Use CodeMirror diffs/merge add-ons if version-control trigger types supported
-1. Use runmode for getting code syntax highlighting within CKEditor HTML (e.g., for doing blog posts): http://codemirror.net/demo/runmode.html and for a button to copy-HTML-(+css with styles inlined?)-to-clipboard in each of the html/javascript/css/svg/etc. modes
-1. Add CodeMirror search/replace?
-1. Tweak change CSS autocomplete in CodeMirror to support color/background-color, support CSS lint options
-1. Cookie to hold JSHint options (or CSS lint options) and for remembering XML "schemaInfo"
-1. XML dialect demo with schema for CodeMirror xmlautocomplete (also a JSON schema for checking JSON dialects if not autocomplete as well?)
-1. Images/canvas: http://www.picozu.com/editor/ ? Animated GIFs?
-1. Animated SVG?
-1. Audio: http://plucked.de/ and https://github.com/plucked/html5-audio-editor ?
-1. Video - popcorn?
-1. Music notations  - http://www.vexflow.com/
-1. MIDI, etc.
-1. Better integration of CodeMirror/CKEditor, using full (mixed HTML) features of latest CodeMirror
-1. Update my regex support in CodeMirror for regex type and for JS overlay: http://codemirror.net/1/contrib/regex/index.html
-1. CKEditor support for popup or inline SVGEdit and SVGEdit support for CKEditor foreign objects (via foreignObject extension?)
-1. Add CodeMirror to SVG Edit XML view
-1. Sticky app
-    1. See https://gist.github.com/brettz9/8687257
-    1. power-user support for form controls like checkboxes (underlying events currently supported better in Chrome than in Firefox), paperclip links, etc.
-    1. Modify WebAppFind to support display of independent data files (for multiple stickies in this case); or don't only associate a file path with individual URLs (file: or http:), but also allow associations with tab groups or bookmark folders so that if saving a new StickyBrains/CKEditor/word-processing file, it will save to a folder where one's ideas are already grouped
-    1. Offer grid-like edit ability using SVG Edit with HTML controls like checkboxes within foreignObject
-1. Create demo supporting docx format (rather than requiring export to HTML for Word docs)
-1. Demonstrate approach of allowing data files for download (so can store them anywhere)--if not AYW approach for namespaced shared browser access--as well as data files chosen from File selector (and save over such a file if within the protocol and user permits)
-1. Ability to build [JHTML](http://brettz9.github.com/jhtml) with autocomplete (usable for saving as JSON or saving as HTML) once spec finalized (once &lt;i> approach used)
-1. Integrate HTML/SVG (and then others) with [Together.js](https://togetherjs.com/) to allow peer-to-peer collaboration on one's local files
-1. Add http://pagedown.googlecode.com/hg/demo/browser/demo.html buttons to Markdown editor?
-1. "Todo" webapp demo
-1. CoffeeScript demo
-1. Modify the OCR demo to support detection (by WebAppFind-injected URL params) of various image formats, SVG, and as per the Ocrad demo, drawing on a canvas which could in turn be saved to disk as an image or exported as a text file (or even [HTML-to](http://robert.ocallahan.org/2011/11/drawing-dom-content-to-canvas.html)[-canvas](http://people.mozilla.org/~roc/rendering-HTML-elements-to-canvas.html)?) images to OCR; also modify to allow clicks/keypress on arrow buttons to browse the PDF page-by-page
-1. PDF demo; might use https://github.com/MrRio/jsPDF (see http://parall.ax/products/jspdf with HTML renderer demo) for writing, integrated into CodeMirror or even CKEditor if modified to support generation of the right format; if the same HTML format could be generated and accepted by the likes of [pdf2htmlEX](https://github.com/coolwanglu/pdf2htmlEX/) and jsPDF, there might be some round-tripping potential.
-1. Get CKeditor to allow WYSIWYG tables to be sortable for sake of CSV demo? Create view-only demo (i.e., just build table and insert)
-1. Web macro-script program for use with the web (including possibly AsYouWish), esp. for text processing (allowing XPath/CSS selectors or raw text searches, testing for content or replacing)
-1. Make especially the text and HTML editor demos extensible via postMessage from add-on site
-to editor which allows for introspection of the JavaScript to store for later evaluation and then will
-put into its own localStorage as an add-on. Could make the demo post the add-on origin site (and possibly code) back to the server (if not indicated as known within client code) and allow these to be discoverable by other users (though allow opting out of such reporting for privacy reasons).
-1. [Ocrad](http://antimatter15.github.io/ocrad.js/demo.html) for text OCR export of an image (once export mode supported)
-1. SVG OpenType Font editor (adapt https://github.com/edf825/SVG-OpenType-Utils ? See https://wiki.mozilla.org/SVGOpenTypeFonts )
-1. Blockly for arbitrary JavaScript:
-    1. Object literals
-    1. Variables (arrays or objects like functions, etc.) with right side for property access (static (can be detected for pull-down) or dynamic)
-    1. `new` (with or w/o needing function definition)
-        `new a()[new b()]`
-        won't normally add new directly within property (and can't within static property)
-    1. invocation (w/o needing function definition)
-1. Email/chat client which stores data locally (and optionally only locally); good open source options to adapt? Tie in together.js with chat (as in whiteboards) or even to write collaborative emails
-1. Do a concept for browsing or editing the file contents of a zip using the likes of http://stuk.github.io/jszip/ or those mentioned at http://stackoverflow.com/questions/2095697/unzip-files-using-javascript
-1. Since WebAppFind relies on files downloaded to the user's desktop, demonstrate with the HTML5 "download" attribute how sites might deliver a data file that the user could then place and call (and optionally also supplying a `filetypes.json` file). Also demonstrate (once functionality is complete), the downloading of a remote document file and subsequent optional PUT request back to the server to save it there (and AsYouWish requesting to save multiple files at once in a particular directory or the zip example above).
-1. Demo plug-in utilizing WebAppFind to pass in data files (from desktop or cross-domain)
-1. Desktop file to desktop app demo (using `filetypes.json`)?
-1. Demo of same-domain, CORS, or AsYouWish client checking `filetypes.json` on a server to determine how to serve? (as opposed to WebAppFind)
-1. Demo of server detecting its own `filetypes.json` (see possible todo above)
-1. Give option for demos like txt to add `\r` back to `\r\n`
-1. Utilize https://github.com/brettz9/octokit.js to allow HTML, SVG, etc. demos to be pushed directly to a Github repo (no universal REST Git API?); could also use with AsYouWish and command line to update a local repo as well (and use cdn.rawgit.com for public
-sharing of content).
-1. Demo WebAppFind usage with http://kb.mozillazine.org/View_source.editor.external and http://kb.mozillazine.org/View_source.editor.path
-1. Demo WebAppFind usage with external editing editor for textareas using [It's All Text! add-on](https://addons.mozilla.org/en-US/firefox/addon/its-all-text/) ([repo](https://github.com/docwhat/itsalltext/)); or adapt to allow optional embedding of web app in place in iframe?
-1. Demo use of [Speech Synthesis](https://dvcs.w3.org/hg/speech-api/raw-file/tip/speechapi.html#tts-section) with an HTML or text file (see [HTML5Rocks](http://updates.html5rocks.com/2014/01/Web-apps-that-talk---Introduction-to-the-Speech-Synthesis-API)) and [Voice recognition](https://dvcs.w3.org/hg/speech-api/raw-file/tip/speechapi.html#speechreco-section) from an audio file. Also allow voice recognition as feature in normal text/HTML demos.
-1. Demo to use SendTo webappdir functionality to make a zip within the passed path (using [JSZip](https://github.com/Stuk/jszip)) from right-click (would require no local files besides WebAppFind/AsYouWish and the SendTo batch file). Also ensure demos with files and folders together.
-1. Adapt the webappfind.js utility class to reduce demo code (and allow better forward compatibility with any API changes).
