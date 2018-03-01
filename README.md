@@ -2,7 +2,7 @@
 
 VERSION INCOMPLETE/NOT YET FUNCTIONAL!!!
 
-A [WebExtensions](https://developer.mozilla.org/en-US/Add-ons/WebExtensions)
+A [WebExtensions](https://developer.mozilla.org/en-US/Add-ons/WebExtensions)/Chrome
 application to allow opening of files from the desktop (by double-click using
 default file assocations or "Open with...") into web applications.
 
@@ -279,15 +279,68 @@ machine—[do not currently work](https://github.com/zeit/pkg/issues/136#issueco
 1. `manifest.json` additions?
 
     1. Set `protocol_handlers: [{protocol: "ext+waf", name: "WebAppFind", uriTemplate: "https://...%s"}]`; e.g., for site to register itself for a type
-
     1. Set `omnibox: {keyword: "waf"}` for special auto-complete to send to add-on
-
     1. Set `options_ui: {page: "webappfind-options.html"}` and/or `sidebar_action`?
-
     1. Set `permissions`/`optionalPermissions`
-
     1. Set `incognito` on whether/how to work in Incognito mode
-
     1. Set `devtools_page` in `manifest.json` to replicate Node console?
-
     1. Use `web_accessible_resources` for exposing any resources to websites?
+
+## To-dos (new environments)
+
+1. Allow files opened by FTP for remote editing to be used.
+1. `localStorage`, cookies and IndexedDB too?; could be wrapped by
+targeted updating API and used with PUT; send schema URL in header
+to inform that the update must be tabular,
+not otherwise hierarchical; could allow a file (or `.filetypes.json`) to
+reference a query so that any updates to the webappfind-opened file
+would only update the subset of retrieved data! Could thereby have flat
+files which bring back shared data ownership (the closest thing to this
+currently that I know of would be using this "Shared Storage" approach begun
+in <https://gist.github.com/brettz9/8876920>). With IndexedDB, which
+accepts version numbers (or defaults to 1), apps could check whether the
+schema they are assuming is current, thus dealing with the main concern
+that subsequent updates to the original schema would break third party
+apps (they would still, but at least potentially incompatible
+modifications would automatically be blocked and an app could provide
+a notice (our equivalent to listening to `onblocked` or possibly
+`onversionchange` if we could find a way to do this to avoid a change
+in schema while the third party app is still open and potentially making
+modifications) about the app awaiting a developer upgrade).
+1. IndexedDB; could synchronize with remote (cross-domain) website data
+(optionally requiring credentials) as well as allowing one-off local editing,
+so that user can have live data feeds into their local data (listen for changes
+locally and poll or coordinate to get or send WebSockets updates with a remote
+data source)
+1. Allow `postMessage` mechanism to receive content as entered in a pop-up dialog
+    for this purpose as opposed to a file (though with an optional file to save back)
+1. Allow `postMessage` of content within inputs/textareas and the DOM (or rely on
+    AtYourCommand for this?)
+1. Allow PUT/POST back to AtYourCommand to have side effects such as
+modifying in place highlighted right-clicking text (without the user seeing
+the web app open), e.g., to convert JS to CoffeeScript in a document
+one is viewing.
+
+## To-dos (Platform-specific)
+
+1. Get to work in Windows (and Linux)
+1. Exe's don't allow right-click "Open with..."" though maybe Windows would
+    allow even these files to be handled in some way (e.g., how Tortoise
+    overlays the context menu).
+
+## To-dos (Message posting)
+
+1. Allow genuine POST or other non-GET or header-dependent requests (ala curl)?
+
+## To-dos (File editing permissions)
+
+1. Allow users to remember privileges so that whenever a file is reloaded (even
+    if not from the desktop), it will continue to allow read/write access.
+
+## To-dos (Submissions)
+
+1. Submit to AMO, npm, etc.
+1. Once cross-platform, make PR to update
+    <https://github.com/marijnh/CodeMirror/blob/master/doc/realworld.html>).
+1. If API stabilizes and functional, file feature request to get the
+    functionality built into Firefox.
