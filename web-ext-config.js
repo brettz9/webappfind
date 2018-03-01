@@ -10,6 +10,7 @@ module.exports = {
         '*.zip',
         '*.xpi',
         'ignore/**',
-        'web-ext-artifacts/**'
+        'web-ext-artifacts/**',
+        'output.app/**'
     ]
 };

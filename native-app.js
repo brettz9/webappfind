@@ -1,6 +1,6 @@
 const nativeMessage = require('chrome-native-messaging');
 const WebSocket = require('ws');
-const {execFile} = require('../polyfills/promise-wrappers');
+const {execFile} = require('./polyfills/promise-wrappers');
 
 const argv = require('minimist')(process.argv.slice(2));
 const {method} = argv;
@@ -32,14 +32,19 @@ case 'client': {
     const appleScript = `
 -- Command line usage example: open ./webappfind-as.app --args /Users/brett/myFile.txt
 --   Could pass in other flags at end too, but not usable with "open with"
-
-on run {input}
-    tell application "Finder"
+on open argv
+    getFile(argv)
+end open
+on run argv
+    getFile(argv)
+end run
+on getFile (argv)
+    try
+        set input to item 1 of argv -- Not needed in Automator AS, but needed in normal AS
+        get POSIX path of (input as text)
+    on error
         try
-            get POSIX path of (input as text)
-        on error
-            try
-                set input to choose file with prompt "` +
+            set input to choose file with prompt "` +
     escapeAppleScriptQuoted(
         'fileSelectMessage' in argv ? argv.fileSelectMessage : 'Please select a file:'
     ) + (
@@ -47,30 +52,32 @@ on run {input}
                 ? `" of type {"${escapeAppleScriptQuoted(argv.fileSelectType)}"}`
                 : ''
         ) + `
-            on error -- cancelled
-                return
-            end try
+        on error -- cancelled
+            return
         end try
+    end try
+    tell application "Finder"
         -- todo: Could prompt for, and allow input for, multiple files or folder
         set filePath to POSIX path of (input as text) -- cast to posix file object and get path
         -- display dialog filePath -- For debugging
-        do shell script "/usr/local/bin/node /Users/brett/webappfind/native-app.js ` +
+        do shell script "/usr/local/bin/node ${__filename} ` +
             `--method=client --file=" & ` +
-            ('file' in argv ? escapeBashDoubleQuoted(argv.file) : `quoted form of filePath`) +
+            ('file' in argv ? `"\\"${escapeBashDoubleQuoted(argv.file)}\\""` : `quoted form of filePath`) +
+            ' & ' +
             (['mode', 'site', 'args'].reduce((s, param) => {
                 if (!(param in argv)) {
                     return s;
                 }
                 const paramValue = argv[param];
-                return `${s} ${param}="${escapeBashDoubleQuoted(paramValue)}"`;
-            }, '') || ' ""') + `
+                return `${s} ${param}=\\"${escapeBashDoubleQuoted(paramValue)}\\"`;
+            }, '"') || ' "') + `"
     end tell
 
     return input
-end run
+end getFile
 `;
-    // Todo: test evaluation/compilation to application
-    // Todo: optionally associate to file type and/or add to dock
+    // Todo: Ensure native-app.js path works if called in executable form
+    // Todo: optionally associate to file type and/or add to dock and/or execute
     console.log('appleScript', appleScript);
     execFile('osacompile', ['-o', 'output.app', '-e', appleScript]);
     return;

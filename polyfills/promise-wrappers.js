@@ -96,7 +96,7 @@ const execFile = (file, args, options) =>
     new Promise((resolve, reject) => {
         execFileOriginal(file, args, options, (error, stdout, stderr) => {
             if (error) {
-                const err = new Error('Exec error');
+                const err = new Error('Exec error' + error);
                 err.error = error;
                 err.stdout = stdout;
                 err.stderr = stderr;

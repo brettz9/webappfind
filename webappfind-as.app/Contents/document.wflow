@@ -51,8 +51,7 @@
 				<key>ActionParameters</key>
 				<dict>
 					<key>source</key>
-					<string>-- Command line usage example: open ./webappfind-as.app --args /Users/brett/speedtest.txt
---   Could pass in other flags at end too, but not useful with "open with"on run {input, parameters}		tell application "Finder"		try			get POSIX path of (input as text)		on error			try				set input to choose file with prompt "Please select a file:" of type {"js"}			on error				return			end try		end try		set filePath to POSIX path of (input as text)		-- display dialog filePath -- For debugging		do shell script "/usr/local/bin/node /Users/brett/webappfind/native-app.js --method=client --file=" &amp; quoted form of filePath	end tell		return inputend run</string>
+					<string>-- Command line usage example: open ./webappfind-as.app --args /Users/brett/myFile.txt--   Could pass in other flags at end too, but not usable with "open with"on run {input, parameters}	tell application "Finder"		try			get POSIX path of (input as text)		on error			try				set input to choose file with prompt "File select message" of type {"js"}			on error -- cancelled				return input			end try		end try		-- todo: Could prompt for, and allow input for, multiple files or folder		set filePath to POSIX path of (input as text) -- cast to posix file object and get path		-- display dialog filePath -- For debugging		do shell script "/usr/local/bin/node /Users/brett/webappfind/native-app.js --method=client --file=" &amp; "\"/Users/brett/speedtest.txt\"" &amp; " mode=\"edit\" site=\"http://example.com\" args=\"arg1 arg2\""	end tell		return inputend run</string>
 				</dict>
 				<key>BundleIdentifier</key>
 				<string>com.apple.Automator.RunScript</string>
