@@ -120,6 +120,10 @@ open ./webappfind-as.app
 
 ## Comparison with alternatives
 
+### TODO: Comparison between WebAppFind and routers/controllers in typical web apps whose verbs are indicated via URL query string parameters.
+
+### TODO: Document issues raised between app-agnostic data sharing as through WebAppFind and likes of `postMessage` (but not `MessageChannel` or `WebSockets` which hard-code the shared app?)
+
 ### Relative disadvantages of alternatives
 
 1. Node opening file and passing
@@ -335,7 +339,7 @@ one is viewing.
 1. Create complementary browser add-on to add desktop listeners to file changes to ensure WebAppFind files stay up to date within the app (ensure app also checks whether the user wishes to reconcile the new push with any changes already made); tie into proposed version control mode?
 1. Create dialog to ask user for mode, etc., so executable doesn't have to bake it all in and can let the user decide at run-time.
 
-## To-dos (Other add-on enhancements)
+## To-dos (Related enhancements to other add-ons)
 
 1. Integrate functionality into <https://github.com/brettz9/filebrowser-enhanced>
 
@@ -343,8 +347,11 @@ one is viewing.
 
 1. Allow genuine POST or other non-GET or header-dependent requests (ala curl)?
 
-## To-dos (File editing permissions)
+## To-dos (File editing permissions/add-on permissions)
 
+1. Option (at the add-on level) to confirm reading and/or saving of data upon
+    each attempt and/or display the proposed diffs before saving. (See
+    "Implementation notes" section).
 1. Allow users to remember privileges so that whenever a file is reloaded (even
     if not from the desktop), it will continue to allow read/write access.
 

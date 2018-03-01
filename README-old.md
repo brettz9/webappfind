@@ -570,11 +570,15 @@ default global ones.
 
 See "Possible future API/filestypes.json changes" for changes/additions planned for the (hopefully) near future.
 
+----
+TODO: Add these below
 1. Options to have Windows
 "[verb](http://msdn.microsoft.com/en-us/library/bb165967.aspx)"
 (i.e., Open, Edit, Print, Play, Preview or custom) be treated as
 modes/custom modes or to otherwise detect and interact with
 them?
+1. Allow a command-line "any" mode to let the web app choose the mode.
+----
 
 Besides "view", "binaryview", "edit", "binaryedit", "register", the following modes might be added in future versions (or made to correspond with WebDav commands?):
 
@@ -603,11 +607,6 @@ within the desktop)
 
 ## Lower priority todos
 
-1. Document comparison between WebAppFind and routers/controllers in
-typical web apps whose verbs are indicated via URL query string parameters.
-1. Document issues raised between app-agnostic data sharing as through
-WebAppFind and likes of postMessage (but not MessageChannel or WebSockets
-which hard-code the shared app?)
 1. See [atyourcommand](https://github.com/brettz9/atyourcommand),
 a browser add-on to allow
 creation of context menu items, including invoking a process with
@@ -688,7 +687,6 @@ opening the file in that chosen mode). Modify `filetypes.json` to support
 optional default mode or suggested modes (though the browser should
 not prevent other modes from being used since the whole idea is that
 the user controls the mode under which they wish to open the file).
-1. Allow a command-line "any" mode to let the web app choose the mode.
 1. Provide meta-data in `filetypes.json` to cause the web app to be passed
 awareness of the desire by the user to be prompted for the selection of
 specific *custom* mode, along with an optional default custom mode and
@@ -703,11 +701,10 @@ wish to view this file or view its source?".
 1. When [AsYouWish](https://github.com/brettz9/asyouwish/) is in use, allow path-reading as long as site is AYW-approved and the page is registered for the protocol--so one can bookmark a path and always load it or load with other approved paths (e.g., in different tabs within a webapp); also can remember paths to invoke upon FF start up ("website addons").
 1. Ensure some additional security/privacy for users desiring it by restricting external access (using https://developer.mozilla.org/en-US/docs/XPCOM_Interface_Reference/nsIContentPolicy and https://developer.mozilla.org/en-US/docs/XPCOM_Interface_Reference/nsIPrincipal per http://stackoverflow.com/questions/18369052/firefox-add-on-to-load-webpage-without-network-access ?) See also http://en.wikipedia.org/wiki/Site-specific_browser regarding such sandboxing.
 1. Option to enable file: protocol (though mention it is currently risky in Firefox to use `postMessage` for security and privacy given its lack of scoping); report issue to FF if issue not already added (also for better means than '*'  <!--* satisfy Notepad++ MD editor--> for add-on communication?) . However, this option would be quite useful, especially if the todo just above on restricting external access were implemented, given that web apps could be installed to work with one's files (ideally without concerns that the data was going to be sent anywhere, and if the todo to confirm saves were implemented, one could also see what changes were being made to a file before being actually saved). Unfortunately, file: sites cannot register themselves as protocol handlers, so the user would need to configure their settings so as to rely on the default handlers in `filetypes.json` to be able to use such a file (or we would need to create our own mechanism, such as through `postMessage` back to the add-on (or a change in the file's GET parameters or perhaps modification of an element within the document), to allow a file: site to request permission to become usable as a protocol handler).
-1. Option (at the add-on level) to confirm reading and/or saving of data upon each attempt and/or display the proposed diffs before saving. (See "Implementation notes" section).
 1. Piggyback on HTML5 drag-and-drop file capabilities (or create own) to allow files dropped in this way to be saved back to disk and/or path provided to the app; same with optionally allowing privileged file picker per site.
 1. As with how filebrowser-extended can open the folder of the currently opened file, add an optional icon in WebAppFind to open the containing directory of the currently opened document file path, e.g., if user used "Open with" on "C:\myfile.txt", it would open "c:\" (if allowed opening the file itself from the desktop and the current web app was also set as the default for that type, it would open another instance of the file in the browser, but may still want to allow this anyways).
 1. Build an executable to open a local executable/batch on the Windows desktop with a dialog asking for command line arguments (e.g., profile)? (as a workaround, one might use WebAppFind for this if an override will be provided to ensure it will launch back on the desktop)? Also allow a dialog to ask for WebAppFind arguments to web apps (could be at executable level or within the WebAppFind add-on).
 1. Create a shared add-on dependency for WebAppFind and AsYouWish exposing perhaps at least for privilege escalation with some of the underlying non-SDK APIs (e.g., a privilege to save
 only to a specific directory if WebAppFind adds such a fundamental mode). Perhaps any AsYouWish directive could be exposed if part of a `filetypes.json` directive and/or command line flag (and not blocked by user preferences) or expose AYW API to other add-ons or command line for adding sites and privileges and use that; could be useful for add-ons as well as sites to provide
 alternative views/editing interfaces for the same shared data.
-1. Option to open HTML in chrome mode so one can do things like cross-domain toDataURL on an image canvas without errors (the proposed change to AsYouWish to allow sites to be reopened in this mode could be a workaround).
+1. Option to open HTML in chrome mode so one can do things like cross-domain `toDataURL` on an image canvas without errors (the proposed change to AsYouWish to allow sites to be reopened in this mode could be a workaround).
