@@ -327,6 +327,17 @@ one is viewing.
 1. Exe's don't allow right-click "Open with..."" though maybe Windows would
     allow even these files to be handled in some way (e.g., how Tortoise
     overlays the context menu).
+1. Provide XULRunner-like options for executable-like behavior independent of the browser
+    (and on mobile)
+
+## To-dos (Desktop-based enhancements)
+
+1. Create complementary browser add-on to add desktop listeners to file changes to ensure WebAppFind files stay up to date within the app (ensure app also checks whether the user wishes to reconcile the new push with any changes already made); tie into proposed version control mode?
+1. Create dialog to ask user for mode, etc., so executable doesn't have to bake it all in and can let the user decide at run-time.
+
+## To-dos (Other add-on enhancements)
+
+1. Integrate functionality into <https://github.com/brettz9/filebrowser-enhanced>
 
 ## To-dos (Message posting)
 

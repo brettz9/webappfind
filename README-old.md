@@ -151,6 +151,8 @@ TODOS TO INCORPORATE AND ADD BELOW
 1. Window/tab targeting
     1. Option to avoid or allow new tabs for same URI/mode/filetype/path? (option to get the same tab or new tabs for them?); option to push to all open windows in different manner so can notify user of updates but not change focus, etc.
     1. Allow command line to specify (or let WebAppFind determine according to some permutation of the file path) the exact window and possibly Panorama group and/or pinned status into which the web app with desktop file will be opened (the web app could handle moving itself instead but only if the web app were AsYouWish-based and the user preferences supplied the file path). Alternatively, the executable might have logic to determine the profile in a similarly automated (as opposed to hard-coded) manner. The advantage of either approach would be to allow the user a better web app grouping organization corresponding to the hierarchical organization they can find on the desktop.
+1. See below and also possibly the notes within the [Executable Builder](https://github.com/brettz9/executable-builder) code
+1. Support the "register" mode from command line?
 ----
 
 WebAppFind is triggered through command line
@@ -211,6 +213,8 @@ POSSIBLE TODOS TO INCORPORATE BELOW
 1. Allow `filetypes.json` to support a hierarchy of custom types (e.g., schema->jsonschema) for meta-data purposes (possibly passing to applications, perhaps useful for namespacing)
 1. Possibility of utilizing `filetypes.json` on the server side for server-side discovery; see http://webviewers.org/xwiki/bin/view/Main/WebHome (utilize its format at all or reconcile?);
 better reconciliaton with local OS type systems
+1. Could allow type to be determined by schema (e.g., JSON Schema based on `$schema` value with JSON document, XML Schema for XML, etc.).
+1. Allow defaultHandlers to be optionally added inline with fileMatches in `filetypes.json`?
 ----
 
 The following steps may currently be altered by user preference.
@@ -469,6 +473,7 @@ default global ones.
 
 1. Consider encouraging use of MIME types for file type names.
 1. Mode and parameter changes
+    1. Pass in argument for profile, or if defunct in browsers, at least allow to open a private window/tab
     1. API changes/additions (Anticipated change with custom modes and allowing for multiple modes (and file access) at once.)
         1. Allow not just one, but multiple, file/URL/folder/command-line/web app/etc. arguments to be passed into
         the web application (e.g., for preferences, privilege level simulation or request information, schema,
@@ -695,25 +700,14 @@ wish to view this file or view its source?".
 
 1. Allow stylesheets or scripts to be clicked to be injected into web apps?
 (could use if app isn't accepting them as additional file arguments already)
-1. Create dialog to ask user for mode, etc., so executable doesn't have to bake it all in and can let the user decide at run-time.
-1. Command line flag additions:
-    1. See below and also possibly the notes within the [Executable Builder](https://github.com/brettz9/executable-builder) code
-    1. Support the "register" mode from command line?
-1. Integrate functionality into https://github.com/brettz9/filebrowser-enhanced
 1. When [AsYouWish](https://github.com/brettz9/asyouwish/) is in use, allow path-reading as long as site is AYW-approved and the page is registered for the protocol--so one can bookmark a path and always load it or load with other approved paths (e.g., in different tabs within a webapp); also can remember paths to invoke upon FF start up ("website addons").
 1. Ensure some additional security/privacy for users desiring it by restricting external access (using https://developer.mozilla.org/en-US/docs/XPCOM_Interface_Reference/nsIContentPolicy and https://developer.mozilla.org/en-US/docs/XPCOM_Interface_Reference/nsIPrincipal per http://stackoverflow.com/questions/18369052/firefox-add-on-to-load-webpage-without-network-access ?) See also http://en.wikipedia.org/wiki/Site-specific_browser regarding such sandboxing.
-1. Provide XULRunner option for executable-like behavior independent of Firefox.
 1. Option to enable file: protocol (though mention it is currently risky in Firefox to use `postMessage` for security and privacy given its lack of scoping); report issue to FF if issue not already added (also for better means than '*'  <!--* satisfy Notepad++ MD editor--> for add-on communication?) . However, this option would be quite useful, especially if the todo just above on restricting external access were implemented, given that web apps could be installed to work with one's files (ideally without concerns that the data was going to be sent anywhere, and if the todo to confirm saves were implemented, one could also see what changes were being made to a file before being actually saved). Unfortunately, file: sites cannot register themselves as protocol handlers, so the user would need to configure their settings so as to rely on the default handlers in `filetypes.json` to be able to use such a file (or we would need to create our own mechanism, such as through `postMessage` back to the add-on (or a change in the file's GET parameters or perhaps modification of an element within the document), to allow a file: site to request permission to become usable as a protocol handler).
 1. Option (at the add-on level) to confirm reading and/or saving of data upon each attempt and/or display the proposed diffs before saving. (See "Implementation notes" section).
 1. Piggyback on HTML5 drag-and-drop file capabilities (or create own) to allow files dropped in this way to be saved back to disk and/or path provided to the app; same with optionally allowing privileged file picker per site.
 1. As with how filebrowser-extended can open the folder of the currently opened file, add an optional icon in WebAppFind to open the containing directory of the currently opened document file path, e.g., if user used "Open with" on "C:\myfile.txt", it would open "c:\" (if allowed opening the file itself from the desktop and the current web app was also set as the default for that type, it would open another instance of the file in the browser, but may still want to allow this anyways).
 1. Build an executable to open a local executable/batch on the Windows desktop with a dialog asking for command line arguments (e.g., profile)? (as a workaround, one might use WebAppFind for this if an override will be provided to ensure it will launch back on the desktop)? Also allow a dialog to ask for WebAppFind arguments to web apps (could be at executable level or within the WebAppFind add-on).
 1. Create a shared add-on dependency for WebAppFind and AsYouWish exposing perhaps at least for privilege escalation with some of the underlying non-SDK APIs (e.g., a privilege to save
-only to a specific directory if WebAppFind adds such a fundamental mode). Perhaps any AsYouWish directive could be exposed
-if part of a `filetypes.json` directive and/or command line flag (and not blocked by user preferences) or expose AYW API to
-other add-ons or command line for adding sites and privileges and use that; could be useful for add-ons as well as sites to provide
+only to a specific directory if WebAppFind adds such a fundamental mode). Perhaps any AsYouWish directive could be exposed if part of a `filetypes.json` directive and/or command line flag (and not blocked by user preferences) or expose AYW API to other add-ons or command line for adding sites and privileges and use that; could be useful for add-ons as well as sites to provide
 alternative views/editing interfaces for the same shared data.
-1. Create complementary browser add-on to add desktop listeners to file changes to ensure WebAppFind files stay up to date within the app (ensure app also checks whether the user wishes to reconcile the new push with any changes already made); tie into proposed version control mode?
-1. Could allow type to be determined by schema (e.g., JSON Schema based on `$schema` value with JSON document, XML Schema for XML, etc.).
-1. Allow defaultHandlers to be optionally added inline with fileMatches in filetypes.json?
 1. Option to open HTML in chrome mode so one can do things like cross-domain toDataURL on an image canvas without errors (the proposed change to AsYouWish to allow sites to be reopened in this mode could be a workaround).
