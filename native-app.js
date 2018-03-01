@@ -28,6 +28,10 @@ case 'client': {
     });
     return;
 } case 'build-openwith-exec': {
+    // Todo: Convert this to JavaScript? using `osacompile -l JavaScript`; see:
+    // 1) https://developer.telerik.com/featured/javascript-os-x-automation-example/
+    // 2) https://www.safaribooksonline.com/library/view/applescript-in-a/1565928415/re154.html
+
     // Todo: Allow calling this functionality from within the add-on
     const appleScript = `
 -- Command line usage example: open ./webappfind-as.app --args /Users/brett/myFile.txt
@@ -79,8 +83,10 @@ on getFile (argv)
     return input
 end getFile
 `;
-    // Todo: Ensure native-app.js path works if called in executable form
-    // Todo: optionally associate to file type and/or add to dock and/or execute
+    // Todo: Ensure native-app.js path works if called in executable form (and invoke bash if not?)
+    // Todo: optionally associate to file type
+    //        see https://apple.stackexchange.com/questions/9866/programmatically-script-atically-changing-the-default-open-with-setting/9954#9954
+    // Todo optionally add to dock and/or execute the result;
     console.log('appleScript', appleScript);
     execFile('osacompile', ['-o', 'output.app', '-e', appleScript]);
     return;

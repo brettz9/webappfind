@@ -215,6 +215,10 @@ machine—[do not currently work](https://github.com/zeit/pkg/issues/136#issueco
 
 ## To-dos (Lower priority)
 
+1. If we don't need all permissions, see <https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Request_the_right_permissions>.
+    We might also consider allowing `activeTab`-only build to avoid
+    content script permissions.
+
 1. Support passing entire directories with permission to re-reference IDs
     (until revoked in a permissions dialog?)
 
