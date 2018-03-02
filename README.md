@@ -92,25 +92,19 @@ open ./webappfind-as.app
 ### Arguments
 
 - **method** - Required. Must be set to "build-openwith-exec".
-
 - **file** - Optional hard-baking of a file. If this argument is not included,
     the generated script will check for the presence of an argument to the
     script to serve as the file to pass to the web application. If no argument
     is passed to the *generated script*, its absence will trigger a file dialog.
-
 - **mode** - Optional mode for invoking the web app on your contents, either
     "view" (readonly) or "edit". Default is "view".
-
 - **site** - Optional baking in of a specific site to invoke with the designated
     file's contents. Will check for local `filetypes.json` otherwise.
-
 - **args** - Optional. Any arguments to pass to the web applications
     `onmessage` listener data object (under `args`).
-
 - **fileSelectMessage** - When the generated script does not have a baked-in
     file and no file argument is passed to it, this argument will determine
     the message shown in the resulting file dialog.
-
 - **fileSelectType** - When the generated script does not have a baked-in file
     and no file argument is passed to it, this argument, if present, will have
     the script insist on a particular file type in the resulting file dialog.
@@ -131,30 +125,23 @@ open ./webappfind-as.app
     [command](https://developer.mozilla.org/en-US/docs/Mozilla/Command_Line_Options)
     [line arguments](https://www.ghacks.net/2013/10/06/list-useful-google-chrome-command-line-switches/)
     into browser to open file with GET parameters
-
     1. This is limited by string length (and possible security problems if
         the user passes along the URL).
-
     1. Listening by GET parameters may conflict with existing parameters
-
     1. Listening by GET parameters may not work with offline applications
         that rely on hash
 
 1. Node opening file and passing command line arguments into browser to
     open file and posting contents to another Node server hosting the web app
-
     1. Forces user to be subject to any non-agnostic listening requirements (a
         receiving app would know the origin and reject the contents).
-
     1. Receiving app (where one would most frequently be developing) cannot be
         a static file web application
 
 ### Advantages of our configuration
 
 1. Our code supports various platforms and browsers out of the box.
-
 1. By using `pkg`, we can avoid forcing users to install Node.
-
 1. Our `filetypes.json` approach offers easy reusability among non-developers
     (or non-Node developers)
 
@@ -185,114 +172,85 @@ machine—[do not currently work](https://github.com/zeit/pkg/issues/136#issueco
         1. `npm run run` - Test the web extension in Firefox
         1. `npm run addon` - Building the add-on file for distribution, e.g., on AMO
 
-## To-dos
+## To-dos (Reimplementing)
 
 1. Delete preferences from `ignore/old-preferences.json` after suitably
     reimplemented
-
 1. Reimplement protocol registration functionality and create tests using
     `registerProtocolHandler` (also for JS/JSON/mytype); also consider
     HTML head meta-data for flagging availability of file registrations
     and possibly allow user directed use of this information to register
+1. Complete [executable builder](https://github.com/brettz9/executable-builder)
+    and [atyourcommand](https://github.com/brettz9/atyourcommand) but for webextensions.
+    1. Option to auto-add as file association and to dock
+    1. Reimplement to support Windows in new webappfind version (as batch
+        scripts as possible); convert to shortcut tied to `cmd.exe` for sake
+        of getting an icon
+    1. Installer script to run to facilitate setting up of OpenWith per
+        user choices (if Executable Builder is not installed, it could link
+        to it, and if it is, it could bring user through steps).
+    1. Applescript-based executable builder also?
+    1. Examine `executable builder` for ideas and UI
+
+## To-dos
 
 1. Have the OS-specific executable of `bin/native-app` be identified and
     bundled automatically
-
 1. Make install script which avoids pkg bundling by assumes user has Node
     installed (much smaller download and less memory, esp. if needing to
     build executables for opening files too)
-
 1. Overcome "Cannot find module 'regedit'" error when building on non-Windows
-
 1. In `pkg` file, after checking registry (how to avoid repeating??), set-up
     Node WebSockets to listen and pass on to add-on (which will open website
     and `postMessage` into it and be able to handle opposite direction,
     including for writing file contents back to disk, but also for
     *AtYourCommand* functionality)
-
 1. Refactor this extension to be a bridge between Node (including
     user-installed packages) and browser/browser add-ons/web-sites.
-
     1. Support passing from Node into other add-ons
-
         1. Is there a way to overcome `allowed_extensions`/`allowed_origins`?
             hard-coded limits; is the app manifest read on install only, on
             browser start-up, or on each access? If the latter, could
             restartlessly dynamically modify the file ourselves. Otherwise
             users may have to bundle this code for each add-on.
-
     1. Might rely on "add-ons" of `npm` packages designated to be installed
         (and via `package.json` config or custom config?) run on start-up.
-
     1. For an added security layer, might only let bridge work with
         user-designated packages.
-
     1. Call "add-on"s' main scripts once at start-up.
-
     1. Have "add-ons" indicate their privilege level (e.g., nodeToBrowser,
         browserToNode) and high-level permission (e.g., `postMessage`
         `contextMenu`).
-
     1. Find best means possible (ideally even `eval`) to get full privileges
         (whether originating from web-site as in AsYouWish, from desktop,
         as in old WebAppFind, or from another add-on) out of
         browser/browser add-on. If not, emulate own via `postMessage` messaging.
-
     1. Example "add-ons"
-
         1. The old WebAppFind behavior could be one of these add-ons
-
             1. Extend `filetypes.json` to support passing into a specific
                 add-on?
-
             1. See old code and all to-dos
-
         1. Like the old WebAppFind behavior but allow for general
             URL-opening mechanism (including for passing of messages)
             in addition to specific `filetypes.json` approach and have
             mechanism also for passing content into another add-on
-
             1. Test with "Open with..." to open file in a Node script
                 which communicates via Node WebSockets
-
         1. AtYourCommand to run once to set-up user's context menus (and
             desktop-file-opening behaviors)
-
         1. AsYouWish to allow websites to communicate into the browser or
             to eval-able Node code; at minimum start shared,
             site-agnostic storage
 
-1. Remove old `webappfind` files/info (e.g., on `filetypes.json`) if
-    making package more general purpose.
+## To-dos (`manifest.json` additions)
 
-1. Complete [executable builder](https://github.com/brettz9/executable-builder)
-    and [atyourcommand](https://github.com/brettz9/atyourcommand) but for webextensions.
-    1. Option to auto-add as file association and to dock
-    1. Reimplement to support Windows in new webappfind version (as batch scripts as possible);
-        convert to shortcut tied to cmd.exe for sake of getting an icon
-    1. Installer script to run to facilitate setting up of OpenWith per user choices (if Executable Builder is not installed, it could link to it, and if it is, it could bring user through steps).
-    1. Applescript-based executable builder also?
-
-1. Document usage of putting in dock for dragging files onto it
-
-## To-dos (Lower priority)
-
-1. If we don't need all permissions, see <https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Request_the_right_permissions>.
-    We might also consider allowing `activeTab`-only build to avoid
-    content script permissions.
-
-1. Support passing entire directories with permission to re-reference IDs
-    (until revoked in a permissions dialog?)
-
-1. `manifest.json` additions?
-
-    1. Set `protocol_handlers: [{protocol: "ext+waf", name: "WebAppFind", uriTemplate: "https://...%s"}]`; e.g., for site to register itself for a type
-    1. Set `omnibox: {keyword: "waf"}` for special auto-complete to send to add-on
-    1. Set `options_ui: {page: "webappfind-options.html"}` and/or `sidebar_action`?
-    1. Set `permissions`/`optionalPermissions`
-    1. Set `incognito` on whether/how to work in Incognito mode
-    1. Set `devtools_page` in `manifest.json` to replicate Node console?
-    1. Use `web_accessible_resources` for exposing any resources to websites?
+1. Set `protocol_handlers: [{protocol: "ext+waf", name: "WebAppFind", uriTemplate: "https://...%s"}]`; e.g., for site to register itself for a type
+1. Set `omnibox: {keyword: "waf"}` for special auto-complete to send to add-on
+1. Set `options_ui: {page: "webappfind-options.html"}` and/or `sidebar_action`?
+1. Set `permissions`/`optionalPermissions`
+1. Set `incognito` on whether/how to work in Incognito mode
+1. Set `devtools_page` in `manifest.json` to replicate Node console?
+1. Use `web_accessible_resources` for exposing any resources to websites?
 
 ## To-dos (new environments)
 
@@ -359,16 +317,25 @@ one is viewing.
     "Implementation notes" section).
 1. Allow users to remember privileges so that whenever a file is reloaded (even
     if not from the desktop), it will continue to allow read/write access.
+1. Support passing entire directories and passing permission to re-reference IDs
+    (until revoked in a permissions dialog?)
+1. If we don't need all add-on permissions, see
+    <https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Request_the_right_permissions>.
+    We might also consider creating an `activeTab`-only build to avoid
+    content script permissions.
 
 ## To-dos (Submissions)
 
 1. Submit to AMO, npm, etc.
 1. Once cross-platform, make PR to update
     <https://github.com/marijnh/CodeMirror/blob/master/doc/realworld.html>).
+1. Ensure the `filetypes.json` in this repo references updated apps once
+    WebAppFind reimplemented.
 1. If API stabilizes and functional, file feature request to get the
     functionality built into Firefox.
 
 ## To-dos (Others)
 
 1. Add from [README-old.md](./README-old.md)
+1. Document usage of putting in dock for dragging files onto it
 1. Search through code for "Todo"
