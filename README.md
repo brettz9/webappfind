@@ -60,10 +60,11 @@ at the previous site which do all of these.)
 
 In order to pass a file into the add-on (which can use any arguments and its
 heuristics to determine the specific website to open and in what manner),
-the `native-app.js` file should be invoked with `--method=client` and optionally
-with `--file="..."`, `--mode="view|edit"`, `--site="http://..."`, `--args="..."`.
-See "Executable builder functionality" "Arguments" section for how these optional
-methods will be used.
+the `native-app.js` file should be invoked with `--method=client` and
+optionally with
+`--file="..."`, `--mode="view|edit"`, `--site="http://..."`, `--args="..."`.
+See "Executable builder functionality" "Arguments" section for how these
+optional methods will be used.
 
 ## Executable builder functionality
 
@@ -95,11 +96,13 @@ open ./webappfind-as.app
 - **file** - Optional hard-baking of a file. If this argument is not included,
     the generated script will check for the presence of an argument to the
     script to serve as the file to pass to the web application. If no argument
-    is passed to the *generated script*, its absence will trigger a file dialog.
+    is passed to the *generated script*, its absence will trigger a file
+    dialog.
 - **mode** - Optional mode for invoking the web app on your contents, either
     "view" (readonly) or "edit". Default is "view".
-- **site** - Optional baking in of a specific site to invoke with the designated
-    file's contents. Will check for local `filetypes.json` otherwise.
+- **site** - Optional baking in of a specific site to invoke with the
+    designated file's contents. Will check for local `filetypes.json`
+    otherwise.
 - **args** - Optional. Any arguments to pass to the web applications
     `onmessage` listener data object (under `args`).
 - **fileSelectMessage** - When the generated script does not have a baked-in
@@ -108,8 +111,8 @@ open ./webappfind-as.app
 - **fileSelectType** - When the generated script does not have a baked-in file
     and no file argument is passed to it, this argument, if present, will have
     the script insist on a particular file type in the resulting file dialog.
-    Must be an extension string without the leading period (e.g., "js" for ".js"
-    JavaScript files) or a
+    Must be an extension string without the leading period (e.g., "js" for
+    ".js" JavaScript files) or a
     [Uniform Type Identifier](https://en.wikipedia.org/wiki/Uniform_Type_Identifier),
     e.g., "public.image" or "com.apple.iwork.pages.sffpages".
 
@@ -150,29 +153,35 @@ open ./webappfind-as.app
 ### Installing development tools
 
 1. `npm -g i pkg` - Uses [pkg](https://github.com/zeit/pkg)
-1. `npm -g i web-ext` - Uses [web-ext](https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Getting_started_with_web-ext)
+1. `npm -g i web-ext` - Uses
+    [web-ext](https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Getting_started_with_web-ext)
 
 ### Testing
 
 *Note: The "all" options—which are for installing for all users on the
 machine—[do not currently work](https://github.com/zeit/pkg/issues/136#issuecomment-308794640)*
 
-1. `npm run (pkg-)installer(-all)-(lint|run|addon)` - Shortcut options for the following
-    two steps
+1. `npm run (pkg-)installer(-all)-(lint|run|addon)` - Shortcut options for
+    the following two steps
     1. `npm run (pkg-)installer(-all)` - Shortcut for the following two steps
         1. `npm run build-(pkg-)installer(-all)` - Shortcut for the following
-            1. If `pkg`, `build-pkg-native-apps(-all)` - builds the Node executables for native
-                messaging
-            1. `build-(pkg-)installer-component(-all)` - Builds installations on the user machine
+            1. If `pkg`, `build-pkg-native-apps(-all)` - builds the Node
+                executables for native messaging
+            1. `build-(pkg-)installer-component(-all)` - Builds installations
+                on the user machine
             1. If `pkg`, `npm link`
-        1. `npm run run-(pkg-)install` - Executes the installer (to register as part
-            of native messaging host files)
+        1. `npm run run-(pkg-)install` - Executes the installer (to register
+            as part of native messaging host files)
     1. One of:
-        1. `npm run lint` - Runs ESLint and `web-ext lint` (which uses `addons-linter`)
+        1. `npm run lint` - Runs ESLint and `web-ext lint` (which uses
+            `addons-linter`)
         1. `npm run run` - Test the web extension in Firefox
-        1. `npm run addon` - Building the add-on file for distribution, e.g., on AMO
+        1. `npm run addon` - Building the add-on file for distribution,
+            e.g., on AMO
 
-## To-dos (Reimplementing)
+## To-dos
+
+### To-dos (Reimplementing)
 
 1. Delete preferences from `ignore/old-preferences.json` after suitably
     reimplemented
@@ -181,7 +190,8 @@ machine—[do not currently work](https://github.com/zeit/pkg/issues/136#issueco
     HTML head meta-data for flagging availability of file registrations
     and possibly allow user directed use of this information to register
 1. Complete [executable builder](https://github.com/brettz9/executable-builder)
-    and [atyourcommand](https://github.com/brettz9/atyourcommand) but for webextensions.
+    and [atyourcommand](https://github.com/brettz9/atyourcommand) but for
+    webextensions.
     1. Option to auto-add as file association and to dock
     1. Reimplement to support Windows in new webappfind version (as batch
         scripts as possible); convert to shortcut tied to `cmd.exe` for sake
@@ -192,7 +202,7 @@ machine—[do not currently work](https://github.com/zeit/pkg/issues/136#issueco
     1. Applescript-based executable builder also?
     1. Examine `executable builder` for ideas and UI
 
-## To-dos
+### To-dos (Other current)
 
 1. Have the OS-specific executable of `bin/native-app` be identified and
     bundled automatically
@@ -224,7 +234,8 @@ machine—[do not currently work](https://github.com/zeit/pkg/issues/136#issueco
     1. Find best means possible (ideally even `eval`) to get full privileges
         (whether originating from web-site as in AsYouWish, from desktop,
         as in old WebAppFind, or from another add-on) out of
-        browser/browser add-on. If not, emulate own via `postMessage` messaging.
+        browser/browser add-on. If not, emulate own via `postMessage`
+        messaging.
     1. Example "add-ons"
         1. The old WebAppFind behavior could be one of these add-ons
             1. Extend `filetypes.json` to support passing into a specific
@@ -242,7 +253,7 @@ machine—[do not currently work](https://github.com/zeit/pkg/issues/136#issueco
             to eval-able Node code; at minimum start shared,
             site-agnostic storage
 
-## To-dos (`manifest.json` additions)
+### To-dos (`manifest.json` additions)
 
 1. Set `protocol_handlers: [{protocol: "ext+waf", name: "WebAppFind", uriTemplate: "https://...%s"}]`; e.g., for site to register itself for a type
 1. Set `omnibox: {keyword: "waf"}` for special auto-complete to send to add-on
@@ -252,7 +263,7 @@ machine—[do not currently work](https://github.com/zeit/pkg/issues/136#issueco
 1. Set `devtools_page` in `manifest.json` to replicate Node console?
 1. Use `web_accessible_resources` for exposing any resources to websites?
 
-## To-dos (new environments)
+### To-dos (new environments)
 
 1. Allow files opened by FTP for remote editing to be used.
 1. `localStorage`, cookies and IndexedDB too?; could be wrapped by
@@ -278,53 +289,59 @@ modifications) about the app awaiting a developer upgrade).
 so that user can have live data feeds into their local data (listen for changes
 locally and poll or coordinate to get or send WebSockets updates with a remote
 data source)
-1. Allow `postMessage` mechanism to receive content as entered in a pop-up dialog
-    for this purpose as opposed to a file (though with an optional file to save back)
-1. Allow `postMessage` of content within inputs/textareas and the DOM (or rely on
-    AtYourCommand for this?)
+1. Allow `postMessage` mechanism to receive content as entered in a pop-up
+    dialog for this purpose as opposed to a file (though with an optional
+    file to save back)
+1. Allow `postMessage` of content within inputs/textareas and the DOM (or
+    rely on AtYourCommand for this?)
 1. Allow PUT/POST back to AtYourCommand to have side effects such as
-modifying in place highlighted right-clicking text (without the user seeing
-the web app open), e.g., to convert JS to CoffeeScript in a document
-one is viewing.
+    modifying in place highlighted right-clicking text (without the user seeing
+    the web app open), e.g., to convert JS to CoffeeScript in a document
+    one is viewing.
 
-## To-dos (Platform-specific)
+### To-dos (Platform-specific)
 
 1. Get to work in Windows (and Linux)
 1. Exe's don't allow right-click "Open with..."" though maybe Windows would
     allow even these files to be handled in some way (e.g., how Tortoise
     overlays the context menu).
-1. Provide XULRunner-like options for executable-like behavior independent of the browser
-    (and on mobile)
+1. Provide XULRunner-like options for executable-like behavior independent
+    of the browser (and on mobile)
 
-## To-dos (Desktop-based enhancements)
+### To-dos (Desktop-based enhancements)
 
-1. Create complementary browser add-on to add desktop listeners to file changes to ensure WebAppFind files stay up to date within the app (ensure app also checks whether the user wishes to reconcile the new push with any changes already made); tie into proposed version control mode?
-1. Create dialog to ask user for mode, etc., so executable doesn't have to bake it all in and can let the user decide at run-time.
+1. Create complementary browser add-on to add desktop listeners to file
+    changes to ensure WebAppFind files stay up to date within the app (ensure
+    app also checks whether the user wishes to reconcile the new push with
+    any changes already made); tie into proposed version control mode?
+1. Create dialog to ask user for mode, etc., so executable doesn't have to
+    bake it all in and can let the user decide at run-time.
 
-## To-dos (Related enhancements to other add-ons)
+### To-dos (Related enhancements to other add-ons)
 
-1. See [webappfind-demos-samples](https://github.com/brettz9/webappfind-demos-samples) for to-dos
+1. See [webappfind-demos-samples](https://github.com/brettz9/webappfind-demos-samples)
+    for to-dos
 1. Integrate functionality into <https://github.com/brettz9/filebrowser-enhanced>
 
-## To-dos (Message posting)
+### To-dos (Message posting)
 
 1. Allow genuine POST or other non-GET or header-dependent requests (ala curl)?
 
-## To-dos (File editing permissions/add-on permissions)
+### To-dos (File editing permissions/add-on permissions)
 
 1. Option (at the add-on level) to confirm reading and/or saving of data upon
     each attempt and/or display the proposed diffs before saving. (See
     "Implementation notes" section).
 1. Allow users to remember privileges so that whenever a file is reloaded (even
     if not from the desktop), it will continue to allow read/write access.
-1. Support passing entire directories and passing permission to re-reference IDs
-    (until revoked in a permissions dialog?)
+1. Support passing entire directories and passing permission to re-reference
+    IDs (until revoked in a permissions dialog?)
 1. If we don't need all add-on permissions, see
     <https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Request_the_right_permissions>.
     We might also consider creating an `activeTab`-only build to avoid
     content script permissions.
 
-## To-dos (Submissions)
+### To-dos (Submissions)
 
 1. Submit to AMO, npm, etc.
 1. Once cross-platform, make PR to update
@@ -334,7 +351,7 @@ one is viewing.
 1. If API stabilizes and functional, file feature request to get the
     functionality built into Firefox.
 
-## To-dos (Others)
+### To-dos (Others)
 
 1. Add from [README-old.md](./README-old.md)
 1. Document usage of putting in dock for dragging files onto it
