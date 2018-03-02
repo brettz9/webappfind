@@ -7,8 +7,8 @@
 (function () {
 'use strict';
 
-let // listenerHolder,
-    fileTypeProtocolDict = {},
+let fileTypeProtocolDict = {};
+const // listenerHolder,
     permittedURIDict = {},
     _ = require('sdk/l10n').get,
     chrome = require('chrome'),
@@ -21,11 +21,11 @@ let // listenerHolder,
     tabs = require('sdk/tabs'),
     registerComponent = require('./commandLineHandlerComponent'),
     prefs = require('sdk/simple-prefs').prefs;
-
+/*
 function l (str) {
     console.log(str);
 }
-
+*/
 // Todo: Don't maintain in storage unless revamping use of protocols to maintain our own list (in which case use should probably use site prefs)
 function registerPermittedPathForURI (uri, mode, customMode, path) {
     if (!permittedURIDict[uri]) {
@@ -48,7 +48,7 @@ function removePermittedPathForURI (uri, mode, customMode, path) {
     if (!permittedURIDict || !permittedURIDict[uri] || !permittedURIDict[uri][mode] || !permittedURIDict[uri][mode][customMode]) {
         return;
     }
-    var pos = permittedURIDict[uri][mode][customMode].indexOf(path);
+    const pos = permittedURIDict[uri][mode][customMode].indexOf(path);
     if (pos > -1) {
         permittedURIDict[uri][mode][customMode].splice(pos, 1);
     }
@@ -70,15 +70,16 @@ function substituteParams (uri, mode, customMode, fileType, pathID) {
 
     // For some reason, although encodeURIComponent() encodes pathID curly braces, when FF resolves, it unescapes them back
 
-    var scheme = url.URL(uri).scheme,
-        params = {
+    const scheme = url.URL(uri).scheme;
+
+    const params = encodeURIComponent(JSON.stringify(
+        {
             fileType: fileType,
             mode: mode,
             customMode: customMode,
             pathID: pathID
-        };
-
-    params = encodeURIComponent(JSON.stringify(params)); // We encode in this manner because registerProtocolHandler only allows for one variable; it also happens to be easier to parse at the moment than standard query strings (though one must strip off the "web+local:" portion as per below)!
+        }
+    )); // We encode in this manner because registerProtocolHandler only allows for one variable; it also happens to be easier to parse at the moment than standard query strings (though one must strip off the "web+local:" portion as per below)!
 
     if (scheme.match(/^web\+local/)) {
         return scheme + ':' + params;
@@ -90,7 +91,8 @@ function startURIWithPermittedPath (uri, mode, customMode, path, fileType, isCon
     if (fileTypesFile) { // Todo: allow basePath in filetypes.json for resolving paths relative to a URI base instead of the actual native path
         uri = url.URL(uri, url.fromFilename(fileTypesFile)).toString(); // Allow relative paths
     }
-    var queryBeginPos, base = uri, queryStr = '', pathID = getPathID(path);
+    let queryBeginPos, base = uri, queryStr = '';
+    const pathID = getPathID(path);
     if (!isConfirmedWebLocalProtocol) {
         queryBeginPos = uri.indexOf('?');
         if (queryBeginPos !== -1) {
@@ -101,8 +103,7 @@ function startURIWithPermittedPath (uri, mode, customMode, path, fileType, isCon
             if (file.exists(base)) { // }!url.isValidURI(uri)) { // This was returning true for a normal file path, so we instead check if we can find the path
                 uri = url.fromFilename(base) + queryStr;
             }
-        }
-        catch(ignore) {
+        } catch (ignore) {
             // It was a regular URI after all, so just continue on
         }
     }
@@ -111,7 +112,7 @@ function startURIWithPermittedPath (uri, mode, customMode, path, fileType, isCon
     registerPermittedPathForURI(uri, mode, customMode, path);
 
     tabs.activeTab.on('ready', function (tab) {
-        var worker = tab.attach({
+        const worker = tab.attach({
             contentScriptFile: data.url('postMessageRelay.js')
         });
         function start () {
@@ -123,7 +124,7 @@ function startURIWithPermittedPath (uri, mode, customMode, path, fileType, isCon
         }
         if (mode === 'edit' || mode === 'binaryedit') {
             worker.port.on('webappfindSave', function (data) {
-                var thePathID = data[0],
+                const thePathID = data[0],
                     newContents = data[1],
                     ws = mode === 'binaryedit' ? file.open(path, 'wb') : file.open(path, 'w');
                 ws.write(newContents);
@@ -140,21 +141,21 @@ function startURIWithPermittedPath (uri, mode, customMode, path, fileType, isCon
 }
 
 function getFile (path) {
-    var localFile = Cc['@mozilla.org/file/local;1'].createInstance(Ci.nsILocalFile);
+    const localFile = Cc['@mozilla.org/file/local;1'].createInstance(Ci.nsILocalFile);
     localFile.initWithPath(path);
     return localFile;
 }
 function protocolIsRegistered (protocol) {
     // https://developer.mozilla.org/en-US/docs/XPCOM_Interface_Reference/nsIExternalProtocolService
     // see also http://mdn.beonex.com/en/XPCOM_Interface_Reference/nsIProtocolHandler.html
-    var serv = Cc['@mozilla.org/uriloader/external-protocol-service;1'].getService(Ci.nsIExternalProtocolService);
+    const serv = Cc['@mozilla.org/uriloader/external-protocol-service;1'].getService(Ci.nsIExternalProtocolService);
     return serv.externalProtocolHandlerExists(protocol);
 }
 function validateProtocolComponent (comp) {
     return (/^[a-z]*$/).test(comp);
 }
 function visitProtocol (mode, customMode, fileType, path) {
-    var protocol = getProtocol(mode, customMode, fileType);
+    const protocol = getProtocol(mode, customMode, fileType);
     startURIWithPermittedPath(protocol + ':', mode, customMode, path, fileType, true);
 }
 function handleError (errorMsg) {
@@ -166,13 +167,12 @@ function handleError (errorMsg) {
         });
         // Close the tab if alerting the user of errors in a way different from using the opened URL
         // tabs.activeTab.close();
-    }
-    else {
+    } else {
         tabs.activeTab.close(); // The command line is called with an open tab which we weren't able to use, so close it
     }
 }
 function getFileExtension (path) {
-    if (path.match(/\.[^\.\/]+$/)) { // Ensure that this is not a folder and that there is an extension to get
+    if (path.match(/\.[^./]+$/)) { // Ensure that this is not a folder and that there is an extension to get
         // Should always be truthy as we required at least one character after the final '.'
         return path.slice(path.lastIndexOf('.') + 1).toLowerCase(); // We lower-case the result to ensure it will work in a protocol
     }
@@ -182,8 +182,8 @@ function xhtmlEscape (str) {
     return str.replace(/&/g, '&amp;'); // Apparently only need to replace ampersands and single quotes for Windows as it does not appear to allow files with <, >, or "
 }
 function noProtocolFoundSoHandleFallbacks (mode, customMode, path) {
-    var isRegistered, uri, errorMsg,
-        fileType = getFileExtension(path);
+    let isRegistered, uri, errorMsg;
+    const fileType = getFileExtension(path);
 
     if (fileType) {
         if (prefs.fallbackToWebProtocolUsingFileExtension) {
@@ -193,10 +193,9 @@ function noProtocolFoundSoHandleFallbacks (mode, customMode, path) {
                 return;
             }
         }
-        errorMsg = _("handler_not_found_for_ext", xhtmlEscape(getProtocol(mode, customMode, fileType)));
-    }
-    else {
-        errorMsg = _("file_ext_not_found");
+        errorMsg = _('handler_not_found_for_ext', xhtmlEscape(getProtocol(mode, customMode, fileType)));
+    } else {
+        errorMsg = _('file_ext_not_found');
     }
     if (prefs.fallbackToBrowserUsingFilePath) {
         uri = url.fromFilename(path);
@@ -212,11 +211,11 @@ function noProtocolFoundSoHandleFallbacks (mode, customMode, path) {
 }
 
 function findUniqueProtocolOrFallbacks (mode, customMode, path, fileType, fileTypesJSON, fileTypesFile) {
-    var defaultHandlersForType = fileTypesJSON.defaultHandlers && fileTypesJSON.defaultHandlers[fileType],
+    const defaultHandlersForType = fileTypesJSON.defaultHandlers && fileTypesJSON.defaultHandlers[fileType],
         fullMode = mode + (customMode || ''),
         hierarchy = fileTypesJSON.hierarchy && fileTypesJSON.hierarchy[fileType];
     if (!validateProtocolComponent(fileType)) {
-        handleError(_("supplied_file_type_not_match_ascii", fileType));
+        handleError(_('supplied_file_type_not_match_ascii', fileType));
         return true;
     }
     if (protocolIsRegistered(getProtocol(mode, customMode, fileType))) {
@@ -248,13 +247,13 @@ function findUniqueProtocolOrFallbacks (mode, customMode, path, fileType, fileTy
 
 function findProtocolOrFallbacks (mode, customMode, path, fileType, fileTypesJSON, fileTypesFile) {
     fileTypeProtocolDict = {};
-    return findUniqueProtocolOrFallbacks (mode, customMode, path, fileType, fileTypesJSON, fileTypesFile);
+    return findUniqueProtocolOrFallbacks(mode, customMode, path, fileType, fileTypesJSON, fileTypesFile);
 }
 
 function sendDirectoryPathToApp (uri, path) {
     uri = uri.replace(/%path/, encodeURIComponent(path));
     tabs.activeTab.on('ready', function (tab) {
-        var worker = tab.attach({
+        const worker = tab.attach({
             contentScriptFile: data.url('postMessageRelayDirectory.js')
         });
         function start () {
@@ -275,7 +274,7 @@ module.exports = function () { // listener
     // listenerHolder = listener;
     // Todo: One might create some WebAppFind-specific batch files which call Firefox with
     //              the WebAppFind arguments to avoid the need for ugly namespacing like "webappdoc".
-    var commandLineName = 'webappdoc',
+    const commandLineName = 'webappdoc',
         modeCommandName = 'webappmode',
         customModeCommandName = 'webappcustommode',
         standardModes = ['view', 'edit', 'binaryview', 'binaryedit'],
@@ -284,9 +283,9 @@ module.exports = function () { // listener
 
     registerComponent({
         name: directoryCommandLineName,
-        help: '  -' + directoryCommandLineName + "               Open My Application\n", // Not apparently used
-        handler: function clh_handle(cmdLine) {
-            var path, hardCodedSite;
+        help: '  -' + directoryCommandLineName + '               Open My Application\n', // Not apparently used
+        handler (cmdLine) {
+            let path, hardCodedSite;
             try {
                 path = cmdLine.handleFlagWithParam(directoryCommandLineName, false);
                 if (!path) { // See other handler below on why doing this
@@ -294,27 +293,26 @@ module.exports = function () { // listener
                 }
                 hardCodedSite = cmdLine.handleFlagWithParam(hardCodedSiteCommandLineName, false);
                 if (!hardCodedSite) {
-                    handleError(_("missing_hard_coded_site", directoryCommandLineName));
+                    handleError(_('missing_hard_coded_site', directoryCommandLineName));
                     return;
                 }
                 // Todo: Do filetypes.json processing, mode URL replacements, etc., similar to files
                 sendDirectoryPathToApp(hardCodedSite, path);
-            }
-            catch (e) {
-                handleError(_("incorrect_parameter_passed_cmd_line", directoryCommandLineName));
+            } catch (e) {
+                handleError(_('incorrect_parameter_passed_cmd_line', directoryCommandLineName));
                 return;
             }
             if (cmdLine.handleFlag(directoryCommandLineName, false)) {
-                handleError(_("valid_directory_must_be_provided", directoryCommandLineName));
-                return;
+                handleError(_('valid_directory_must_be_provided', directoryCommandLineName));
+                // return;
             }
         }
     });
     registerComponent({
         name: commandLineName,
-        help: '  -' + commandLineName + "               Open My Application\n", // Not apparently used
-        handler: function clh_handle(cmdLine) {
-            var i, path, mode, customMode,
+        help: '  -' + commandLineName + '               Open My Application\n', // Not apparently used
+        handler (cmdLine) {
+            let i, path, mode, customMode,
                 fileTypesFile, fileTypesJSON, fileMatches, filePattern, fileMatch, filePatternStr, fileType;
             cmdLine.preventDefault = true; // Todo: Do we want or need this?
             try {
@@ -327,26 +325,35 @@ module.exports = function () { // listener
                 if (!path) {
                     return;
                 }
-            }
-            catch (e) {
-                handleError(_("incorrect_parameter_passed_cmd_line", commandLineName));
+            } catch (e) {
+                handleError(_('incorrect_parameter_passed_cmd_line', commandLineName));
                 return;
             }
             try {
                 mode = cmdLine.handleFlagWithParam(modeCommandName, false);
                 if (standardModes.indexOf(mode) === -1) { // Default instead to "view"?
-                    throw 'go to catch';
+                    throw new Error('go to catch');
                 }
-            }
-            catch (e2) {
-                handleError(_("waf_expects_fund_mode", modeCommandName, standardModes.join(_("waf_expects_fund_mode_joiner")), (mode ? _("mode_was_supplied", mode) : _("no_mode_found"))));
+            } catch (e2) {
+                handleError(
+                    _(
+                        'waf_expects_fund_mode',
+                        modeCommandName,
+                        standardModes.join(
+                            _('waf_expects_fund_mode_joiner')
+                        ),
+                        (mode
+                            ? _('mode_was_supplied', mode)
+                            : _('no_mode_found')
+                        )
+                    )
+                );
                 return;
             }
 
             try { // Optional param
                 customMode = cmdLine.handleFlagWithParam(customModeCommandName, false);
-            }
-            catch (ignore) {
+            } catch (ignore) {
             }
 
             if (path && mode) {
@@ -356,11 +363,10 @@ module.exports = function () { // listener
                     try {
                         fileTypesJSON = JSON.parse(fileTypesJSON);
                         if (!fileTypesJSON || typeof fileTypesJSON !== 'object') {
-                            throw 'goto next error';
+                            throw new Error('goto next error');
                         }
-                    }
-                    catch (jsonError) {
-                        handleError(_("json_file_not_valid", fileTypesFile, jsonError));
+                    } catch (jsonError) {
+                        handleError(_('json_file_not_valid', fileTypesFile, jsonError.message));
                         return;
                     }
                     fileMatches = fileTypesJSON.fileMatches;
@@ -369,21 +375,19 @@ module.exports = function () { // listener
                         try {
                             filePatternStr = fileMatch[0];
                             fileType = fileMatch[1];
-                        }
-                        catch(fileMatchesError) {
-                            handleError(_("error_processing_file_matching_array_idx", i));
+                        } catch (fileMatchesError) {
+                            handleError(_('error_processing_file_matching_array_idx', i));
                             return;
                         }
                         try {
                             filePattern = new RegExp(filePatternStr, 'i'); // file paths should be case-insensitive, so let's offer some convenience
-                        }
-                        catch(regexError) {
-                            handleError(_("regex_pattern_in_file_had_error", filePattern, fileTypesFile, regexError));
+                        } catch (regexError) {
+                            handleError(_('regex_pattern_in_file_had_error', filePattern, fileTypesFile, regexError));
                             return;
                         }
                         if (filePattern.test(path)) {
-                            console.log('matched fileType: '+ fileType);
-                            //tabs.activeTab.activate(); // When opening from command line, without this, the "active tab" won't actually be active.
+                            console.log('matched fileType: ' + fileType);
+                            // tabs.activeTab.activate(); // When opening from command line, without this, the "active tab" won't actually be active.
 
                             if (findProtocolOrFallbacks(mode, customMode, path, fileType, fileTypesJSON, fileTypesFile)) {
                                 return;
@@ -400,7 +404,7 @@ module.exports = function () { // listener
                 return;
             }
             if (cmdLine.handleFlag(commandLineName, false)) {
-                handleError(_("valid_ID_must_be_provided", commandLineName));
+                handleError(_('valid_ID_must_be_provided', commandLineName));
                 // return;
                 // openWindow(CHROME_URI, null);
                 // cmdLine.preventDefault = true;
