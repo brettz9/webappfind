@@ -1,5 +1,8 @@
 - LOOK AT demos-samples BRANCH for deleted info!!!
 
+- Move old demos/samples to own repository and add TestCafe tests for them (need
+    to also call binary for simulating "Open with..." behavior)
+
 ## Possible "Demos" todos
 
 1. Make scrollbars easier to use in CodeMirror demos

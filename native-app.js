@@ -84,6 +84,8 @@ on getFile (argv)
 end getFile
 `;
     // Todo: Ensure native-app.js path works if called in executable form (and invoke bash if not?)
+    // Todo: Ensure we can customize server, at least different for each browser and then
+    //        make client above customizable here too (though defaulting to this particular executable)
     // Todo: optionally associate to file type
     //        see https://apple.stackexchange.com/questions/9866/programmatically-script-atically-changing-the-default-open-with-setting/9954#9954
     // Todo optionally add to dock and/or execute the result;

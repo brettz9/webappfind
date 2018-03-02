@@ -342,6 +342,7 @@ one is viewing.
 ## To-dos (Related enhancements to other add-ons)
 
 1. Integrate functionality into <https://github.com/brettz9/filebrowser-enhanced>
+1. See [DEMOS.md](./DEMOS.md) on need to move old demos/samples to own repo.
 
 ## To-dos (Message posting)
 
@@ -362,3 +363,8 @@ one is viewing.
     <https://github.com/marijnh/CodeMirror/blob/master/doc/realworld.html>).
 1. If API stabilizes and functional, file feature request to get the
     functionality built into Firefox.
+
+## To-dos (Others)
+
+1. Add from [README-old.md](./README-old.md)
+1. Search through coe for "Todo"

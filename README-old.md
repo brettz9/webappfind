@@ -1,4 +1,4 @@
-- LOOK AT old-files BRANCH for deleted info!!!
+- LOOK AT old-\* folders for deleted info!!!
 
 # Comparison to other standards and tools
 
@@ -149,6 +149,7 @@ finished should help users to do this.
 ----
 TODOS TO INCORPORATE AND ADD BELOW
 1. Window/tab targeting
+    1. Option to give browser focus or open in background?
     1. Option to avoid or allow new tabs for same URI/mode/filetype/path? (option to get the same tab or new tabs for them?); option to push to all open windows in different manner so can notify user of updates but not change focus, etc.
     1. Allow command line to specify (or let WebAppFind determine according to some permutation of the file path) the exact window and possibly Panorama group and/or pinned status into which the web app with desktop file will be opened (the web app could handle moving itself instead but only if the web app were AsYouWish-based and the user preferences supplied the file path). Alternatively, the executable might have logic to determine the profile in a similarly automated (as opposed to hard-coded) manner. The advantage of either approach would be to allow the user a better web app grouping organization corresponding to the hierarchical organization they can find on the desktop.
 1. See below and also possibly the notes within the [Executable Builder](https://github.com/brettz9/executable-builder) code
@@ -581,7 +582,8 @@ them?
 ----
 
 Besides "view", "binaryview", "edit", "binaryedit", "register", the following modes might be added in future versions (or made to correspond with WebDav commands?):
-
+1. "route"
+1. "extensiontypehierarchyhandler"
 1. Version control (also some discussion of possibilities for multiple file saving)
     1. "create", "delete" - for any necessary set-up before creation or deletion of a file (as with saving, the protocol should not have side effects, so these should only bring one to the page to confirm the user wished to take such an action--and the browser might have its own confirmation for these actions).
     1. "rename" and "move" (or cut or copy and paste)
