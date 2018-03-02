@@ -340,6 +340,7 @@ one is viewing.
 
 ## To-dos (Related enhancements to other add-ons)
 
+1. See [webappfind-demos-samples](https://github.com/brettz9/webappfind-demos-samples) for to-dos
 1. Integrate functionality into <https://github.com/brettz9/filebrowser-enhanced>
 
 ## To-dos (Message posting)
