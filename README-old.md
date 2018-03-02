@@ -1,4 +1,4 @@
-- LOOK AT old-files BRANCHES for deleted info!!!
+- LOOK AT old-files BRANCH for deleted info!!!
 
 # Comparison to other standards and tools
 

@@ -1,4 +1,4 @@
-- LOOK AT old-files, demos-samples BRANCHES for deleted info!!!
+- LOOK AT demos-samples BRANCH for deleted info!!!
 
 ## Possible "Demos" todos
 
