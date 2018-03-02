@@ -202,14 +202,49 @@ machine—[do not currently work](https://github.com/zeit/pkg/issues/136#issueco
     file contents back to disk, but also for *AtYourCommand* functionality)
 1. Delete preferences from `ignore/old-preferences.json` after suitably
     reimplemented
-    1. Set `options_ui: {page: "webappfind-options.html"}` and/or `sidebar_action`?
+    1. Set `options_ui: {page: "webappfind-options.html"}` and/or
+        `sidebar_action`?
     1. Currently preferences are global, whereas it may be desirable to allow
         users to customize their preferences by type/protocol in addition to
         the current default global ones.
 1. Security improvements
-    1. Disable further save attempts with bad ID supplied in case a however previously approved site is attempting to guess at the paths of (if the user has enabled path transmission), or at the GUID representing, other non-approved files
-    1. Check upon each save attempt that the loaded protocol is still registered as a handler (and remove usage notes above once implemented).
-    1. Listen for unregistration of protocols to disable acting on future messages from them (only relevant for pages already loaded in this session).
+    1. Disable further save attempts with bad ID supplied in case a however
+        previously approved site is attempting to guess at the paths of
+        (if the user has enabled path transmission), or at the GUID
+        representing, other non-approved files
+    1. Check upon each save attempt that the loaded protocol is still
+        registered as a handler (and remove usage notes above once
+        implemented).
+    1. Listen for unregistration of protocols to disable acting on future
+        messages from them (only relevant for pages already loaded in this
+        session).
+    1. Piggyback on HTML5 drag-and-drop file capabilities (or create own) to
+        allow files dropped in this way to be saved back to disk and/or path
+        provided to the app; same with optionally allowing privileged file
+        picker per site.
+    1. Ensure some additional security/privacy for users desiring it by
+        restricting external access (using <https://developer.mozilla.org/en-US/docs/XPCOM_Interface_Reference/nsIContentPolicy>
+        and <https://developer.mozilla.org/en-US/docs/XPCOM_Interface_Reference/nsIPrincipal>
+        per <http://stackoverflow.com/questions/18369052/firefox-add-on-to-load-webpage-without-network-access>?)
+        See also http://en.wikipedia.org/wiki/Site-specific_browser regarding
+        such sandboxing.
+    1. Option to enable `file:` protocol (though mention it is currently risky
+        in Firefox to use `postMessage` for security and privacy given its lack
+        of scoping); report issue to FF if issue not already added (also for
+        better means than '\*' for add-on communication?). However, this option
+        would be quite useful, especially if the todo just above on restricting
+        external access were implemented, given that web apps could be
+        installed to work with one's files (ideally without concerns that the
+        data was going to be sent anywhere, and if the todo to confirm saves
+        were implemented, one could also see what changes were being made to
+        a file before being actually saved). Unfortunately, `file:` sites
+        cannot register themselves as protocol handlers, so the user would
+        need to configure their settings so as to rely on the default handlers
+        in `filetypes.json` to be able to use such a file (or we would need
+        to create our own mechanism, such as through `postMessage` back to
+        the add-on (or a change in the file's GET parameters or perhaps
+        modification of an element within the document), to allow a `file:`
+        site to request permission to become usable as a protocol handler).
 1. Reimplement protocol registration functionality and create tests using
     `registerProtocolHandler` (also for JS/JSON/mytype); also consider
     HTML head meta-data for flagging availability of file registrations
@@ -227,9 +262,6 @@ machine—[do not currently work](https://github.com/zeit/pkg/issues/136#issueco
         to it, and if it is, it could bring user through steps).
     1. Applescript-based executable builder also?
     1. Examine `executable builder` for ideas and UI
-1. Set `devtools_page` in `manifest.json` to replicate Node console?
-1. Use `web_accessible_resources` for exposing any resources to websites?
-1. Set `omnibox: {keyword: "waf"}` for special auto-complete to send to add-on
 
 ### To-dos (Message posting)
 
@@ -259,6 +291,22 @@ machine—[do not currently work](https://github.com/zeit/pkg/issues/136#issueco
     WebAppFind reimplemented.
 1. If API stabilizes and functional, file feature request to get the
     functionality built into Firefox.
+
+### To-dos (Future, fairly minor yet new functionality)
+
+1. Set `devtools_page` in `manifest.json` to replicate Node console?
+1. Use `web_accessible_resources` for exposing any resources to websites?
+1. Set `omnibox: {keyword: "waf"}` for special auto-complete to send to add-on
+1. As with how `filebrowser-extended` can open the folder of the currently
+    opened file, add an optional icon in WebAppFind to open the containing
+    directory of the currently opened document file path, e.g., if user used
+    "Open with" on "C:\myfile.txt", it would open "c:\" (if allowed opening
+    the file itself from the desktop and the current web app was also set as
+    the default for that type, it would open another instance of the file in
+    the browser, but may still want to allow this anyways).
+1. Allow right-clicking of stylesheets or scripts encountered in the process to
+    be clicked to be injected into web apps? (could use if app isn't accepting
+    them as additional file arguments already)
 
 ### To-dos (new environments)
 
@@ -313,6 +361,13 @@ machine—[do not currently work](https://github.com/zeit/pkg/issues/136#issueco
     any changes already made); tie into proposed version control mode?
 1. Create dialog to ask user for mode, etc., so executable doesn't have to
     bake it all in and can let the user decide at run-time.
+    1. Build an executable to open a local executable/batch on the Windows
+        desktop with a dialog asking for command line arguments (e.g.,
+        profile)? (as a workaround, one might use WebAppFind for this if an
+        override will be provided to ensure it will launch back on the
+        desktop)? Also allow a dialog to ask for WebAppFind arguments to
+        web apps (could be at executable level or within the WebAppFind
+        add-on).
 
 ### To-dos (Related enhancements to other add-ons or refactoring to act as separate)
 
@@ -356,6 +411,27 @@ machine—[do not currently work](https://github.com/zeit/pkg/issues/136#issueco
     script. Ensure add-ons support file: and native paths to: open folder
     on desktop, open folder in the browser's file browser, execute on desktop,
     execute with web app
+1. AsYouWish
+    1. When [AsYouWish](https://github.com/brettz9/asyouwish/) may be restored
+        and in use, allow path-reading as long as site is AYW-approved and the
+        page is registered for the protocol--so one can bookmark a path and
+        always load it or load with other approved paths (e.g., in different
+        tabs within a webapp); also can remember paths to invoke upon FF start
+        up ("website addons").
+    1. Create a shared add-on dependency for WebAppFind and AsYouWish exposing
+        perhaps at least for privilege escalation with some of the underlying
+        non-SDK APIs (e.g., a privilege to save only to a specific directory if
+        WebAppFind adds such a fundamental mode). Perhaps any AsYouWish
+        directive could be exposed if part of a `filetypes.json` directive
+        and/or command line flag (and not blocked by user preferences) or
+        expose AYW API to other add-ons or command line for adding sites
+        and privileges and use that; could be useful for add-ons as well
+        as sites to provide alternative views/editing interfaces for the
+        same shared data.
+    1. Option to open HTML in chrome mode so one can do things like
+        cross-domain `toDataURL` on an image canvas without errors (the
+        proposed change to `AsYouWish` to allow sites to be reopened in
+        this mode could be a workaround).
 1. Refactor this extension to be a bridge between Node (including
     user-installed packages) and browser/browser add-ons/web-sites.
     1. Support passing from Node into other add-ons
