@@ -371,4 +371,4 @@ one is viewing.
 ## To-dos (Others)
 
 1. Add from [README-old.md](./README-old.md)
-1. Search through coe for "Todo"
+1. Search through code for "Todo"
