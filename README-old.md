@@ -10,8 +10,9 @@
 [WebActivities](https://wiki.mozilla.org/WebAPI/WebActivities) is similar to WebAppFind in that both seek to allow delegation of certain behaviors such as "view" and "edit" to (potentially) different apps (where the user also has the freedom to choose any app to handle the given type of activity), but WebActivities does not operate on files. Jonas Sicking indicated in a personal email response supportive of the concept of WebAppFind that WebActivities would be a good "way to dispatch the "view"/"edit" request to the appropriate web page, however WebActivities are still at an early stage and not ready for your use cases.".
 
 These missing use cases (besides operating on files) might perhaps include:
-* The typing system of WebActivities does not seem to be made to be extensible by applications. It thus also doesn't allow specification of hierarchies of types (e.g., myJson->json->js) for fallbacks for as-yet-unregistered types or for alternate editor types.
-* WebActivities doesn't allow recommendation of default handlers when opening a file for the first time (though a WebActivities-supporting site could seek to register itself as such a handler).
+
+1. The typing system of WebActivities does not seem to be made to be extensible by applications. It thus also doesn't allow specification of hierarchies of types (e.g., myJson->json->js) for fallbacks for as-yet-unregistered types or for alternate editor types.
+1. WebActivities doesn't allow recommendation of default handlers when opening a file for the first time (though a WebActivities-supporting site could seek to register itself as such a handler).
 
 The [WebAPI](https://wiki.mozilla.org/WebAPI) has a
 [DeviceStorageAPI](https://wiki.mozilla.org/WebAPI/DeviceStorageAPI)
@@ -20,10 +21,10 @@ which has certain file-related behaviors.
 Shortcomings (or differences) of the current DeviceStorageAPI
 relative to WebAppFind would appear to be:
 
-* It does not seem to anticipate the activities being triggered from one's desktop, but rather if one is already within a web app.
-* The proposal at present appears to be limited to files in a specific directory of one's hard drive. It thus does not allow one the freedom to store one's files wherever one likes on one's hard-drive for better organization purposes.
+1. It does not seem to anticipate the activities being triggered from one's desktop, but rather if one is already within a web app.
+1. The proposal at present appears to be limited to files in a specific directory of one's hard drive. It thus does not allow one the freedom to store one's files wherever one likes on one's hard-drive for better organization purposes.
 
-The DeviceStorageAPI appears to allow more privileges (like
+The `DeviceStorageAPI` appears to allow more privileges (like
 [AsYouWish](https://github.com/brettz9/asyouwish/)) such as
 enumerating files in a directory, adding or deleting files, and listening
 for creation/deletion/modifications, whereas WebAppFind is currently
@@ -35,7 +36,7 @@ or deleting a file (in case it wishes to do related set-up/take-down work).
 Since WebAppFind executables pass along path information, WebAppFind
 can already be used with the AsYouWish add-on (if the user so configures
 that privilege-escalating add-on) to have it conduct the other privileged
-activities of the DeviceStorageAPI whether enumerating files in the file's
+activities of the `DeviceStorageAPI` whether enumerating files in the file's
 directory, doing set-up or take-down work related to file creation or
 deletion, or such things as uploading the containing folder's contents
 (and especially if WebAppFind is modified to allow for opening a hidden
@@ -53,8 +54,16 @@ to plug into your web app (which can mimic the desktop itself if you wish).
 higher-than-normal privilege level to websites, but it differs in
 a number of areas:
 
-1. AsYouWish sites ask for permission, and once approved, can then immediately do their work. WebAppFind currently allows sites to ask for permission to register themselves as handlers, but their work will only become relevant when the user opens a file via WebAppFind.
-2. AsYouWish allows for a vast number of possible privileges (though subject to user approval) including potentially arbitrary file reading and writing (as with some browser extensions), while WebAppFind is limited to file reading and writing (though it may expand to certain other circumscribed, user-initated file-related activities in the future) and only for those files so opened as opened by the user.
+1. AsYouWish sites ask for permission, and once approved, can then
+    immediately do their work. WebAppFind currently allows sites to ask
+    for permission to register themselves as handlers, but their work
+    will only become relevant when the user opens a file via WebAppFind.
+2. AsYouWish allows for a vast number of possible privileges (though
+    subject to user approval) including potentially arbitrary file reading
+    and writing (as with some browser extensions), while WebAppFind is
+    limited to file reading and writing (though it may expand to certain
+    other circumscribed, user-initated file-related activities in the
+    future) and only for those files so opened as opened by the user.
 
 # Usage notes (for end-users)
 
@@ -77,30 +86,31 @@ from source or use the pre-built XPI included with the repository).
 
 1. Right-click on a file.
     1. If you want to use WebAppFind without disturbing your defaults
-    for that file extension, select "Open with"->"Choose default program..."
-    if present (or if not present, open the file and choose "Select a program
-    from a list of installed programs") and then make sure "Always use the
-    selected program to open this kind of file" is not checked.
+        for that file extension, select
+        "Open with"->"Choose default program..." if present (or if
+        not present, open the file and choose "Select a program
+        from a list of installed programs") and then make sure "Always use
+        the selected program to open this kind of file" is not checked.
     1. If you always want to use WebAppFind when handling files of this
-    extension, click "Properties", then click "Change..." next to
-    "Opens with:" in the General tab of the dialog.
+        extension, click "Properties", then click "Change..." next to
+        "Opens with:" in the General tab of the dialog.
 1. Click "Browse".
 1. Navigate to an executable within the "cplusplus" folder of this
-[WebAppFind](https://github.com/brettz9/webappfind) repository (or, if
-you prefer, you can build the executables yourself with the source code
-included in this repository). If you want web apps to open this file in
-view-only mode, choose "WebAppFinder-view-mode-Firefox.exe" (or
-"WebAppFinder-binaryview-mode-Firefox.exe" if this is for a program
-needing to open a file in binary mode, such as images, sound files, or
-videos). If you want to grant the webapp read and write access for this
-file (or type of file if you chose option 1.2) you open via WebAppFind,
-choose "WebAppFinder-edit-mode-Firefox.exe" (or
-"WebAppFinder-binaryedit-mode-Firefox.exe" for editing binary files).
+    [WebAppFind](https://github.com/brettz9/webappfind) repository (or, if
+    you prefer, you can build the executables yourself with the source code
+    included in this repository). If you want web apps to open this file in
+    view-only mode, choose "WebAppFinder-view-mode-Firefox.exe" (or
+    "WebAppFinder-binaryview-mode-Firefox.exe" if this is for a program
+    needing to open a file in binary mode, such as images, sound files, or
+    videos). If you want to grant the webapp read and write access for this
+    file (or type of file if you chose option 1.2) you open via WebAppFind,
+    choose "WebAppFinder-edit-mode-Firefox.exe" (or
+    "WebAppFinder-binaryedit-mode-Firefox.exe" for editing binary files).
 1. Select "Ok".
 1. If you used "Open with" (as per step 1.1 above), your file should have
-already opened with WebAppFind. If you opted for "Properties" (step 1.2
-above), you should now be able to double-click any file possessing the
-same extension to open it with WebAppFind.
+    already opened with WebAppFind. If you opted for "Properties" (step 1.2
+    above), you should now be able to double-click any file possessing the
+    same extension to open it with WebAppFind.
 
 If an edit `web+local` protocol is enabled and open and then disabled in
 the same session, it will keep having save access (though within that
@@ -153,14 +163,29 @@ finished should help users to do this.
 TODOS TO INCORPORATE AND ADD BELOW
 1. Window/tab targeting
     1. Option to give browser focus or open in background?
-    1. Option to avoid or allow new tabs for same URI/mode/filetype/path? (option to get the same tab or new tabs for them?); option to push to all open windows in different manner so can notify user of updates but not change focus, etc.
-    1. Allow command line to specify (or let WebAppFind determine according to some permutation of the file path) the exact window and possibly Panorama group and/or pinned status into which the web app with desktop file will be opened (the web app could handle moving itself instead but only if the web app were AsYouWish-based and the user preferences supplied the file path). Alternatively, the executable might have logic to determine the profile in a similarly automated (as opposed to hard-coded) manner. The advantage of either approach would be to allow the user a better web app grouping organization corresponding to the hierarchical organization they can find on the desktop.
-1. See below and also possibly the notes within the [Executable Builder](https://github.com/brettz9/executable-builder) code
+    1. Option to avoid or allow new tabs for same URI/mode/filetype/path?
+        (option to get the same tab or new tabs for them?); option to push
+        to all open windows in different manner so can notify user of
+        updates but not change focus, etc.
+    1. Allow command line to specify (or let WebAppFind determine according
+        to some permutation of the file path) the exact window and possibly
+        Panorama group and/or pinned status into which the web app with
+        desktop file will be opened (the web app could handle moving itself
+        instead but only if the web app were AsYouWish-based and the user
+        preferences supplied the file path). Alternatively, the executable
+        might have logic to determine the profile in a similarly automated
+        (as opposed to hard-coded) manner. The advantage of either approach
+        would be to allow the user a better web app grouping organization
+        corresponding to the hierarchical organization they can find on
+        the desktop.
+1. See below and also possibly the notes within the
+    [Executable Builder](https://github.com/brettz9/executable-builder) code
 1. Support the "register" mode from command line?
 ----
 
 WebAppFind is triggered through command line
-arguments passed to a WebExtensions browser (or Chrome) and handled by the WebAppFind add-on.
+arguments passed to a WebExtensions browser (or Chrome) and handled by
+the WebAppFind add-on.
 
 It is my goal to complete work on
 [Executable Builder](https://github.com/brettz9/executable-builder) to
@@ -175,11 +200,23 @@ streamlining cross-browser invocation, but currently this API is available
 if someone wishes to build their own executables using the API or to
 simply be able to run commands manually from the command line.
 
-* `-webappdoc <path>` - Indicates the path of the file which will be made available to the web application (with the privileges designated by `-webappmode`)
-* `-webappmode <mode>` Indicates the fundamental mode under which the file will be opened up to the web app (i.e., "-webappmode view", "-webappmode binaryview", "-webappmode edit", or "-webappmode binaryedit").
-* `-webappcustommode <custom mode>` - Indicates a mode that supplements the fundamental mode (e.g., "source" added to the fundamental mode, "view" in order to specify that the document is being
-opened so as to view the source code). Custom modes will immediately follow the mode within the protocol. (Note that this API is expected to change)
-* `-remote "openurl(about:newtab)"` - This built-in Mozilla command line API allows Firefox (unlike "-silent") to gain focus without additional instructions to Windows. If the tab is determined to not be needed (e.g., if the user has opted to allow desktop opening of the file when no protocols are found), the add-on will simply auto-close the tab that this parameter opens.
+* `-webappdoc <path>` - Indicates the path of the file which will be made
+    available to the web application (with the privileges designated by
+    `-webappmode`)
+* `-webappmode <mode>` Indicates the fundamental mode under which the file
+    will be opened up to the web app (i.e., "-webappmode view",
+    "-webappmode binaryview", "-webappmode edit", or "-webappmode binaryedit").
+* `-webappcustommode <custom mode>` - Indicates a mode that supplements
+    the fundamental mode (e.g., "source" added to the fundamental mode,
+    "view" in order to specify that the document is being opened so as to
+    view the source code). Custom modes will immediately follow the mode
+    within the protocol. (Note that this API is expected to change)
+* `-remote "openurl(about:newtab)"` - This built-in Mozilla command line
+    API allows Firefox (unlike "-silent") to gain focus without additional
+    instructions to Windows. If the tab is determined to not be needed
+    (e.g., if the user has opted to allow desktop opening of the file when
+    no protocols are found), the add-on will simply auto-close the tab
+    that this parameter opens.
 
 # For developers
 
@@ -191,65 +228,140 @@ web app may inadvertently be exposing data they have saved on their
 desktops or even overwriting it.
 
 1. Please note the security comments within the API comments below for
-details on how to make communication with the add-on safely (via
-`postMessage`).
+    details on how to make communication with the add-on safely (via
+    `postMessage`).
 1. As with any web app, do not trust user-supplied data (e.g., to paste
-it using `innerHTML`), especially if that data is supplied via the URL (to
-which hackers can link or cause their visitors to visit such pages). See
-https://en.wikipedia.org/wiki/Cross-site_scripting for some of the concerns.
+    it using `innerHTML`), especially if that data is supplied via the URL (to
+    which hackers can link or cause their visitors to visit such pages). See
+    <https://en.wikipedia.org/wiki/Cross-site_scripting> for some of the
+    concerns.
 1. There should be no side effects upon the opening of a link to your web app
-(and whether or not your app is opened as a URL, protocol, or
-protocol-opened-through-WebAppFind), so for example, you should not
-automatically save file contents back to disk (at least without user
-approval). (An exception might be made in the future if AsYouWish is
-installed and the user wished to bookmark privileged but harmless or
-per-use-confirmed processes, e.g., to visit a link to package up some
-files as part of a build process.) See
-https://en.wikipedia.org/wiki/Cross-site_request_forgery for some
-of the concerns.
+    (and whether or not your app is opened as a URL, protocol, or
+    protocol-opened-through-WebAppFind), so for example, you should not
+    automatically save file contents back to disk (at least without user
+    approval). (An exception might be made in the future if AsYouWish is
+    installed and the user wished to bookmark privileged but harmless or
+    per-use-confirmed processes, e.g., to visit a link to package up some
+    files as part of a build process.) See
+    <https://en.wikipedia.org/wiki/Cross-site_request_forgery> for some
+    of the concerns.
 
 ## API: file type finding
 
 ----
 POSSIBLE TODOS TO INCORPORATE BELOW
 1. Support processing of `filetypes.json` for directories (e.g., a
-"directoryMatches" property to be added to `filetypes.json`).
-1. Allow `filetypes.json` to support a hierarchy of custom types (e.g., schema->jsonschema) for meta-data purposes (possibly passing to applications, perhaps useful for namespacing)
-1. Possibility of utilizing `filetypes.json` on the server side for server-side discovery; see http://webviewers.org/xwiki/bin/view/Main/WebHome (utilize its format at all or reconcile?);
-better reconciliaton with local OS type systems
-1. Could allow type to be determined by schema (e.g., JSON Schema based on `$schema` value with JSON document, XML Schema for XML, etc.).
-1. Allow defaultHandlers to be optionally added inline with fileMatches in `filetypes.json`?
+    "directoryMatches" property to be added to `filetypes.json`).
+1. Allow `filetypes.json` to support a hierarchy of custom types (e.g.,
+    schema->jsonschema) for meta-data purposes (possibly passing to
+    applications, perhaps useful for namespacing)
+1. Possibility of utilizing `filetypes.json` on the server side for
+    server-side discovery; see <http://webviewers.org/xwiki/bin/view/Main/WebHome>
+    (utilize its format at all or reconcile?); better reconciliation
+    with local OS type systems
+1. Could allow type to be determined by schema (e.g., JSON Schema based
+    on `$schema` value with JSON document, XML Schema for XML, etc.).
+1. Allow defaultHandlers to be optionally added inline with `fileMatches`
+    in `filetypes.json`?
 ----
 
 The following steps may currently be altered by user preference.
 
-1. File types can currently be obtained based on file extension (e.g., "myScript.js" would incorporate "js" into the type name) or based on settings within a `filetypes.json` file placed within the same directory as the data files. The rules are as follows:
+1. File types can currently be obtained based on file extension
+    (e.g., "myScript.js" would incorporate "js" into the type name) or
+    based on settings within a `filetypes.json` file placed within the same
+    directory as the data files. The rules are as follows:
     1. Use a (lower-case) file extension (e.g., "js" in our example above)
-    1. If a `filetypes.json` file is supplied within the same directory as the data files, a lower-case custom type can be specified:
-        1. At the root of the `filetypes.json` JSON object can be a property "fileMatches" which is an array of two-value arrays. The first item in these inner arrays must be a regular expression expressed as a string to indicate which files will be matched and the second value to indicate the type to be assigned to the match. The first inner array containing a match will be the one used to designate the type name (which must be lower-case ASCII letters only).
+    1. If a `filetypes.json` file is supplied within the same directory as
+        the data files, a lower-case custom type can be specified:
+        1. At the root of the `filetypes.json` JSON object can be a property
+            "fileMatches" which is an array of two-value arrays. The first
+            item in these inner arrays must be a regular expression expressed
+            as a string to indicate which files will be matched and the
+            second value to indicate the type to be assigned to the match.
+            The first inner array containing a match will be the one used
+            to designate the type name (which must be lower-case ASCII
+            letters only).
 1. Once a file type is known as per above...
     1. a protocol may be checked for the detected type as follows:
-        1. The protocol to find the type will begin with "web+local" (only existing [whitelisted protocols or "web+" ones are allowed](http://www.whatwg.org/specs/web-apps/current-work/multipage/timers.html#dom-navigator-registerprotocolhandler))
-        1. The protocol must then be followed by the (lower-case) fundamental mode (currently "view", "binaryview", "edit", "binaryedit", or "register") and optionally by a custom mode (e.g., "source") which indicates an extensible mode which is focused on one type of viewing, editing, etc. (e.g., looking at the source code of an HTML file as opposed to a WYSIWYG view).
-        1. The protocol must then be concluded by the file type as per above (i.e., the file extension like "js" or `filetypes.json` designated type name (which [must be lower case ASCII](http://www.whatwg.org/specs/web-apps/current-work/multipage/timers.html#dom-navigator-registerprotocolhandler))).
-        1. If the protocol is found to be registered, it will be visited and these steps will end. Otherwise, continue with the following steps.
-    1. If the `filetypes.json` file contains a top-level "defaultHandlers" property object, this object will be checked against the type name and if a sub-object for this type is found:
-        1. that object will be checked to see whether the "register" mode is present (and the add-on user has not opted out of visiting these links), and if yes, the user would be forwarded to it (to allow a site the ability to register itself as a handler for any number of modes and/or be a portal to those modes) and these steps would stop. Otherwise, continue.
-        1. that object will be checked to see whether the requested open mode is also present (i.e., "view", "binaryview", "edit", or "binaryedit" optionally followed by a supplied extensible custom mode such as "source" to view or edit source only).
-            1. If the open mode key is present, its value will be used as the site to open. (Currently, %s found in the URL will be substituted with the equivalent protocol scheme (e.g., "web+localeditjs:") followed by a JSON-stringify'd object (containing *fileType*, *mode*, *customMode*, and *pathID* properties); note that user preferences may determine that the path ID is not the actual path but a mere GUID.) Although this may be changed in the future, file:// URLs currently do not work with WebAppFind message posting (due to current privacy leaks in Firefox with add-on-to-file-protocol-webpage communication) (As I recall, custom DOM events didn't work with file:, and there is apparently no other method of communicating with an add-on (without injecting a global) that we could use like allowing sites to open a chrome:// URL (restartless might be able to get such URLs via chrome.manifest or dynamically but this is not allowed from the file: protocol)). (Note: For security reasons
-            one should not rely on the URL parameters; it is better to utilize the message listening approach shown below.)
-    1. If the `filetypes.json` file contains a top level "hierarchy" property object and if a suitable mode was not found, the hierarchy object may be checked for the type name to see what types might be acceptable alternatives (in decreasing order of preference) to determine the type to check in future steps below.
-    1. If no other information is present in the `filetypes.json` file, if the file is not present, or if a specific default site was not found, depending on user settings, depending on user setting, the browser may attempt to open the file. Depending on user settings, the user may delegate the opening of the file back to the desktop (the default, however, is not to do so). If the user has not permitted either of these behaviors, an error message will be displayed.
+        1. The protocol to find the type will begin with "web+local"
+            (only existing
+            [whitelisted protocols or "web+" ones are allowed](http://www.whatwg.org/specs/web-apps/current-work/multipage/timers.html#dom-navigator-registerprotocolhandler))
+        1. The protocol must then be followed by the (lower-case) fundamental
+            mode (currently "view", "binaryview", "edit", "binaryedit", or
+            "register") and optionally by a custom mode (e.g., "source") which
+            indicates an extensible mode which is focused on one type of
+            viewing, editing, etc. (e.g., looking at the source code of an
+            HTML file as opposed to a WYSIWYG view).
+        1. The protocol must then be concluded by the file type as per above
+            (i.e., the file extension like "js" or `filetypes.json` designated
+            type name (which
+            [must be lower case ASCII](http://www.whatwg.org/specs/web-apps/current-work/multipage/timers.html#dom-navigator-registerprotocolhandler))).
+        1. If the protocol is found to be registered, it will be visited and
+            these steps will end. Otherwise, continue with the following steps.
+    1. If the `filetypes.json` file contains a top-level "defaultHandlers"
+        property object, this object will be checked against the type name and
+        if a sub-object for this type is found:
+        1. that object will be checked to see whether the "register" mode is
+            present (and the add-on user has not opted out of visiting these
+            links), and if yes, the user would be forwarded to it (to allow
+            a site the ability to register itself as a handler for any number
+            of modes and/or be a portal to those modes) and these steps would
+            stop. Otherwise, continue.
+        1. that object will be checked to see whether the requested open mode
+            is also present (i.e., "view", "binaryview", "edit", or
+            "binaryedit" optionally followed by a supplied extensible custom
+            mode such as "source" to view or edit source only).
+            1. If the open mode key is present, its value will be used as the
+                site to open. (Currently, %s found in the URL will be
+                substituted with the equivalent protocol scheme (e.g.,
+                "web+localeditjs:") followed by a JSON-stringify'd object
+                (containing *fileType*, *mode*, *customMode*, and *pathID*
+                properties); note that user preferences may determine that
+                the path ID is not the actual path but a mere GUID.) Although
+                this may be changed in the future, file:// URLs currently do
+                not work with WebAppFind message posting (due to current
+                privacy leaks in Firefox with add-on-to-file-protocol-webpage
+                communication) (As I recall, custom DOM events didn't work
+                with `file:`, and there is apparently no other method of
+                communicating with an add-on (without injecting a global)
+                that we could use like allowing sites to open a `chrome://`
+                URL (restartless might be able to get such URLs via
+                `chrome.manifest` or dynamically but this is not allowed from
+                the `file:` protocol)). (Note: For security reasons
+                one should not rely on the URL parameters; it is better to
+                utilize the message listening approach shown below.)
+    1. If the `filetypes.json` file contains a top level "hierarchy"
+        property object and if a suitable mode was not found, the hierarchy
+        object may be checked for the type name to see what types might
+        be acceptable alternatives (in decreasing order of preference)
+        to determine the type to check in future steps below.
+    1. If no other information is present in the `filetypes.json` file,
+        if the file is not present, or if a specific default site was not
+        found, depending on user settings, depending on user setting, the
+        browser may attempt to open the file. Depending on user settings,
+        the user may delegate the opening of the file back to the desktop
+        (the default, however, is not to do so). If the user has not
+        permitted either of these behaviors, an error message will be
+        displayed.
 
-So, for example, if no `filetypes.json` file were present (or if the `filetypes.json` indicated that the given file was of the "js" type), a edit-capable loading of a JavaScript source file might look for a registration at "web+localeditjs:". Depending on user configuration, if such a hander is not found, the file may be opened in the browser or on the desktop.
+So, for example, if no `filetypes.json` file were present (or if the
+`filetypes.json` indicated that the given file was of the "js" type),
+a edit-capable loading of a JavaScript source file might look for a
+registration at "web+localeditjs:". Depending on user configuration,
+if such a hander is not found, the file may be opened in the browser
+or on the desktop.
 
 ## API: reading file contents
 
-The 'webapp-view' message (see the example below) will be sent to the web app when a desktop file has been opened in the "view", "binaryview", "edit", or "binaryedit" mode. This message delivers the file contents (whether in binary form or not) to the web app.
+The 'webapp-view' message (see the example below) will be sent to the web
+app when a desktop file has been opened in the "view", "binaryview", "edit",
+or "binaryedit" mode. This message delivers the file contents (whether in
+binary form or not) to the web app.
 
 ```js
-var pathID; // We might use an array to track multiple path IDs within the same app (once WebAppFind may be modified to support this capability!)
-window.addEventListener('message', function(e) {
+let pathID; // We might use an array to track multiple path IDs within the same app (once WebAppFind may be modified to support this capability!)
+window.addEventListener('message', function (e) {
     // e.data might be set to something like:
     // ['webapp-view', '{1e5c754e-95d3-4431-a08c-5364db753d97}', 'the loaded file contents will be here!']
     // ...or if the user has checked the option "Reveal selected file paths to scripts", it may look like this:
@@ -263,7 +375,7 @@ window.addEventListener('message', function(e) {
     }
     if (e.data[0] === 'webapp-view') {
         pathID = e.data[1]; // We remember this in case we are in "edit" mode which requires a pathID for saving back to disk
-        var fileContents = e.data[2];
+        const fileContents = e.data[2];
         // Do something with fileContents like adding them to a textarea, etc.
     }
 });
@@ -303,7 +415,9 @@ app would like to inform the user in some manner).
 // You should only call this when the user has indicated
 //  they wish to make a save such as if they have approved
 //  draft auto-saving or when manually clicking a save button.
-window.postMessage(['webapp-save', previouslySavedPathIDFromViewEvent, dataToSaveAsString], window.location.origin);
+window.postMessage([
+    'webapp-save', previouslySavedPathIDFromViewEvent, dataToSaveAsString
+], window.location.origin);
 ```
 
 Only windows with the URI approved by the process detailed above
@@ -364,10 +478,9 @@ app which could request privileges to process the supplied directory's
 contents.
 
 Note that for convenience, a batch file (that does not even require
-WebAppFind) is packaged with WebAppFind
-in the "batch" folder that can similarly be used if placed in the
-"SendTo" folder to allow
-opening a right-clicked directory into the browser's file browser (including
+WebAppFind) is packaged with WebAppFind in the "batch" folder that can
+similarly be used if placed in the "SendTo" folder to allow opening
+a right-clicked directory into the browser's file browser (including
 if you have overlaid its default browser with
 [filebrowser-enhanced](https://github.com/brettz9/filebrowser-enhanced)).
 
@@ -379,29 +492,39 @@ your [file types](./doc/Registered-file-types.md) and
 [custom modes](./doc/Registered-custom-modes.md) (or at least namespace
 them well).
 
-Even if `filetypes.json` is used with "register" on "defaultHandlers", it may be
-convenient to have a separate spec URL detailed for your file type, including
-for cases where the file extension is used without `filetypes.json`.
+Even if `filetypes.json` is used with "register" on "defaultHandlers", it may
+be convenient to have a separate spec URL detailed for your file type,
+including for cases where the file extension is used without `filetypes.json`.
 
 # Design choices
 
 ## Implementation notes
 
-A direct visit to the protocol (including through XSRF) should provide no side effects. However, it is possible that a malicious handler opened by the user in "edit" mode could provide immediate side effects by saving back data to overwrite the supplied file. This might be mitigated by a configurable option to require the user's consent upon each save and/or to inform the user of the proposed diffs before saving. But again this will only be possible upon user initiation, only for the specific file or files approved in a given session, and a site will only be usable as a handler if the `filetypes.json` packaged with the data file designates it as a default handler for the data file (and the user maintains the preference to use this information) or if they have previously approved a protocol site for the given type.
+A direct visit to the protocol (including through XSRF) should provide no
+side effects. However, it is possible that a malicious handler opened by
+the user in "edit" mode could provide immediate side effects by saving
+back data to overwrite the supplied file. This might be mitigated by a
+configurable option to require the user's consent upon each save and/or
+to inform the user of the proposed diffs before saving. But again this
+will only be possible upon user initiation, only for the specific file or
+files approved in a given session, and a site will only be usable as a
+handler if the `filetypes.json` packaged with the data file designates
+it as a default handler for the data file (and the user maintains the
+preference to use this information) or if they have previously approved
+a protocol site for the given type.
 
 ## Rationale for `filetypes.json` design
 
 Although there may be some advantages to storing meta-data at the individual
 file level, I did not see a very convenient way in which Windows would allow
-the addition of arbitrary meta-data which the browser could easily query (besides
-the registry, Windows does not appear to offer arbitrary addition and editing
-of properties through its UI though programs, e.g., TortoiseGit, are
-able to overlay the properties and
-are aware of file-level metadata while adding their own). Having a JSON file
-allows developers to add some type configuration (beyond the more generic
-info detectable by a file extension) within the directory containing the data
-files, allowing for introspection and modifications in a manner familiar to
-web developers.
+the addition of arbitrary meta-data which the browser could easily query
+(besides the registry, Windows does not appear to offer arbitrary addition
+and editing of properties through its UI though programs, e.g., TortoiseGit,
+are able to overlay the properties and are aware of file-level metadata
+while adding their own). Having a JSON file allows developers to add some
+type configuration (beyond the more generic info detectable by a file
+extension) within the directory containing the data files, allowing for
+introspection and modifications in a manner familiar to web developers.
 
 The "fileMatches" array is an array of arrays as opposed to object
 literal in order to ensure matches occur in reliable order across
@@ -512,7 +635,8 @@ default global ones.
     the original source file. Once multiple modes may be supported, users might supply
     both "edit" and "export" privileges to a web app simultaneously so one could save back the original
     file as well as the export (e.g., to save SVG and a PNG export or to save a CoffeeScript file and its JavaScript export).
-            1. Like "export", we might wish to allow a file to be opened with the privilege to save anywhere in a particular directory, etc.
+            1. Like "export", we might wish to allow a file to be opened with
+                the privilege to save anywhere in a particular directory, etc.
         1. Change custom modes to be prefixed with a colon in front of fundamental modes and then
             allow multiple modes separated by whitespace (especially in preparation for support of a likely
             frequent use case for combining a new fundamental mode, "export", along with an "edit" mode,
@@ -579,7 +703,10 @@ default global ones.
     1. Allow `filetypes.json` to designate icon files (as well as suggested shortcut names?) for use with [Executable Builder](https://github.com/brettz9/executable-builder) executables so the user will not need to create their own icon? Executables or batch files (or filebrowser-enhanced) might pre-read the current directory and parse the JSON file and then delegate to another shortcut/executable associated with this icon
 1. Protocol handler changes
     1. Since web protocols are not meant to be used to have the privilege of reading from or writing to files (unless they belong to reserved protocols which, per the HTML spec, cannot be registered from the web anyways), the current approach of allowing web sites to register themselves as handlers might need to be modified to use some other mechanism which can at least provide warnings to users about the capabilities they are thereby approving (perhaps as within [AsYouWish](https://github.com/brettz9/asyouwish/) when sites themselves can do the requesting for privileges). However, since WebAppFind chose to start with the web protocol approach not only because it is an existing method for sites to register themselves for later potential use, but because the data security and privacy issues are confined to data files which are explicitly opened from the desktop when using the WebAppFind approach.
-    1. Depending on whether registerProtocolHandler will continue to be used, see about whether the HTML spec might be open to more tolerance within the allowed characters of a custom protocol beyond lower-case ASCII letters.
+    1. Depending on whether registerProtocolHandler will continue to be used,
+        see about whether the HTML spec might be open to more tolerance within
+        the allowed characters of a custom protocol beyond lower-case ASCII
+        letters.
 
 ## Possible future mode additions
 
@@ -588,131 +715,204 @@ See "Possible future API/filestypes.json changes" for changes/additions planned 
 ----
 TODO: Add these below
 1. Options to have Windows
-"[verb](http://msdn.microsoft.com/en-us/library/bb165967.aspx)"
-(i.e., Open, Edit, Print, Play, Preview or custom) be treated as
-modes/custom modes or to otherwise detect and interact with
-them?
+    "[verb](http://msdn.microsoft.com/en-us/library/bb165967.aspx)"
+    (i.e., Open, Edit, Print, Play, Preview or custom) be treated as
+    modes/custom modes or to otherwise detect and interact with
+    them?
 1. Allow a command-line "any" mode to let the web app choose the mode.
 ----
 
-Besides "view", "binaryview", "edit", "binaryedit", "register", the following modes might be added in future versions (or made to correspond with WebDav commands?):
+Besides "view", "binaryview", "edit", "binaryedit", "register", the
+following modes might be added in future versions (or made to correspond
+with WebDav commands?):
+
 1. "route"
 1. "extensiontypehierarchyhandler"
-1. Version control (also some discussion of possibilities for multiple file saving)
-    1. "create", "delete" - for any necessary set-up before creation or deletion of a file (as with saving, the protocol should not have side effects, so these should only bring one to the page to confirm the user wished to take such an action--and the browser might have its own confirmation for these actions).
+1. Version control (also some discussion of possibilities for multiple
+    file saving)
+    1. "create", "delete" - for any necessary set-up before creation or
+        deletion of a file (as with saving, the protocol should not have
+        side effects, so these should only bring one to the page to confirm
+        the user wished to take such an action--and the browser might have
+        its own confirmation for these actions).
     1. "rename" and "move" (or cut or copy and paste)
-    1. "versioncontrol" - A mechanism could be added to request listening to events which would impact version control (though some means of determining scope would be needed--e.g., a folder and all its subfolders--as well as privacy/security considerations which expands beyond the current scope of individual file viewing and saving; similar concerns would need to be taken into account for other modes that may process multiple files like search or file packaging). These events could be used to open a (hidden?) web app to store data (e.g., via localStorage or a new "edit" mechanism which could save to disk, but circumscribed by file type so that, e.g., a repository binary could be modified without the user needing to explicitly open it) and build a file history for a "repository". This "versioncontrol" handlers ought to allow multiple listening apps in some manner; this would be both for the sake of allowing different versioncontrol storage mechanisms/repository types, for ensuring that any viewing apps get updated upon external changes, as well as for any apps storing meta-data related to a document or documents but not saved within them to be notified and respond accordingly (including possibly saving their own updates back to disk), e.g., for building up a history of commit messages (which would at least effectively need the completion of the todo to allow a single web app to handle multiple documents at once).
-1. "send to" or "mailer" but with file (and folder) contents instead of just a path - e.g., to put file contents and/or file attachment(s), subject, etc. into a mail viewer, ready to email (with equivalents for chatting)?
-1. "validate" - Before the save command of an "edit" mode process (and its response back to the app) is completed, it may be handy to have a separate protocol be called for any registered validators of a given file type to perform validation and conditionally reject a save. Instead of receiving the file path, they would be passed the proposed file contents for saving from "edit" to ensure proper well-formedness and validity before saving back to disk. It might be ideal for a validator to simply be a JavaScript file with a specific function, but for parity, we should probably implement this as another HTML file using a (secure) postMessage. If a file was found within a `filetypes.json` hierarchy, it may be desirable to ensure validators are sought up the hierarchy (at least if not found at the most specific level), e.g., to check that a "myType" file specified as being a JSON file is indeed a JSON file, or at least a JavaScript object if there is no JSON validator registered.
-1. "preconvert" and "postconvert" - hooks to transform content before reading or writing, respectively (but before "validate")
-1. "splash" - for a splash page leading to the modes so that "register" can be exclusively for registering users?
-1. "query" or "search" - For queries within file or within a folder, etc., optionally (?) filtered by file type; this might be used for "find-in-files" behavior (multiple file saving would be needed for "replace-in-files"). These queries could be hierarchical (as also defined in `filetypes.json`?) such that, for example, one might have "myType" JSON files queryable in a precise manner, e.g., to find all files (or records) containing a "publication date" between a range of dates, while also allowing more generic queries such as RQL, or if not available (or not desired), the user could default to full text search (since a superset of JSON could be the txt type which could allow full text search). Also for simple file listing (see SendTo info for how to get a batch file to process a folder by right-click
-within the desktop)
-1. "execute" - Although the OS would normally do its own execution, it is possible that privileged apps (as through AsYouWish) might be able to handle this at least partly on their own
+    1. "versioncontrol" - A mechanism could be added to request listening to
+        events which would impact version control (though some means of
+        determining scope would be needed—e.g., a folder and all its
+        subfolders—as well as privacy/security considerations which expands
+        beyond the current scope of individual file viewing and saving;
+        similar concerns would need to be taken into account for other
+        modes that may process multiple files like search or file packaging).
+        These events could be used to open a (hidden?) web app to store data
+        (e.g., via localStorage or a new "edit" mechanism which could save
+        to disk, but circumscribed by file type so that, e.g., a repository
+        binary could be modified without the user needing to explicitly
+        open it) and build a file history for a "repository". This
+        "versioncontrol" handlers ought to allow multiple listening apps
+        in some manner; this would be both for the sake of allowing different
+        versioncontrol storage mechanisms/repository types, for ensuring
+        that any viewing apps get updated upon external changes, as well
+        as for any apps storing meta-data related to a document or documents
+        but not saved within them to be notified and respond accordingly
+        (including possibly saving their own updates back to disk), e.g.,
+        for building up a history of commit messages (which would at
+        least effectively need the completion of the todo to allow a
+        single web app to handle multiple documents at once).
+1. "send to" or "mailer" but with file (and folder) contents instead of just
+    a path - e.g., to put file contents and/or file attachment(s), subject,
+    etc. into a mail viewer, ready to email (with equivalents for chatting)?
+1. "validate" - Before the save command of an "edit" mode process (and
+    its response back to the app) is completed, it may be handy to have a
+    separate protocol be called for any registered validators of a given file
+    type to perform validation and conditionally reject a save. Instead of
+    receiving the file path, they would be passed the proposed file contents
+    for saving from "edit" to ensure proper well-formedness and validity
+    before saving back to disk. It might be ideal for a validator to simply
+    be a JavaScript file with a specific function, but for parity, we should
+    probably implement this as another HTML file using a (secure)
+    `postMessage`. If a file was found within a `filetypes.json` hierarchy,
+    it may be desirable to ensure validators are sought up the hierarchy
+    (at least if not found at the most specific level), e.g., to check that
+    a "myType" file specified as being a JSON file is indeed a JSON file,
+    or at least a JavaScript object if there is no JSON validator registered.
+1. "preconvert" and "postconvert" - hooks to transform content before reading
+    or writing, respectively (but before "validate")
+1. "splash" - for a splash page leading to the modes so that "register" can
+    be exclusively for registering users?
+1. "query" or "search" - For queries within file or within a folder, etc.,
+    optionally (?) filtered by file type; this might be used for
+    "find-in-files" behavior (multiple file saving would be needed for
+    "replace-in-files"). These queries could be hierarchical (as also
+    defined in `filetypes.json`?) such that, for example, one might have
+    "myType" JSON files queryable in a precise manner, e.g., to find all
+    files (or records) containing a "publication date" between a range of
+    dates, while also allowing more generic queries such as RQL, or if not
+    available (or not desired), the user could default to full text search
+    (since a superset of JSON could be the txt type which could allow full
+    text search). Also for simple file listing (see SendTo info for how to
+    get a batch file to process a folder by right-click within the desktop)
+1. "execute" - Although the OS would normally do its own execution, it is
+    possible that privileged apps (as through AsYouWish) might be able to
+    handle this at least partly on their own
 1. "prompt" mode; see to-do below.
 1. "any" mode; see to-do below.
 1. Support local or remote stream inputs
 
 ## Lower priority todos
 
-1. See [atyourcommand](https://github.com/brettz9/atyourcommand),
-a browser add-on to allow
-creation of context menu items, including invoking a process with
-arguments with the selected text, right-clicked URL, or current URL
-as arguments (with the URL potentially being first retrieved as text and
-then sent as arguments?). Besides allowing the reverse behavior of
-WebAppFind (allowing one to selectively choose files on the web or
-text to supply to a desktop app instead of supplying desktop files or
-command line text to a web app, e.g., opening a file from the web in
-Notepad++), it would even allow WebAppFind to be invoked (for the
-use case of passing text or URL content to a web app); the web app
-could, if opened in edit mode, place a (privileged
-cross-domain) PUT request on behalf of the web app for a save-back,
-allowing users the choice of application for saving files back to the web
-(also allow a desktop executable the ability to launch such a site file in
-a hard-coded app or web-app--in this case, the executable would be clicked
-directly since it was hard-coding both the data file (a web file) and the
-handling app (which in this case could also be a desktop app)). Also support
-a content-type handler and protocol handler for opening exe/batch files (or
-option to install first (with platform-specific choices) if not already
-installed, but with privacy guards not to report whether already
-installed), passing arguments (or shell commands), so web can get
-access to desktop. Let protocol or content-type handler support either
-URLs (so specific data files can be read) or the content itself be passed
-but without a need for something heavy like Java or Silverlight (or whatever
-people use to do this) to do the delegation to the desktop files (plug-ins
-themselves support swapping of data files (for reading or writing) in
-app-independent manner?)... Also ensure asks permission and give
-ability to remember permissions for a site... (Avoids need for plugin
-(or new browser instance embedding) to integrate desktop apps with
-and originating from the Web.) Integrate with an add-on version of the
-AsYouWish-bundled command line app so batch commands can be
-passed from there (as well as saved as a context menu item) to
-WebAppFind (see other todo in this README about this possibility).
-Also right-click to add text or URL contents as itself a context menu
-script. Ensure add-ons support file: and native paths to: open folder
-on desktop, open folder in the browser's file browser, execute on desktop,
-execute with web app
 1. Write utility code
     1. Leverage `method:'local'` property of API distinguishing
-    file://-based client-side GET-like code or server-side GET or POST-driven
-    content (which should also provide a "untrusted" property or the
-    like so as to distinguish code with side effects and those without).
-    Develop boilerplate code to work in all possible environments (except
-    for dumb clients or clients with JavaScript disabled making POST
-    requests). Utilize with [URI templates](http://tools.ietf.org/html/rfc6570)
-    for server-side discovery and a special API for postMessage
-    client-side discovery (e.g., if [atyourcommand](https://github.com/brettz9/atyourcommand)
-    were to make known to you the modes available in an app
-    when one is designing a command to shuffle off content to it)? Make
-    this perhaps a mode itself also so that files from the desktop could also
-    be opened in a manner that the web app displays the available modes (and
-    can post them back optionally to a callin app, again, like atyourcommand).
-    1. Develop utility wrapper library for API to store to disk via WebAppFind
-    and/or to store to `localStorage`, IndexedDB, and/or remote POST/PUT (since
-    may wish to keep and possibly synchronize local copy or remote back-up).
+        file://-based client-side GET-like code or server-side GET or
+        POST-driven content (which should also provide a "untrusted" property
+        or the like so as to distinguish code with side effects and those
+        without). Develop boilerplate code to work in all possible
+        environments (except for dumb clients or clients with JavaScript
+        disabled making POST requests). Utilize with
+        [URI templates](http://tools.ietf.org/html/rfc6570)
+        for server-side discovery and a special API for `postMessage`
+        client-side discovery (e.g., if
+        [atyourcommand](https://github.com/brettz9/atyourcommand)
+        were to make known to you the modes available in an app
+        when one is designing a command to shuffle off content to it)? Make
+        this perhaps a mode itself also so that files from the desktop could
+        also be opened in a manner that the web app displays the available
+        modes (and can post them back optionally to a callin app, again,
+        like atyourcommand).
+        1. Develop utility wrapper library for API to store to disk via
+            WebAppFind and/or to store to `localStorage`, IndexedDB,
+            and/or remote POST/PUT (since may wish to keep and possibly
+            synchronize local copy or remote back-up).
 1. API for XPath/XQuery (+ [HTTPQuery](https://github.com/brettz9/httpquery))
-like targeted updating within documents, so data decoupled as with files
-(XSS-safe or unsafe versions); PATCH header for more generic updates?
+    like targeted updating within documents, so data decoupled as with files
+    (XSS-safe or unsafe versions); PATCH header for more generic updates?
 1. PUT for specific site only (or data within a site as per targeted
-updating item)
+    updating item)
 1. Allow command line for temporary file or designated file saving
-of string contents in webappfind as well (with dialog to approve
-there as in [atyourcommand](https://github.com/brettz9/atyourcommand)
-if would cause an overwrite).
+    of string contents in webappfind as well (with dialog to approve
+    there as in [atyourcommand](https://github.com/brettz9/atyourcommand)
+    if would cause an overwrite).
 1. Support a global user `filetypes.json` file (at a chosen directory
-specified within the browser?) which can override or provide defaults for
-local `filetypes.json` files (especially for defaults since sites might
-not have registered handlers, and a user might not wish to have to
-put a `filetypes.json` file within each directory). Ensure it is in a location
-readily detectable by other desktop apps which may wish to check
-it as well (or to be opened in WebAppFind itself) (and demo it
-with Greasemonkey editing once done, and add support to Stylish).
+    specified within the browser?) which can override or provide defaults for
+    local `filetypes.json` files (especially for defaults since sites might
+    not have registered handlers, and a user might not wish to have to
+    put a `filetypes.json` file within each directory). Ensure it is in a
+    location readily detectable by other desktop apps which may wish to check
+    it as well (or to be opened in WebAppFind itself) (and demo it
+    with Greasemonkey editing once done, and add support to Stylish).
 1. Allow a command-line "prompt" fundamental mode: will allow the
-user to determine mode at run-time (the browser (or other opening app)
-can provide a prompt to the user to ask which mode to use before
-opening the file in that chosen mode). Modify `filetypes.json` to support
-optional default mode or suggested modes (though the browser should
-not prevent other modes from being used since the whole idea is that
-the user controls the mode under which they wish to open the file).
+    user to determine mode at run-time (the browser (or other opening app)
+    can provide a prompt to the user to ask which mode to use before
+    opening the file in that chosen mode). Modify `filetypes.json` to support
+    optional default mode or suggested modes (though the browser should
+    not prevent other modes from being used since the whole idea is that
+    the user controls the mode under which they wish to open the file).
 1. Provide meta-data in `filetypes.json` to cause the web app to be passed
-awareness of the desire by the user to be prompted for the selection of
-specific *custom* mode, along with an optional default custom mode and
-suggested custom modes along with any explicitly passed. Thus, an app
-might use this information to ask on WebAppFind invocation, "Do you
-wish to view this file or view its source?".
+    awareness of the desire by the user to be prompted for the selection of
+    specific *custom* mode, along with an optional default custom mode and
+    suggested custom modes along with any explicitly passed. Thus, an app
+    might use this information to ask on WebAppFind invocation, "Do you
+    wish to view this file or view its source?".
 
 ## Possible future todos
 
 1. Allow stylesheets or scripts to be clicked to be injected into web apps?
-(could use if app isn't accepting them as additional file arguments already)
-1. When [AsYouWish](https://github.com/brettz9/asyouwish/) is in use, allow path-reading as long as site is AYW-approved and the page is registered for the protocol--so one can bookmark a path and always load it or load with other approved paths (e.g., in different tabs within a webapp); also can remember paths to invoke upon FF start up ("website addons").
-1. Ensure some additional security/privacy for users desiring it by restricting external access (using https://developer.mozilla.org/en-US/docs/XPCOM_Interface_Reference/nsIContentPolicy and https://developer.mozilla.org/en-US/docs/XPCOM_Interface_Reference/nsIPrincipal per http://stackoverflow.com/questions/18369052/firefox-add-on-to-load-webpage-without-network-access ?) See also http://en.wikipedia.org/wiki/Site-specific_browser regarding such sandboxing.
-1. Option to enable file: protocol (though mention it is currently risky in Firefox to use `postMessage` for security and privacy given its lack of scoping); report issue to FF if issue not already added (also for better means than '*'  <!--* satisfy Notepad++ MD editor--> for add-on communication?) . However, this option would be quite useful, especially if the todo just above on restricting external access were implemented, given that web apps could be installed to work with one's files (ideally without concerns that the data was going to be sent anywhere, and if the todo to confirm saves were implemented, one could also see what changes were being made to a file before being actually saved). Unfortunately, file: sites cannot register themselves as protocol handlers, so the user would need to configure their settings so as to rely on the default handlers in `filetypes.json` to be able to use such a file (or we would need to create our own mechanism, such as through `postMessage` back to the add-on (or a change in the file's GET parameters or perhaps modification of an element within the document), to allow a file: site to request permission to become usable as a protocol handler).
-1. Piggyback on HTML5 drag-and-drop file capabilities (or create own) to allow files dropped in this way to be saved back to disk and/or path provided to the app; same with optionally allowing privileged file picker per site.
-1. As with how filebrowser-extended can open the folder of the currently opened file, add an optional icon in WebAppFind to open the containing directory of the currently opened document file path, e.g., if user used "Open with" on "C:\myfile.txt", it would open "c:\" (if allowed opening the file itself from the desktop and the current web app was also set as the default for that type, it would open another instance of the file in the browser, but may still want to allow this anyways).
-1. Build an executable to open a local executable/batch on the Windows desktop with a dialog asking for command line arguments (e.g., profile)? (as a workaround, one might use WebAppFind for this if an override will be provided to ensure it will launch back on the desktop)? Also allow a dialog to ask for WebAppFind arguments to web apps (could be at executable level or within the WebAppFind add-on).
-1. Create a shared add-on dependency for WebAppFind and AsYouWish exposing perhaps at least for privilege escalation with some of the underlying non-SDK APIs (e.g., a privilege to save
-only to a specific directory if WebAppFind adds such a fundamental mode). Perhaps any AsYouWish directive could be exposed if part of a `filetypes.json` directive and/or command line flag (and not blocked by user preferences) or expose AYW API to other add-ons or command line for adding sites and privileges and use that; could be useful for add-ons as well as sites to provide
-alternative views/editing interfaces for the same shared data.
-1. Option to open HTML in chrome mode so one can do things like cross-domain `toDataURL` on an image canvas without errors (the proposed change to AsYouWish to allow sites to be reopened in this mode could be a workaround).
+    (could use if app isn't accepting them as additional file arguments
+    already)
+1. When [AsYouWish](https://github.com/brettz9/asyouwish/) is in use, allow
+    path-reading as long as site is AYW-approved and the page is registered
+    for the protocol--so one can bookmark a path and always load it or load
+    with other approved paths (e.g., in different tabs within a webapp);
+    also can remember paths to invoke upon FF start up ("website addons").
+1. Ensure some additional security/privacy for users desiring it by
+    restricting external access (using <https://developer.mozilla.org/en-US/docs/XPCOM_Interface_Reference/nsIContentPolicy>
+    and <https://developer.mozilla.org/en-US/docs/XPCOM_Interface_Reference/nsIPrincipal>
+    per <http://stackoverflow.com/questions/18369052/firefox-add-on-to-load-webpage-without-network-access>?)
+    See also http://en.wikipedia.org/wiki/Site-specific_browser regarding
+    such sandboxing.
+1. Option to enable `file:` protocol (though mention it is currently risky in
+    Firefox to use `postMessage` for security and privacy given its lack of
+    scoping); report issue to FF if issue not already added (also for better
+    means than '*'  <!--* satisfy Notepad++ MD editor--> for add-on
+    communication?) . However, this option would be quite useful, especially
+    if the todo just above on restricting external access were implemented,
+    given that web apps could be installed to work with one's files (ideally
+    without concerns that the data was going to be sent anywhere, and if the
+    todo to confirm saves were implemented, one could also see what changes
+    were being made to a file before being actually saved). Unfortunately,
+    `file:` sites cannot register themselves as protocol handlers, so the
+    user would need to configure their settings so as to rely on the default
+    handlers in `filetypes.json` to be able to use such a file (or we would
+    need to create our own mechanism, such as through `postMessage` back to
+    the add-on (or a change in the file's GET parameters or perhaps
+    modification of an element within the document), to allow a `file:`
+    site to request permission to become usable as a protocol handler).
+1. Piggyback on HTML5 drag-and-drop file capabilities (or create own) to
+    allow files dropped in this way to be saved back to disk and/or path
+    provided to the app; same with optionally allowing privileged file
+    picker per site.
+1. As with how filebrowser-extended can open the folder of the currently
+    opened file, add an optional icon in WebAppFind to open the containing
+    directory of the currently opened document file path, e.g., if user used
+    "Open with" on "C:\myfile.txt", it would open "c:\" (if allowed opening
+    the file itself from the desktop and the current web app was also set as
+    the default for that type, it would open another instance of the file in
+    the browser, but may still want to allow this anyways).
+1. Build an executable to open a local executable/batch on the Windows
+    desktop with a dialog asking for command line arguments (e.g.,
+    profile)? (as a workaround, one might use WebAppFind for this if an
+    override will be provided to ensure it will launch back on the desktop)?
+    Also allow a dialog to ask for WebAppFind arguments to web apps (could be
+    at executable level or within the WebAppFind add-on).
+1. Create a shared add-on dependency for WebAppFind and AsYouWish exposing
+    perhaps at least for privilege escalation with some of the underlying
+    non-SDK APIs (e.g., a privilege to save only to a specific directory if
+    WebAppFind adds such a fundamental mode). Perhaps any AsYouWish directive
+    could be exposed if part of a `filetypes.json` directive and/or command
+    line flag (and not blocked by user preferences) or expose AYW API to
+    other add-ons or command line for adding sites and privileges and use
+    that; could be useful for add-ons as well as sites to provide
+    alternative views/editing interfaces for the same shared data.
+1. Option to open HTML in chrome mode so one can do things like cross-domain
+    `toDataURL` on an image canvas without errors (the proposed change to
+    `AsYouWish` to allow sites to be reopened in this mode could be a
+    workaround).
