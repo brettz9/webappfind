@@ -196,12 +196,17 @@ machine—[do not currently work](https://github.com/zeit/pkg/issues/136#issueco
 
 ### To-dos (Reimplementing or basic)
 
+1. When done, remove generated AppleScript app(s) from repo
 1. From Node WebSockets -> add-on, we need to open website and `postMessage`
     into it and be able to handle opposite direction, including for writing
     file contents back to disk, but also for *AtYourCommand* functionality)
 1. Delete preferences from `ignore/old-preferences.json` after suitably
     reimplemented
     1. Set `options_ui: {page: "webappfind-options.html"}` and/or `sidebar_action`?
+1. Security improvements
+    1. Disable further save attempts with bad ID supplied in case a however previously approved site is attempting to guess at the paths of (if the user has enabled path transmission), or at the GUID representing, other non-approved files
+    1. Check upon each save attempt that the loaded protocol is still registered as a handler (and remove usage notes above once implemented).
+    1. Listen for unregistration of protocols to disable acting on future messages from them (only relevant for pages already loaded in this session).
 1. Reimplement protocol registration functionality and create tests using
     `registerProtocolHandler` (also for JS/JSON/mytype); also consider
     HTML head meta-data for flagging availability of file registrations

@@ -1,4 +1,4 @@
-- LOOK AT old-\* folders for deleted info!!!
+- LOOK AT old-app folders for deleted info!!!
 
 1. Document usage of putting in dock for dragging files onto it
 1. Search through code for "Todo"
@@ -317,6 +317,16 @@ If one adds something like the following Windows batch file:
 "%ProgramFiles(x86)%\Mozilla Firefox\firefox.exe" -remote "openurl(about:newtab)" -webappdir "%1" -webappsite "http://brett-zamir.me/webappfind/demos/dir.html?path=%1"
 ```
 
+:: For details on where one may put this, http://superuser.com/a/722699/156958 and http://answers.microsoft.com/en-us/windows/forum/windows_vista-desktop/how-to-locate-the-sendto-folder-in-vista/78b16711-1135-4eb0-851a-8abae9bfe9ed
+:: Place this file at "shell:SendTo" e.g., the location, C:\Users\Brett\AppData\Roaming\Microsoft\Windows\SendTo
+"%ProgramFiles(x86)%\Mozilla Firefox\firefox.exe" -remote "openurl(about:newtab)" "%1"
+
+
+:: For details on where one may put this, http://superuser.com/a/722699/156958 and http://answers.microsoft.com/en-us/windows/forum/windows_vista-desktop/how-to-locate-the-sendto-folder-in-vista/78b16711-1135-4eb0-851a-8abae9bfe9ed
+:: Place this file at "shell:SendTo" e.g., the location, C:\Users\Brett\AppData\Roaming\Microsoft\Windows\SendTo
+"%ProgramFiles(x86)%\Mozilla Firefox\firefox.exe" -remote "openurl(about:newtab)" -webappdir "%1" -webappsite "http://brett-zamir.me/webappfind/demos/dir.html?path=%1"
+
+
 ...and copies it into the Windows "SendTo" folder (which can be found by
 opening `shell:SendTo`), you can right click folders to send its path to
 your web app (change the URL above to that of your web application).
@@ -602,13 +612,6 @@ within the desktop)
 1. "prompt" mode; see to-do below.
 1. "any" mode; see to-do below.
 1. Support local or remote stream inputs
-
-## Higher priority todos planned
-
-1. Added security
-    1. Disable further save attempts with bad ID supplied in case a however previously approved site is attempting to guess at the paths of (if the user has enabled path transmission), or at the GUID representing, other non-approved files
-    1. Check upon each save attempt that the loaded protocol is still registered as a handler (and remove usage notes above once implemented).
-    1. Listen for unregistration of protocols to disable acting on future messages from them (only relevant for pages already loaded in this session).
 
 ## Lower priority todos
 
