@@ -49,11 +49,12 @@ gain such access without your running the process that grants permission.
 
 ## Some use case scenarios
 
+1. See [webappfind-demos-samples](https://github.com/brettz9/webappfind-demos-samples).
 1. Work on Git on your desktop while being able to open HTML files for
 WYSIWYG editing in a (CKEditor) web app which you can easily modify
 to add buttons for inserting code snippets? Do you want to use CodeMirror
 for syntax highlighting of your JavaScript and CSS? (Demos are available
-which do all of these.)
+at the previous site which do all of these.)
 
 ## Command line communication with add-on
 
@@ -256,8 +257,6 @@ machine—[do not currently work](https://github.com/zeit/pkg/issues/136#issueco
             to eval-able Node code; at minimum start shared,
             site-agnostic storage
 
-1. Add back demos and sample files from old `webappfind`.
-
 1. Remove old `webappfind` files/info (e.g., on `filetypes.json`) if
     making package more general purpose.
 
@@ -342,7 +341,6 @@ one is viewing.
 ## To-dos (Related enhancements to other add-ons)
 
 1. Integrate functionality into <https://github.com/brettz9/filebrowser-enhanced>
-1. See [DEMOS.md](./DEMOS.md) on need to move old demos/samples to own repo.
 
 ## To-dos (Message posting)
 
