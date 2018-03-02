@@ -1,6 +1,6 @@
 ## 3.0.0 (Unreleased)
 
-- Switch to WebExtensions
+- Switch to WebExtensions/Chrome
 
 ## 2.0.0
 
