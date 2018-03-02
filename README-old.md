@@ -1,5 +1,8 @@
 - LOOK AT old-\* folders for deleted info!!!
 
+1. Document usage of putting in dock for dragging files onto it
+1. Search through code for "Todo"
+
 # Comparison to other standards and tools
 
 ## Comparison with similar WebAPI work
@@ -475,6 +478,7 @@ default global ones.
 1. Consider encouraging use of MIME types for file type names.
 1. Mode and parameter changes
     1. Pass in argument for profile, or if defunct in browsers, at least allow to open a private window/tab
+        1. Set `incognito` on whether/how to work in Incognito mode
     1. API changes/additions (Anticipated change with custom modes and allowing for multiple modes (and file access) at once.)
         1. Allow not just one, but multiple, file/URL/folder/command-line/web app/etc. arguments to be passed into
         the web application (e.g., for preferences, privilege level simulation or request information, schema,

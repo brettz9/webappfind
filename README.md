@@ -181,14 +181,32 @@ machine—[do not currently work](https://github.com/zeit/pkg/issues/136#issueco
 
 ## To-dos
 
-### To-dos (Reimplementing)
+### To-dos (Miscellaneous)
 
+1. Add from [README-old.md](./README-old.md)
+
+### To-dos (Building)
+
+1. Have the OS-specific executable of `bin/native-app` be identified and
+    bundled automatically
+1. Make install script which avoids `pkg` bundling by assuming user has Node
+    installed (much smaller download and less memory, esp. if needing to
+    build executables for opening files too)
+1. Overcome "Cannot find module 'regedit'" error when building on non-Windows
+
+### To-dos (Reimplementing or basic)
+
+1. From Node WebSockets -> add-on, we need to open website and `postMessage`
+    into it and be able to handle opposite direction, including for writing
+    file contents back to disk, but also for *AtYourCommand* functionality)
 1. Delete preferences from `ignore/old-preferences.json` after suitably
     reimplemented
+    1. Set `options_ui: {page: "webappfind-options.html"}` and/or `sidebar_action`?
 1. Reimplement protocol registration functionality and create tests using
     `registerProtocolHandler` (also for JS/JSON/mytype); also consider
     HTML head meta-data for flagging availability of file registrations
     and possibly allow user directed use of this information to register
+    1. Set `protocol_handlers: [{protocol: "ext+waf", name: "WebAppFind", uriTemplate: "https://...%s"}]`; e.g., for site to register itself for a type
 1. Complete [executable builder](https://github.com/brettz9/executable-builder)
     and [atyourcommand](https://github.com/brettz9/atyourcommand) but for
     webextensions.
@@ -201,94 +219,65 @@ machine—[do not currently work](https://github.com/zeit/pkg/issues/136#issueco
         to it, and if it is, it could bring user through steps).
     1. Applescript-based executable builder also?
     1. Examine `executable builder` for ideas and UI
-
-### To-dos (Other current)
-
-1. Have the OS-specific executable of `bin/native-app` be identified and
-    bundled automatically
-1. Make install script which avoids pkg bundling by assumes user has Node
-    installed (much smaller download and less memory, esp. if needing to
-    build executables for opening files too)
-1. Overcome "Cannot find module 'regedit'" error when building on non-Windows
-1. In `pkg` file, after checking registry (how to avoid repeating??), set-up
-    Node WebSockets to listen and pass on to add-on (which will open website
-    and `postMessage` into it and be able to handle opposite direction,
-    including for writing file contents back to disk, but also for
-    *AtYourCommand* functionality)
-1. Refactor this extension to be a bridge between Node (including
-    user-installed packages) and browser/browser add-ons/web-sites.
-    1. Support passing from Node into other add-ons
-        1. Is there a way to overcome `allowed_extensions`/`allowed_origins`?
-            hard-coded limits; is the app manifest read on install only, on
-            browser start-up, or on each access? If the latter, could
-            restartlessly dynamically modify the file ourselves. Otherwise
-            users may have to bundle this code for each add-on.
-    1. Might rely on "add-ons" of `npm` packages designated to be installed
-        (and via `package.json` config or custom config?) run on start-up.
-    1. For an added security layer, might only let bridge work with
-        user-designated packages.
-    1. Call "add-on"s' main scripts once at start-up.
-    1. Have "add-ons" indicate their privilege level (e.g., nodeToBrowser,
-        browserToNode) and high-level permission (e.g., `postMessage`
-        `contextMenu`).
-    1. Find best means possible (ideally even `eval`) to get full privileges
-        (whether originating from web-site as in AsYouWish, from desktop,
-        as in old WebAppFind, or from another add-on) out of
-        browser/browser add-on. If not, emulate own via `postMessage`
-        messaging.
-    1. Example "add-ons"
-        1. The old WebAppFind behavior could be one of these add-ons
-            1. Extend `filetypes.json` to support passing into a specific
-                add-on?
-            1. See old code and all to-dos
-        1. Like the old WebAppFind behavior but allow for general
-            URL-opening mechanism (including for passing of messages)
-            in addition to specific `filetypes.json` approach and have
-            mechanism also for passing content into another add-on
-            1. Test with "Open with..." to open file in a Node script
-                which communicates via Node WebSockets
-        1. AtYourCommand to run once to set-up user's context menus (and
-            desktop-file-opening behaviors)
-        1. AsYouWish to allow websites to communicate into the browser or
-            to eval-able Node code; at minimum start shared,
-            site-agnostic storage
-
-### To-dos (`manifest.json` additions)
-
-1. Set `protocol_handlers: [{protocol: "ext+waf", name: "WebAppFind", uriTemplate: "https://...%s"}]`; e.g., for site to register itself for a type
-1. Set `omnibox: {keyword: "waf"}` for special auto-complete to send to add-on
-1. Set `options_ui: {page: "webappfind-options.html"}` and/or `sidebar_action`?
-1. Set `permissions`/`optionalPermissions`
-1. Set `incognito` on whether/how to work in Incognito mode
 1. Set `devtools_page` in `manifest.json` to replicate Node console?
 1. Use `web_accessible_resources` for exposing any resources to websites?
+1. Set `omnibox: {keyword: "waf"}` for special auto-complete to send to add-on
+
+### To-dos (Message posting)
+
+1. Allow genuine POST or other non-GET or header-dependent requests (ala curl)?
+
+### To-dos (File editing permissions/add-on permissions)
+
+1. Option (at the add-on level) to confirm reading and/or saving of data upon
+    each attempt and/or display the proposed diffs before saving. (See
+    "Implementation notes" section).
+1. Allow users to remember privileges so that whenever a file is reloaded (even
+    if not from the desktop), it will continue to allow read/write access.
+1. Support passing entire directories and passing permission to re-reference
+    IDs (until revoked in a permissions dialog?)
+1. If we don't need all add-on permissions, see
+    <https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Request_the_right_permissions>.
+    We might also consider creating an `activeTab`-only build to avoid
+    content script permissions.
+    1. Set `permissions`/`optionalPermissions`
+
+### To-dos (Submissions)
+
+1. Submit to AMO, npm, etc.
+1. Once cross-platform, make PR to update
+    <https://github.com/marijnh/CodeMirror/blob/master/doc/realworld.html>).
+1. Ensure the `filetypes.json` in this repo references updated apps once
+    WebAppFind reimplemented.
+1. If API stabilizes and functional, file feature request to get the
+    functionality built into Firefox.
 
 ### To-dos (new environments)
 
 1. Allow files opened by FTP for remote editing to be used.
 1. `localStorage`, cookies and IndexedDB too?; could be wrapped by
-targeted updating API and used with PUT; send schema URL in header
-to inform that the update must be tabular,
-not otherwise hierarchical; could allow a file (or `.filetypes.json`) to
-reference a query so that any updates to the webappfind-opened file
-would only update the subset of retrieved data! Could thereby have flat
-files which bring back shared data ownership (the closest thing to this
-currently that I know of would be using this "Shared Storage" approach begun
-in <https://gist.github.com/brettz9/8876920>). With IndexedDB, which
-accepts version numbers (or defaults to 1), apps could check whether the
-schema they are assuming is current, thus dealing with the main concern
-that subsequent updates to the original schema would break third party
-apps (they would still, but at least potentially incompatible
-modifications would automatically be blocked and an app could provide
-a notice (our equivalent to listening to `onblocked` or possibly
-`onversionchange` if we could find a way to do this to avoid a change
-in schema while the third party app is still open and potentially making
-modifications) about the app awaiting a developer upgrade).
+    targeted updating API and used with PUT; send schema URL in header
+    to inform that the update must be tabular,
+    not otherwise hierarchical; could allow a file (or `.filetypes.json`) to
+    reference a query so that any updates to the webappfind-opened file
+    would only update the subset of retrieved data! Could thereby have flat
+    files which bring back shared data ownership (the closest thing to this
+    currently that I know of would be using this "Shared Storage" approach
+    begun in <https://gist.github.com/brettz9/8876920>). With IndexedDB, which
+    accepts version numbers (or defaults to 1), apps could check whether the
+    schema they are assuming is current, thus dealing with the main concern
+    that subsequent updates to the original schema would break third party
+    apps (they would still, but at least potentially incompatible
+    modifications would automatically be blocked and an app could provide
+    a notice (our equivalent to listening to `onblocked` or possibly
+    `onversionchange` if we could find a way to do this to avoid a change
+    in schema while the third party app is still open and potentially making
+    modifications) about the app awaiting a developer upgrade).
 1. IndexedDB; could synchronize with remote (cross-domain) website data
-(optionally requiring credentials) as well as allowing one-off local editing,
-so that user can have live data feeds into their local data (listen for changes
-locally and poll or coordinate to get or send WebSockets updates with a remote
-data source)
+    (optionally requiring credentials) as well as allowing one-off local
+    editing, so that user can have live data feeds into their local data
+    (listen for changes locally and poll or coordinate to get or send
+    WebSockets updates with a remote data source)
 1. Allow `postMessage` mechanism to receive content as entered in a pop-up
     dialog for this purpose as opposed to a file (though with an optional
     file to save back)
@@ -317,42 +306,48 @@ data source)
 1. Create dialog to ask user for mode, etc., so executable doesn't have to
     bake it all in and can let the user decide at run-time.
 
-### To-dos (Related enhancements to other add-ons)
+### To-dos (Related enhancements to other add-ons or refactoring to act as separate)
 
 1. See [webappfind-demos-samples](https://github.com/brettz9/webappfind-demos-samples)
     for to-dos
 1. Integrate functionality into <https://github.com/brettz9/filebrowser-enhanced>
-
-### To-dos (Message posting)
-
-1. Allow genuine POST or other non-GET or header-dependent requests (ala curl)?
-
-### To-dos (File editing permissions/add-on permissions)
-
-1. Option (at the add-on level) to confirm reading and/or saving of data upon
-    each attempt and/or display the proposed diffs before saving. (See
-    "Implementation notes" section).
-1. Allow users to remember privileges so that whenever a file is reloaded (even
-    if not from the desktop), it will continue to allow read/write access.
-1. Support passing entire directories and passing permission to re-reference
-    IDs (until revoked in a permissions dialog?)
-1. If we don't need all add-on permissions, see
-    <https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Request_the_right_permissions>.
-    We might also consider creating an `activeTab`-only build to avoid
-    content script permissions.
-
-### To-dos (Submissions)
-
-1. Submit to AMO, npm, etc.
-1. Once cross-platform, make PR to update
-    <https://github.com/marijnh/CodeMirror/blob/master/doc/realworld.html>).
-1. Ensure the `filetypes.json` in this repo references updated apps once
-    WebAppFind reimplemented.
-1. If API stabilizes and functional, file feature request to get the
-    functionality built into Firefox.
-
-### To-dos (Others)
-
-1. Add from [README-old.md](./README-old.md)
-1. Document usage of putting in dock for dragging files onto it
-1. Search through code for "Todo"
+1. Refactor this extension to be a bridge between Node (including
+    user-installed packages) and browser/browser add-ons/web-sites.
+    1. Support passing from Node into other add-ons
+        1. Is there a way to overcome `allowed_extensions`/`allowed_origins`?
+            hard-coded limits; is the app manifest read on install only, on
+            browser start-up, or on each access? If the latter, could
+            restartlessly dynamically modify the file ourselves. Otherwise
+            users may have to bundle this code for each add-on.
+    1. Might rely on "add-ons" of `npm` packages designated to be installed
+        (and via `package.json` config or custom config?) run on start-up.
+    1. For an added security layer, might only let bridge work with
+        user-designated packages.
+    1. Call "add-on"s' main scripts once at start-up.
+    1. Have "add-ons" indicate their privilege level (e.g., nodeToBrowser,
+        browserToNode) and high-level permission (e.g., `postMessage`
+        `contextMenu`).
+    1. Find best means possible (ideally even `eval`) to get full privileges
+        (whether originating from web-site as in AsYouWish, from desktop,
+        as in old WebAppFind, or from another add-on) out of
+        browser/browser add-on. If not, emulate own via `postMessage`
+        messaging. Or use
+        [onMessageExternal](https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/runtime/onMessageExternal)
+        and [onConnectExternal](https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/runtime/onConnectExternal)
+        and have add-on execute a specified script
+    1. Example "add-ons"
+        1. The old WebAppFind behavior could be one of these add-ons
+            1. Extend `filetypes.json` to support passing into a specific
+                add-on?
+            1. See old code and all to-dos
+        1. Like the old WebAppFind behavior but allow for general
+            URL-opening mechanism (including for passing of messages)
+            in addition to specific `filetypes.json` approach and have
+            mechanism also for passing content into another add-on
+            1. Test with "Open with..." to open file in a Node script
+                which communicates via Node WebSockets
+        1. AtYourCommand to run once to set-up user's context menus (and
+            desktop-file-opening behaviors)
+        1. AsYouWish to allow websites to communicate into the browser or
+            to eval-able Node code; at minimum start shared,
+            site-agnostic storage
