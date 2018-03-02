@@ -1,7 +1,7 @@
-- LOOK AT old-app folders for deleted info!!!
+- LOOK AT old-app folders for deleted info and to-dos!!!
 
 1. Document usage of putting in dock for dragging files onto it
-1. Search through code for "Todo"
+1. Search through current and old code for "Todo"
 
 # Comparison to other standards and tools
 
@@ -161,6 +161,10 @@ finished should help users to do this.
 
 ----
 TODOS TO INCORPORATE AND ADD BELOW
+1. Allow command line for temporary file or designated file saving
+    of string contents in webappfind as well (with dialog to approve
+    there as in [atyourcommand](https://github.com/brettz9/atyourcommand)
+    if would cause an overwrite).
 1. Window/tab targeting
     1. Option to give browser focus or open in background?
     1. Option to avoid or allow new tabs for same URI/mode/filetype/path?
@@ -250,6 +254,20 @@ desktops or even overwriting it.
 
 ----
 POSSIBLE TODOS TO INCORPORATE BELOW
+1. Provide meta-data in `filetypes.json` to cause the web app to be passed
+    awareness of the desire by the user to be prompted for the selection of
+    specific *custom* mode, along with an optional default custom mode and
+    suggested custom modes along with any explicitly passed. Thus, an app
+    might use this information to ask on WebAppFind invocation, "Do you
+    wish to view this file or view its source?".
+1. Support a global user `filetypes.json` file (at a chosen directory
+    specified within the browser?) which can override or provide defaults for
+    local `filetypes.json` files (especially for defaults since sites might
+    not have registered handlers, and a user might not wish to have to
+    put a `filetypes.json` file within each directory). Ensure it is in a
+    location readily detectable by other desktop apps which may wish to check
+    it as well (or to be opened in WebAppFind itself) (and demo it
+    with Greasemonkey editing once done, and add support to Stylish).
 1. Support processing of `filetypes.json` for directories (e.g., a
     "directoryMatches" property to be added to `filetypes.json`).
 1. Allow `filetypes.json` to support a hierarchy of custom types (e.g.,
@@ -263,6 +281,10 @@ POSSIBLE TODOS TO INCORPORATE BELOW
     on `$schema` value with JSON document, XML Schema for XML, etc.).
 1. Allow defaultHandlers to be optionally added inline with `fileMatches`
     in `filetypes.json`?
+1. Modify `filetypes.json` to support "prompt" mode
+    optional default mode or suggested modes (though the browser should
+    not prevent other modes from being used since the whole idea is that
+    the user controls the mode under which they wish to open the file).
 ----
 
 The following steps may currently be altered by user preference.
@@ -454,21 +476,20 @@ The recommended method for listening for the directory path is instead in
 the following manner:
 
 ```js
-window.addEventListener('message', function(e) {
-        if (e.origin !== window.location.origin) { // PRIVACY AND SECURITY! (for viewing and saving, respectively)
-            return;
-        }
-        try {
-            var path = e.data.webappfind.directoryPath;
-        }
-        catch (undesiredMessageFormat) {
-            return;
-        }
+window.addEventListener('message', function (e) {
+    if (e.origin !== window.location.origin) { // PRIVACY AND SECURITY! (for viewing and saving, respectively)
+        return;
+    }
+    let path;
+    try {
+        path = e.data.webappfind.directoryPath;
+    }
+    catch (undesiredMessageFormat) {
+        return;
+    }
 
-        // Now do something with "path" here!
-
-
-    }, false);
+    // Now do something with "path" here!
+});
 ```
 
 WebAppFind may be modified in the future
@@ -836,7 +857,6 @@ TODO: Add these below
     (i.e., Open, Edit, Print, Play, Preview or custom) be treated as
     modes/custom modes or to otherwise detect and interact with
     them?
-1. Allow a command-line "any" mode to let the web app choose the mode.
 ----
 
 Besides "view", "binaryview", "edit", "binaryedit", "register", the
@@ -911,61 +931,9 @@ with WebDav commands?):
 1. "execute" - Although the OS would normally do its own execution, it is
     possible that privileged apps (as through AsYouWish) might be able to
     handle this at least partly on their own
-1. "prompt" mode; see to-do below.
-1. "any" mode; see to-do below.
-1. Support local or remote stream inputs
-
-## Lower priority todos
-
-1. Write utility code
-    1. Leverage `method:'local'` property of API distinguishing
-        file://-based client-side GET-like code or server-side GET or
-        POST-driven content (which should also provide a "untrusted" property
-        or the like so as to distinguish code with side effects and those
-        without). Develop boilerplate code to work in all possible
-        environments (except for dumb clients or clients with JavaScript
-        disabled making POST requests). Utilize with
-        [URI templates](http://tools.ietf.org/html/rfc6570)
-        for server-side discovery and a special API for `postMessage`
-        client-side discovery (e.g., if
-        [atyourcommand](https://github.com/brettz9/atyourcommand)
-        were to make known to you the modes available in an app
-        when one is designing a command to shuffle off content to it)? Make
-        this perhaps a mode itself also so that files from the desktop could
-        also be opened in a manner that the web app displays the available
-        modes (and can post them back optionally to a callin app, again,
-        like atyourcommand).
-        1. Develop utility wrapper library for API to store to disk via
-            WebAppFind and/or to store to `localStorage`, IndexedDB,
-            and/or remote POST/PUT (since may wish to keep and possibly
-            synchronize local copy or remote back-up).
-1. API for XPath/XQuery (+ [HTTPQuery](https://github.com/brettz9/httpquery))
-    like targeted updating within documents, so data decoupled as with files
-    (XSS-safe or unsafe versions); PATCH header for more generic updates?
-1. PUT for specific site only (or data within a site as per targeted
-    updating item)
-1. Allow command line for temporary file or designated file saving
-    of string contents in webappfind as well (with dialog to approve
-    there as in [atyourcommand](https://github.com/brettz9/atyourcommand)
-    if would cause an overwrite).
-1. Support a global user `filetypes.json` file (at a chosen directory
-    specified within the browser?) which can override or provide defaults for
-    local `filetypes.json` files (especially for defaults since sites might
-    not have registered handlers, and a user might not wish to have to
-    put a `filetypes.json` file within each directory). Ensure it is in a
-    location readily detectable by other desktop apps which may wish to check
-    it as well (or to be opened in WebAppFind itself) (and demo it
-    with Greasemonkey editing once done, and add support to Stylish).
-1. Allow a command-line "prompt" fundamental mode: will allow the
-    user to determine mode at run-time (the browser (or other opening app)
+1. "prompt" mode - Allow a command-line "prompt" fundamental mode: will allow
+    the user to determine mode at run-time (the browser (or other opening app)
     can provide a prompt to the user to ask which mode to use before
-    opening the file in that chosen mode). Modify `filetypes.json` to support
-    optional default mode or suggested modes (though the browser should
-    not prevent other modes from being used since the whole idea is that
-    the user controls the mode under which they wish to open the file).
-1. Provide meta-data in `filetypes.json` to cause the web app to be passed
-    awareness of the desire by the user to be prompted for the selection of
-    specific *custom* mode, along with an optional default custom mode and
-    suggested custom modes along with any explicitly passed. Thus, an app
-    might use this information to ask on WebAppFind invocation, "Do you
-    wish to view this file or view its source?".
+    opening the file in that chosen mode).
+1. "any" mode - Allow a command-line mode to let the web app choose the mode.
+1. Support local or remote stream inputs

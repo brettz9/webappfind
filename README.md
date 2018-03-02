@@ -343,6 +343,33 @@ machine—[do not currently work](https://github.com/zeit/pkg/issues/136#issueco
     modifying in place highlighted right-clicking text (without the user seeing
     the web app open), e.g., to convert JS to CoffeeScript in a document
     one is viewing.
+    1. PUT for specific site only (or data within a site as per targeted
+        updating item)
+1. API for XPath/XQuery (+ [HTTPQuery](https://github.com/brettz9/httpquery))
+    like targeted updating within documents, so data decoupled as with files
+    (XSS-safe or unsafe versions); PATCH header for more generic updates?
+1. Write utility code
+    1. Leverage `method:'local'` property of API distinguishing
+        file://-based client-side GET-like code or server-side GET or
+        POST-driven content (which should also provide a "untrusted" property
+        or the like so as to distinguish code with side effects and those
+        without). Develop boilerplate code to work in all possible
+        environments (except for dumb clients or clients with JavaScript
+        disabled making POST requests). Utilize with
+        [URI templates](http://tools.ietf.org/html/rfc6570)
+        for server-side discovery and a special API for `postMessage`
+        client-side discovery (e.g., if
+        [atyourcommand](https://github.com/brettz9/atyourcommand)
+        were to make known to you the modes available in an app
+        when one is designing a command to shuffle off content to it)? Make
+        this perhaps a mode itself also so that files from the desktop could
+        also be opened in a manner that the web app displays the available
+        modes (and can post them back optionally to a calling app, again,
+        like atyourcommand).
+        1. Develop utility wrapper library for API to store to disk via
+            WebAppFind and/or to store to `localStorage`, IndexedDB,
+            and/or remote POST/PUT (since may wish to keep and possibly
+            synchronize local copy or remote back-up).
 
 ### To-dos (Platform-specific)
 
