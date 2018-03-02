@@ -203,6 +203,9 @@ machine—[do not currently work](https://github.com/zeit/pkg/issues/136#issueco
 1. Delete preferences from `ignore/old-preferences.json` after suitably
     reimplemented
     1. Set `options_ui: {page: "webappfind-options.html"}` and/or `sidebar_action`?
+    1. Currently preferences are global, whereas it may be desirable to allow
+        users to customize their preferences by type/protocol in addition to
+        the current default global ones.
 1. Security improvements
     1. Disable further save attempts with bad ID supplied in case a however previously approved site is attempting to guess at the paths of (if the user has enabled path transmission), or at the GUID representing, other non-approved files
     1. Check upon each save attempt that the loaded protocol is still registered as a handler (and remove usage notes above once implemented).

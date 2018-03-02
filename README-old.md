@@ -600,15 +600,8 @@ browsers if they do not allow add-ons to check command line arguments).
 
 # Todos and possible changes
 
-## Possible future user preference changes
-
-Currently preferences are global, whereas it may be desirable to allow users
-to customize their preferences by type/protocol in addition to the current
-default global ones.
-
 ## Possible future API/filetypes.json changes
 
-1. Consider encouraging use of MIME types for file type names.
 1. Mode and parameter changes
     1. Pass in argument for profile, or if defunct in browsers, at least
         allow to open a private window/tab
@@ -787,7 +780,6 @@ default global ones.
             sites registering themselves via [registerContentHandler()](https://developer.mozilla.org/en-US/docs/Web/API/Navigator.registerContentHandler).
             See, however, [bug 391286](https://bugzilla.mozilla.org/show_bug.cgi?id=391286)
             for current lack of arbitrary MIME support in Firefox.
-
     1. See "Possible future mode additions" section below for possible
         additions to fundamental (functional) modes beyond just "view",
         "binaryview", "edit", and "binaryedit".
@@ -798,6 +790,7 @@ default global ones.
             custom mode, and path)? or just pass through `postMessage`?
             Bookmarkability vs. clean API?
 1. `filetypes.json` changes
+    1. Consider encouraging use of MIME types for file type names.
     1. Change `filetypes.json` to .`filetypes.json` or at least support
         the latter for those not wishing to distract users or let them
         mess things up.
