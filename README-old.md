@@ -3,68 +3,6 @@
 1. Document usage of putting in dock for dragging files onto it
 1. Search through current and old code for "Todo"
 
-# Comparison to other standards and tools
-
-## Comparison with similar WebAPI work
-
-[WebActivities](https://wiki.mozilla.org/WebAPI/WebActivities) is similar to WebAppFind in that both seek to allow delegation of certain behaviors such as "view" and "edit" to (potentially) different apps (where the user also has the freedom to choose any app to handle the given type of activity), but WebActivities does not operate on files. Jonas Sicking indicated in a personal email response supportive of the concept of WebAppFind that WebActivities would be a good "way to dispatch the "view"/"edit" request to the appropriate web page, however WebActivities are still at an early stage and not ready for your use cases.".
-
-These missing use cases (besides operating on files) might perhaps include:
-
-1. The typing system of WebActivities does not seem to be made to be extensible by applications. It thus also doesn't allow specification of hierarchies of types (e.g., myJson->json->js) for fallbacks for as-yet-unregistered types or for alternate editor types.
-1. WebActivities doesn't allow recommendation of default handlers when opening a file for the first time (though a WebActivities-supporting site could seek to register itself as such a handler).
-
-The [WebAPI](https://wiki.mozilla.org/WebAPI) has a
-[DeviceStorageAPI](https://wiki.mozilla.org/WebAPI/DeviceStorageAPI)
-which has certain file-related behaviors.
-
-Shortcomings (or differences) of the current DeviceStorageAPI
-relative to WebAppFind would appear to be:
-
-1. It does not seem to anticipate the activities being triggered from one's desktop, but rather if one is already within a web app.
-1. The proposal at present appears to be limited to files in a specific directory of one's hard drive. It thus does not allow one the freedom to store one's files wherever one likes on one's hard-drive for better organization purposes.
-
-The `DeviceStorageAPI` appears to allow more privileges (like
-[AsYouWish](https://github.com/brettz9/asyouwish/)) such as
-enumerating files in a directory, adding or deleting files, and listening
-for creation/deletion/modifications, whereas WebAppFind is currently
-focused on individual file reading and saving. However, WebAppFind
-may add other actions in the future, such as listening for file change
-events for version tracking or allowing for a web app to handle adding
-or deleting a file (in case it wishes to do related set-up/take-down work).
-
-Since WebAppFind executables pass along path information, WebAppFind
-can already be used with the AsYouWish add-on (if the user so configures
-that privilege-escalating add-on) to have it conduct the other privileged
-activities of the `DeviceStorageAPI` whether enumerating files in the file's
-directory, doing set-up or take-down work related to file creation or
-deletion, or such things as uploading the containing folder's contents
-(and especially if WebAppFind is modified to allow for opening a hidden
-window, AsYouWish could be used for batch-like operations). Another
-possibility is remembering a file path, e.g., for an equivalent to Windows
-"Pin to Start" if you wish to create something like Windows 8's drag-and-drop
-Start menu as an AsYouWish app, with local desktop apps (and web apps)
-launchable from your web app, allowing you to extend your native OS
-desktop (when not using say [filebrowser-enhanced](https://github.com/brettz9/filebrowser-enhanced)),
-to plug into your web app (which can mimic the desktop itself if you wish).
-
-## Comparison with AsYouWish
-
-[AsYouWish](https://github.com/brettz9/asyouwish/) allows a
-higher-than-normal privilege level to websites, but it differs in
-a number of areas:
-
-1. AsYouWish sites ask for permission, and once approved, can then
-    immediately do their work. WebAppFind currently allows sites to ask
-    for permission to register themselves as handlers, but their work
-    will only become relevant when the user opens a file via WebAppFind.
-2. AsYouWish allows for a vast number of possible privileges (though
-    subject to user approval) including potentially arbitrary file reading
-    and writing (as with some browser extensions), while WebAppFind is
-    limited to file reading and writing (though it may expand to certain
-    other circumscribed, user-initated file-related activities in the
-    future) and only for those files so opened as opened by the user.
-
 # Usage notes (for end-users)
 
 (For command line usage, see its API below.)
@@ -166,6 +104,7 @@ TODOS TO INCORPORATE AND ADD BELOW
     there as in [atyourcommand](https://github.com/brettz9/atyourcommand)
     if would cause an overwrite).
 1. Window/tab targeting
+    1. Allow targeting of hidden window
     1. Option to give browser focus or open in background?
     1. Option to avoid or allow new tabs for same URI/mode/filetype/path?
         (option to get the same tab or new tabs for them?); option to push
