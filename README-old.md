@@ -605,7 +605,6 @@ within the desktop)
     1. Disable further save attempts with bad ID supplied in case a however previously approved site is attempting to guess at the paths of (if the user has enabled path transmission), or at the GUID representing, other non-approved files
     1. Check upon each save attempt that the loaded protocol is still registered as a handler (and remove usage notes above once implemented).
     1. Listen for unregistration of protocols to disable acting on future messages from them (only relevant for pages already loaded in this session).
-1. Create tests using `registerProtocolHandler` (also for JS/JSON/mytype)
 
 ## Lower priority todos
 

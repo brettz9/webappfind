@@ -190,6 +190,11 @@ machine—[do not currently work](https://github.com/zeit/pkg/issues/136#issueco
 1. Delete preferences from `ignore/old-preferences.json` after suitably
     reimplemented
 
+1. Reimplement protocol registration functionality and create tests using
+    `registerProtocolHandler` (also for JS/JSON/mytype); also consider
+    HTML head meta-data for flagging availability of file registrations
+    and possibly allow user directed use of this information to register
+
 1. Have the OS-specific executable of `bin/native-app` be identified and
     bundled automatically
 
