@@ -3,44 +3,6 @@
 1. Document usage of putting in dock for dragging files onto it
 1. Search through current and old code for "Todo"
 
-## Tips for usage with other tools
-
-As mentioned,
-[Executable Builder](https://github.com/brettz9/executable-builder)
-is a project which ought to open up further options to WebAppFind
-users when complete.
-
-If you wish to open desktop files into web apps but which for those web apps
-to have higher privileges than just writing back to the opened file, see
-[AsYouWish](https://github.com/brettz9/asyouwish/).
-
-Remember that besides being able to launch WebAppFind from the desktop,
-you can also launch from the command line, including from within the likes of
-desktop apps as well, such as [Notepad++](http://notepad-plus-plus.org/).
-(See also [atyourcommand](https://github.com/brettz9/atyourcommand) for
-some desired todos regarding standardizing argument types.)
-
-In the case of Notepad++, one can go to the "Run" menu and choose the
-"Run..." item, and then specify the path of the relevant WebAppFind
-executable followed by a space and `"$(FULL_CURRENT_PATH)"`. This
-will allow you to open the current file in a web app. You may
-also wish to click the "save" button there which allows specifying a hot
-key. If you wish to supply other arguments, see the relevant
-[Notepad++ wiki page](http://sourceforge.net/apps/mediawiki/notepad-plus/index.php?title=External_Programs).
-Note that as WebAppFind does not yet support a global user `filetypes.json`
-file, you will first need to allow a site to register itself as a protocol
-handler for the types of files you wish to open (based on file
-extension) or add a `filetypes.json` file within the directory of the file
-of interest (to which you can easily get in Notepad++ by "Open
-Containing Folder in Explorer" and then adding the file by right-click
-and opening it); otherwise, you may get a message in a browser tab
-that a handler was not found for the supplied file's extension.
-
-If you want to go in the other direction, from web documents to the desktop
-(or from arbitrary web documents to web apps), you might watch
-[AtYourCommand](https://github.com/brettz9/atyourcommand) which when
-finished should help users to do this.
-
 ## Command line API
 
 ----
