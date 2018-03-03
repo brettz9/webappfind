@@ -567,7 +567,7 @@ machine—[do not currently work](https://github.com/zeit/pkg/issues/136#issueco
 ### To-dos (Related enhancements to other add-ons or refactoring to act as separate)
 
 1. See [webappfind-demos-samples](https://github.com/brettz9/webappfind-demos-samples)
-    for to-dos
+    for to-dos; update it for any API changes
 1. Integrate functionality into <https://github.com/brettz9/filebrowser-enhanced>
 1. See [atyourcommand](https://github.com/brettz9/atyourcommand),
     a browser add-on to allow creation of context menu items, including

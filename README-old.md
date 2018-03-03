@@ -270,21 +270,21 @@ binary form or not) to the web app.
 
 ```js
 let pathID; // We might use an array to track multiple path IDs within the same app (once WebAppFind may be modified to support this capability!)
-window.addEventListener('message', function (e) {
+window.addEventListener('message', function ({origin, data}) {
     // e.data might be set to something like:
     // ['webapp-view', '{1e5c754e-95d3-4431-a08c-5364db753d97}', 'the loaded file contents will be here!']
     // ...or if the user has checked the option "Reveal selected file paths to scripts", it may look like this:
     // ['webapp-view', 'C:\\Users\\Brett\\someDataFile.txt', 'the loaded file contents will be here!']
 
-    if (e.origin !== window.location.origin || // We are only interested in a message sent as though within this URL by our browser add-on
-        (!Array.isArray(e.data) || // Validate format
-            e.data[0] === 'webapp-save') // Avoid our post below (other messages might be possible in the future which may also need to be excluded if your subsequent code makes assumptions on the type of message this is)
+    if (origin !== location.origin || // We are only interested in a message sent as though within this URL by our browser add-on
+        (!data || !data.webappfind || // Validate format
+            data[0] === 'webapp-save') // Avoid our post below (other messages might be possible in the future which may also need to be excluded if your subsequent code makes assumptions on the type of message this is)
     ) {
         return;
     }
-    if (e.data[0] === 'webapp-view') {
-        pathID = e.data[1]; // We remember this in case we are in "edit" mode which requires a pathID for saving back to disk
-        const fileContents = e.data[2];
+    if (data[0] === 'webapp-view') {
+        pathID = data[1]; // We remember this in case we are in "edit" mode which requires a pathID for saving back to disk
+        const fileContents = data[2];
         // Do something with fileContents like adding them to a textarea, etc.
     }
 });
@@ -326,7 +326,7 @@ app would like to inform the user in some manner).
 //  draft auto-saving or when manually clicking a save button.
 window.postMessage([
     'webapp-save', previouslySavedPathIDFromViewEvent, dataToSaveAsString
-], window.location.origin);
+], location.origin);
 ```
 
 Only windows with the URI approved by the process detailed above
@@ -363,19 +363,18 @@ The recommended method for listening for the directory path is instead in
 the following manner:
 
 ```js
-window.addEventListener('message', function (e) {
-    if (e.origin !== window.location.origin) { // PRIVACY AND SECURITY! (for viewing and saving, respectively)
+window.addEventListener('message', function ({origin, data}) {
+    if (origin !== location.origin) { // PRIVACY AND SECURITY! (for viewing and saving, respectively)
         return;
     }
-    let path;
+    let directoryPath;
     try {
-        path = e.data.webappfind.directoryPath;
-    }
-    catch (undesiredMessageFormat) {
+        ({directoryPath} = data.webappfind);
+    } catch (undesiredMessageFormat) { // May be non-WebAppFind format
         return;
     }
 
-    // Now do something with "path" here!
+    // Now do something with "directoryPath" here!
 });
 ```
 
