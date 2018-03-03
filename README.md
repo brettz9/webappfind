@@ -160,6 +160,16 @@ or to bring up the file selector, just:
 open ./webappfind-as.app
 ```
 
+You can then follow the instructions in "Usage notes (for end-users)"
+to use "Open with" or to associate a specific file or all files of a
+certain extension with the web app that will be chosen as a result of
+running this executable.
+
+Alternatively or in addition, you can drag this file to your Dock,
+Favorites, etc. so as to be able to drag files onto it for opening
+(or to just click it to open any hard-baked file or to get the file
+dialog otherwise).
+
 ### Arguments
 
 - **method** - Required. Must be set to "build-openwith-exec".
