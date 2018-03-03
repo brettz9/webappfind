@@ -2,6 +2,8 @@
 
 VERSION INCOMPLETE/NOT YET FUNCTIONAL!!!
 
+TODO: Ensure this README actually reflects the implementation once complete.
+
 A [WebExtensions](https://developer.mozilla.org/en-US/Add-ons/WebExtensions)/Chrome
 application to allow opening of files from the desktop (by double-click using
 default file assocations or "Open with...") into web applications.
@@ -56,6 +58,74 @@ to add buttons for inserting code snippets? Do you want to use CodeMirror
 for syntax highlighting of your JavaScript and CSS? (Demos are available
 at the previous site which do all of these.)
 
+## Usage notes (for end-users)
+
+(For command line usage, see the API below instead.)
+
+It is hoped that the instructions below can be further simplified
+once the Executable Builder component is enhanced to automatically
+associate default file types to (web) applications (and optionally
+add them to the Dock, etc.) without the user needing to find the
+path of these executables as WebAppFind currently requires.
+
+### Instructions
+
+Note that you must first install the WebExtensions add-on so that
+the following steps will work (the add-on has not yet been submitted
+to the Add-ons site, so for now, you will have to build the add-on
+from source).
+
+1. Right-click on a file and...
+    1. If you want to use WebAppFind without disturbing your defaults
+        for that file extension, select "Open With"->"Other..." and
+        if you want to always open that particular file with WebAppFind,
+        you can also check "Always Open With". (Alternatively, you can
+        select "Get Info" (`command-I`) and change the value in the
+        "Open with" pull-down and then the file can just be double-clicked
+        in the future.)
+        <!--
+        Note: on Windows, when available again, the following instructions can be used:
+
+        select "Open with"->"Choose default program..." if present (or if
+        not present, open the file and choose "Select a program
+        from a list of installed programs") and then make sure "Always use
+        the selected program to open this kind of file" is not checked.
+        -->
+    1. If you always want to use WebAppFind when handling files with the same
+        extension as this file (and just be able to double-click such files
+        when opening them in the future), you can select "Get Info"
+        (`command-I`) and change the value in the "Open with" pull-down and
+        then click "Change All.." to apply to all such files of that file
+        extension.
+        <!--
+        TODO: on Windows, when available again, the following instructions can be used:
+
+        click "Properties", then click "Change..." next to
+        "Opens with:" in the General tab of the dialog.
+        -->
+<!--
+TODO: on Windows, when available again, the following instructions can be used:
+1. Click "Browse".
+-->
+1. Navigate to an executable built following the instructions in the section
+    "Executable builder functionality" (Or, if
+    you prefer, you can use one of the pre-built binaries includes in the `bin`
+    folder of this repository, though see the above-mentioned section anyways
+    on the differences of functionality in those binaries).
+1. Select "Ok".
+1. If you used "Open with" (as per step 1.1 above), your file should have
+    already opened with WebAppFind. If you opted for "Get Info" in step 1
+    <!-- TODO: On Windows, once implemented "Properties" -->
+    you should now be able to double-click the file (or any file possessing
+    the same extension if you followed step 1.2) to open it with WebAppFind.
+
+If an edit `web+local` protocol is enabled and open and then disabled in
+the same session, it will keep having save access (though within that
+window session only). One must currently close any open tabs for that
+web application if one no longer wishes to allow access (though as noted
+elsewhere in this documentation, the app only has access to the files to
+which you granted access).
+
 ## Command line communication with add-on
 
 In order to pass a file into the add-on (which can use any arguments and its
@@ -99,7 +169,11 @@ open ./webappfind-as.app
     is passed to the *generated script*, its absence will trigger a file
     dialog.
 - **mode** - Optional mode for invoking the web app on your contents, either
-    "view" (readonly) or "edit". Default is "view".
+    "view" (readonly) or "edit" (read and write). Default is "view".
+    If this is for a program needing to open a file in binary mode, such as
+    images, sound files, or videos, use "binaryview" or "binaryedit" instead.
+    The `filetypes.json` file can be used to force "binary" or not for
+    the respective view or edit mode.
 - **site** - Optional baking in of a specific site to invoke with the
     designated file's contents. Will check for local `filetypes.json`
     otherwise.

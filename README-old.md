@@ -3,61 +3,7 @@
 1. Document usage of putting in dock for dragging files onto it
 1. Search through current and old code for "Todo"
 
-# Usage notes (for end-users)
-
-(For command line usage, see its API below.)
-
-It is hoped that the instructions below can be mostly automated
-and simplified once the
-[Executable Builder](https://github.com/brettz9/executable-builder)
-add-on is complete (this add-on is to optionally interact with WebAppFind
-to allow building and assignment of executable/batch files which can be
-designated for specific file types without the user needing to find the
-path of these executables as WebAppFind currently requires).
-
-## Instructions
-
-Note that you must first install the WebExtensions add-on so that
-the following steps will work (the add-on has not yet been submitted
-to the Addons site, so for now, you will have to either build
-from source or use the pre-built XPI included with the repository).
-
-1. Right-click on a file.
-    1. If you want to use WebAppFind without disturbing your defaults
-        for that file extension, select
-        "Open with"->"Choose default program..." if present (or if
-        not present, open the file and choose "Select a program
-        from a list of installed programs") and then make sure "Always use
-        the selected program to open this kind of file" is not checked.
-    1. If you always want to use WebAppFind when handling files of this
-        extension, click "Properties", then click "Change..." next to
-        "Opens with:" in the General tab of the dialog.
-1. Click "Browse".
-1. Navigate to an executable within the "cplusplus" folder of this
-    [WebAppFind](https://github.com/brettz9/webappfind) repository (or, if
-    you prefer, you can build the executables yourself with the source code
-    included in this repository). If you want web apps to open this file in
-    view-only mode, choose "WebAppFinder-view-mode-Firefox.exe" (or
-    "WebAppFinder-binaryview-mode-Firefox.exe" if this is for a program
-    needing to open a file in binary mode, such as images, sound files, or
-    videos). If you want to grant the webapp read and write access for this
-    file (or type of file if you chose option 1.2) you open via WebAppFind,
-    choose "WebAppFinder-edit-mode-Firefox.exe" (or
-    "WebAppFinder-binaryedit-mode-Firefox.exe" for editing binary files).
-1. Select "Ok".
-1. If you used "Open with" (as per step 1.1 above), your file should have
-    already opened with WebAppFind. If you opted for "Properties" (step 1.2
-    above), you should now be able to double-click any file possessing the
-    same extension to open it with WebAppFind.
-
-If an edit `web+local` protocol is enabled and open and then disabled in
-the same session, it will keep having save access (though within that
-window session only). One must currently close any open tabs for that
-web application if one no longer wishes to allow access (though as noted
-elsewhere in the documentation, the app only has access to the files to
-which it was permitted access).
-
-# Tips for usage with other tools
+## Tips for usage with other tools
 
 As mentioned,
 [Executable Builder](https://github.com/brettz9/executable-builder)
@@ -95,7 +41,7 @@ If you want to go in the other direction, from web documents to the desktop
 [AtYourCommand](https://github.com/brettz9/atyourcommand) which when
 finished should help users to do this.
 
-# Command line API
+## Command line API
 
 ----
 TODOS TO INCORPORATE AND ADD BELOW
@@ -161,9 +107,9 @@ simply be able to run commands manually from the command line.
     no protocols are found), the add-on will simply auto-close the tab
     that this parameter opens.
 
-# For developers
+## For developers
 
-## Important security notes
+### Important security notes
 
 When developing a web app for use with WebAppFind, it is even more
 important to protect the privacy and security of your users since your
@@ -189,10 +135,12 @@ desktops or even overwriting it.
     <https://en.wikipedia.org/wiki/Cross-site_request_forgery> for some
     of the concerns.
 
-## API: file type finding
+### API: file type finding
 
 ----
 POSSIBLE TODOS TO INCORPORATE BELOW
+1. Add meta-data so "view" requests can become "viewbinary" or "edit" become
+    "editbinary".
 1. Provide meta-data in `filetypes.json` to cause the web app to be passed
     awareness of the desire by the user to be prompted for the selection of
     specific *custom* mode, along with an optional default custom mode and
@@ -313,7 +261,7 @@ registration at "web+localeditjs:". Depending on user configuration,
 if such a hander is not found, the file may be opened in the browser
 or on the desktop.
 
-## API: reading file contents
+### API: reading file contents
 
 The 'webapp-view' message (see the example below) will be sent to the web
 app when a desktop file has been opened in the "view", "binaryview", "edit",
@@ -346,7 +294,7 @@ Only windows with the URI approved by the process detailed above
 will be able to successfully receive such messages (and only for the
 supplied file).
 
-## API: saving back to the originally supplied file path (for the "edit" mode only)
+### API: saving back to the originally supplied file path (for the "edit" mode only)
 
 A save will be performed by sending a 'webapp-save' to the add-on
 (see the code below).
@@ -384,7 +332,7 @@ window.postMessage([
 Only windows with the URI approved by the process detailed above
 can successfully save such messages (and only for the supplied file).
 
-## API: Obtaining a directory path
+### API: Obtaining a directory path
 
 If one adds something like the following Windows batch file:
 
@@ -444,7 +392,7 @@ a right-clicked directory into the browser's file browser (including
 if you have overlaid its default browser with
 [filebrowser-enhanced](https://github.com/brettz9/filebrowser-enhanced)).
 
-## Recognized file types and custom modes
+### Recognized file types and custom modes
 
 Although you are free to define your own file types and custom modes,
 in order to prevent future conflicts, it is recommended that you register
@@ -456,9 +404,9 @@ Even if `filetypes.json` is used with "register" on "defaultHandlers", it may
 be convenient to have a separate spec URL detailed for your file type,
 including for cases where the file extension is used without `filetypes.json`.
 
-# Design choices
+## Design choices
 
-## Implementation notes
+### Implementation notes
 
 A direct visit to the protocol (including through XSRF) should provide no
 side effects. However, it is possible that a malicious handler opened by
@@ -473,7 +421,7 @@ it as a default handler for the data file (and the user maintains the
 preference to use this information) or if they have previously approved
 a protocol site for the given type.
 
-## Rationale for `filetypes.json` design
+### Rationale for `filetypes.json` design
 
 Although there may be some advantages to storing meta-data at the individual
 file level, I did not see a very convenient way in which Windows would allow
@@ -546,7 +494,7 @@ useful for namespacing between the two types of modes, but
 the current HTML spec does not allow protocols to be registered
 with them present.)
 
-## Rationale for API design
+### Rationale for API design
 
 `postMessage` was chosen for having a familiar API and already
 designed for potentially untrusted collaboration sources. (See the
@@ -558,9 +506,9 @@ and mode info while supplying that to the add-on via a URL which
 would in turn check the temp file (this approach might work for other
 browsers if they do not allow add-ons to check command line arguments).
 
-# Todos and possible changes
+## Todos and possible changes
 
-## Possible future API/filetypes.json changes
+### Possible future API/filetypes.json changes
 
 1. Mode and parameter changes
     1. Pass in argument for profile, or if defunct in browsers, at least
@@ -784,7 +732,7 @@ browsers if they do not allow add-ons to check command line arguments).
         the allowed characters of a custom protocol beyond lower-case ASCII
         letters.
 
-## Possible future mode additions
+### Possible future mode additions
 
 See "Possible future API/filestypes.json changes" for changes/additions
 planned for the (hopefully) near future.
