@@ -283,6 +283,7 @@ or on the desktop.
     1. Pass in argument for profile, or if defunct in browsers, at least
         allow to open a private window/tab
         1. Set `incognito` on whether/how to work in Incognito mode
+        1. Re: Profile, see <https://support.mozilla.org/en-US/kb/profile-manager-create-and-remove-firefox-profiles>
     1. API changes/additions (Anticipated change with custom modes and
         allowing for multiple modes (and file access) at once.)
         1. Allow not just one, but multiple, file/URL/folder/command-line/web
