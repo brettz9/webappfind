@@ -1,7 +1,3 @@
-## To-dos (Miscellaneous)
-
-1. Update [Developer-Guide.ms](./Developer-Guide.md) and [DESIGN](./DESIGN.md)
-
 ## To-dos (Building)
 
 1. Have the OS-specific executable of `bin/native-app` be identified and
@@ -13,6 +9,7 @@
 
 ## To-dos (Reimplementing or basic)
 
+1. Update [Developer-Guide.ms](./Developer-Guide.md) and [DESIGN](./DESIGN.md)
 1. See current code for other to-dos
 1. LOOK AT old-app folders for implementation aspects and to-dos to add here
 1. When done, remove generated AppleScript app(s) from repo
