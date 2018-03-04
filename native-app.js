@@ -90,7 +90,7 @@ end getFile
     //        see https://apple.stackexchange.com/questions/9866/programmatically-script-atically-changing-the-default-open-with-setting/9954#9954
     // Todo optionally add to dock and/or execute the result;
     console.log('appleScript', appleScript);
-    execFile('osacompile', ['-o', 'output.app', '-e', appleScript]);
+    execFile('osacompile', ['-o', '../output.app', '-e', appleScript]);
     return;
 }
 }
@@ -123,13 +123,17 @@ wss.on('connection', (ws) => {
         const {method} = msgObj;
         switch (method) {
         case 'client': {
+            ws.send(JSON.stringify(msgObj)); // Send back to client
+            backgroundScript.write(JSON.stringify(msgObj));
+            /*
             ['file', 'mode', 'site', 'args'].forEach((prop) => {
                 const value = msgObj[prop];
                 if (value !== undefined) {
-                    backgroundScript.write('Native app server received: ' + prop + ' = ' + value);
-                    ws.send(JSON.stringify({prop, value}));
+                    backgroundScript.write(JSON.stringify({prop, value}));
+                    // ws.send(JSON.stringify({prop, value})); // Send back to client
                 }
             });
+            */
             break;
         }
         }

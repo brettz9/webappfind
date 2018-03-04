@@ -19,8 +19,10 @@ const port = browser.runtime.connectNative('webappfind');
 /**
 Listen for messages from the webappfind native messaging app (which listens for websocket connections, ala "Open"/"Open with...").
 */
-port.onMessage.addListener((response) => {
-    console.log('Received in background script: ' + response);
+port.onMessage.addListener((msg) => {
+    // const msgObj = JSON.parse(msg);
+    console.log('msgObj', msg); // msgObj);
+    // ['file', 'mode', 'site', 'args'];
 });
 
 // Todo: open tabs, etc. (see old WebAppFind code) and listen to page for write commands (if has write access)
