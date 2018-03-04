@@ -31,6 +31,7 @@ TODOS TO INCORPORATE AND ADD BELOW
     if would cause an overwrite).
 1. Window/tab targeting
     1. Allow targeting of hidden window
+    1. make resulting tab pinned?
     1. Option to give browser focus or open in background?
     1. Option to avoid or allow new tabs for same URI/mode/filetype/path?
         (option to get the same tab or new tabs for them?); option to push

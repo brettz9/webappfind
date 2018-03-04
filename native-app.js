@@ -76,7 +76,7 @@ on getFile (argv)
                     return s;
                 }
                 const paramValue = argv[param];
-                return `${s} ${param}=\\"${escapeBashDoubleQuoted(paramValue)}\\"`;
+                return `${s} --${param}=\\"${escapeBashDoubleQuoted(paramValue)}\\"`;
             }, '"') || ' "') + `"
     end tell
 
@@ -114,7 +114,7 @@ function messageHandler (msg, push, done) {
 const backgroundScript = new nativeMessage.Output();
 backgroundScript.pipe(process.stdout);
 
-backgroundScript.write('Starting (in native app)');
+backgroundScript.write('"Starting (in native app)"');
 
 const wss = new WebSocket.Server({ port: 8080 });
 wss.on('connection', (ws) => {

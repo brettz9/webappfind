@@ -15,7 +15,7 @@
     "background": {
         "scripts": [
             "polyfills/browser-polyfill.js",
-            "background.js"
+            "lib/background.js"
         ]
     },
 
@@ -26,5 +26,5 @@
         }
     },
 
-    "permissions": ["nativeMessaging"]
+    "permissions": ["nativeMessaging", "activeTab"]
 }
