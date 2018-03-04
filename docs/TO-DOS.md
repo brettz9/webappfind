@@ -7,79 +7,6 @@
     build executables for opening files too)
 1. Overcome "Cannot find module 'regedit'" error when building on non-Windows
 
-## To-dos (Reimplementing or basic)
-
-1. Update [Developer-Guide.ms](./Developer-Guide.md) and [DESIGN](./DESIGN.md)
-1. See current code for other to-dos
-1. LOOK AT old-app folders for implementation aspects and to-dos to add here
-
-1. When done, remove generated AppleScript app(s) from repo
-1. From Node WebSockets -> add-on, we need to open website and `postMessage`
-    into it and be able to handle opposite direction, including for writing
-    file contents back to disk, but also for *AtYourCommand* functionality)
-1. Delete preferences from `ignore/old-preferences.json` after suitably
-    reimplemented
-    1. Set `options_ui: {page: "webappfind-options.html"}` and/or
-        `sidebar_action`?
-    1. Currently preferences are global, whereas it may be desirable to allow
-        users to customize their preferences by type/protocol in addition to
-        the current default global ones.
-1. Security improvements
-    1. Disable further save attempts with bad ID supplied in case a however
-        previously approved site is attempting to guess at the paths of
-        (if the user has enabled path transmission), or at the GUID
-        representing, other non-approved files
-    1. Check upon each save attempt that the loaded protocol is still
-        registered as a handler (and remove usage notes above once
-        implemented).
-    1. Listen for unregistration of protocols to disable acting on future
-        messages from them (only relevant for pages already loaded in this
-        session).
-    1. Piggyback on HTML5 drag-and-drop file capabilities (or create own) to
-        allow files dropped in this way to be saved back to disk and/or path
-        provided to the app; same with optionally allowing privileged file
-        picker per site.
-    1. Ensure some additional security/privacy for users desiring it by
-        restricting external access (using <https://developer.mozilla.org/en-US/docs/XPCOM_Interface_Reference/nsIContentPolicy>
-        and <https://developer.mozilla.org/en-US/docs/XPCOM_Interface_Reference/nsIPrincipal>
-        per <http://stackoverflow.com/questions/18369052/firefox-add-on-to-load-webpage-without-network-access>?)
-        See also http://en.wikipedia.org/wiki/Site-specific_browser regarding
-        such sandboxing.
-    1. Option to enable `file:` protocol (though mention it is currently risky
-        in Firefox to use `postMessage` for security and privacy given its lack
-        of scoping); report issue to FF if issue not already added (also for
-        better means than '\*' for add-on communication?). However, this option
-        would be quite useful, especially if the todo just above on restricting
-        external access were implemented, given that web apps could be
-        installed to work with one's files (ideally without concerns that the
-        data was going to be sent anywhere, and if the todo to confirm saves
-        were implemented, one could also see what changes were being made to
-        a file before being actually saved). Unfortunately, `file:` sites
-        cannot register themselves as protocol handlers, so the user would
-        need to configure their settings so as to rely on the default handlers
-        in `filetypes.json` to be able to use such a file (or we would need
-        to create our own mechanism, such as through `postMessage` back to
-        the add-on (or a change in the file's GET parameters or perhaps
-        modification of an element within the document), to allow a `file:`
-        site to request permission to become usable as a protocol handler).
-1. Reimplement protocol registration functionality and create tests using
-    `registerProtocolHandler` (also for JS/JSON/mytype); also consider
-    HTML head meta-data for flagging availability of file registrations
-    and possibly allow user directed use of this information to register
-    1. Set `protocol_handlers: [{protocol: "ext+waf", name: "WebAppFind", uriTemplate: "https://...%s"}]`; e.g., for site to register itself for a type
-1. Complete [executable builder](https://github.com/brettz9/executable-builder)
-    and [atyourcommand](https://github.com/brettz9/atyourcommand) but for
-    webextensions.
-    1. Option to auto-add as file association and to dock
-    1. Reimplement to support Windows in new webappfind version (as batch
-        scripts as possible); convert to shortcut tied to `cmd.exe` for sake
-        of getting an icon
-    1. Installer script to run to facilitate setting up of OpenWith per
-        user choices (if Executable Builder is not installed, it could link
-        to it, and if it is, it could bring user through steps).
-    1. Applescript-based executable builder also?
-    1. Examine `executable builder` for ideas and UI
-
 ## Command line API
 
 Todo: Review this documentation section for reimplementation, and move
@@ -158,6 +85,79 @@ simply be able to run commands manually from the command line.
     (e.g., if the user has opted to allow desktop opening of the file when
     no protocols are found), the add-on will simply auto-close the tab
     that this parameter opens.
+
+## To-dos (Reimplementing preferences/basics)
+
+1. Update [Developer-Guide.ms](./Developer-Guide.md) and [DESIGN](./DESIGN.md)
+1. See current code for other to-dos
+1. LOOK AT old-app folders for implementation aspects and to-dos to add here
+1. When done, remove generated AppleScript app(s) from repo
+
+1. From Node WebSockets -> add-on, we need to open website and `postMessage`
+    into it and be able to handle opposite direction, including for writing
+    file contents back to disk, but also for *AtYourCommand* functionality)
+1. Delete preferences from `old-app/old-preferences.json` after suitably
+    reimplemented
+    1. Set `options_ui: {page: "webappfind-options.html"}` and/or
+        `sidebar_action`?
+    1. Currently preferences are global, whereas it may be desirable to allow
+        users to customize their preferences by type/protocol in addition to
+        the current default global ones.
+1. Security improvements
+    1. Disable further save attempts with bad ID supplied in case a however
+        previously approved site is attempting to guess at the paths of
+        (if the user has enabled path transmission), or at the GUID
+        representing, other non-approved files
+    1. Check upon each save attempt that the loaded protocol is still
+        registered as a handler (and remove usage notes above once
+        implemented).
+    1. Listen for unregistration of protocols to disable acting on future
+        messages from them (only relevant for pages already loaded in this
+        session).
+    1. Piggyback on HTML5 drag-and-drop file capabilities (or create own) to
+        allow files dropped in this way to be saved back to disk and/or path
+        provided to the app; same with optionally allowing privileged file
+        picker per site.
+    1. Ensure some additional security/privacy for users desiring it by
+        restricting external access (using <https://developer.mozilla.org/en-US/docs/XPCOM_Interface_Reference/nsIContentPolicy>
+        and <https://developer.mozilla.org/en-US/docs/XPCOM_Interface_Reference/nsIPrincipal>
+        per <http://stackoverflow.com/questions/18369052/firefox-add-on-to-load-webpage-without-network-access>?)
+        See also http://en.wikipedia.org/wiki/Site-specific_browser regarding
+        such sandboxing.
+    1. Option to enable `file:` protocol (though mention it is currently risky
+        in Firefox to use `postMessage` for security and privacy given its lack
+        of scoping); report issue to FF if issue not already added (also for
+        better means than '\*' for add-on communication?). However, this option
+        would be quite useful, especially if the todo just above on restricting
+        external access were implemented, given that web apps could be
+        installed to work with one's files (ideally without concerns that the
+        data was going to be sent anywhere, and if the todo to confirm saves
+        were implemented, one could also see what changes were being made to
+        a file before being actually saved). Unfortunately, `file:` sites
+        cannot register themselves as protocol handlers, so the user would
+        need to configure their settings so as to rely on the default handlers
+        in `filetypes.json` to be able to use such a file (or we would need
+        to create our own mechanism, such as through `postMessage` back to
+        the add-on (or a change in the file's GET parameters or perhaps
+        modification of an element within the document), to allow a `file:`
+        site to request permission to become usable as a protocol handler).
+1. Reimplement protocol registration functionality and create tests using
+    `registerProtocolHandler` (also for JS/JSON/mytype); also consider
+    HTML head meta-data for flagging availability of file registrations
+    and possibly allow user directed use of this information to register
+    1. Set `protocol_handlers: [{protocol: "ext+waf", name: "WebAppFind", uriTemplate: "https://...%s"}]`; e.g., for site to register itself for a type
+1. Complete [executable builder](https://github.com/brettz9/executable-builder)
+    and [atyourcommand](https://github.com/brettz9/atyourcommand) but for
+    webextensions.
+    1. Option to auto-add as file association and to dock
+    1. Reimplement to support Windows in new webappfind version (as batch
+        scripts as possible); convert to shortcut tied to `cmd.exe` for sake
+        of getting an icon
+    1. Installer script to run to facilitate setting up of OpenWith per
+        user choices (if Executable Builder is not installed, it could link
+        to it, and if it is, it could bring user through steps).
+    1. Applescript-based executable builder also?
+    1. Examine `executable builder` for ideas and UI
 
 ## For developers
 ### API: file type finding
