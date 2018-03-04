@@ -12,6 +12,7 @@
 1. Update [Developer-Guide.ms](./Developer-Guide.md) and [DESIGN](./DESIGN.md)
 1. See current code for other to-dos
 1. LOOK AT old-app folders for implementation aspects and to-dos to add here
+
 1. When done, remove generated AppleScript app(s) from repo
 1. From Node WebSockets -> add-on, we need to open website and `postMessage`
     into it and be able to handle opposite direction, including for writing
@@ -85,6 +86,17 @@ Todo: Review this documentation section for reimplementation, and move
 to own documentation section when done. Review old [executable builder](https://github.com/brettz9/executable-builder) code also.
 ----
 TODOS TO INCORPORATE AND ADD BELOW
+1. Builder command to indicate:
+    1. target directory path/file name
+    1. icon path (or link to SVG-edit to make own)
+
+    1. full screen mode
+    1. make shortcut
+    1. additional batch commands
+    1. hard-coded string to pass for reading or eval
+    1. global hotkey to activate
+    1. ability to just open a URL without going through WebAppFind
+    1. Could allow creating templates (including name, description)
 1. Allow command line for temporary file or designated file saving
     of string contents in webappfind as well (with dialog to approve
     there as in [atyourcommand](https://github.com/brettz9/atyourcommand)
