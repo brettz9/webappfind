@@ -13,6 +13,7 @@ Todo: Review this documentation section for reimplementation, and move
 to own documentation section when done. Review old [executable builder](https://github.com/brettz9/executable-builder) code also.
 ----
 TODOS TO INCORPORATE AND ADD BELOW
+1. Error checking and reporting as dialog (or new tab) unless preference to disable on
 1. Builder command to indicate:
     1. target directory path/file name
     1. icon path (or link to SVG-edit to make own)
