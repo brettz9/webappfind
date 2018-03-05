@@ -18,7 +18,7 @@ TODOS TO INCORPORATE AND ADD BELOW
     1. target directory path/file name
     1. icon path (or link to SVG-edit to make own)
 
-    1. full screen mode
+    1. open in full screen mode or reader mode
     1. make shortcut
     1. additional batch commands
     1. hard-coded string to pass for reading or eval
