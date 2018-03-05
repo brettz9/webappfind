@@ -94,6 +94,7 @@ simply be able to run commands manually from the command line.
 1. See current code for other to-dos
 1. LOOK AT old-app folders for implementation aspects and to-dos to add here
 1. When done, remove generated AppleScript app(s) from repo
+1. Ensure working in Chrome as well as Firefox
 
 1. From Node WebSockets -> add-on, we need to open website and `postMessage`
     into it and be able to handle opposite direction, including for writing
