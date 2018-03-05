@@ -26,5 +26,5 @@
         }
     },
 
-    "permissions": ["nativeMessaging", "activeTab", "<all_urls>"]
+    "permissions": ["nativeMessaging", "<all_urls>"]
 }
