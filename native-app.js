@@ -72,7 +72,7 @@ on getFile (argv)
             `--method=client --file=" & ` +
             ('file' in argv ? `"\\"${escapeBashDoubleQuoted(argv.file)}\\""` : `quoted form of filePath`) +
             ' & ' +
-            (['mode', 'site', 'args'].reduce((s, param) => {
+            (['mode', 'site', 'args', 'binary'].reduce((s, param) => {
                 if (!(param in argv)) {
                     return s;
                 }
