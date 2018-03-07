@@ -1,6 +1,6 @@
 const nativeMessage = require('chrome-native-messaging');
 const WebSocket = require('ws');
-const {execFile} = require('./polyfills/promise-wrappers');
+const {execFile, readFile} = require('./polyfills/promise-wrappers');
 
 const argv = require('minimist')(process.argv.slice(2));
 const {method} = argv;
@@ -118,11 +118,21 @@ backgroundScript.write('"Starting (in native app)"');
 
 const wss = new WebSocket.Server({ port: 8080 });
 wss.on('connection', (ws) => {
-    ws.on('message', (msg) => {
-        const msgObj = JSON.parse(msg);
-        const {method} = msgObj;
+    ws.on('message', async (msg) => {
+        let msgObj = JSON.parse(msg);
+        const {method, file, binary} = msgObj;
         switch (method) {
         case 'client': {
+            let content;
+            if ('file' in msgObj) { // Site may still wish args passed to it
+                // Todo: Document this and `binary` as command line
+                const options = binary ? null : 'utf8';
+                content = await readFile(file, options);
+                if (binary) {
+                    content = content.buffer;
+                }
+            }
+            msgObj = {...msgObj, content};
             ws.send(JSON.stringify(msgObj)); // Send back to client
             backgroundScript.write(JSON.stringify(msgObj));
             /*

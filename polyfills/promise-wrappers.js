@@ -15,6 +15,21 @@ const mkdirp = (dirPath) => {
         });
     });
 };
+const readFile = (path, options) => {
+    return new Promise((resolve, reject) => {
+        fs.readFile(
+            path,
+            options,
+            (err, data) => {
+                if (err) {
+                    reject(err);
+                    return;
+                }
+                resolve(data);
+            }
+        );
+    });
+};
 const writeFile = (path, data) => {
     return new Promise((resolve, reject) => {
         fs.writeFile(
@@ -108,6 +123,7 @@ const execFile = (file, args, options) =>
     });
 
 exports.mkdirp = mkdirp;
+exports.readFile = readFile;
 exports.writeFile = writeFile;
 exports.copyExecutable = copyExecutable;
 exports.copyFile = copyFile;
