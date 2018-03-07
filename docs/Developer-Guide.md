@@ -65,12 +65,12 @@ supplied file).
 
 ### API: saving back to the originally supplied file path (for the "edit" mode only)
 
-A save will be performed by sending a 'webapp-save' to the add-on
+A save will be performed by sending a 'save' to the add-on
 (see the code below).
 
 A pathID will be needed when making a save of file contents back to
 the add-on (which will save back to disk). You can obtain this before
-making saves, by listening for the 'webapp-view' message (described
+making saves, by listening for the 'view' message (described
 under "API: reading file contents" above); the 2nd value of the first (array)
 argument (`previouslySavedPathIDFromViewEvent`) will contain this
 information.
@@ -81,7 +81,7 @@ in a new tab as a new instance).
 
 Note the important comment below about ensuring your users' privacy.
 
-Once a save has been performed, a message, 'webapp-save-end', will be
+Once a save has been performed, a message, 'save-end', will be
 sent from the add-on back to the WebAppFind-opened app (in case the
 app would like to inform the user in some manner).
 
@@ -94,7 +94,7 @@ app would like to inform the user in some manner).
 //  they wish to make a save such as if they have approved
 //  draft auto-saving or when manually clicking a save button.
 window.postMessage({
-    type: 'webapp-save',
+    type: 'save',
     pathID: previouslySavedPathIDFromViewEvent,
     content: dataToSaveAsString
 }, location.origin);
