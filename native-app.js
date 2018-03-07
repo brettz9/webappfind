@@ -1,6 +1,6 @@
 const nativeMessage = require('chrome-native-messaging');
 const WebSocket = require('ws');
-const uuid = require('uuid/v5');
+const uuid = require('uuid/v4');
 const {execFile, readFile} = require('./polyfills/promise-wrappers');
 
 const argv = require('minimist')(process.argv.slice(2));
