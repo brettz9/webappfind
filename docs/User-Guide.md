@@ -80,14 +80,23 @@ whose contents will be sent to your web applications.
 
 If the AppleScript is invoked on the command line, one can invoke with:
 
+<!--
 ```bash
 open ./webappfind-as.app --args /Users/brett/myFile.txt
 ```
+-->
+```bash
+osascript ./webappfind-as.app /Users/brett/myFile.txt
+```
 
 or to bring up the file selector, just:
-
+<!--
 ```bash
 open ./webappfind-as.app
+```
+-->
+```basePath
+osascript ./webappfind-as.app
 ```
 
 You can then follow the instructions in "Usage notes (for end-users)"

@@ -28,29 +28,33 @@ desktops and have the potential to even overwrite it.
 
 ### API: reading file contents
 
-The 'webapp-view' message (see the example below) will be sent to the web
-app when a desktop file has been opened in the "view", "binaryview", "edit",
-or "binaryedit" mode. This message delivers the file contents (whether in
-binary form or not) to the web app.
+The 'view' type of message (see the example below) will be sent to the web
+app when a desktop file has been opened in the "view" or "edit" mode. This
+message delivers the file contents (whether in binary form or not) to the
+web app.
 
 ```js
 let pathID; // We might use an array to track multiple path IDs within the same app (once WebAppFind may be modified to support this capability!)
 window.addEventListener('message', function ({origin, data}) {
-    // e.data might be set to something like:
-    // ['webapp-view', '{1e5c754e-95d3-4431-a08c-5364db753d97}', 'the loaded file contents will be here!']
+    // `data` might be set to something like:
+    // {type: 'view', pathID: '{1e5c754e-95d3-4431-a08c-5364db753d97}', content: 'the loaded file contents will be here!'}
     // ...or if the user has checked the option "Reveal selected file paths to scripts", it may look like this:
-    // ['webapp-view', 'C:\\Users\\Brett\\someDataFile.txt', 'the loaded file contents will be here!']
+    // {type :'view', pathID: 'C:\\Users\\Brett\\someDataFile.txt', content: 'the loaded file contents will be here!'}
 
-    if (origin !== location.origin || // We are only interested in a message sent as though within this URL by our browser add-on
-        (!data || !data.webappfind || // Validate format
-            data[0] === 'webapp-save') // Avoid our post below (other messages might be possible in the future which may also need to be excluded if your subsequent code makes assumptions on the type of message this is)
-    ) {
+    let type, pathID, content;
+    try {
+        ({type, pathID, content} = data); // May throw if data is not an object
+        if (origin !== location.origin || // We are only interested in a message sent as though within this URL by our browser add-on
+            type === 'save') // Avoid our post below (other messages might be possible in the future which may also need to be excluded if your subsequent code makes assumptions on the type of message this is)
+        ) {
+            return;
+        }
+    } catch (err) {
         return;
     }
-    if (data[0] === 'webapp-view') {
-        pathID = data[1]; // We remember this in case we are in "edit" mode which requires a pathID for saving back to disk
-        const fileContents = data[2];
-        // Do something with fileContents like adding them to a textarea, etc.
+    if (type === 'view') {
+        // We remember the pathID in case we are in "edit" mode which requires a pathID for saving back to disk
+        // Do something with `content` like adding it to a textarea, etc.
     }
 });
 ```
@@ -89,9 +93,11 @@ app would like to inform the user in some manner).
 // You should only call this when the user has indicated
 //  they wish to make a save such as if they have approved
 //  draft auto-saving or when manually clicking a save button.
-window.postMessage([
-    'webapp-save', previouslySavedPathIDFromViewEvent, dataToSaveAsString
-], location.origin);
+window.postMessage({
+    type: 'webapp-save',
+    pathID: previouslySavedPathIDFromViewEvent,
+    content: dataToSaveAsString
+}, location.origin);
 ```
 
 Only windows with the URI approved by the process detailed above
