@@ -118,23 +118,30 @@ backgroundScript.write('"Starting (in native app)"');
 
 const wss = new WebSocket.Server({ port: 8080 });
 wss.on('connection', (ws) => {
-    ws.on('message', async (msg) => {
+    ws.on('message', (msg) => {
+        function process (content) {
+            msgObj = Object.assign(msgObj, content); // {...msgObj, content};
+            ws.send(JSON.stringify(msgObj)); // Send back to client
+            backgroundScript.write(JSON.stringify(msgObj));
+        }
         let msgObj = JSON.parse(msg);
         const {method, file, binary} = msgObj;
         switch (method) {
         case 'client': {
-            let content;
             if ('file' in msgObj) { // Site may still wish args passed to it
                 // Todo: Document this and `binary` as command line
                 const options = binary ? null : 'utf8';
-                content = await readFile(file, options);
-                if (binary) {
-                    content = content.buffer;
-                }
+                // let content = await readFile(file, options);
+                readFile(file, options).then((content) => {
+                    if (binary) {
+                        content = content.buffer;
+                    }
+                    console.log('ccc', content);
+                    return content;
+                }).then(process);
+            } else {
+                process();
             }
-            msgObj = {...msgObj, content};
-            ws.send(JSON.stringify(msgObj)); // Send back to client
-            backgroundScript.write(JSON.stringify(msgObj));
             /*
             ['file', 'mode', 'site', 'args'].forEach((prop) => {
                 const value = msgObj[prop];
