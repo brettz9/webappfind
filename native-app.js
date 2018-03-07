@@ -1,5 +1,6 @@
 const nativeMessage = require('chrome-native-messaging');
 const WebSocket = require('ws');
+const uuid = require('uuid/v5');
 const {execFile, readFile} = require('./polyfills/promise-wrappers');
 
 const argv = require('minimist')(process.argv.slice(2));
@@ -120,7 +121,7 @@ const wss = new WebSocket.Server({ port: 8080 });
 wss.on('connection', (ws) => {
     ws.on('message', (msg) => {
         function process (content) {
-            msgObj = Object.assign(msgObj, content); // {...msgObj, content};
+            msgObj = Object.assign(msgObj, {content, pathID: uuid()}); // {...msgObj, content};
             ws.send(JSON.stringify(msgObj)); // Send back to client
             backgroundScript.write(JSON.stringify(msgObj));
         }
@@ -136,14 +137,13 @@ wss.on('connection', (ws) => {
                     if (binary) {
                         content = content.buffer;
                     }
-                    console.log('ccc', content);
                     return content;
                 }).then(process);
             } else {
                 process();
             }
             /*
-            ['file', 'mode', 'site', 'args'].forEach((prop) => {
+            ['file', 'mode', 'site', 'args', 'pathID'].forEach((prop) => {
                 const value = msgObj[prop];
                 if (value !== undefined) {
                     backgroundScript.write(JSON.stringify({prop, value}));

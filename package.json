@@ -81,20 +81,21 @@
     "chrome-native-messaging": "0.2.0",
     "minimist": "^1.2.0",
     "mkdirp": "^0.5.1",
+    "uuid": "^3.2.1",
     "webextension-polyfill": "^0.2.1",
-    "ws": "^4.1.0"
+    "ws": "^5.0.0"
   },
   "optionalDependencies": {
     "regedit": "2.2.7"
   },
   "devDependencies": {
     "chai": "^4.1.2",
-    "eslint": "4.18.1",
+    "eslint": "4.18.2",
     "eslint-config-standard": "11.0.0",
     "eslint-plugin-import": "2.9.0",
     "eslint-plugin-node": "6.0.1",
     "eslint-plugin-promise": "3.6.0",
     "eslint-plugin-standard": "3.0.1",
-    "mocha": "^5.0.1"
+    "mocha": "^5.0.3"
   }
 }
