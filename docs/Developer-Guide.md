@@ -45,7 +45,7 @@ window.addEventListener('message', function ({origin, data}) {
     try {
         ({type, pathID, content} = data); // May throw if data is not an object
         if (origin !== location.origin || // We are only interested in a message sent as though within this URL by our browser add-on
-            type === 'save') // Avoid our post below (other messages might be possible in the future which may also need to be excluded if your subsequent code makes assumptions on the type of message this is)
+            type === 'save' // Avoid our post below (other messages might be possible in the future which may also need to be excluded if your subsequent code makes assumptions on the type of message this is)
         ) {
             return;
         }
