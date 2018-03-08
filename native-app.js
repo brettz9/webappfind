@@ -1,7 +1,7 @@
 const nativeMessage = require('chrome-native-messaging');
 const WebSocket = require('ws');
 const uuid = require('uuid/v4');
-const {execFile, readFile} = require('./polyfills/promise-wrappers');
+const {execFile, readFile, writeFile} = require('./polyfills/promise-wrappers');
 
 const argv = require('minimist')(process.argv.slice(2));
 const {method} = argv;
@@ -105,8 +105,17 @@ backgroundScript.write('"Starting (in native app)"');
 const wss = new WebSocket.Server({ port: 8080 });
 wss.on('connection', (ws) => {
     function messageHandler (msg, push, done) {
-        // push(msg); // We'll just echo the message for now
-        done();
+        if (!msg || typeof msg !== 'object') {
+            push(msg); // We'll just echo the message
+            done();
+        } else {
+            processMessage(msg).then((ret) => {
+                if (ret) {
+                    push(ret);
+                }
+                done();
+            });
+        }
     }
     const input = new nativeMessage.Input();
     const transform = new nativeMessage.Transform(messageHandler);
@@ -121,24 +130,36 @@ wss.on('connection', (ws) => {
     function processMessage (msgObj) {
         function process (content) {
             Object.assign(msgObj, {content, pathID: uuid()});
-            ws.send(JSON.stringify(msgObj)); // Send back to client
-            output.write(msgObj);
+            return msgObj;
         }
-        const {method, file, binary} = msgObj;
+        const {method, file, binary, content} = msgObj;
         switch (method) {
+        case 'save': {
+            return writeFile(file, content).catch((error) => {
+                /*
+                if (error.code === 'EEXIST') {
+                    return;
+                }
+                */
+                return {saveEnd: true, error};
+            }).then(() => {
+                return {saveEnd: true};
+            });
+        }
+        case 'read':
         case 'client': {
             if ('file' in msgObj) { // Site may still wish args passed to it
                 // Todo: Document this and `binary` as command line
                 const options = binary ? null : 'utf8';
                 // let content = await readFile(file, options);
-                readFile(file, options).then((content) => {
+                return readFile(file, options).then((content) => {
                     if (binary) {
                         content = content.buffer;
                     }
                     return content;
-                }).then(process);
-            } else {
-                process();
+                }).then(process).catch((error) => {
+                    return {method, error};
+                });
             }
             /*
             ['file', 'mode', 'site', 'args', 'pathID'].forEach((prop) => {
@@ -149,13 +170,16 @@ wss.on('connection', (ws) => {
                 }
             });
             */
-            break;
+            return process();
         }
         }
     }
     ws.on('message', (msg) => { // Strings or buffer
         const msgObj = JSON.parse(msg);
-        processMessage(msgObj);
+        processMessage(msgObj).then((msgObj) => {
+            ws.send(JSON.stringify(msgObj)); // Send back to client in case it might use
+            output.write(msgObj); // Send contents to add-on
+        });
     });
 });
 })();
