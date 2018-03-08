@@ -132,7 +132,7 @@ wss.on('connection', (ws) => {
             Object.assign(msgObj, {content, pathID: uuid()});
             return msgObj;
         }
-        const {method, file, binary, content} = msgObj;
+        const {method, file, binary, content, tabID, pathID} = msgObj;
         switch (method) {
         case 'save': {
             return writeFile(file, content).catch((error) => {
@@ -141,9 +141,9 @@ wss.on('connection', (ws) => {
                     return;
                 }
                 */
-                return {saveEnd: true, error};
+                return {saveEnd: true, tabID, pathID, error};
             }).then(() => {
-                return {saveEnd: true};
+                return {saveEnd: true, tabID, pathID};
             });
         }
         case 'read':
