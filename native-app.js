@@ -20,7 +20,7 @@ case 'client': {
     const ws = new WebSocket('ws://localhost:8080');
 
     ws.on('open', () => {
-        ws.send(JSON.stringify(argv));
+        ws.send(JSON.stringify(argv)); // Strings or buffer
     });
 
     ws.on('message', (data) => {
@@ -96,36 +96,34 @@ end getFile
 }
 }
 
-const input = new nativeMessage.Input();
-const transform = new nativeMessage.Transform(messageHandler);
-const output = new nativeMessage.Output();
-
-process.stdin
-    .pipe(input)
-    .pipe(transform)
-    .pipe(output)
-    .pipe(process.stdout);
-
-function messageHandler (msg, push, done) {
-    // We'll just echo the message for now
-    push(msg);
-    done();
-}
-
+/*
 const backgroundScript = new nativeMessage.Output();
 backgroundScript.pipe(process.stdout);
-
 backgroundScript.write('"Starting (in native app)"');
+*/
 
 const wss = new WebSocket.Server({ port: 8080 });
 wss.on('connection', (ws) => {
-    ws.on('message', (msg) => {
+    function messageHandler (msg, push, done) {
+        // push(msg); // We'll just echo the message for now
+        done();
+    }
+    const input = new nativeMessage.Input();
+    const transform = new nativeMessage.Transform(messageHandler);
+    const output = new nativeMessage.Output();
+
+    process.stdin
+        .pipe(input)
+        .pipe(transform)
+        .pipe(output)
+        .pipe(process.stdout);
+
+    function processMessage (msgObj) {
         function process (content) {
-            msgObj = Object.assign(msgObj, {content, pathID: uuid()}); // {...msgObj, content};
+            Object.assign(msgObj, {content, pathID: uuid()});
             ws.send(JSON.stringify(msgObj)); // Send back to client
-            backgroundScript.write(JSON.stringify(msgObj));
+            output.write(msgObj);
         }
-        let msgObj = JSON.parse(msg);
         const {method, file, binary} = msgObj;
         switch (method) {
         case 'client': {
@@ -154,6 +152,10 @@ wss.on('connection', (ws) => {
             break;
         }
         }
+    }
+    ws.on('message', (msg) => { // Strings or buffer
+        const msgObj = JSON.parse(msg);
+        processMessage(msgObj);
     });
 });
 })();
