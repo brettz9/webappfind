@@ -64,10 +64,10 @@ let ct = 0, ctr = 0, k = 0,
     paths = {};
 
 const on = () => {
-
+        return []; // TODO
     },
     emit = (type, obj) => {
-        browser.runtime.sendMessage(Object.assign(obj), {type});
+        browser.runtime.sendMessage(Object.assign(obj || {}, {type}));
     };
 const options = {};
 
