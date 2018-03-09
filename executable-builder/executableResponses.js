@@ -5,18 +5,18 @@
 (function () {
 'use strict';
 
-var chrome = require('chrome'),
+const chrome = require('chrome'),
     Cc = chrome.Cc,
     Ci = chrome.Ci,
     file = require('sdk/io/file'),
     system = require('sdk/system');
 
-function l(msg) {
+function l (msg) {
     console.log(msg);
 }
-function makeURI(aURL, aOriginCharset, aBaseURI) {
-  var ioService = Cc['@mozilla.org/network/io-service;1'].getService(Ci.nsIIOService);
-  return ioService.newURI(aURL, aOriginCharset || null, aBaseURI || null);
+function makeURI (aURL, aOriginCharset, aBaseURI) {
+    const ioService = Cc['@mozilla.org/network/io-service;1'].getService(Ci.nsIIOService);
+    return ioService.newURI(aURL, aOriginCharset || null, aBaseURI || null);
 }
 
 function getHardFile (dir) {
@@ -31,14 +31,13 @@ function getHardPath (dir) {
 }
 
 function createProcess (aNsIFile, args, observer, emit) {
-    var process = Cc['@mozilla.org/process/util;1'].createInstance(Ci.nsIProcess);
-    observer = (emit && observer && observer.observe) ?
-        observer :
-        {observe: function (aSubject, aTopic, data) {}};
-	process.init(aNsIFile);
+    const process = Cc['@mozilla.org/process/util;1'].createInstance(Ci.nsIProcess);
+    observer = (emit && observer && observer.observe)
+        ? observer
+        : {observe: function (aSubject, aTopic, data) {}};
+    process.init(aNsIFile);
     process.runAsync(args, args.length, observer);
 }
-
 
 /*
 In case we decide to create profiles on behalf of the user (without the need to visit the profile manager)
@@ -50,15 +49,15 @@ http://kb.mozillazine.org/Profiles.ini_file
 
 exports.createProfile = function (name) {
     // https://developer.mozilla.org/en-US/docs/XPCOM_Interface_Reference/nsIToolkitProfileService#createProfile%28%29
-    var toolkitProfileService = Cc['@mozilla.org/toolkit/profile-service;1'].createInstance(Ci.nsIToolkitProfileService);
+    const toolkitProfileService = Cc['@mozilla.org/toolkit/profile-service;1'].createInstance(Ci.nsIToolkitProfileService);
     toolkitProfileService.createProfile(null, null, name); // aRootDir, aTempDir, aName
     return true;
 };
 
 exports.getProfiles = function () {
     // Instead cycle over profiles.ini (within "%appdata%/Mozilla/Firefox/")
-    var profileObj,
-        profiles = [],
+    let profileObj;
+    const profiles = [],
         toolkitProfileService = Cc['@mozilla.org/toolkit/profile-service;1'].createInstance(Ci.nsIToolkitProfileService),
         profileObjs = toolkitProfileService.profiles;
     while (profileObjs.hasMoreElements()) {
@@ -70,14 +69,14 @@ exports.getProfiles = function () {
 };
 
 function getFirefoxExecutable () {
-    var file = getHardFile('CurProcD');
+    let file = getHardFile('CurProcD');
     file = file.parent; // Otherwise, points to "browser" subdirectory
     file.append('firefox.exe');
     return file;
 }
 
 exports.manageProfiles = function (cb) {
-    var file = getFirefoxExecutable();
+    const file = getFirefoxExecutable();
     createProcess(file, ['-P', '-no-remote'], cb);
 };
 
@@ -88,7 +87,7 @@ exports.manageProfiles = function (cb) {
 * @see {@link http://mxr.mozilla.org/mozilla-central/source/xpcom/io/nsDirectoryServiceDefs.h}
 */
 exports.getHardPaths = function (emit) {
-    var profD = system.pathFor('ProfD'),
+    const profD = system.pathFor('ProfD'),
         ex = file.join(profD, 'executables');
     if (!file.exists(ex)) {
         file.mkpath(ex);
@@ -107,8 +106,7 @@ exports.getHardPaths = function (emit) {
 };
 
 exports.autocompleteURLHistory = function (data, emit) {
-    var i, node, result, cont,
-        historyService = Cc['@mozilla.org/browser/nav-history-service;1'].getService(Ci.nsINavHistoryService),
+    const historyService = Cc['@mozilla.org/browser/nav-history-service;1'].getService(Ci.nsINavHistoryService),
         // No query options set will get all history, sorted in database order,
         // which is nsINavHistoryQueryOptions.SORT_BY_NONE.
         options = historyService.getNewQueryOptions(),
@@ -116,6 +114,7 @@ exports.autocompleteURLHistory = function (data, emit) {
         userVal = data.value,
         optValues = [],
         optIcons = [];
+    let i, node, result, cont;
 
     query.uriIsPrefix = true;
     options.maxResults = 20;
@@ -129,7 +128,7 @@ exports.autocompleteURLHistory = function (data, emit) {
         cont = result.root;
         cont.containerOpen = true;
 
-        for (i = 0; i < cont.childCount; i ++) {
+        for (i = 0; i < cont.childCount; i++) {
             node = cont.getChild(i);
             // "node" attributes contains the information (e.g. URI, title, time, icon...)
             // see : https://developer.mozilla.org/en/nsINavHistoryResultNode
@@ -140,9 +139,8 @@ exports.autocompleteURLHistory = function (data, emit) {
         // Close container when done
         // see : https://developer.mozilla.org/en/nsINavHistoryContainerResultNode
         cont.containerOpen = false;
-    }
-    catch(e) {
-        // l('autocompleteURLHistory error: '+e);
+    } catch (err) {
+        // l('autocompleteURLHistory error: ' + err);
     }
 
     return {
@@ -164,16 +162,16 @@ exports.saveTemplate = function (data, emit) {
                getService(Ci.nsIProperties).get('ProfD', Ci.nsIFile);
     profD.append(data.fileName);
     */
-    var ws,
-        profD = system.pathFor('ProfD'),
+    const profD = system.pathFor('ProfD'),
         ec = file.join(profD, 'executable-creator'),
         template = file.join(profD, 'executable-creator', data.fileName + '.html'),
         lastTemplate = data.lastTemplate ? file.join(profD, 'executable-creator', data.lastTemplate + '.html') : null;
+
     if (!file.exists(ec)) {
         file.mkpath(ec);
     }
 
-    ws = file.open(template, 'w');
+    const ws = file.open(template, 'w');
     ws.writeAsync(data.content, function () {
         if (lastTemplate) { // Currently not in use
             file.remove(lastTemplate);
@@ -183,7 +181,7 @@ exports.saveTemplate = function (data, emit) {
 };
 
 exports.deleteTemplate = function (data, emit) {
-    var profD = system.pathFor('ProfD'),
+    const profD = system.pathFor('ProfD'),
         ec = file.join(profD, 'executable-creator'),
         template = file.join(profD, 'executable-creator', data.fileName + '.html');
     if (!file.exists(ec)) {
@@ -197,7 +195,7 @@ exports.deleteTemplate = function (data, emit) {
 };
 
 exports.getTemplate = function (data, emit) {
-    var profD = system.pathFor('ProfD'),
+    const profD = system.pathFor('ProfD'),
         // ec = file.join(profD, 'executable-creator'),
         template = file.join(profD, 'executable-creator', data.fileName + '.html'),
         rs = file.open(template, 'r');
@@ -208,7 +206,7 @@ exports.getTemplate = function (data, emit) {
 };
 
 exports.getTemplates = function (emit) {
-    var profD = system.pathFor('ProfD'),
+    const profD = system.pathFor('ProfD'),
         ec = file.join(profD, 'executable-creator');
     if (!file.exists(ec)) {
         file.mkpath(ec);
@@ -232,26 +230,28 @@ function stripQuotes (str) {
 // Todo: Otherwise complete and test
 function createBatchForShortcutCreation (data, emit) {
     if (!data.shortcutPath) {
-        throw 'A shortcut path must be supplied to createBatchForShortcutCreation()';
+        throw new Error('A shortcut path must be supplied to createBatchForShortcutCreation()');
     }
 
-    var shortcutPath = data.shortcutPath,
+    const {
+            shortcutPath,
+            profileName, // OPTIONAL
+            description = 'Firefox Shortcut',
+            iconPath, // OPTIONAL
+            hotKey, // OPTIONAL // Todo: Give user a non-textual way to input
+            /*
+            1 Activates and displays a window. If the window is minimized or maximized, the system restores it to its original size and position.
+            3 Activates the window and displays it as a maximized window.
+            7 Minimizes the window and activates the next top-level window.
+            */
+            windowStyle = '1',
+            webappdoc, // Todo: convert to native path if in file:// form; handle differently if a URL or desktop file and support URLs in WebAppFind!
+            // Todo: If user opts for (dynamic) webappdoc, do some simple checking for HTTP(S) and if it is, change the argument to webappurl instead
+            webappurl,
+            webappmode,
+            webappcustommode
+        } = data,
         ff = getFirefoxExecutable().path,
-        profileName = data.profileName, // OPTIONAL
-        description = data.description || 'Firefox Shortcut',
-        iconPath = data.iconPath, // OPTIONAL
-        hotKey = data.hotKey, // OPTIONAL // Todo: Give user a non-textual way to input
-        /*
-        1 Activates and displays a window. If the window is minimized or maximized, the system restores it to its original size and position.
-        3 Activates the window and displays it as a maximized window.
-        7 Minimizes the window and activates the next top-level window.
-        */
-        windowStyle = data.windowStyle || '1',
-        webappdoc = data.webappdoc, // Todo: convert to native path if in file:// form; handle differently if a URL or desktop file and support URLs in WebAppFind!
-        // Todo: If user opts for (dynamic) webappdoc, do some simple checking for HTTP(S) and if it is, change the argument to webappurl instead
-        webappurl = data.webappurl,
-        webappmode = data.webappmode,
-        webappcustommode = data.webappcustommode,
         ffDir = ff.parent.path,
         batch = ':::set WshShell = WScript.CreateObject("WScript.Shell")\n' +
         ':::set oShellLink = WshShell.CreateShortcut(' + batchQuote(shortcutPath) + ')\n' +
@@ -285,17 +285,16 @@ function createBatchForShortcutCreation (data, emit) {
 * @example ['-P', '-no-remote']
 */
 exports.cmd = function (data) {
-    var cmdDir = getHardFile('SysD');
+    const cmdDir = getHardFile('SysD');
     cmdDir.append('cmd.exe');
     createProcess(cmdDir, data.args, data);
 };
 
-
 function buildSED (userSED) {
     // Possible values from http://www.mdgx.com/INF_web/cdfinfo.htm
-    var defaultSED = [
+    const defaultSED = [
         {Version: { // Does order within a section matter (or between sections)?
-            Class:'IEXPRESS',
+            Class: 'IEXPRESS',
             SEDVersion: '3'
         }},
         {Options: {
@@ -356,9 +355,9 @@ function buildSED (userSED) {
         };
     }
     function addUserSections (userSectionObject) {
-        var subsec, subsecs,
-            userSectionName = getSectionName(userSectionObject),
+        const userSectionName = getSectionName(userSectionObject),
             defaultSEDIdx = defaultSED.findIndex(findSection(userSectionName));
+        let subsec, subsecs;
         if (defaultSEDIdx !== -1) {
             subsecs = userSectionObject[userSectionName];
             for (subsec in subsecs) {
@@ -366,15 +365,14 @@ function buildSED (userSED) {
                     defaultSED[defaultSEDIdx][userSectionName][subsec] = subsecs[subsec];
                 }
             }
-        }
-        else {
+        } else {
             defaultSED.push(userSectionObject);
         }
     }
     function sedSerializer (str, sectionObject) {
-        var sub,
-            sectionName = getSectionName(sectionObject),
-            subObj = sectionObject[sectionName],
+        const sectionName = getSectionName(sectionObject),
+            subObj = sectionObject[sectionName];
+        let sub,
             ret = str + '[' + sectionName + ']\n';
         for (sub in subObj) {
             if (subObj[sub] !== undefined) { // Give chance for user to delete a default
@@ -391,19 +389,20 @@ function buildSED (userSED) {
 }
 
 exports.saveExecutables = function (data, emit) {
-    var sed,
-        templateName = data.templateName,
-        description = data.description,
+    const templateName = data.templateName,
         executableNames = data.executableNames,
-        dirPaths = data.dirPaths,
+        dirPaths = data.dirPaths;
+    /*
+    let sed,
+        description = data.description,
         preserveShortcuts = data.preserveShortcuts,
         convertToExes = data.convertToExes,
         pinApps = data.pinApps,
         sedPreserves = data.sedPreserves,
         batchPreserves = data.batchPreserves;
+    */
     executableNames.forEach(function (exeName, i) {
-        var sed,
-            baseName = exeName.replace(/\.exe$/, ''),
+        const baseName = exeName.replace(/\.exe$/, ''),
             batName = baseName + '.bat',
             dirPath = dirPaths[i].replace(/\\$/, '') + '\\';
         exeName = baseName + '.exe';
@@ -411,7 +410,7 @@ exports.saveExecutables = function (data, emit) {
         // Todo: only create batch if there isn't one there already
         createBatchForShortcutCreation(data, emit);
         // Todo: only build a new SED file if there isn't one there already
-        sed = buildSED([
+        const sed = buildSED([
             {Strings: {
                 TargetName: batchQuote(dirPath + exeName),
                 FriendlyName: batchQuote(templateName),
@@ -428,10 +427,9 @@ exports.saveExecutables = function (data, emit) {
     });
 };
 
-
 // THE REMAINING WAS COPIED FROM filebrowser-enhanced fileBrowserResponses.js (RETURN ALL MODIFICATIONS THERE)
 function getFile (path) {
-    var localFile = Cc['@mozilla.org/file/local;1'].createInstance(Ci.nsILocalFile);
+    const localFile = Cc['@mozilla.org/file/local;1'].createInstance(Ci.nsILocalFile);
     localFile.initWithPath(path);
     return localFile;
 }
@@ -439,20 +437,16 @@ function getFile (path) {
 function picker (data, emit) {
     // Note: could use https://developer.mozilla.org/en-US/docs/Extensions/Using_the_DOM_File_API_in_chrome_code
     //         but this appears to be less feature rich
-    var dir,
-        dirPath = data.dirPath,
-        selector = data.selector,
-        selectFolder = data.selectFolder,
-        defaultExtension = data.defaultExtension,
+    const {dirPath, selector, selectFolder, defaultExtension} = data,
         windowMediator = Cc['@mozilla.org/appshell/window-mediator;1'].getService(Ci.nsIWindowMediator),
         nsIFilePicker = Ci.nsIFilePicker,
         fp = Cc['@mozilla.org/filepicker;1'].createInstance(nsIFilePicker);
-
+    let dir;
     if (!selectFolder) {
         fp.defaultExtension = defaultExtension;
-        //fp.appendFilter('ICO (.ico)', '*.ico');
-        //fp.appendFilter('SVG (.svg)', '*.svg');
-        //fp.appendFilter('Icon file', '*.ico; *.svg');
+        // fp.appendFilter('ICO (.ico)', '*.ico');
+        // fp.appendFilter('SVG (.svg)', '*.svg');
+        // fp.appendFilter('Icon file', '*.ico; *.svg');
         if (defaultExtension === 'ico') {
             fp.appendFilter('Icon file', '*.ico');
         }
@@ -463,19 +457,18 @@ function picker (data, emit) {
             dir = Cc['@mozilla.org/file/local;1'].createInstance(Ci.nsIFile);
             dir.initWithPath(dirPath);
             fp.displayDirectory = dir;
-        }
-        catch(e) {
-            l('initWithPath error: '+ e);
+        } catch (err) {
+            l('initWithPath error: ' + err);
         }
     }
     fp.init(
         windowMediator.getMostRecentWindow(null),
-        selectFolder ? "Pick a folder for the executable" : "Pick an icon file",
+        selectFolder ? 'Pick a folder for the executable' : 'Pick an icon file',
         selectFolder ? nsIFilePicker.modeGetFolder : nsIFilePicker.modeOpen
     );
 
     fp.open({done: function (rv) {
-        var file, path,
+        let file, path,
             res = '';
         if (rv === nsIFilePicker.returnOK || rv === nsIFilePicker.returnReplace) {
             file = fp.file;
@@ -484,48 +477,42 @@ function picker (data, emit) {
         }
         if (selectFolder) {
             emit('dirPickResult', {path: res, selector: selector, selectFolder: selectFolder});
-        }
-        else {
+        } else {
             emit('filePickResult', {path: res, selector: selector});
         }
         return false;
     }});
-    /*
-    var rv = fp.show();
+    /* var rv = fp.show();
     if (rv == nsIFilePicker.returnOK || rv == nsIFilePicker.returnReplace) {
         var file = fp.file;
         var path = fp.file.path;
 
-    }*/
+    } */
 }
 
 exports.dirPick = picker;
 exports.filePick = picker;
 
-
 exports.reveal = function (path) {
-    var localFile = getFile(path);
+    const localFile = getFile(path);
     localFile.reveal();
 };
 
 exports.autocompleteValues = function (data, emit) {
-
-    var optValues,
-        userVal = data.value,
+    const userVal = data.value,
         dir = file.dirname(userVal),
         base = file.basename(userVal);
+    let optValues;
 
     if (file.exists(userVal)) {
         if (userVal.match(/(?:\/|\\)$/)) {
             optValues = file.list(userVal).map(function (fileInDir) {
                 return file.join(userVal, fileInDir);
             });
-        }
-        else {
+        } else {
             optValues = [userVal];
         }
-    }
-    else if (file.exists(dir)) {
+    } else if (file.exists(dir)) {
         optValues = file.list(dir).filter(function (fileInDir) {
             return fileInDir.indexOf(base) === 0;
         }).map(function (fileInDir) {
@@ -533,26 +520,20 @@ exports.autocompleteValues = function (data, emit) {
         });
     }
 
-
-    optValues = data.dirOnly ?
-        optValues.filter(function (optValue) {
+    optValues = data.dirOnly
+        ? optValues.filter(function (optValue) {
             try {
                 return getFile(optValue).isDirectory();
-            }
-            catch (e) {
+            } catch (err) {
                 return false;
             }
-        }) :
-        optValues;
+        })
+        : optValues;
 
     return {
         listID: data.listID,
         optValues: optValues,
         userVal: userVal // Just for debugging on the other side
     };
-
 };
-
-
-
 }());

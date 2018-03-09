@@ -12,10 +12,19 @@
         "96": "icons/icon96.png"
     },
 
+    "default_locale": "en",
+    "browser_action": {
+        "browser_style": true,
+        "default_area": "navbar",
+        "default_icon": "/executable-builder/executable.svg",
+        "default_title": "__MSG_browserActionTitle__",
+        "default_popup": "/executable-builder/index.html"
+    },
+
     "background": {
         "scripts": [
-            "polyfills/browser-polyfill.js",
-            "lib/background.js"
+            "/polyfills/browser-polyfill.js",
+            "/lib/background.js"
         ]
     },
 
