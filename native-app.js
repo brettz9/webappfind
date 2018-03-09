@@ -102,78 +102,103 @@ backgroundScript.pipe(process.stdout);
 backgroundScript.write('"Starting (in native app)"');
 */
 
-const wss = new WebSocket.Server({ port: 8080 });
-wss.on('connection', (ws) => {
-    function messageHandler (msg, push, done) {
-        if (!msg || typeof msg !== 'object') {
-            push(msg); // We'll just echo the message
+const input = new nativeMessage.Input();
+const transform = new nativeMessage.Transform(messageHandler);
+const output = new nativeMessage.Output();
+process.stdin
+    .pipe(input)
+    .pipe(transform)
+    .pipe(output)
+    .pipe(process.stdout);
+
+function messageHandler (msg, push, done) {
+    output.write('message handler' + msg);
+    if (!msg || typeof msg !== 'object') {
+        push(msg); // We'll just echo the message
+        done();
+    } else {
+        processMessage(msg).then((ret) => {
+            if (ret) {
+                push(ret);
+            }
             done();
-        } else {
-            processMessage(msg).then((ret) => {
-                if (ret) {
-                    push(ret);
-                }
-                done();
-            });
-        }
+        });
     }
-    const input = new nativeMessage.Input();
-    const transform = new nativeMessage.Transform(messageHandler);
-    const output = new nativeMessage.Output();
+}
 
-    process.stdin
-        .pipe(input)
-        .pipe(transform)
-        .pipe(output)
-        .pipe(process.stdout);
-
-    function processMessage (msgObj) {
-        function process (content) {
-            Object.assign(msgObj, {content, pathID: uuid()});
-            return msgObj;
-        }
-        const {method, file, binary, content, tabID, pathID} = msgObj;
-        switch (method) {
-        case 'save': {
-            return writeFile(file, content).catch((error) => {
-                /*
-                if (error.code === 'EEXIST') {
-                    return;
-                }
-                */
-                return {saveEnd: true, tabID, pathID, error};
-            }).then(() => {
-                return {saveEnd: true, tabID, pathID};
-            });
-        }
-        case 'read':
-        case 'client': {
-            if ('file' in msgObj) { // Site may still wish args passed to it
-                // Todo: Document this and `binary` as command line
-                const options = binary ? null : 'utf8';
-                // let content = await readFile(file, options);
-                return readFile(file, options).then((content) => {
-                    if (binary) {
-                        content = content.buffer;
-                    }
-                    return content;
-                }).then(process).catch((error) => {
-                    return {method, error};
+function processMessage (msgObj) {
+    function process (content) {
+        Object.assign(msgObj, {content, pathID: uuid()});
+        return msgObj;
+    }
+    output.write('"eval1"');
+    const {method, file, binary, content, tabID, pathID} = msgObj;
+    switch (method) {
+    case 'nodeEval': {
+        output.write('"Node eval"');
+        const {i, string, tabID} = msgObj;
+        let result;
+        try {
+            result = eval(string); // eslint-disable-line no-eval
+            if (typeof result === 'function') {
+                result = result();
+            }
+            if (result && typeof result.then === 'function') {
+                return result.then((result) => {
+                    return {nodeEval: true, i, result};
+                }).catch((error) => {
+                    return {nodeEval: true, i, error};
                 });
             }
-            /*
-            ['file', 'mode', 'site', 'args', 'pathID'].forEach((prop) => {
-                const value = msgObj[prop];
-                if (value !== undefined) {
-                    backgroundScript.write(JSON.stringify({prop, value}));
-                    // ws.send(JSON.stringify({prop, value})); // Send back to client
-                }
-            });
-            */
-            return process();
+        } catch (error) {
+            return Promise.resolve({nodeEval: true, i, tabID, error});
         }
-        }
+        return Promise.resolve({nodeEval: true, i, tabID, result});
     }
+    case 'save': {
+        return writeFile(file, content).catch((error) => {
+            /*
+            if (error.code === 'EEXIST') {
+                return;
+            }
+            */
+            return {saveEnd: true, tabID, pathID, error};
+        }).then(() => {
+            return {saveEnd: true, tabID, pathID};
+        });
+    }
+    case 'read':
+    case 'client': {
+        if ('file' in msgObj) { // Site may still wish args passed to it
+            // Todo: Document this and `binary` as command line
+            const options = binary ? null : 'utf8';
+            // let content = await readFile(file, options);
+            return readFile(file, options).then((content) => {
+                if (binary) {
+                    content = content.buffer;
+                }
+                return content;
+            }).then(process).catch((error) => {
+                return {method, error};
+            });
+        }
+        /*
+        ['file', 'mode', 'site', 'args', 'pathID'].forEach((prop) => {
+            const value = msgObj[prop];
+            if (value !== undefined) {
+                backgroundScript.write(JSON.stringify({prop, value}));
+                // ws.send(JSON.stringify({prop, value})); // Send back to client
+            }
+        });
+        */
+        return process();
+    }
+    }
+}
+
+const wss = new WebSocket.Server({ port: 8080 });
+wss.on('connection', (ws) => {
+    output.write('"Begin test"');
     ws.on('message', (msg) => { // Strings or buffer
         const msgObj = JSON.parse(msg);
         processMessage(msgObj).then((msgObj) => {
