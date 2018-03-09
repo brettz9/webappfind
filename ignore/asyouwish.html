@@ -9,7 +9,6 @@
                 return;
             }
             if (webappfind.evalReady) {
-                /*
                 window.postMessage({
                     webappfind: {
                         method: 'addonEval',
@@ -20,7 +19,6 @@
                         `
                     }
                 }, '*');
-                */
                 window.postMessage({
                     webappfind: {
                         method: 'nodeEval',
@@ -30,12 +28,12 @@
                     }
                 }, '*');
             } else {
-                console.log('got evaled result: ', webappfind);
+                alert('got evaled result: ' + JSON.stringify(webappfind, null, 2));
             }
         });
         </script>
     </head>
     <body>
-
+Right click to access context menu "Enable AsYouWish for this tab" and approve the dialogs.
     </body>
 </html>
