@@ -7,6 +7,8 @@
     "homepage_url": "https://github.com/brettz9/webappfind",
     "description": "Open desktop files into web apps",
 
+    "permissions": ["nativeMessaging", "<all_urls>"],
+
     "icons": {
         "48": "icons/icon48.png",
         "96": "icons/icon96.png"
@@ -33,7 +35,5 @@
             "id": "webappfind@brett-zamir.me",
             "strict_min_version": "54.0"
         }
-    },
-
-    "permissions": ["nativeMessaging", "<all_urls>"]
+    }
 }
