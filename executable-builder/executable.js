@@ -1,5 +1,5 @@
 /* eslint-env webextensions */
-/* globals jml, XMLSerializer, DOMParser, alert, confirm */
+/* globals jml, XMLSerializer, alert, confirm */
 /*
 Info:
 1. On building profile dir. for executables, see http://stackoverflow.com/questions/18711327/programmatically-create-firefox-profiles
@@ -53,21 +53,17 @@ function l (msg) {
     console.log(msg);
 }
 */
-if (document.querySelector('body') && document.querySelector('body').innerHTML.match(/\S/)) { // Don't add page (or its listeners) more than once
-    // l(body.innerHTML);
-    // alert('already a body'); // Happened with webappfind call
-    return;
-}
-
 let ct = 0, ctr = 0, k = 0,
     profiles = [],
     paths = {};
 
-const on = () => {
+const on = (msg, cb) => {
+        cb({firstChild: null}); // eslint-disable-line standard/no-callback-literal
         return []; // TODO
     },
     emit = (type, obj) => {
-        browser.runtime.sendMessage(Object.assign(obj || {}, {type}));
+        // TODO
+        // browser.runtime.sendMessage(Object.assign(obj || {}, {type}));
     };
 const options = {};
 
@@ -78,9 +74,11 @@ function $$ (sel) {
     return document.querySelectorAll(sel);
 }
 function templateExistsInMenu (val) {
+    /*
     return [].slice.call($('#templates')).some(function (option) {
         return option.text === val;
     });
+    */
 }
 function getHardPath (dir) {
     return paths[dir];
@@ -222,12 +220,16 @@ function getProfiles () {
 // BEGIN EVENT ATTACHMENT
 
 on('openOrCreateICOResponse', function (data) {
-    alert(data);
+    // alert(data);
 });
 
 // COPIED FROM filebrowser-enhanced directoryMod.js (RETURN ALL MODIFICATIONS THERE)
 on('autocompleteValuesResponse', function (data) {
     const datalist = document.getElementById(data.listID);
+    if (!datalist) {
+        // Todo: Remove this block after implemented
+        return;
+    }
     while (datalist.firstChild) {
         datalist.removeChild(datalist.firstChild);
     }
@@ -242,6 +244,10 @@ on('autocompleteValuesResponse', function (data) {
 
 on('autocompleteURLHistoryResponse', function (data) {
     const datalist = document.getElementById(data.listID);
+    if (!datalist) {
+        // Todo: Remove this block after implemented
+        return;
+    }
     while (datalist.firstChild) {
         datalist.removeChild(datalist.firstChild);
     }
@@ -257,16 +263,20 @@ on('autocompleteURLHistoryResponse', function (data) {
 });
 
 on('deleteTemplateResponse', function (data) {
+    /*
     $('#templates').remove([].slice.call($('#templates')).findIndex(function (option) {
         return option.text === data.fileName;
     }));
-    alert(data.message);
+    */
+    // alert(data.message);
 });
 
 on('getTemplateResponse', function (data) {
+    /*
     const dom = new DOMParser().parseFromString(data.content, 'application/xhtml+xml');
     // dom.documentElement.cloneNode(true);
     $('#dynamic').parentNode.replaceChild(dom.documentElement, $('#dynamic'));
+    */
 });
 
 function fileOrDirResult (data) {
@@ -280,10 +290,12 @@ on('filePickResult', fileOrDirResult);
 on('dirPickResult', fileOrDirResult);
 
 on('saveTemplateResult', function (data) {
+    /*
     if (!templateExistsInMenu(data.templateName)) {
         $('#templates').add(jml('option', [data.templateName]));
     }
-    alert(data.message);
+    */
+    // alert(data.message);
 });
 
 function init (templates) {
@@ -820,14 +832,19 @@ function init (templates) {
 
 // We could abstract this, but it's light enough for now to keep flexible
 on('getHardPathsResponse', function (pathData) {
+    console.log('11111');
     paths = pathData;
     on('getProfilesResponse', function (profileData) {
-        profiles = profileData;
+        // profiles = profileData;
+        profiles = [];
         on('getTemplatesResponse', function (templateData) {
-            while (document.body.firstChild) {
-                document.body.removeChild(document.body.firstChild);
+            if (document.body) {
+                while (document.body.firstChild) {
+                    document.body.removeChild(document.body.firstChild);
+                }
             }
-            init(templateData);
+            // Todo: init(templateData);
+            init([]);
         });
         emit('getTemplates');
     });
