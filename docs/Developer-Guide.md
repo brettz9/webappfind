@@ -60,8 +60,8 @@ window.addEventListener('message', function ({origin, data}) {
 ```
 
 Only windows with the URI approved by the process detailed above
-will be able to successfully receive such messages (and only for the
-supplied file).
+will be able to successfully receive such messages (and only for
+files explicitly supplied (in that session)).
 
 ### API: saving back to the originally supplied file path (for the "edit" mode only)
 
@@ -101,8 +101,10 @@ window.postMessage({
 ```
 
 Only windows with the URI approved by the process detailed above
-can successfully save such messages (and only for the supplied file).
+will be able to successfully save such messages (and only for
+files explicitly supplied (in that session)).
 
+<!--
 ### API: Obtaining a directory path
 
 If one adds something like the following Windows batch file:
@@ -161,7 +163,7 @@ similarly be used if placed in the "SendTo" folder to allow opening
 a right-clicked directory into the browser's file browser (including
 if you have overlaid its default browser with
 [filebrowser-enhanced](https://github.com/brettz9/filebrowser-enhanced)).
-
+-->
 ### Recognized file types and custom modes
 
 Although you are free to define your own file types and custom modes,
