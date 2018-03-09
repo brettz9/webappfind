@@ -79,6 +79,7 @@
   },
   "dependencies": {
     "chrome-native-messaging": "0.2.0",
+    "jamilih": "^0.30.0",
     "minimist": "^1.2.0",
     "mkdirp": "^0.5.1",
     "uuid": "^3.2.1",
