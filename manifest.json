@@ -7,7 +7,8 @@
     "homepage_url": "https://github.com/brettz9/webappfind",
     "description": "Open desktop files into web apps",
 
-    "permissions": ["nativeMessaging", "<all_urls>"],
+    "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self';",
+    "permissions": ["nativeMessaging", "contextMenus", "activeTab", "<all_urls>"],
 
     "icons": {
         "48": "icons/icon48.png",

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>AsYouWish demo</title>
+        <script defer="">
+        window.addEventListener('message', ({data: {webappfind}}) => {
+            console.log('got evaled result: ', webappfind);
+            if (webappfind.evalReady) {
+                window.postMessage({
+                    webappfind: {
+                        method: 'addonEval',
+                        string: `
+            browser.tabs.create({
+                url: 'https://en.wikipedia.org'
+            });
+                        `
+                    }
+                }, '*');
+            }
+        });
+        </script>
+    </head>
+    <body>
+
+    </body>
+</html>

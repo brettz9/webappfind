@@ -2,5 +2,9 @@
     "browserActionTitle": {
         "message": "WebAppFind",
         "description": "Title on toolbar"
+    },
+    "enable-asyouwish": {
+        "message": "Enable AsYouWish for this tab",
+        "description": "Whether to enable the privileged AsYouWish API for this tab"
     }
 }
