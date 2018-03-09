@@ -77,9 +77,6 @@ function $ (sel) {
 function $$ (sel) {
     return document.querySelectorAll(sel);
 }
-function toArray (arrLikeObj) {
-    return [].slice.call(arrLikeObj);
-}
 function templateExistsInMenu (val) {
     return [].slice.call($('#templates')).some(function (option) {
         return option.text === val;
@@ -300,7 +297,7 @@ function init (templates) {
             return;
         }
         if (pathBoxInput) {
-            if (toArray(target.nextElementSibling.classList).indexOf('pinAppHolder') > -1) {
+            if ([...target.nextElementSibling.classList].includes('pinAppHolder')) {
                 target.parentNode.removeChild(target.nextElementSibling);
             }
             if (val === getHardPath('TaskBar')) {
@@ -346,7 +343,7 @@ function init (templates) {
             e.charCode === 32 || // Space bar is found here
             [27, 13, 9, 32, 44, 16, 8, // Esc, Enter, Tab, Spacebar, PrtScn, Shift, Backspace (we really only need for space, enter, tab, and backspace here as the others don't do anything with keypress)
                 46, 35, 36, 33, 34, 37, 38, 39, 40, 93 // also prevent Del, End, Home, PgUp, PgDown, Arrows (left, up, right, down), ?
-            ].indexOf(e.keyCode) !== -1
+            ].includes(e.keyCode)
         ) {
             e.target.value = '';
         } else {
@@ -373,7 +370,7 @@ function init (templates) {
     });
 
     // Todo: Support keypress
-    window.addEventListener('click', function (e) {
+    window.addEventListener('click', function ({target}) {
         function toValue (item) {
             return item.value;
         }
@@ -382,21 +379,21 @@ function init (templates) {
             return prev;
         }
         function reduceCheckedValue (sel) {
-            return toArray($$(sel)).reduce(toCheckedValue, {});
+            return [...$$(sel)].reduce(toCheckedValue, {});
         }
         function reduceValue (sel) {
-            return toArray($$(sel)).map(toValue);
+            return [...$$(sel)].map(toValue);
         }
-        const dataset = e.target.dataset,
-            type = dataset.type,
-            dirPick = dataset.dirPick,
-            fileExtensionID = dataset.fileExtensionID,
-            pathBoxSelect = dataset.pathBoxSelect || (e.target.parentNode && e.target.parentNode.dataset && e.target.parentNode.dataset.pathBoxSelect),
-            pathInputID = dataset.pathInputID;
-        let holderID, parentHolderSel, input, nextSibling, selVal, templateName, ser, content,
+        const {dataset, parentNode} = target;
+        const {
+            type, dirPick, pathInputID, fileExtensionID
+        } = dataset;
+        const pathBoxSelect = dataset.pathBoxSelect ||
+            (parentNode && parentNode.dataset && parentNode.dataset.pathBoxSelect);
+        let content,
             keyEv, options, executableNames, dirPaths, preserveShortcuts, pinApps, convertToExes, sedPreserves, batchPreserves,
-            val = e.target.value,
-            id = e.target.id,
+            val = target.value,
+            id = target.id,
             sel = dataset.sel;
 
         if (dirPick) {
@@ -407,11 +404,11 @@ function init (templates) {
                 selectFolder: dirPick
             });
         } else if (pathInputID) {
-            holderID = 'pathBoxHolder' + pathInputID;
-            parentHolderSel = '#pathHolder';
+            const holderID = 'pathBoxHolder' + pathInputID;
+            const parentHolderSel = '#pathHolder';
             if (type === 'add') {
-                input = jml.apply(null, createPathInput());
-                nextSibling = $('#' + holderID).nextElementSibling;
+                const input = jml.apply(null, createPathInput());
+                const nextSibling = $('#' + holderID).nextElementSibling;
                 if (nextSibling) {
                     $(parentHolderSel).insertBefore(input, nextSibling);
                 } else {
@@ -433,11 +430,11 @@ function init (templates) {
             keyEv.initKeyEvent('input', true, true, document.defaultView, false, false, false, false, 13, 0);
             $('#pathBox' + pathBoxSelect).dispatchEvent(keyEv);
         } else if (fileExtensionID) {
-            holderID = 'fileExtensionInfoHolder' + fileExtensionID;
-            parentHolderSel = '#fileExtensionHolder';
+            const holderID = 'fileExtensionInfoHolder' + fileExtensionID;
+            const parentHolderSel = '#fileExtensionHolder';
             if (type === 'add') {
-                input = jml.apply(null, createFileExtensionControls());
-                nextSibling = $('#' + holderID).nextElementSibling;
+                const input = jml.apply(null, createFileExtensionControls());
+                const nextSibling = $('#' + holderID).nextElementSibling;
                 if (nextSibling) {
                     $(parentHolderSel).insertBefore(input, nextSibling);
                 } else {
@@ -450,7 +447,7 @@ function init (templates) {
                 $('#' + holderID).parentNode.removeChild($('#' + holderID));
             }
         } else if (sel) {
-            selVal = $(sel).value;
+            let selVal = $(sel).value;
             if (selVal.match(/^resource:/)) {
                 selVal = selVal.substring(0, selVal.lastIndexOf('/') + 1);
                 window.open(selVal, 'resource' + (k++));
@@ -460,10 +457,10 @@ function init (templates) {
                 emit('reveal', selVal);
             }
         } else {
-            if (e.target.nodeName.toLowerCase() === 'option') {
-                switch (e.target.parentNode.id) {
+            if (target.nodeName.toLowerCase() === 'option') {
+                switch (target.parentNode.id) {
                 case 'iconPathSelect': case 'profileNameSelect': case 'desktopFilePathSelect':
-                    id = e.target.parentNode.id;
+                    id = target.parentNode.id;
                     break;
                 default:
                     return;
@@ -513,11 +510,11 @@ function init (templates) {
                     return;
                 }
             case 'runCommands': // eslint-disable-line no-fallthrough
-                templateName = $('#templateName').value;
+                const templateName = $('#templateName').value;
                 if ($('#rememberTemplateChanges').checked &&
                     templateName !== '') {
                     // Save the file, over-writing any existing file
-                    ser = new XMLSerializer();
+                    const ser = new XMLSerializer();
                     ser.$formSerialize = true;
                     content = ser.serializeToString($('#dynamic'));
 
