@@ -1,0 +1,76 @@
+#main {
+	overflow:auto;
+	height: 650px;
+}
+#main.closed {
+	float: left;
+	width:99%;
+	padding-left: 1%;
+}
+#main.open {
+	float: left;
+	width:70%;
+}
+#names {
+	float: left;
+	width: 30%;
+}
+#selectNames {
+	width: 98%;
+	padding: 2%;
+}
+#showNames {position: fixed;}
+#command-name-section {clear:left;}
+
+#substitutions-explanation-container,
+#fileArguments {
+	padding-right: 1%;
+}
+#substitutions-explanation-container, #substitutions-used-container,
+#fileArguments, #URLArguments {
+	float: left;
+	width: 49.5%;
+}
+#substitutions-explanation, #substitutions-used,
+#executableTableContainer, #fileAndURLArgumentContainer {
+	overflow: auto;
+	border: 1px inset orange;
+}
+#executableTableContainer,
+#fileAndURLArgumentContainer {
+	height: 100px;
+}
+
+#substitutions-explanation {
+	height: 205px;
+}
+#substitutions-used {
+	/*height: 100px; Height to use if main explanatory text is before scrolling block*/
+	height: 205px;
+}
+.execution {
+	text-align:center;
+}
+.execution, .export {
+	float: left;
+	width: 50%;
+}
+
+#processExecuted {color: red;}
+.ei-files-revealButton, .ei-exe-revealButton {
+	border: none;
+	margin-left: 5px;
+	width: 25px;
+	background-color: transparent;
+	background-repeat: no-repeat;
+	background-size: 20px 20px;
+}
+
+/* Indent children of "optgroups" for multiple
+select widget except for the first item, "select all" */
+.ms-drop > ul > li:not(.group):not(:first-child) {
+    margin-left: 10px;
+}
+.hiddenContext {
+	font-style: italic;
+}
