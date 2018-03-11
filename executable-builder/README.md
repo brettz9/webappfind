@@ -82,11 +82,14 @@ can cover the entire range of functionality available in the UI.
         file associations with possible baked in meta-data that can
         be tweaked by the user (e.g., edit could be changed to read-only
         though read-only should probably not be changeable), using favicon if
-        no icon specified
+        no icon specified; if no file associations are available, only
+        show the option to create one's own executables from scratch
     1. Create desktop app (to communicate with native messaging app to use
         `windows` add-on privilege to open a dialog, asking which web
         app (that has previously advertised itself as supporting the
-        clicked on file type) the user wishes to open in).
+        clicked on file type) the user wishes to open in). If none
+        yet exist, provide explanation (and link to, or even parse,
+        a wiki to which sites can add their info for discovery?)
 
 # Todos
 
