@@ -9,26 +9,24 @@
 
     "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self';",
     "optional_permissions": [
-        "background",
         "bookmarks",
         "browserSettings",
         "clipboardRead",
         "clipboardWrite",
-        "contentSettings",
         "cookies",
-        "debugger",
         "geolocation",
         "history",
         "idle",
-        "management",
         "notifications",
-        "pageCapture",
         "tabs",
         "topSites",
         "webNavigation",
         "webRequest",
         "webRequestBlocking"
     ],
+    "$$$comment-optional-permissions": "`background`, `contentSettings`, `debugger`, `management`, `pageCapture` were giving console warnings",
+
+
     "permissions": ["nativeMessaging", "contextMenus", "activeTab", "<all_urls>",
 
 "unlimitedStorage",
@@ -46,10 +44,12 @@
 "proxy",
 "sessions",
 "storage",
-"tabHide",
 "theme"
 
     ],
+
+    "$$$comment-permissions": "`tabHide` is a permission we might add, but FF is currently giving warnings for it",
+
 
     "icons": {
         "48": "icons/icon48.png",
