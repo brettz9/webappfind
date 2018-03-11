@@ -70,6 +70,22 @@ Firefox in addition to Firefox's own flags.
 It is hoped that additional command line options will be added which
 can cover the entire range of functionality available in the UI.
 
+# To-dos for new Executable Builder (in WebAppFind)
+
+1. Adapt to-dos below for current realities of being within WebAppFind
+1. Allow sites to advertise (in `<meta>`?) a number of file extensions
+    (of a certain total limited byte size and number?) which they
+    support, so that the following can be done:
+    1. Pre-populate, in the browser action popup, a list of available
+        file associations with possible baked in meta-data that can
+        be tweaked by the user (e.g., edit could be changed to read-only
+        though read-only should probably not be changeable), using favicon if
+        no icon specified
+    1. Create desktop app (to communicate with native messaging app to use
+        `windows` add-on privilege to open a dialog, asking which web
+        app (that has previously advertised itself as supporting the
+        clicked on file type) the user wishes to open in).
+
 # Todos
 
 1. IMPORTANT: Upgrade my quick-and-dirty, ironically non-concern-separated
