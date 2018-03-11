@@ -47,7 +47,7 @@ for integrating with deeper Windows (and Linux) functionality? e.g., adding item
         1. Command line standards!!: http://technet.microsoft.com/en-us/library/ee156811.aspx
 1. Search for other 'todo' instances below
 */
-(() => {
+
 /*
 function l (msg) {
     console.log(msg);
@@ -832,7 +832,6 @@ function init (templates) {
 
 // We could abstract this, but it's light enough for now to keep flexible
 on('getHardPathsResponse', function (pathData) {
-    console.log('11111');
     paths = pathData;
     on('getProfilesResponse', function (profileData) {
         // profiles = profileData;
@@ -851,4 +850,17 @@ on('getHardPathsResponse', function (pathData) {
     emit('getProfiles');
 });
 emit('getHardPaths');
+
+(async () => {
+function flattenDepthOne (arrays) {
+    return [].concat(...arrays);
+}
+const metas = flattenDepthOne(await browser.tabs.executeScript({
+    allFrames: true,
+    code: `
+[...document.querySelectorAll('meta[name="webappfind"]')].map((m) => m.content)
+`,
+    runAt: 'document_end'
+}));
+console.log('metas-browser-action', metas);
 })();
