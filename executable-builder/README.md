@@ -85,6 +85,9 @@ can cover the entire range of functionality available in the UI.
         for other problems).
     1. Give warning if currently opened site doesn't advertise support
         but trying to open in it
+    1. Option for trusted sites (as with storage or notifications in
+        Chrome?) that are present as a bookmark, with notification
+        permissions, etc., to auto-add their file types to "Open with...".
     1. Pre-populate, in the browser action popup, a list of available
         file associations with possible baked in meta-data that can
         be tweaked by the user (e.g., edit could be changed to read-only
@@ -99,6 +102,8 @@ can cover the entire range of functionality available in the UI.
         clicked on file type) the user wishes to open in). If none
         yet exist, provide explanation (and link to, or even parse,
         a wiki to which sites can add their info for discovery?)
+        1. Option to disable recording of such data discovered at
+            various sites
 
 # Todos
 
