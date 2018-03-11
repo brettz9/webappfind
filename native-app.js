@@ -1,3 +1,4 @@
+const path = require('path');
 const nativeMessage = require('chrome-native-messaging');
 const WebSocket = require('ws');
 const uuid = require('uuid/v4');
@@ -110,6 +111,16 @@ process.stdin
     .pipe(transform)
     .pipe(output)
     .pipe(process.stdout);
+
+// https://github.com/NiklasGollenstede/native-ext/blob/master/browser.js#L128-L154
+const browser = {};
+if (process.env.MOZ_CRASHREPORTER_EVENTS_DIRECTORY) {
+    browser.profileDir = path.resolve(process.env.MOZ_CRASHREPORTER_EVENTS_DIRECTORY, '../..');
+} else {
+    throw new Error(`MOZ_CRASHREPORTER_EVENTS_DIRECTORY environment variable not set by Firefox`);
+    // either -P / -p "profile_name" or -profile "profile_path" (precedence?) default: FS.readFileSync('%AppData%\Mozilla\Firefox\profiles.ini').trim().split(/(?:\r\n?\n){2}/g).find(_=>_.includes('Default=1')).match(/Path=(.*))[1]
+}
+// output.write(browser.profileDir);
 
 function messageHandler (msg, push, done) {
     output.write('message handler' + msg);
