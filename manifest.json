@@ -18,16 +18,18 @@
         "history",
         "idle",
         "notifications",
-        "tabs",
         "topSites",
-        "webNavigation",
         "webRequest",
         "webRequestBlocking"
     ],
     "$$$comment-optional-permissions": "`background`, `contentSettings`, `debugger`, `management`, `pageCapture` were giving console warnings",
 
 
-    "permissions": ["nativeMessaging", "contextMenus", "activeTab", "<all_urls>",
+    "permissions": [
+
+        "nativeMessaging", "<all_urls>",
+
+        "contextMenus", "activeTab", "tabs", "webNavigation",
 
 "unlimitedStorage",
 
