@@ -76,6 +76,8 @@ can cover the entire range of functionality available in the UI.
 1. Allow sites to advertise (in `<meta>`?) a number of file extensions
     (of a certain total limited byte size and number?) which they
     support, so that the following can be done:
+    1. Have option to change icon when files are available (requires
+        (pseudo) content-script)
     1. Pre-populate, in the browser action popup, a list of available
         file associations with possible baked in meta-data that can
         be tweaked by the user (e.g., edit could be changed to read-only
