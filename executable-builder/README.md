@@ -76,6 +76,7 @@ can cover the entire range of functionality available in the UI.
 1. Allow sites to advertise (in `<meta>`?) a number of file extensions
     (of a certain total limited byte size and number?) which they
     support, so that the following can be done:
+    1. Add our format to <https://wiki.whatwg.org/wiki/MetaExtensions>
     1. Have option to change icon when files are available (requires
         (pseudo) content-script)
     1. Bake in a new command-line option to open into whatever the
