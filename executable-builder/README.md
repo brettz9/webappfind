@@ -80,6 +80,11 @@ can cover the entire range of functionality available in the UI.
         (pseudo) content-script)
     1. Bake in a new command-line option to open into whatever the
         current tab is opened to
+    1. Command line option to only return without error if the targeted
+        site has the `meta` elements (also ensure returning errors
+        for other problems).
+    1. Give warning if currently opened site doesn't advertise support
+        but trying to open in it
     1. Pre-populate, in the browser action popup, a list of available
         file associations with possible baked in meta-data that can
         be tweaked by the user (e.g., edit could be changed to read-only
