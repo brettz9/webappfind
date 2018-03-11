@@ -78,6 +78,8 @@ can cover the entire range of functionality available in the UI.
     support, so that the following can be done:
     1. Have option to change icon when files are available (requires
         (pseudo) content-script)
+    1. Bake in a new command-line option to open into whatever the
+        current tab is opened to
     1. Pre-populate, in the browser action popup, a list of available
         file associations with possible baked in meta-data that can
         be tweaked by the user (e.g., edit could be changed to read-only
