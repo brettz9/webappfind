@@ -375,8 +375,8 @@ function picker (data) {
 EB.dirPick = picker;
 EB.filePick = picker;
 
-EB.reveal = function (path) {
-    return getNodeJSON('reveal', path);
+EB.reveal = function (data) {
+    return getNodeJSON('reveal', data);
 };
 
 EB.autocompleteValues = function (data) {

@@ -141,15 +141,15 @@ const profilesINI = isWin
 
 const nodeJSONMethods = {
     execFile,
-    reveal () {
+    reveal ({fileName}) {
         if (isWin) {
-            // Explorer /select,filename
-        } else if (isMac) {
-            // open -R filename
-        } else {
-            // Todo: Get this (and other areas) working for Linux
-            // nautilus // Ubuntu
+            return execFile('Explorer', ['/select', fileName]);
         }
+        if (isMac) {
+            return execFile('open', ['-R', fileName]);
+        }
+        // Todo: Check this (and other areas) working for Linux
+        return execFile('nautilus', fileName); // Ubuntu
     },
     createProfile ({name}) {
         this._makeProfileDir(name).catch((err) => {
