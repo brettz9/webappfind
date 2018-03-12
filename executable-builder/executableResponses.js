@@ -366,12 +366,7 @@ EB.saveExecutables = function (data, emit) {
         dirPaths = data.dirPaths;
     /*
     let sed,
-        description = data.description,
-        preserveShortcuts = data.preserveShortcuts,
-        convertToExes = data.convertToExes,
-        pinApps = data.pinApps,
-        sedPreserves = data.sedPreserves,
-        batchPreserves = data.batchPreserves;
+        {description, preserveShortcuts, convertToExes, pinApps, sedPreserves, batchPreserves} = data;
     */
     executableNames.forEach(function (exeName, i) {
         const baseName = exeName.replace(/\.exe$/, ''),
@@ -400,14 +395,6 @@ EB.saveExecutables = function (data, emit) {
 };
 
 // THE REMAINING WAS COPIED FROM filebrowser-enhanced fileBrowserResponses.js (RETURN ALL MODIFICATIONS THERE)
-function getFile (path) {
-    /*
-    const localFile = Cc['@mozilla.org/file/local;1'].createInstance(Ci.nsILocalFile);
-    localFile.initWithPath(path);
-    return localFile;
-    */
-}
-
 function picker (data, emit) {
     /*
     // Note: could use https://developer.mozilla.org/en-US/docs/Extensions/Using_the_DOM_File_API_in_chrome_code
@@ -469,7 +456,7 @@ EB.dirPick = picker;
 EB.filePick = picker;
 
 EB.reveal = function (path) {
-    const localFile = getFile(path);
+    const localFile = (path);
     localFile.reveal();
 };
 
@@ -499,7 +486,7 @@ EB.autocompleteValues = function (data) {
     optValues = data.dirOnly
         ? optValues.filter(function (optValue) {
             try {
-                return getFile(optValue).isDirectory();
+                return (optValue).isDirectory();
             } catch (err) {
                 return false;
             }
