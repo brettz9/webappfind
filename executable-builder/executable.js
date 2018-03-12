@@ -65,11 +65,9 @@ function $$ (sel) {
     return document.querySelectorAll(sel);
 }
 function templateExistsInMenu (val) {
-    /*
-    return [].slice.call($('#templates')).some(function (option) {
+    return [...$('#templates').options].some((option) => {
         return option.text === val;
     });
-    */
 }
 function getHardPath (dir) {
     return paths[dir];
@@ -202,7 +200,7 @@ function createPathInput () {
 }
 
 function getProfiles () {
-    return profiles.reduce(function (opts, optVal) {
+    return profiles.reduce((opts, optVal) => {
         opts.push(['option', [optVal]]);
         return opts;
     }, []);
@@ -224,7 +222,7 @@ function autocompleteValuesResponse (data) {
     while (datalist.firstChild) {
         datalist.removeChild(datalist.firstChild);
     }
-    data.optValues.forEach(function (optValue) {
+    data.optValues.forEach((optValue) => {
         const option = jml('option', {
             // text: optValue,
             value: optValue
@@ -242,7 +240,7 @@ function autocompleteURLHistoryResponse (data) {
     while (datalist.firstChild) {
         datalist.removeChild(datalist.firstChild);
     }
-    data.optValues.forEach(function (optValue, i) {
+    data.optValues.forEach((optValue, i) => {
         const option = jml('option', {
             // text: optValue,
             value: optValue,
@@ -254,7 +252,7 @@ function autocompleteURLHistoryResponse (data) {
 }
 
 function deleteTemplateResponse ({fileName}) {
-    $('#templates').remove([].slice.call($('#templates')).findIndex(function (option) {
+    $('#templates').remove([...$('#templates').options].findIndex((option) => {
         return option.text === fileName;
     }));
     // alert(message);
@@ -403,7 +401,7 @@ function init () {
             const holderID = 'pathBoxHolder' + pathInputID;
             const parentHolderSel = '#pathHolder';
             if (type === 'add') {
-                const input = jml.apply(null, createPathInput());
+                const input = jml(...createPathInput());
                 const nextSibling = $('#' + holderID).nextElementSibling;
                 if (nextSibling) {
                     $(parentHolderSel).insertBefore(input, nextSibling);
@@ -429,7 +427,7 @@ function init () {
             const holderID = 'fileExtensionInfoHolder' + fileExtensionID;
             const parentHolderSel = '#fileExtensionHolder';
             if (type === 'add') {
-                const input = jml.apply(null, createFileExtensionControls());
+                const input = jml(...createFileExtensionControls());
                 const nextSibling = $('#' + holderID).nextElementSibling;
                 if (nextSibling) {
                     $(parentHolderSel).insertBefore(input, nextSibling);
@@ -565,7 +563,7 @@ function init () {
     document.body.appendChild(jml('div',
         [
             ['select', {id: 'templates'},
-                templates.reduce(function (opts, template) {
+                templates.reduce((opts, template) => {
                     opts.push(['option', [template]]);
                     return opts;
                 }, [
