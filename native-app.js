@@ -125,21 +125,51 @@ if (process.env.MOZ_CRASHREPORTER_EVENTS_DIRECTORY) {
 }
 directories.Desk = path.join(homedir, 'Desktop');
 const isWin = process.platform === 'win32';
+directories.Pict = isWin ? '%UserProfile%\\Pictures' : `${homedir}/Pictures`;
+directories.Docs = isWin ? '%UserProfile%\\Documents' : `${homedir}/Documents`;
+directories.AppData = isWin ? '%AppData%' : '~/Library/Application Support';
+directories.Progs = isWin ? '%ProgramFiles%' : '/Applications';
+if (isWin) {
+    directories.Strt = directories.AppData + '\\Microsoft\\Windows\\Start Menu';
+    directories.TaskBar = directories.AppData + '\\Microsoft\\Internet Explorer\\Quick Launch\\User Pinned\\TaskBar';
+}
 const profilesINI = isWin
     ? '%appdata%\\Mozilla\\Firefox\\profiles.ini'
     : `${homedir}/Library/Application Support/Firefox/profiles.ini`;
-if (isWin) {
-    directories.Strt = '%appdata%\\Microsoft\\Windows\\Start Menu';
-}
-directories.Pict = isWin ? '%UserProfile%\\Pictures' : `${homedir}/Pictures`;
-directories.Docs = isWin ? '%UserProfile%\\Documents' : `${homedir}/Documents`;
-// directories.AppData = isWin ? '%AppData%' : '~/Library/Application Support/Firefox/'; // Profiles are just in this subfolder with probably little reason to use this
-directories.Progs = isWin ? '%ProgramFiles%' : '/Applications';
 
 const nodeJSONMethods = {
     getProfiles () {
         return readFile(profilesINI, 'utf8').then((contents) => {
             return {profiles: ini.parse(contents)};
+        });
+    },
+    getHardPaths () {
+        return this._makeProfileDir('executables').then((Executable) => {
+            return Object.assign({Executable}, directories);
+        });
+    },
+    getFirefoxExecutableAndDir () {
+        return [path.join(
+            directories.Progs,
+            (isWin ? 'firefox.exe' : 'Firefox.app')
+        ), directories.Progs];
+    },
+    saveTemplate ({templateName, content, lastTemplate}) {
+        const profD = directories.ProfD,
+            template = path.join(profD, 'executable-creator', templateName + '.html');
+        lastTemplate = lastTemplate ? path.join(profD, 'executable-creator', lastTemplate + '.html') : null;
+
+        return this._makeECDir().then((ec) => {
+            return writeFile(template, content);
+        }).then(() => {
+            if (lastTemplate) { // Currently not in use
+                return writeFile(lastTemplate);
+            }
+        }).then(() => {
+            return {
+                templateName,
+                message: 'Save successful! in (' + template + ')'
+            };
         });
     },
     deleteTemplate ({fileName}) {
@@ -157,18 +187,20 @@ const nodeJSONMethods = {
     },
     getTemplate ({fileName}) {
         const profD = directories.ProfD,
-            // ec = file.join(profD, 'executable-creator'),
             template = path.join(profD, 'executable-creator', fileName + '.html');
         return readFile(template, 'utf8');
     },
-    _makeECDir () {
+    _makeProfileDir (dir) {
         const profD = directories.ProfD,
-            ec = path.join(profD, 'executable-creator');
-        return mkdirp(ec).catch((err) => {
+            pDir = path.join(profD, dir);
+        return mkdirp(pDir).catch((err) => {
             if (err.code !== 'EEXIST') {
                 throw err;
             }
-        }).then(() => ec);
+        }).then(() => pDir);
+    },
+    _makeECDir () {
+        return this._makeProfileDir('executable-creator');
     },
     getTemplates () {
         return this._makeECDir().then((ec) => {

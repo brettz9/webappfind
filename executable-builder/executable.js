@@ -513,8 +513,8 @@ function init () {
                     content = ser.serializeToString($('#dynamic'));
 
                     EB.saveTemplate({
-                        fileName: templateName,
-                        content: content
+                        templateName,
+                        content
                     }).then(saveTemplateResult);
                 }
 

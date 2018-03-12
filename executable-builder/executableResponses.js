@@ -15,15 +15,6 @@ function getHardFile (dir) {
     // return Cc['@mozilla.org/file/directory_service;1'].getService(Ci.nsIProperties).get(dir, Ci.nsIFile);
 }
 
-/*
-/**
-* @see getHardPaths()
-*
-function getHardPath (dir) {
-    return getHardFile(dir).path;
-}
-*/
-
 function createProcess (aNsIFile, args, observer, emit) {
     /*
     const process = Cc['@mozilla.org/process/util;1'].createInstance(Ci.nsIProcess);
@@ -60,46 +51,20 @@ EB.getProfiles = function () {
     });
 };
 
-function getFirefoxExecutable () {
-    let file = getHardFile('CurProcD');
-    file = file.parent; // Otherwise, points to "browser" subdirectory
-    file.append('firefox.exe');
-    return file;
+function getFirefoxExecutableAndDir () {
+    return getNodeJSON('getFirefoxExecutableAndDir');
 }
 
-EB.manageProfiles = function (cb) {
-    const file = getFirefoxExecutable();
+EB.manageProfiles = async function (cb) {
+    const [file] = await getFirefoxExecutableAndDir();
     createProcess(file, ['-P', '-no-remote'], cb);
 };
 
-/**
-* @todo Ensure OS independent
-* @see {@link https://developer.mozilla.org/en-US/docs/Code_snippets/File_I_O#Getting_files_in_special_directories}
-* @see {@link http://mxr.mozilla.org/mozilla-central/source/xpcom/io/nsAppDirectoryServiceDefs.h}
-* @see {@link http://mxr.mozilla.org/mozilla-central/source/xpcom/io/nsDirectoryServiceDefs.h}
-*/
-EB.getHardPaths = function (emit) {
-    /*
-    const profD = predefinedDirectories.ProfD,
-        ex = file.join(profD, 'executables');
-    if (!file.exists(ex)) {
-        file.mkpath(ex);
-    }
-
-    // Todo: handle QuickLaunch for before Win7: C:\Documents and Settings\UserName\Application Data\Microsoft\Internet Explorer\Quick Launch
-    return ['Desk', 'Strt', 'Progs', 'AppData', 'Pict', 'ProfD', 'Docs'].reduce(function (obj, name) {
-        obj[name] = getHardPath(name);
-        return obj;
-    }, {
-        // Todo: Make OS-specific
-        Programs: getHardFile('CurProcD').parent.parent.path, // Is this reliable?
-        TaskBar: getHardPath('AppData') + '\\Microsoft\\Internet Explorer\\Quick Launch\\User Pinned\\TaskBar',
-        Executable: ex
-    });
-    */
+EB.getHardPaths = function () {
+    return getNodeJSON('getHardPaths');
 };
 
-EB.autocompleteURLHistory = function (data, emit) {
+EB.autocompleteURLHistory = function (data) {
     /*
     const historyService = Cc['@mozilla.org/browser/nav-history-service;1'].getService(Ci.nsINavHistoryService),
         // No query options set will get all history, sorted in database order,
@@ -151,31 +116,8 @@ EB.openOrCreateICO = function () {
     return 'Not yet implemented';
 };
 
-EB.saveTemplate = function (data, emit) {
-    // get profile directory
-    /*
-    var profD = Cc['@mozilla.org/file/directory_service;1'].
-               getService(Ci.nsIProperties).get('ProfD', Ci.nsIFile);
-    profD.append(data.fileName);
-    */
-    /*
-    const profD = predefinedDirectories.ProfD,
-        ec = file.join(profD, 'executable-creator'),
-        template = file.join(profD, 'executable-creator', data.fileName + '.html'),
-        lastTemplate = data.lastTemplate ? file.join(profD, 'executable-creator', data.lastTemplate + '.html') : null;
-
-    if (!file.exists(ec)) {
-        file.mkpath(ec);
-    }
-
-    const ws = file.open(template, 'w');
-    ws.writeAsync(data.content, function () {
-        if (lastTemplate) { // Currently not in use
-            file.remove(lastTemplate);
-        }
-        emit('saveTemplateResult', {templateName: data.fileName, message: 'Save successful! in (' + template + ')'});
-    });
-    */
+EB.saveTemplate = function (data) {
+    return getNodeJSON('saveTemplate', data);
 };
 
 EB.deleteTemplate = function (data) {
@@ -191,7 +133,9 @@ EB.getTemplates = function () {
 };
 
 function batchQuote (item) {
-    return '"' + item.replace(/"/g, '\\"') + '"';
+    return `"${
+        item.replace(/"/g, '\\"')
+    }"`;
 }
 
 function stripQuotes (str) {
@@ -200,7 +144,7 @@ function stripQuotes (str) {
 
 // Todo: Option to preserve shortcut, SED, and, if converting to exe, the batch file
 // Todo: Otherwise complete and test
-function createBatchForShortcutCreation (data, emit) {
+async function createBatchForShortcutCreation (data) {
     if (!data.shortcutPath) {
         throw new Error('A shortcut path must be supplied to createBatchForShortcutCreation()');
     }
@@ -223,8 +167,7 @@ function createBatchForShortcutCreation (data, emit) {
             webappmode,
             webappcustommode
         } = data,
-        ff = getFirefoxExecutable().path,
-        ffDir = ff.parent.path,
+        [ff, ffDir] = await getFirefoxExecutableAndDir(),
         batch = ':::set WshShell = WScript.CreateObject("WScript.Shell")\n' +
         ':::set oShellLink = WshShell.CreateShortcut(' + batchQuote(shortcutPath) + ')\n' +
         ':::oShellLink.TargetPath = ' + batchQuote(ff) + '\n' +
@@ -360,7 +303,7 @@ function buildSED (userSED) {
     return serializeSED(defaultSED);
 }
 
-EB.saveExecutables = function (data, emit) {
+EB.saveExecutables = function (data) {
     const templateName = data.templateName,
         executableNames = data.executableNames,
         dirPaths = data.dirPaths;
@@ -368,14 +311,14 @@ EB.saveExecutables = function (data, emit) {
     let sed,
         {description, preserveShortcuts, convertToExes, pinApps, sedPreserves, batchPreserves} = data;
     */
-    executableNames.forEach(function (exeName, i) {
+    executableNames.forEach(async function (exeName, i) {
         const baseName = exeName.replace(/\.exe$/, ''),
             batName = baseName + '.bat',
             dirPath = dirPaths[i].replace(/\\$/, '') + '\\';
         exeName = baseName + '.exe';
 
         // Todo: only create batch if there isn't one there already
-        createBatchForShortcutCreation(data, emit);
+        await createBatchForShortcutCreation(data);
         // Todo: only build a new SED file if there isn't one there already
         const sed = buildSED([
             {Strings: {
@@ -395,7 +338,7 @@ EB.saveExecutables = function (data, emit) {
 };
 
 // THE REMAINING WAS COPIED FROM filebrowser-enhanced fileBrowserResponses.js (RETURN ALL MODIFICATIONS THERE)
-function picker (data, emit) {
+function picker (data) {
     /*
     // Note: could use https://developer.mozilla.org/en-US/docs/Extensions/Using_the_DOM_File_API_in_chrome_code
     //         but this appears to be less feature rich
