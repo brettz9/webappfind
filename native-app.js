@@ -1,10 +1,9 @@
-const fs = require('fs');
 const path = require('path');
 const ini = require('ini');
 const nativeMessage = require('chrome-native-messaging');
 const WebSocket = require('ws');
 const uuid = require('uuid/v4');
-const {execFile, readFile, writeFile} = require('./polyfills/promise-wrappers');
+const {execFile, readFile, writeFile, mkdirp, readdir} = require('./polyfills/promise-wrappers');
 
 const argv = require('minimist')(process.argv.slice(2));
 const {method} = argv;
@@ -119,13 +118,16 @@ process.stdin
 const directories = {};
 const homedir = require('os').homedir();
 if (process.env.MOZ_CRASHREPORTER_EVENTS_DIRECTORY) {
-    directories.profD = path.resolve(process.env.MOZ_CRASHREPORTER_EVENTS_DIRECTORY, '../..');
+    directories.ProfD = path.resolve(process.env.MOZ_CRASHREPORTER_EVENTS_DIRECTORY, '../..');
 } else {
     throw new Error(`MOZ_CRASHREPORTER_EVENTS_DIRECTORY environment variable not set by Firefox`);
     // either -P / -p "profile_name" or -profile "profile_path" (precedence?) default: fs.readFileSync('%AppData%\Mozilla\Firefox\profiles.ini').trim().split(/(?:\r\n?\n){2}/g).find(_=>_.includes('Default=1')).match(/Path=(.*))[1]
 }
 directories.Desk = path.join(homedir, 'Desktop');
 const isWin = process.platform === 'win32';
+const profilesINI = isWin
+    ? '%appdata%\\Mozilla\\Firefox\\profiles.ini'
+    : `${homedir}/Library/Application Support/Firefox/profiles.ini`;
 if (isWin) {
     directories.Strt = '%appdata%\\Microsoft\\Windows\\Start Menu';
 }
@@ -134,14 +136,52 @@ directories.Docs = isWin ? '%UserProfile%\\Documents' : `${homedir}/Documents`;
 // directories.AppData = isWin ? '%AppData%' : '~/Library/Application Support/Firefox/'; // Profiles are just in this subfolder with probably little reason to use this
 directories.Progs = isWin ? '%ProgramFiles%' : '/Applications';
 
-output.write({directories});
-const profiles = ini.parse(
-    fs.readFileSync(`${homedir}/Library/Application Support/Firefox/profiles.ini`, 'utf-8')
-);
-output.write({profiles});
+const nodeJSONMethods = {
+    getProfiles () {
+        return readFile(profilesINI, 'utf8').then((contents) => {
+            return {profiles: ini.parse(contents)};
+        });
+    },
+    deleteTemplate ({fileName}) {
+        // Todo: Finish
+        /*
+        const profD = directories.ProfD,
+            ec = path.join(profD, 'executable-creator'),
+            template = path.join(profD, 'executable-creator', fileName + '.html');
+        if (!file.exists(ec)) {
+            file.mkpath(ec);
+        }
+        if (!file.exists(template)) {
+            return {message: 'File file (' + template + ') + does not exist', fileName};
+        }
+        file.remove(template);
+        return {message: 'File removed!', fileName};
+        */
+    },
+    getTemplate ({fileName}) {
+        const profD = directories.ProfD,
+            // ec = file.join(profD, 'executable-creator'),
+            template = path.join(profD, 'executable-creator', fileName + '.html');
+        return readFile(template, 'utf8');
+    },
+    getTemplates () {
+        const profD = directories.ProfD,
+            ec = path.join(profD, 'executable-creator');
+        return mkdirp(ec).catch((err) => {
+            if (err.code !== 'EEXIST') {
+                throw err;
+            }
+        }).then(() => {
+            return readdir(ec);
+        }).then((files) => {
+            return files
+                .filter((f) => f.match(/\.html$/))
+                .map((f) => f.replace(/\.html$/, ''));
+        });
+    }
+};
 
 function messageHandler (msg, push, done) {
-    output.write('message handler' + msg);
     if (!msg || typeof msg !== 'object') {
         push(msg); // We'll just echo the message
         done();
@@ -160,12 +200,18 @@ function processMessage (msgObj) {
         Object.assign(msgObj, {content, pathID: uuid()});
         return msgObj;
     }
-    output.write('"eval1"');
-    const {method, file, binary, content, tabID, pathID} = msgObj;
+    const {i, method, args, file, binary, content, tabID, pathID, nodeJSON} = msgObj;
+    if (nodeJSON) {
+        return nodeJSONMethods[method](...args).catch((error) => {
+            return {i, method, error, nodeJSON: true};
+        }).then((result) => {
+            return {i, method, result, nodeJSON: true};
+        });
+    }
     switch (method) {
     case 'nodeEval': {
         output.write('"Node eval"');
-        const {i, string, tabID} = msgObj;
+        const {string, tabID} = msgObj;
         let result;
         try {
             result = eval(string); // eslint-disable-line no-eval

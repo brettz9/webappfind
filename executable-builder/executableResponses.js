@@ -9,9 +9,7 @@ function l (msg) {
     console.log(msg);
 }
 
-const backgroundPage = browser.extension.getBackgroundPage();
-console.log(1111, backgroundPage.getPredefinedDirectories());
-console.log(1112, backgroundPage.getBrowserProfiles());
+const {getNodeJSON} = browser.extension.getBackgroundPage();
 
 function getHardFile (dir) {
     // return Cc['@mozilla.org/file/directory_service;1'].getService(Ci.nsIProperties).get(dir, Ci.nsIFile);
@@ -55,19 +53,11 @@ EB.createProfile = function (name) {
 };
 
 EB.getProfiles = function () {
-    // Instead cycle over profiles.ini (within "%appdata%/Mozilla/Firefox/")
-    const profiles = [];
-    /*
-    let profileObj;
-    const toolkitProfileService = Cc['@mozilla.org/toolkit/profile-service;1'].createInstance(Ci.nsIToolkitProfileService),
-        profileObjs = toolkitProfileService.profiles;
-    while (profileObjs.hasMoreElements()) {
-        profileObj = profileObjs.getNext();
-        profileObj.QueryInterface(Ci.nsIToolkitProfile);
-        profiles.push(profileObj.name);
-    }
-    */
-    return profiles;
+    return getNodeJSON('getProfiles').then(({profiles}) => {
+        return Object.entries(profiles).filter(([p, profile]) => {
+            return p.startsWith('Profile');
+        }).map(([, profile]) => profile.Name);
+    });
 };
 
 function getFirefoxExecutable () {
@@ -90,7 +80,7 @@ EB.manageProfiles = function (cb) {
 */
 EB.getHardPaths = function (emit) {
     /*
-    const profD = system.pathFor('ProfD'),
+    const profD = predefinedDirectories.ProfD,
         ex = file.join(profD, 'executables');
     if (!file.exists(ex)) {
         file.mkpath(ex);
@@ -169,7 +159,7 @@ EB.saveTemplate = function (data, emit) {
     profD.append(data.fileName);
     */
     /*
-    const profD = system.pathFor('ProfD'),
+    const profD = predefinedDirectories.ProfD,
         ec = file.join(profD, 'executable-creator'),
         template = file.join(profD, 'executable-creator', data.fileName + '.html'),
         lastTemplate = data.lastTemplate ? file.join(profD, 'executable-creator', data.lastTemplate + '.html') : null;
@@ -188,48 +178,16 @@ EB.saveTemplate = function (data, emit) {
     */
 };
 
-EB.deleteTemplate = function (data, emit) {
-    /*
-    const profD = system.pathFor('ProfD'),
-        ec = file.join(profD, 'executable-creator'),
-        template = file.join(profD, 'executable-creator', data.fileName + '.html');
-    if (!file.exists(ec)) {
-        file.mkpath(ec);
-    }
-    if (!file.exists(template)) {
-        return {message: 'File file (' + template + ') + does not exist', fileName: data.fileName};
-    }
-    file.remove(template);
-    return {message: 'File removed!', fileName: data.fileName};
-    */
+EB.deleteTemplate = function (data) {
+    return getNodeJSON('deleteTemplate', data);
 };
 
-EB.getTemplate = function (data, emit) {
-    /*
-    const profD = system.pathFor('ProfD'),
-        // ec = file.join(profD, 'executable-creator'),
-        template = file.join(profD, 'executable-creator', data.fileName + '.html'),
-        rs = file.open(template, 'r');
-    return {
-        content: rs.read(),
-        fileName: data.fileName
-    };
-    */
+EB.getTemplate = function (data) {
+    return getNodeJSON('getTemplate', data);
 };
 
-EB.getTemplates = function (emit) {
-    /*
-    const profD = system.pathFor('ProfD'),
-        ec = file.join(profD, 'executable-creator');
-    if (!file.exists(ec)) {
-        file.mkpath(ec);
-    }
-    return file.list(ec).filter(function (files) {
-        return files.match(/\.html$/);
-    }).map(function (f) {
-        return f.replace(/\.html$/, '');
-    });
-    */
+EB.getTemplates = function () {
+    return getNodeJSON('getTemplates');
 };
 
 function batchQuote (item) {

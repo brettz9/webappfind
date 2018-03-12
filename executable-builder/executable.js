@@ -1,5 +1,5 @@
 /* eslint-env webextensions */
-/* globals EB, jml, XMLSerializer, alert, confirm */
+/* globals EB, jml, DOMParser, XMLSerializer, alert, confirm */
 /*
 Info:
 1. On building profile dir. for executables, see http://stackoverflow.com/questions/18711327/programmatically-create-firefox-profiles
@@ -254,20 +254,16 @@ function autocompleteURLHistoryResponse (data) {
 }
 
 function deleteTemplateResponse (data) {
-    /*
     $('#templates').remove([].slice.call($('#templates')).findIndex(function (option) {
         return option.text === data.fileName;
     }));
-    */
     // alert(data.message);
 }
 
-function getTemplateResponse (data) {
-    /*
-    const dom = new DOMParser().parseFromString(data.content, 'application/xhtml+xml');
+function getTemplateResponse (content) {
+    const dom = new DOMParser().parseFromString(content, 'application/xhtml+xml');
     // dom.documentElement.cloneNode(true);
     $('#dynamic').parentNode.replaceChild(dom.documentElement, $('#dynamic'));
-    */
 }
 
 function fileOrDirResult (data) {
