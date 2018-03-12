@@ -1,6 +1,8 @@
 // executableResponses.js - Executable Builder's module
 // author: brettz9
-/* globals exports, require */
+/* globals require */
+
+var EB = {}; // eslint-disable-line no-var
 
 (function () {
 'use strict';
@@ -13,10 +15,6 @@ const chrome = require('chrome'),
 
 function l (msg) {
     console.log(msg);
-}
-function makeURI (aURL, aOriginCharset, aBaseURI) {
-    const ioService = Cc['@mozilla.org/network/io-service;1'].getService(Ci.nsIIOService);
-    return ioService.newURI(aURL, aOriginCharset || null, aBaseURI || null);
 }
 
 function getHardFile (dir) {
@@ -47,14 +45,14 @@ https://developer.mozilla.org/en-US/docs/XPCOM_Interface_Reference/nsIToolkitPro
 http://kb.mozillazine.org/Profiles.ini_file
 */
 
-exports.createProfile = function (name) {
+EB.createProfile = function (name) {
     // https://developer.mozilla.org/en-US/docs/XPCOM_Interface_Reference/nsIToolkitProfileService#createProfile%28%29
     const toolkitProfileService = Cc['@mozilla.org/toolkit/profile-service;1'].createInstance(Ci.nsIToolkitProfileService);
     toolkitProfileService.createProfile(null, null, name); // aRootDir, aTempDir, aName
     return true;
 };
 
-exports.getProfiles = function () {
+EB.getProfiles = function () {
     // Instead cycle over profiles.ini (within "%appdata%/Mozilla/Firefox/")
     let profileObj;
     const profiles = [],
@@ -75,7 +73,7 @@ function getFirefoxExecutable () {
     return file;
 }
 
-exports.manageProfiles = function (cb) {
+EB.manageProfiles = function (cb) {
     const file = getFirefoxExecutable();
     createProcess(file, ['-P', '-no-remote'], cb);
 };
@@ -86,7 +84,7 @@ exports.manageProfiles = function (cb) {
 * @see {@link http://mxr.mozilla.org/mozilla-central/source/xpcom/io/nsAppDirectoryServiceDefs.h}
 * @see {@link http://mxr.mozilla.org/mozilla-central/source/xpcom/io/nsDirectoryServiceDefs.h}
 */
-exports.getHardPaths = function (emit) {
+EB.getHardPaths = function (emit) {
     const profD = system.pathFor('ProfD'),
         ex = file.join(profD, 'executables');
     if (!file.exists(ex)) {
@@ -105,7 +103,7 @@ exports.getHardPaths = function (emit) {
     });
 };
 
-exports.autocompleteURLHistory = function (data, emit) {
+EB.autocompleteURLHistory = function (data, emit) {
     const historyService = Cc['@mozilla.org/browser/nav-history-service;1'].getService(Ci.nsINavHistoryService),
         // No query options set will get all history, sorted in database order,
         // which is nsINavHistoryQueryOptions.SORT_BY_NONE.
@@ -119,7 +117,7 @@ exports.autocompleteURLHistory = function (data, emit) {
     query.uriIsPrefix = true;
     options.maxResults = 20;
     try {
-        query.uri = makeURI(userVal); // May throw here (would be better
+        query.uri = (userVal); // makeURI: May throw here (would be better
         // if this were pure strings rather than nsiURI but now at least
         // it works when user types valid URI which is only part of a larger one)
 
@@ -151,11 +149,11 @@ exports.autocompleteURLHistory = function (data, emit) {
     };
 };
 
-exports.openOrCreateICO = function () {
+EB.openOrCreateICO = function () {
     return 'Not yet implemented';
 };
 
-exports.saveTemplate = function (data, emit) {
+EB.saveTemplate = function (data, emit) {
     // get profile directory
     /*
     var profD = Cc['@mozilla.org/file/directory_service;1'].
@@ -180,7 +178,7 @@ exports.saveTemplate = function (data, emit) {
     });
 };
 
-exports.deleteTemplate = function (data, emit) {
+EB.deleteTemplate = function (data, emit) {
     const profD = system.pathFor('ProfD'),
         ec = file.join(profD, 'executable-creator'),
         template = file.join(profD, 'executable-creator', data.fileName + '.html');
@@ -194,7 +192,7 @@ exports.deleteTemplate = function (data, emit) {
     return {message: 'File removed!', fileName: data.fileName};
 };
 
-exports.getTemplate = function (data, emit) {
+EB.getTemplate = function (data, emit) {
     const profD = system.pathFor('ProfD'),
         // ec = file.join(profD, 'executable-creator'),
         template = file.join(profD, 'executable-creator', data.fileName + '.html'),
@@ -205,7 +203,7 @@ exports.getTemplate = function (data, emit) {
     };
 };
 
-exports.getTemplates = function (emit) {
+EB.getTemplates = function (emit) {
     const profD = system.pathFor('ProfD'),
         ec = file.join(profD, 'executable-creator');
     if (!file.exists(ec)) {
@@ -284,7 +282,7 @@ function createBatchForShortcutCreation (data, emit) {
 * @param {object} Object with properties "args" and "observe"
 * @example ['-P', '-no-remote']
 */
-exports.cmd = function (data) {
+EB.cmd = function (data) {
     const cmdDir = getHardFile('SysD');
     cmdDir.append('cmd.exe');
     createProcess(cmdDir, data.args, data);
@@ -388,7 +386,7 @@ function buildSED (userSED) {
     return serializeSED(defaultSED);
 }
 
-exports.saveExecutables = function (data, emit) {
+EB.saveExecutables = function (data, emit) {
     const templateName = data.templateName,
         executableNames = data.executableNames,
         dirPaths = data.dirPaths;
@@ -490,15 +488,15 @@ function picker (data, emit) {
     } */
 }
 
-exports.dirPick = picker;
-exports.filePick = picker;
+EB.dirPick = picker;
+EB.filePick = picker;
 
-exports.reveal = function (path) {
+EB.reveal = function (path) {
     const localFile = getFile(path);
     localFile.reveal();
 };
 
-exports.autocompleteValues = function (data, emit) {
+EB.autocompleteValues = function (data, emit) {
     const userVal = data.value,
         dir = file.dirname(userVal),
         base = file.basename(userVal);

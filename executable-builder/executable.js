@@ -1,5 +1,5 @@
 /* eslint-env webextensions */
-/* globals jml, XMLSerializer, alert, confirm */
+/* globals EB, jml, XMLSerializer, alert, confirm */
 /*
 Info:
 1. On building profile dir. for executables, see http://stackoverflow.com/questions/18711327/programmatically-create-firefox-profiles
@@ -48,23 +48,14 @@ for integrating with deeper Windows (and Linux) functionality? e.g., adding item
 1. Search for other 'todo' instances below
 */
 
+(async () => {
 /*
 function l (msg) {
     console.log(msg);
 }
 */
-let ct = 0, ctr = 0, k = 0,
-    profiles = [],
-    paths = {};
+let ct = 0, ctr = 0, k = 0;
 
-const on = (msg, cb) => {
-        cb({firstChild: null}); // eslint-disable-line standard/no-callback-literal
-        return []; // TODO
-    },
-    emit = (type, obj) => {
-        // TODO
-        // browser.runtime.sendMessage(Object.assign(obj || {}, {type}));
-    };
 const options = {};
 
 function $ (sel) {
@@ -219,12 +210,12 @@ function getProfiles () {
 
 // BEGIN EVENT ATTACHMENT
 
-on('openOrCreateICOResponse', function (data) {
-    // alert(data);
-});
+function openOrCreateICOResponse () {
+    // TODO:
+}
 
 // COPIED FROM filebrowser-enhanced directoryMod.js (RETURN ALL MODIFICATIONS THERE)
-on('autocompleteValuesResponse', function (data) {
+function autocompleteValuesResponse (data) {
     const datalist = document.getElementById(data.listID);
     if (!datalist) {
         // Todo: Remove this block after implemented
@@ -240,9 +231,9 @@ on('autocompleteValuesResponse', function (data) {
         });
         datalist.appendChild(option);
     });
-});
+}
 
-on('autocompleteURLHistoryResponse', function (data) {
+function autocompleteURLHistoryResponse (data) {
     const datalist = document.getElementById(data.listID);
     if (!datalist) {
         // Todo: Remove this block after implemented
@@ -260,24 +251,24 @@ on('autocompleteURLHistoryResponse', function (data) {
         });
         datalist.appendChild(option);
     });
-});
+}
 
-on('deleteTemplateResponse', function (data) {
+function deleteTemplateResponse (data) {
     /*
     $('#templates').remove([].slice.call($('#templates')).findIndex(function (option) {
         return option.text === data.fileName;
     }));
     */
     // alert(data.message);
-});
+}
 
-on('getTemplateResponse', function (data) {
+function getTemplateResponse (data) {
     /*
     const dom = new DOMParser().parseFromString(data.content, 'application/xhtml+xml');
     // dom.documentElement.cloneNode(true);
     $('#dynamic').parentNode.replaceChild(dom.documentElement, $('#dynamic'));
     */
-});
+}
 
 function fileOrDirResult (data) {
     const path = data.path,
@@ -286,19 +277,19 @@ function fileOrDirResult (data) {
         $(selector).value = path;
     }
 }
-on('filePickResult', fileOrDirResult);
-on('dirPickResult', fileOrDirResult);
+const filePickResult = fileOrDirResult;
+const dirPickResult = fileOrDirResult;
 
-on('saveTemplateResult', function (data) {
+function saveTemplateResult (data) {
     /*
     if (!templateExistsInMenu(data.templateName)) {
         $('#templates').add(jml('option', [data.templateName]));
     }
     */
     // alert(data.message);
-});
+}
 
-function init (templates) {
+function init () {
     window.addEventListener('input', function ({target}) {
         const id = target.id,
             val = target.value,
@@ -323,11 +314,11 @@ function init (templates) {
                     ]
                 ), target.nextElementSibling);
             }
-            emit('autocompleteValues', {
+            EB.autocompleteValues({
                 value: val,
                 listID: target.getAttribute('list'),
                 dirOnly: true
-            });
+            }).then(autocompleteValuesResponse);
         } else if (id === 'customMode') {
             target.value = target.value.replace(/[^a-z]/, '');
         } else if (id === 'urlBox' || id === 'documentURLBox') {
@@ -336,15 +327,15 @@ function init (templates) {
                 return;
             }
             */
-            emit('autocompleteURLHistory', {
+            EB.autocompleteURLHistory({
                 value: val,
                 listID: target.getAttribute('list')
-            });
+            }).then(autocompleteURLHistoryResponse);
         } else if (id === 'desktopFilePath' || id === 'iconPath') {
-            emit('autocompleteValues', {
+            EB.autocompleteValues({
                 value: val,
                 listID: target.getAttribute('list')
-            });
+            }).then(autocompleteValuesResponse);
         }
     });
 
@@ -377,12 +368,12 @@ function init (templates) {
             }
         } else if (target.id === 'templates') {
             // $('#templateName').value = val;
-            emit('getTemplate', {fileName: val});
+            EB.getTemplate({fileName: val}).then(getTemplateResponse);
         }
     });
 
     // Todo: Support keypress
-    window.addEventListener('click', function ({target}) {
+    window.addEventListener('click', async function ({target}) {
         function toValue (item) {
             return item.value;
         }
@@ -405,16 +396,16 @@ function init (templates) {
         let content,
             keyEv, options, executableNames, dirPaths, preserveShortcuts, pinApps, convertToExes, sedPreserves, batchPreserves,
             val = target.value,
-            id = target.id,
-            sel = dataset.sel;
+            {id} = target,
+            {sel} = dataset;
 
         if (dirPick) {
             // Value can be blank (if user just wishes to browse)
-            emit('dirPick', {
+            EB.dirPick({
                 dirPath: $('#pathBox' + dirPick).value,
                 selector: '#pathBox' + dirPick,
                 selectFolder: dirPick
-            });
+            }).then(dirPickResult);
         } else if (pathInputID) {
             const holderID = 'pathBoxHolder' + pathInputID;
             const parentHolderSel = '#pathHolder';
@@ -466,7 +457,7 @@ function init (templates) {
                 return;
             }
             if (selVal) {
-                emit('reveal', selVal);
+                EB.reveal(selVal);
             }
         } else {
             if (target.nodeName.toLowerCase() === 'option') {
@@ -485,7 +476,7 @@ function init (templates) {
                     alert('In order to delete a template, you must choose one in the pull-down');
                     return;
                 }
-                emit('deleteTemplate', {fileName: val});
+                EB.deleteTemplate({fileName: val}).then(deleteTemplateResponse);
                 break;
             case 'desktopFilePathSelect': case 'iconPathSelect':
                 if (!val) {
@@ -496,20 +487,20 @@ function init (templates) {
             case 'desktopFilePick': case 'iconPick':
                 // Value can be blank (if user just wishes to browse)
                 sel = '#' + id.replace(/Pick$/, 'Path');
-                emit('filePick', {
+                EB.filePick({
                     dirPath: $(sel).value,
                     selector: sel,
                     defaultExtension: 'ico' // Todo: Fix for desktopFilePick
-                });
+                }).then(filePickResult);
                 break;
             case 'openOrCreateICO':
-                emit('openOrCreateICO');
+                EB.openOrCreateICO().then(openOrCreateICOResponse);
                 break;
             case 'profileNameSelect':
                 $('#profileName').value = val;
                 break;
             case 'manageProfiles':
-                emit('manageProfiles');
+                EB.manageProfiles();
                 break;
             case 'createExecutable':
                 // Todo: Auto-name executable and auto-add path by default
@@ -530,10 +521,10 @@ function init (templates) {
                     ser.$formSerialize = true;
                     content = ser.serializeToString($('#dynamic'));
 
-                    emit('saveTemplate', {
+                    EB.saveTemplate({
                         fileName: templateName,
                         content: content
-                    });
+                    }).then(saveTemplateResult);
                 }
 
                 executableNames = reduceValue('.executableName');
@@ -546,13 +537,13 @@ function init (templates) {
                 batchPreserves = reduceCheckedValue('.batchPreserve');
 
                 options = {
-                    executableNames: executableNames,
-                    dirPaths: dirPaths,
-                    preserveShortcuts: preserveShortcuts,
-                    convertToExes: convertToExes,
-                    pinApps: pinApps,
-                    sedPreserves: sedPreserves,
-                    batchPreserves: batchPreserves,
+                    executableNames,
+                    dirPaths,
+                    preserveShortcuts,
+                    convertToExes,
+                    pinApps,
+                    sedPreserves,
+                    batchPreserves,
                     templateName: templateName || null,
                     description: $('#description').value || '',
                     profileName: $('#profileName').value || null,
@@ -567,7 +558,7 @@ function init (templates) {
                                                 null
                 };
 
-                emit('saveExecutables', options);
+                EB.saveExecutables(options);
 
                 // $('.fileExtension').value // defaultFileExtension
                 // emit('associateFileExtension');
@@ -831,27 +822,21 @@ function init (templates) {
 }
 
 // We could abstract this, but it's light enough for now to keep flexible
-on('getHardPathsResponse', function (pathData) {
-    paths = pathData;
-    on('getProfilesResponse', function (profileData) {
-        // profiles = profileData;
-        profiles = [];
-        on('getTemplatesResponse', function (templateData) {
-            if (document.body) {
-                while (document.body.firstChild) {
-                    document.body.removeChild(document.body.firstChild);
-                }
-            }
-            // Todo: init(templateData);
-            init([]);
-        });
-        emit('getTemplates');
-    });
-    emit('getProfiles');
-});
-emit('getHardPaths');
+const [paths, profiles, templates] = await Promise.all(
+    EB.getHardPaths(),
+    EB.getProfilesResponse(),
+    EB.getTemplatesResponse()
+);
+/*
+if (document.body) {
+    while (document.body.firstChild) {
+        document.body.removeChild(document.body.firstChild);
+    }
+}
+*/
+// browser.runtime.sendMessage(Object.assign(obj || {}, {type}));
+init();
 
-(async () => {
 function flattenDepthOne (arrays) {
     return [].concat(...arrays);
 }

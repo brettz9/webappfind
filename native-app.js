@@ -1,4 +1,6 @@
+const fs = require('fs');
 const path = require('path');
+const ini = require('ini');
 const nativeMessage = require('chrome-native-messaging');
 const WebSocket = require('ws');
 const uuid = require('uuid/v4');
@@ -112,15 +114,31 @@ process.stdin
     .pipe(output)
     .pipe(process.stdout);
 
+// Todo: Windows below is untested
 // https://github.com/NiklasGollenstede/native-ext/blob/master/browser.js#L128-L154
-const browser = {};
+const directories = {};
+const homedir = require('os').homedir();
 if (process.env.MOZ_CRASHREPORTER_EVENTS_DIRECTORY) {
-    browser.profileDir = path.resolve(process.env.MOZ_CRASHREPORTER_EVENTS_DIRECTORY, '../..');
+    directories.profD = path.resolve(process.env.MOZ_CRASHREPORTER_EVENTS_DIRECTORY, '../..');
 } else {
     throw new Error(`MOZ_CRASHREPORTER_EVENTS_DIRECTORY environment variable not set by Firefox`);
-    // either -P / -p "profile_name" or -profile "profile_path" (precedence?) default: FS.readFileSync('%AppData%\Mozilla\Firefox\profiles.ini').trim().split(/(?:\r\n?\n){2}/g).find(_=>_.includes('Default=1')).match(/Path=(.*))[1]
+    // either -P / -p "profile_name" or -profile "profile_path" (precedence?) default: fs.readFileSync('%AppData%\Mozilla\Firefox\profiles.ini').trim().split(/(?:\r\n?\n){2}/g).find(_=>_.includes('Default=1')).match(/Path=(.*))[1]
 }
-// output.write(browser.profileDir);
+directories.Desk = path.join(homedir, 'Desktop');
+const isWin = process.platform === 'win32';
+if (isWin) {
+    directories.Strt = '%appdata%\\Microsoft\\Windows\\Start Menu';
+}
+directories.Pict = isWin ? '%UserProfile%\\Pictures' : `${homedir}/Pictures`;
+directories.Docs = isWin ? '%UserProfile%\\Documents' : `${homedir}/Documents`;
+// directories.AppData = isWin ? '%AppData%' : '~/Library/Application Support/Firefox/'; // Profiles are just in this subfolder with probably little reason to use this
+directories.Progs = isWin ? '%ProgramFiles%' : '/Applications';
+
+output.write(JSON.stringify(directories));
+const profiles = ini.parse(
+    fs.readFileSync(`${homedir}/Library/Application Support/Firefox/profiles.ini`, 'utf-8')
+);
+output.write(JSON.stringify({profiles}));
 
 function messageHandler (msg, push, done) {
     output.write('message handler' + msg);
