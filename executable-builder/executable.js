@@ -822,11 +822,12 @@ function init () {
 }
 
 // We could abstract this, but it's light enough for now to keep flexible
-const [paths, profiles, templates] = await Promise.all(
+const [paths, profiles, templates] = await Promise.all([
     EB.getHardPaths(),
-    EB.getProfilesResponse(),
-    EB.getTemplatesResponse()
-);
+    EB.getProfiles(),
+    EB.getTemplates()
+]);
+console.log('ttt', templates);
 /*
 if (document.body) {
     while (document.body.firstChild) {

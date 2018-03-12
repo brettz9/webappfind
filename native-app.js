@@ -134,11 +134,11 @@ directories.Docs = isWin ? '%UserProfile%\\Documents' : `${homedir}/Documents`;
 // directories.AppData = isWin ? '%AppData%' : '~/Library/Application Support/Firefox/'; // Profiles are just in this subfolder with probably little reason to use this
 directories.Progs = isWin ? '%ProgramFiles%' : '/Applications';
 
-output.write(JSON.stringify(directories));
+output.write({directories});
 const profiles = ini.parse(
     fs.readFileSync(`${homedir}/Library/Application Support/Firefox/profiles.ini`, 'utf-8')
 );
-output.write(JSON.stringify({profiles}));
+output.write({profiles});
 
 function messageHandler (msg, push, done) {
     output.write('message handler' + msg);

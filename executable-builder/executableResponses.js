@@ -1,40 +1,40 @@
-// executableResponses.js - Executable Builder's module
-// author: brettz9
-/* globals require */
+/* eslint-env webextensions */
 
 var EB = {}; // eslint-disable-line no-var
 
-(function () {
+(() => {
 'use strict';
-
-const chrome = require('chrome'),
-    Cc = chrome.Cc,
-    Ci = chrome.Ci,
-    file = require('sdk/io/file'),
-    system = require('sdk/system');
 
 function l (msg) {
     console.log(msg);
 }
 
+const backgroundPage = browser.extension.getBackgroundPage();
+console.log(1111, backgroundPage.getPredefinedDirectories());
+console.log(1112, backgroundPage.getBrowserProfiles());
+
 function getHardFile (dir) {
-    return Cc['@mozilla.org/file/directory_service;1'].getService(Ci.nsIProperties).get(dir, Ci.nsIFile);
+    // return Cc['@mozilla.org/file/directory_service;1'].getService(Ci.nsIProperties).get(dir, Ci.nsIFile);
 }
 
+/*
 /**
 * @see getHardPaths()
-*/
+*
 function getHardPath (dir) {
     return getHardFile(dir).path;
 }
+*/
 
 function createProcess (aNsIFile, args, observer, emit) {
+    /*
     const process = Cc['@mozilla.org/process/util;1'].createInstance(Ci.nsIProcess);
     observer = (emit && observer && observer.observe)
         ? observer
         : {observe: function (aSubject, aTopic, data) {}};
     process.init(aNsIFile);
     process.runAsync(args, args.length, observer);
+    */
 }
 
 /*
@@ -47,22 +47,26 @@ http://kb.mozillazine.org/Profiles.ini_file
 
 EB.createProfile = function (name) {
     // https://developer.mozilla.org/en-US/docs/XPCOM_Interface_Reference/nsIToolkitProfileService#createProfile%28%29
+    /*
     const toolkitProfileService = Cc['@mozilla.org/toolkit/profile-service;1'].createInstance(Ci.nsIToolkitProfileService);
     toolkitProfileService.createProfile(null, null, name); // aRootDir, aTempDir, aName
+    */
     return true;
 };
 
 EB.getProfiles = function () {
     // Instead cycle over profiles.ini (within "%appdata%/Mozilla/Firefox/")
+    const profiles = [];
+    /*
     let profileObj;
-    const profiles = [],
-        toolkitProfileService = Cc['@mozilla.org/toolkit/profile-service;1'].createInstance(Ci.nsIToolkitProfileService),
+    const toolkitProfileService = Cc['@mozilla.org/toolkit/profile-service;1'].createInstance(Ci.nsIToolkitProfileService),
         profileObjs = toolkitProfileService.profiles;
     while (profileObjs.hasMoreElements()) {
         profileObj = profileObjs.getNext();
         profileObj.QueryInterface(Ci.nsIToolkitProfile);
         profiles.push(profileObj.name);
     }
+    */
     return profiles;
 };
 
@@ -85,6 +89,7 @@ EB.manageProfiles = function (cb) {
 * @see {@link http://mxr.mozilla.org/mozilla-central/source/xpcom/io/nsDirectoryServiceDefs.h}
 */
 EB.getHardPaths = function (emit) {
+    /*
     const profD = system.pathFor('ProfD'),
         ex = file.join(profD, 'executables');
     if (!file.exists(ex)) {
@@ -101,9 +106,11 @@ EB.getHardPaths = function (emit) {
         TaskBar: getHardPath('AppData') + '\\Microsoft\\Internet Explorer\\Quick Launch\\User Pinned\\TaskBar',
         Executable: ex
     });
+    */
 };
 
 EB.autocompleteURLHistory = function (data, emit) {
+    /*
     const historyService = Cc['@mozilla.org/browser/nav-history-service;1'].getService(Ci.nsINavHistoryService),
         // No query options set will get all history, sorted in database order,
         // which is nsINavHistoryQueryOptions.SORT_BY_NONE.
@@ -147,6 +154,7 @@ EB.autocompleteURLHistory = function (data, emit) {
         optIcons: optIcons,
         userVal: userVal // Just for debugging on the other side
     };
+    */
 };
 
 EB.openOrCreateICO = function () {
@@ -160,6 +168,7 @@ EB.saveTemplate = function (data, emit) {
                getService(Ci.nsIProperties).get('ProfD', Ci.nsIFile);
     profD.append(data.fileName);
     */
+    /*
     const profD = system.pathFor('ProfD'),
         ec = file.join(profD, 'executable-creator'),
         template = file.join(profD, 'executable-creator', data.fileName + '.html'),
@@ -176,9 +185,11 @@ EB.saveTemplate = function (data, emit) {
         }
         emit('saveTemplateResult', {templateName: data.fileName, message: 'Save successful! in (' + template + ')'});
     });
+    */
 };
 
 EB.deleteTemplate = function (data, emit) {
+    /*
     const profD = system.pathFor('ProfD'),
         ec = file.join(profD, 'executable-creator'),
         template = file.join(profD, 'executable-creator', data.fileName + '.html');
@@ -190,9 +201,11 @@ EB.deleteTemplate = function (data, emit) {
     }
     file.remove(template);
     return {message: 'File removed!', fileName: data.fileName};
+    */
 };
 
 EB.getTemplate = function (data, emit) {
+    /*
     const profD = system.pathFor('ProfD'),
         // ec = file.join(profD, 'executable-creator'),
         template = file.join(profD, 'executable-creator', data.fileName + '.html'),
@@ -201,9 +214,11 @@ EB.getTemplate = function (data, emit) {
         content: rs.read(),
         fileName: data.fileName
     };
+    */
 };
 
 EB.getTemplates = function (emit) {
+    /*
     const profD = system.pathFor('ProfD'),
         ec = file.join(profD, 'executable-creator');
     if (!file.exists(ec)) {
@@ -214,6 +229,7 @@ EB.getTemplates = function (emit) {
     }).map(function (f) {
         return f.replace(/\.html$/, '');
     });
+    */
 };
 
 function batchQuote (item) {
@@ -427,12 +443,15 @@ EB.saveExecutables = function (data, emit) {
 
 // THE REMAINING WAS COPIED FROM filebrowser-enhanced fileBrowserResponses.js (RETURN ALL MODIFICATIONS THERE)
 function getFile (path) {
+    /*
     const localFile = Cc['@mozilla.org/file/local;1'].createInstance(Ci.nsILocalFile);
     localFile.initWithPath(path);
     return localFile;
+    */
 }
 
 function picker (data, emit) {
+    /*
     // Note: could use https://developer.mozilla.org/en-US/docs/Extensions/Using_the_DOM_File_API_in_chrome_code
     //         but this appears to be less feature rich
     const {dirPath, selector, selectFolder, defaultExtension} = data,
@@ -496,7 +515,8 @@ EB.reveal = function (path) {
     localFile.reveal();
 };
 
-EB.autocompleteValues = function (data, emit) {
+EB.autocompleteValues = function (data) {
+    /*
     const userVal = data.value,
         dir = file.dirname(userVal),
         base = file.basename(userVal);
@@ -533,5 +553,6 @@ EB.autocompleteValues = function (data, emit) {
         optValues: optValues,
         userVal: userVal // Just for debugging on the other side
     };
+    */
 };
-}());
+})();
