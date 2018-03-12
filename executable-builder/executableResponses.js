@@ -315,15 +315,13 @@ EB.saveExecutables = function (data) {
 };
 
 // THE REMAINING WAS COPIED FROM filebrowser-enhanced fileBrowserResponses.js (RETURN ALL MODIFICATIONS THERE)
-function picker (data) {
+function picker ({dirPath, selector, selectFolder, defaultExtension}) {
     /*
     // Note: could use https://developer.mozilla.org/en-US/docs/Extensions/Using_the_DOM_File_API_in_chrome_code
     //         but this appears to be less feature rich
-    const {dirPath, selector, selectFolder, defaultExtension} = data,
-        windowMediator = Cc['@mozilla.org/appshell/window-mediator;1'].getService(Ci.nsIWindowMediator),
+    const windowMediator = Cc['@mozilla.org/appshell/window-mediator;1'].getService(Ci.nsIWindowMediator),
         nsIFilePicker = Ci.nsIFilePicker,
         fp = Cc['@mozilla.org/filepicker;1'].createInstance(nsIFilePicker);
-    let dir;
     if (!selectFolder) {
         fp.defaultExtension = defaultExtension;
         // fp.appendFilter('ICO (.ico)', '*.ico');
@@ -336,7 +334,7 @@ function picker (data) {
 
     if (dirPath) {
         try {
-            dir = Cc['@mozilla.org/file/local;1'].createInstance(Ci.nsIFile);
+            const dir = Cc['@mozilla.org/file/local;1'].createInstance(Ci.nsIFile);
             dir.initWithPath(dirPath);
             fp.displayDirectory = dir;
         } catch (err) {
@@ -350,19 +348,14 @@ function picker (data) {
     );
 
     fp.open({done: function (rv) {
-        let file, path,
-            res = '';
+        let path;
         if (rv === nsIFilePicker.returnOK || rv === nsIFilePicker.returnReplace) {
-            file = fp.file;
-            path = file.path;
-            res = path;
+            ({file: {path}} = fp);
         }
         if (selectFolder) {
-            emit('dirPickResult', {path: res, selector: selector, selectFolder: selectFolder});
-        } else {
-            emit('filePickResult', {path: res, selector: selector});
+            return {path, selector, selectFolder};
         }
-        return false;
+        return {path, selector};
     }});
     /* var rv = fp.show();
     if (rv == nsIFilePicker.returnOK || rv == nsIFilePicker.returnReplace) {
