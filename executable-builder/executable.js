@@ -253,11 +253,11 @@ function autocompleteURLHistoryResponse (data) {
     });
 }
 
-function deleteTemplateResponse (data) {
+function deleteTemplateResponse ({fileName}) {
     $('#templates').remove([].slice.call($('#templates')).findIndex(function (option) {
-        return option.text === data.fileName;
+        return option.text === fileName;
     }));
-    // alert(data.message);
+    // alert(message);
 }
 
 function getTemplateResponse (content) {
@@ -276,13 +276,11 @@ function fileOrDirResult (data) {
 const filePickResult = fileOrDirResult;
 const dirPickResult = fileOrDirResult;
 
-function saveTemplateResult (data) {
-    /*
-    if (!templateExistsInMenu(data.templateName)) {
-        $('#templates').add(jml('option', [data.templateName]));
+function saveTemplateResult ({templateName}) {
+    if (!templateExistsInMenu(templateName)) {
+        $('#templates').add(jml('option', [templateName]));
     }
-    */
-    // alert(data.message);
+    // alert(message);
 }
 
 function init () {
@@ -383,7 +381,7 @@ function init () {
         function reduceValue (sel) {
             return [...$$(sel)].map(toValue);
         }
-        const {dataset, parentNode} = target;
+        const {dataset, parentNode, value: val} = target;
         const {
             type, dirPick, pathInputID, fileExtensionID
         } = dataset;
@@ -391,7 +389,6 @@ function init () {
             (parentNode && parentNode.dataset && parentNode.dataset.pathBoxSelect);
         let content,
             keyEv, options, executableNames, dirPaths, preserveShortcuts, pinApps, convertToExes, sedPreserves, batchPreserves,
-            val = target.value,
             {id} = target,
             {sel} = dataset;
 
@@ -467,12 +464,12 @@ function init () {
             }
             switch (id) {
             case 'deleteTemplate':
-                val = $('#templates').selectedOptions[0].value;
-                if (!val) {
+                const fileName = $('#templates').selectedOptions[0].value;
+                if (!fileName) {
                     alert('In order to delete a template, you must choose one in the pull-down');
                     return;
                 }
-                EB.deleteTemplate({fileName: val}).then(deleteTemplateResponse);
+                EB.deleteTemplate({fileName}).then(deleteTemplateResponse);
                 break;
             case 'desktopFilePathSelect': case 'iconPathSelect':
                 if (!val) {

@@ -3,7 +3,7 @@ const ini = require('ini');
 const nativeMessage = require('chrome-native-messaging');
 const WebSocket = require('ws');
 const uuid = require('uuid/v4');
-const {execFile, readFile, writeFile, mkdirp, readdir} = require('./polyfills/promise-wrappers');
+const {execFile, readFile, writeFile, mkdirp, readdir, unlink} = require('./polyfills/promise-wrappers');
 
 const argv = require('minimist')(process.argv.slice(2));
 const {method} = argv;
@@ -143,20 +143,17 @@ const nodeJSONMethods = {
         });
     },
     deleteTemplate ({fileName}) {
-        // Todo: Finish
-        /*
-        const profD = directories.ProfD,
-            ec = path.join(profD, 'executable-creator'),
-            template = path.join(profD, 'executable-creator', fileName + '.html');
-        if (!file.exists(ec)) {
-            file.mkpath(ec);
-        }
-        if (!file.exists(template)) {
-            return {message: 'File file (' + template + ') + does not exist', fileName};
-        }
-        file.remove(template);
-        return {message: 'File removed!', fileName};
-        */
+        return this._makeECDir().then((ec) => {
+            const template = path.join(ec, fileName + '.html');
+            unlink(template).catch((err) => {
+                if (err.code === 'ENOENT') { // File doens't exist
+                    return {message: 'File file (' + template + ') + does not exist'};
+                }
+                return {message: err};
+            }).then(() => {
+                return {message: 'File removed!', fileName};
+            });
+        });
     },
     getTemplate ({fileName}) {
         const profD = directories.ProfD,
@@ -164,14 +161,17 @@ const nodeJSONMethods = {
             template = path.join(profD, 'executable-creator', fileName + '.html');
         return readFile(template, 'utf8');
     },
-    getTemplates () {
+    _makeECDir () {
         const profD = directories.ProfD,
             ec = path.join(profD, 'executable-creator');
         return mkdirp(ec).catch((err) => {
             if (err.code !== 'EEXIST') {
                 throw err;
             }
-        }).then(() => {
+        }).then(() => ec);
+    },
+    getTemplates () {
+        return this._makeECDir().then((ec) => {
             return readdir(ec);
         }).then((files) => {
             return files
