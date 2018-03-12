@@ -273,7 +273,7 @@ EB.saveExecutables = function (data) {
 
 // THE REMAINING WAS COPIED FROM filebrowser-enhanced fileBrowserResponses.js (RETURN ALL MODIFICATIONS THERE)
 function picker ({dirPath, selector, selectFolder, defaultExtension}) {
-    // TODO: Could implement as a Node-based browser
+    // TODO: Could implement as a Node-based file/directory picker; maybe this? https://github.com/Joker-Jelly/nfb
     /*
     // Note: could use https://developer.mozilla.org/en-US/docs/Extensions/Using_the_DOM_File_API_in_chrome_code
     //         but this appears to be less feature rich
