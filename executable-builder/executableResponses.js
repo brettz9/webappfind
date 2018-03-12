@@ -44,55 +44,12 @@ EB.getHardPaths = function () {
 };
 
 EB.autocompleteURLHistory = function (data) {
-    /*
-    const historyService = Cc['@mozilla.org/browser/nav-history-service;1'].getService(Ci.nsINavHistoryService),
-        // No query options set will get all history, sorted in database order,
-        // which is nsINavHistoryQueryOptions.SORT_BY_NONE.
-        options = historyService.getNewQueryOptions(),
-        query = historyService.getNewQuery(), // No query parameters will return everything
-        userVal = data.value,
-        optValues = [],
-        optIcons = [];
-    let i, node, result, cont;
-
-    query.uriIsPrefix = true;
-    options.maxResults = 20;
-    try {
-        query.uri = (userVal); // makeURI: May throw here (would be better
-        // if this were pure strings rather than nsiURI but now at least
-        // it works when user types valid URI which is only part of a larger one)
-
-        // execute the query
-        result = historyService.executeQuery(query, options);
-        cont = result.root;
-        cont.containerOpen = true;
-
-        for (i = 0; i < cont.childCount; i++) {
-            node = cont.getChild(i);
-            // "node" attributes contains the information (e.g. URI, title, time, icon...)
-            // see : https://developer.mozilla.org/en/nsINavHistoryResultNode
-            optValues.push(node.uri);
-            optIcons.push(node.icon);
-        }
-
-        // Close container when done
-        // see : https://developer.mozilla.org/en/nsINavHistoryContainerResultNode
-        cont.containerOpen = false;
-    } catch (err) {
-        // l('autocompleteURLHistory error: ' + err);
-    }
-
-    return {
-        listID: data.listID,
-        optValues: optValues,
-        optIcons: optIcons,
-        userVal: userVal // Just for debugging on the other side
-    };
-    */
+    return getNodeJSON('autocompleteURLHistory', data);
 };
 
 EB.openOrCreateICO = function () {
-    return 'Not yet implemented';
+    // TODO:
+    throw new Error('Not yet implemented');
 };
 
 EB.saveTemplate = function (data) {
@@ -373,43 +330,6 @@ EB.reveal = function (data) {
 };
 
 EB.autocompleteValues = function (data) {
-    /*
-    const userVal = data.value,
-        dir = file.dirname(userVal),
-        base = file.basename(userVal);
-    let optValues;
-
-    if (file.exists(userVal)) {
-        if (userVal.match(/(?:\/|\\)$/)) {
-            optValues = file.list(userVal).map(function (fileInDir) {
-                return file.join(userVal, fileInDir);
-            });
-        } else {
-            optValues = [userVal];
-        }
-    } else if (file.exists(dir)) {
-        optValues = file.list(dir).filter(function (fileInDir) {
-            return fileInDir.indexOf(base) === 0;
-        }).map(function (fileInDir) {
-            return file.join(dir, fileInDir);
-        });
-    }
-
-    optValues = data.dirOnly
-        ? optValues.filter(function (optValue) {
-            try {
-                return (optValue).isDirectory();
-            } catch (err) {
-                return false;
-            }
-        })
-        : optValues;
-
-    return {
-        listID: data.listID,
-        optValues: optValues,
-        userVal: userVal // Just for debugging on the other side
-    };
-    */
+    return getNodeJSON('autocompleteValues', data);
 };
 })();
