@@ -11,21 +11,6 @@ function l (msg) {
 
 const {getNodeJSON} = browser.extension.getBackgroundPage();
 
-function getHardFile (dir) {
-    // return Cc['@mozilla.org/file/directory_service;1'].getService(Ci.nsIProperties).get(dir, Ci.nsIFile);
-}
-
-function createProcess (aNsIFile, args, observer, emit) {
-    /*
-    const process = Cc['@mozilla.org/process/util;1'].createInstance(Ci.nsIProcess);
-    observer = (emit && observer && observer.observe)
-        ? observer
-        : {observe: function (aSubject, aTopic, data) {}};
-    process.init(aNsIFile);
-    process.runAsync(args, args.length, observer);
-    */
-}
-
 /*
 In case we decide to create profiles on behalf of the user (without the need to visit the profile manager)
 http://stackoverflow.com/questions/18711327/programmatically-create-firefox-profiles
@@ -33,18 +18,13 @@ https://developer.mozilla.org/en-US/docs/XPCOM_Interface_Reference/nsIToolkitPro
 https://developer.mozilla.org/en-US/docs/XPCOM_Interface_Reference/nsIToolkitProfile
 http://kb.mozillazine.org/Profiles.ini_file
 */
-
-EB.createProfile = function (name) {
+EB.createProfile = function ({name}) {
     // https://developer.mozilla.org/en-US/docs/XPCOM_Interface_Reference/nsIToolkitProfileService#createProfile%28%29
-    /*
-    const toolkitProfileService = Cc['@mozilla.org/toolkit/profile-service;1'].createInstance(Ci.nsIToolkitProfileService);
-    toolkitProfileService.createProfile(null, null, name); // aRootDir, aTempDir, aName
-    */
-    return true;
+    return getNodeJSON('createProfile', {name});
 };
 
 EB.getProfiles = function () {
-    return getNodeJSON('getProfiles').then(({profiles}) => {
+    return getNodeJSON('getProfileInfo').then(({profiles}) => {
         return Object.entries(profiles).filter(([p, profile]) => {
             return p.startsWith('Profile');
         }).map(([, profile]) => profile.Name);
@@ -55,9 +35,8 @@ function getFirefoxExecutableAndDir () {
     return getNodeJSON('getFirefoxExecutableAndDir');
 }
 
-EB.manageProfiles = async function (cb) {
-    const [file] = await getFirefoxExecutableAndDir();
-    createProcess(file, ['-P', '-no-remote'], cb);
+EB.manageProfiles = function () {
+    return getNodeJSON('manageProfiles');
 };
 
 EB.getHardPaths = function () {
@@ -196,13 +175,11 @@ async function createBatchForShortcutCreation (data) {
 
 /**
 * Call the command line with the supplied arguments
-* @param {object} Object with properties "args" and "observe"
-* @example ['-P', '-no-remote']
+* @param {object} Object with property "args"
+* @example {args: ['-P', '-no-remote']}
 */
-EB.cmd = function (data) {
-    const cmdDir = getHardFile('SysD');
-    cmdDir.append('cmd.exe');
-    createProcess(cmdDir, data.args, data);
+EB.cmd = function (args) {
+    return getNodeJSON('cmd', args);
 };
 
 function buildSED (userSED) {
@@ -399,8 +376,7 @@ EB.dirPick = picker;
 EB.filePick = picker;
 
 EB.reveal = function (path) {
-    const localFile = (path);
-    localFile.reveal();
+    return getNodeJSON('reveal', path);
 };
 
 EB.autocompleteValues = function (data) {

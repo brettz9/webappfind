@@ -125,11 +125,13 @@ if (process.env.MOZ_CRASHREPORTER_EVENTS_DIRECTORY) {
 }
 directories.Desk = path.join(homedir, 'Desktop');
 const isWin = process.platform === 'win32';
+const isMac = process.platform === 'darwin';
 directories.Pict = isWin ? '%UserProfile%\\Pictures' : `${homedir}/Pictures`;
 directories.Docs = isWin ? '%UserProfile%\\Documents' : `${homedir}/Documents`;
 directories.AppData = isWin ? '%AppData%' : '~/Library/Application Support';
 directories.Progs = isWin ? '%ProgramFiles%' : '/Applications';
 if (isWin) {
+    directories.SysD = '%WinDir%';
     directories.Strt = directories.AppData + '\\Microsoft\\Windows\\Start Menu';
     directories.TaskBar = directories.AppData + '\\Microsoft\\Internet Explorer\\Quick Launch\\User Pinned\\TaskBar';
 }
@@ -138,7 +140,42 @@ const profilesINI = isWin
     : `${homedir}/Library/Application Support/Firefox/profiles.ini`;
 
 const nodeJSONMethods = {
-    getProfiles () {
+    execFile,
+    reveal () {
+        if (isWin) {
+            // Explorer /select,filename
+        } else if (isMac) {
+            // open -R filename
+        } else {
+            // Todo: Get this (and other areas) working for Linux
+            // nautilus // Ubuntu
+        }
+    },
+    createProfile ({name}) {
+        this._makeProfileDir(name).catch((err) => {
+            if (err.code !== 'EEXIST') {
+                throw err;
+            }
+        }).then((pd) => {
+            return this.execFirefox({args: ['-no-remote', `-profile ${pd}`]});
+        }).then((result) => {
+            // Todo: Could add to ini
+            return result;
+        });
+    },
+    execFirefox ({args}) {
+        return this.getFirefoxExecutableAndDir().then(([file]) => {
+            return execFile(file, args);
+        });
+    },
+    manageProfiles () {
+        return this.execFirefox({args: ['-P', '-no-remote']});
+    },
+    cmd ({args}) {
+        const cmdDir = path.join(directories.SysD, 'cmd.exe');
+        return execFile(cmdDir, args);
+    },
+    getProfileInfo () {
         return readFile(profilesINI, 'utf8').then((contents) => {
             return {profiles: ini.parse(contents)};
         });

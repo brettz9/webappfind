@@ -552,9 +552,10 @@ function init () {
 
                 // $('.fileExtension').value // defaultFileExtension
                 // emit('associateFileExtension');
-                /* emit('cmd', {args: [], observe: function () {
+                /*
+                    await EB.cmd({args: []});
                     alert('Command run!');
-                }}); */
+                */
                 break;
             }
         }
