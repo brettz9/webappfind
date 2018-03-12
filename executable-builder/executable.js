@@ -265,8 +265,7 @@ function getTemplateResponse (content) {
 }
 
 function fileOrDirResult (data) {
-    const path = data.path,
-        selector = data.selector;
+    const {path, selector} = data;
     if (path) {
         $(selector).value = path;
     }
