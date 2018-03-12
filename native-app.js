@@ -3,7 +3,9 @@ const ini = require('ini');
 const nativeMessage = require('chrome-native-messaging');
 const WebSocket = require('ws');
 const uuid = require('uuid/v4');
-const {execFile, readFile, writeFile, mkdirp, readdir, unlink} = require('./polyfills/promise-wrappers');
+const {
+    execFile, readFile, writeFile, mkdirp, readdir, unlink, stat
+} = require('./polyfills/promise-wrappers');
 
 const argv = require('minimist')(process.argv.slice(2));
 const {method} = argv;
@@ -152,7 +154,7 @@ const nodeJSONMethods = {
         return execFile('nautilus', fileName); // Ubuntu
     },
     createProfile ({name}) {
-        this._makeProfileDir(name).catch((err) => {
+        return this._makeProfileDir(name).catch((err) => {
             if (err.code !== 'EEXIST') {
                 throw err;
             }
@@ -186,10 +188,10 @@ const nodeJSONMethods = {
         });
     },
     getFirefoxExecutableAndDir () {
-        return [path.join(
+        return Promise.resolve([path.join(
             directories.Progs,
             (isWin ? 'firefox.exe' : 'Firefox.app')
-        ), directories.Progs];
+        ), directories.Progs]);
     },
     saveTemplate ({templateName, content, lastTemplate}) {
         const profD = directories.ProfD,
@@ -287,26 +289,25 @@ const nodeJSONMethods = {
             // l('autocompleteURLHistory error: ' + err);
         }
 
-        return {
+        return Promise.resolve({
             listID,
             optValues,
             optIcons,
             userVal // Just for debugging on the other side
-        };
+        });
         */
     },
-    autocompleteValues ({value, dirOnly, listID}) {
-        // TODO:
+    autocompleteValues ({value: userVal, dirOnly, listID}) {
+        console.log('stat', stat);
         /*
-        const userVal = value,
-            dir = file.dirname(userVal),
-            base = file.basename(userVal);
+        const dir = path.dirname(userVal),
+            base = path.basename(userVal);
         let optValues;
 
         if (file.exists(userVal)) {
             if (userVal.match(/(?:\/|\\)$/)) {
                 optValues = file.list(userVal).map(function (fileInDir) {
-                    return file.join(userVal, fileInDir);
+                    return path.join(userVal, fileInDir);
                 });
             } else {
                 optValues = [userVal];
@@ -315,25 +316,30 @@ const nodeJSONMethods = {
             optValues = file.list(dir).filter((fileInDir) => {
                 return fileInDir.indexOf(base) === 0;
             }).map((fileInDir) => {
-                return file.join(dir, fileInDir);
+                return path.join(dir, fileInDir);
             });
         }
 
-        optValues = dirOnly
-            ? optValues.filter((optValue) => {
+        const optValuesRetrieved = dirOnly
+            ? Promise.all(optValues.map((optValue) => {
                 try {
-                    return (optValue).isDirectory();
+                    return stat(optValue).then((stats) => {
+                        return [stats.isDirectory(), optValue];
+                    });
                 } catch (err) {
-                    return false;
+                    return [false];
                 }
+            })).then((optValues) => {
+                return optValues.filter(([bool]) => bool).map(([, optValue]) => optValue);
             })
-            : optValues;
-
-        return {
-            listID,
-            optValues,
-            userVal // Just for debugging on the other side
-        };
+            : Promise.resolve(optValues);
+        return optValuesRetrieved.then((optValues) => {
+            return {
+                listID,
+                optValues,
+                userVal // Just for debugging on the other side
+            };
+        });
         */
     }
 };

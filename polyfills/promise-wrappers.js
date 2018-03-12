@@ -70,6 +70,18 @@ const unlink = (path) => {
     });
 };
 
+const stat = (path) => {
+    return new Promise((resolve, reject) => {
+        fs.stat(path, (err, stats) => {
+            if (err) {
+                reject(err);
+                return;
+            }
+            resolve(stats);
+        });
+    });
+};
+
 function copyFile (source, target) {
     return copyFileUtil(source, target);
 }
@@ -151,6 +163,7 @@ exports.readFile = readFile;
 exports.writeFile = writeFile;
 exports.readdir = readdir;
 exports.unlink = unlink;
+exports.stat = stat;
 exports.copyExecutable = copyExecutable;
 exports.copyFile = copyFile;
 exports.execFile = execFile;
