@@ -131,15 +131,24 @@ const isMac = process.platform === 'darwin';
 directories.Pict = isWin ? '%UserProfile%\\Pictures' : `${homedir}/Pictures`;
 directories.Docs = isWin ? '%UserProfile%\\Documents' : `${homedir}/Documents`;
 directories.AppData = isWin ? '%AppData%' : '~/Library/Application Support';
-directories.Progs = isWin ? '%ProgramFiles%' : '/Applications';
+directories.ProgF = isWin ? '%ProgramFiles%' : '/Applications';
+directories.Strt = isWin ? directories.AppData + '\\Microsoft\\Windows\\Start Menu\\Programs\\Startup' : '/Library/StartupItems';
 if (isWin) {
     directories.SysD = '%WinDir%';
-    directories.Strt = directories.AppData + '\\Microsoft\\Windows\\Start Menu';
+    directories.Progs = directories.AppData + '\\Microsoft\\Windows\\Start Menu\\Programs';
+    // Mac apparently doesn't have a folder used for adding items to the dock (apparently it is a preference instead)
     directories.TaskBar = directories.AppData + '\\Microsoft\\Internet Explorer\\Quick Launch\\User Pinned\\TaskBar';
 }
 const profilesINI = isWin
     ? '%appdata%\\Mozilla\\Firefox\\profiles.ini'
     : `${homedir}/Library/Application Support/Firefox/profiles.ini`;
+
+// Adapted from XRegExp:
+const regexEscape = (str) => String.prototype.replace.call(
+    str,
+    /[-[\]{}()*+?.,\\^$|#\s]/g,
+    '\\$&'
+);
 
 const nodeJSONMethods = {
     execFile,
@@ -184,7 +193,12 @@ const nodeJSONMethods = {
     },
     getHardPaths () {
         return this._makeProfileDir('executables').then((Executable) => {
-            return Object.assign({Executable}, directories);
+            return Object.assign({
+                ffIcon: path.join(__dirname, 'executable-builder', 'firefox32.ico'),
+                // The following was having problems at least for web-ext runner
+                // ffIcon: path.join(directories.ProfD, 'webappfind', 'executable-builder', 'firefox32.ico'),
+                Executable
+            }, directories);
         });
     },
     getFirefoxExecutableAndDir () {
@@ -261,7 +275,8 @@ const nodeJSONMethods = {
                 dir = path.dirname(userVal);
                 return readdir(dir).then((files) => { // May throw
                     return files.filter((fileInDir) => {
-                        return fileInDir.startsWith(base);
+                        // return fileInDir.startsWith(base); // Works for case-sensitive
+                        return (new RegExp(regexEscape(base), 'i')).test(fileInDir);
                     });
                 });
             }

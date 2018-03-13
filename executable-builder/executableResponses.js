@@ -48,6 +48,7 @@ EB.autocompleteURLHistory = function ({listID, value: userVal}) {
         text: userVal,
         maxResults: 100 // Default: 100
     }).then((historyItems) => {
+        // console.log('historyItems', historyItems);
         const optValues = historyItems.map((hi) => hi.url);
         return Promise.resolve({
             listID,

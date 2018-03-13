@@ -54,9 +54,8 @@ function l (msg) {
     console.log(msg);
 }
 */
+const os = browser.runtime.PlatformOs;
 let ct = 0, ctr = 0, k = 0;
-
-const options = {};
 
 function $ (sel) {
     return document.querySelector(sel);
@@ -182,10 +181,10 @@ function createPathInput () {
                 ['option', {value: getHardPath('Executable')}, ['Executable folder within profile folder']],
                 ['option', {value: getHardPath('Desk')}, ['Desktop']],
                 ['option', {value: getHardPath('Strt')}, ['Start-up']],
-                ['option', {value: getHardPath('Progs')}, ['Start menu']],
-                ['option', {value: getHardPath('TaskBar')}, ['Task bar']],
+                (os === 'win' ? ['option', {value: getHardPath('Progs')}, ['Start menu']] : ''),
+                (os === 'win' ? ['option', {value: getHardPath('TaskBar')}, ['Task bar']] : ''),
                 ['option', {value: getHardPath('ProfD')}, ['Profile folder']],
-                ['option', {value: getHardPath('Programs')}, ['Programs']]
+                ['option', {value: getHardPath('ProgF')}, ['Programs']]
             ]],
             createRevealButton('#pathBox' + i),
             ['button', {dataset: {pathInputID: i, type: 'add'}}, [
@@ -819,6 +818,11 @@ const [paths, profiles, templates] = await Promise.all([
     EB.getTemplates()
 ]);
 console.log('ttt', templates);
+const options = {
+    ffIcon: getHardPath('ffIcon'),
+    folderImage: 'Yellow_folder_icon_open.png'
+};
+
 /*
 if (document.body) {
     while (document.body.firstChild) {
