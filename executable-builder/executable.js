@@ -97,7 +97,7 @@ function createFileExtensionControls () {
     const i = ++ctr;
     return ['div', {id: 'fileExtensionInfoHolder' + i}, [
         ['label', [
-            'File extension to associate with this executable (for Open With): ',
+            `File extension to associate with this executable (for "Open With${ellipsis}"): `,
             ['input', {size: 10, 'class': 'fileExtension'}]
         ]],
         ['br'],
