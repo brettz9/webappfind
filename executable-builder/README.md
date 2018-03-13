@@ -90,34 +90,26 @@ can cover the entire range of functionality available in the UI.
 
 # To-dos for new Executable Builder (in WebAppFind)
 
-1. IMPORTANT: See `execute.js`, `executableResponses.js`, etc. for specific
-    todos already under-way
-1. Remove from WebAppFind/filebrowser-enhanced/AsYouWish to-dos any items
-    completed in process of this add-on
-1. As reimplement, uncomment hidden docs above
+1. IMPORTANT: See `execute.js`, `executableResponses.js`, etc. for *other
+    todos already under-way*
+1. *Remove/adapt to-dos from other add-ons*
+    (WebAppFind/filebrowser-enhanced/AsYouWish) as completed in process of
+    this add-on
+1. As reimplement, *uncomment hidden docs* above
 
-1. IMPORTANT: Upgrade my quick-and-dirty, ironically non-concern-separated
-    data files approach in favor of some kind of data-only form serialization
-    (in case fields change), e.g., <https://github.com/macek/jquery-serialize-object>
-1. Ability to drop URL onto AppleScript and use that?
-1. Reimplement ability to invoke from command line (though native messaging)
-    1. Expose full API for building executables to the command line
-        1. Support additional command line arguments to open up the executable
-            builder dialog from the desktop with initial values such as
-            executable or icon path, desktop/remote file or web app URL,
-            etc.; allow command the "Browse" dialog for desktop file to be
-            opened via command line or immediately to the document URL
-            autocomplete field (so that Executable Builder can easily add
-            an add-on bar/toolbar button to go immediately to picking a
-            file or URL)
-    1. Allow executable builder to build executables to run itself!
-1. Adapt to-dos below for current realities of being within WebAppFind
-1. Split into generic and specific sections (so will allow building of
-    executables regardless of whether used for WebAppFind or not);
-    dynamically reveal sections based on 'Open with WebAppFind?'
-    radio group selection, hard-coding or not, etc.
-1. Profile building
-1. Allow sites to advertise (in `<meta>`?) a number of file extensions
+1. Complete *i18n* work
+1. *Other executable types*
+    1. Ability to *drop URL onto AppleScript* and use that?
+
+1. *UI*
+    1. Upgrade my quick-and-dirty, ironically non-concern-separated data files
+        approach in favor of some kind of *data-only form serialization*
+        (in case fields change), e.g., <https://github.com/macek/jquery-serialize-object>
+    1. *Split form into generic and specific sections* (so will allow building of
+        executables regardless of *whether used for WebAppFind or not*);
+        *dynamically reveal* sections based on 'Open with WebAppFind?'
+        radio group selection, hard-coding or not, etc. (as simpler *Wizard*)
+1. Allow sites to advertise (in *`<meta>`*?) a number of file extensions
     (of a certain total limited byte size and number?) which they
     support, so that the following can be done:
     1. Add our format to <https://wiki.whatwg.org/wiki/MetaExtensions>
@@ -149,64 +141,77 @@ can cover the entire range of functionality available in the UI.
         a wiki to which sites can add their info for discovery?)
         1. Option to disable recording of such data discovered at
             various sites
-1. Command line for ExecutableBuilder: Until web apps support file
-    writing to arbitrary locations (WebActivity or new addition to
-    WebAppFind?), one can at least treat ExecutableBuilder as itself
-    an executable (and be able to bake it into
-    an executable with its own icon, profile, etc.); also support other
-    commands, so e.g., an AsYouWish application could provide an
-    alternative interface to the built-in exec dialog (and trigger-able from
-    WebAppFind); see Demo todos below on dog-fooding
-    1. Since can't open browser action, just open within some other window
-1. Add AsYouWish (and ExecutableBuilder and WebAppFind) optionally
-    to profile folder (or global?) so apps can have
-    privileges from any profile! (Ought to be desirable to have easy
-    way to share back from one profile to another though in case
-    people start building independent executables and then decide
-    want to share again so as to allow independent executable)
-1. In place of or in addition to profiles, consider contextualIdentities
-1. Complete i18n work
-
-# Possible todos
-
-1. Profile - Request to work offline, use the profile without asking,
-    open FF is not open.
-1. Support direct integration of commands into
-    [atyourcommand](https://github.com/brettz9/atyourcommand)
-1. Ability to manage previously added items (including if added to
-    extended filebrowser) so that one knows which file types have
-    been associated through this add-on
+1. Reimplement ability to *invoke from command line* (though native messaging)
+    1. *Command line for ExecutableBuilder UI*: Until web apps support file
+        writing to arbitrary locations (WebActivity or new addition to
+        WebAppFind?), one can at least treat ExecutableBuilder as itself
+        an executable (and be able to bake it into
+        an executable with its own icon, profile, etc.); also support other
+        commands, so e.g., an AsYouWish application could provide an
+        alternative interface to the built-in exec dialog (and trigger-able
+        from WebAppFind); see Demo todos below on dog-fooding
+        1. Since can't open browser action, just open within some other window
+    1. *Expose full API to command line* for building executables
+        1. Support additional command line arguments to *open up the executable
+            builder dialog from the desktop with initial values* such as
+            executable or icon path, desktop/remote file or web app URL,
+            etc.; allow command the "Browse" dialog for desktop file to be
+            opened via command line or immediately to the document URL
+            autocomplete field (so that Executable Builder can easily add
+            an add-on bar/toolbar button to go immediately to picking a
+            file or URL)
+    1. Allow executable builder to *build executables to run itself!*
+1. *Profiles*
+    1. Profile building
+    1. Add AsYouWish (and ExecutableBuilder and WebAppFind) optionally
+        to profile folder (or global?) so apps can have
+        privileges from any profile! (Ought to be desirable to have easy
+        way to share back from one profile to another though in case
+        people start building independent executables and then decide
+        want to share again so as to allow independent executable)
+    1. In place of or in addition to profiles, consider *contextualIdentities*
+    1. Profile - Request to *work offline*, use the *profile without asking*,
+        *open if FF is not open*.
+    1. Conditional logic to *check if `-no-remote`* (preferred is open) and if
+        not, open a specific profile or vice versa? (?)
+    1. Try *installing WebAppFind and ExecutableBuilder extensions globally* so
+        each profile (or multiple profiles--e.g., one profile for each
+        WebAppFind method and/or different environments--e.g., multiple tabs
+        but only for HTML reading) can access it? (since
+        `--install-global-extension` is removed from FF now, should apparently
+        use this instead:
+        <https://developer.mozilla.org/en-US/docs/Installing_extensions>)
 1. Include ability to embed configuration information if WebAppFind
-    command line starts to support more configuration options (e.g., full
-    screen mode, or stage of type-detection algorithm to require or at
+    command line starts to support more configuration options (e.g., *full
+    screen mode, or stage of type-detection* algorithm to require or at
     which to begin).
-1. Try installing WebAppFind and ExecutableBuilder extensions globally so
-    each profile (or multiple profiles--e.g., one profile for each WebAppFind
-    method and/or different environments--e.g., multiple tabs but
-    only for HTML reading) can access it? (since --install-global-extension
-    is removed from FF now, should apparently use this instead:
-    <https://developer.mozilla.org/en-US/docs/Installing_extensions>)
-1. If WebAppFind implements eval()-like behavior (see its todos for
-    more on this possibility), create batch files (also for Linux/Mac) which
-    pass evalable JS files (or embed JS strings) as a command line
-    argument which will be sent to FF for (privileged) evaluation along with
-    the optional WebAppFind files on which they are executed.
-1. Ability to pass in string of HTML/JS to the add-on command line to
-    execute that instead of a specific file (so that an exe could include
-    the launching app and processing within one file)? (removing last?
-    advantage of exes beyond allowing file dropping/right-click usage
-    and own task bar icons? example: open a specific file, that gets sent
-    to a particular eval: protocol which listens for the content and then
-    passes it to a script that it dynamically loads
-1. Ability to proposed WebAppFind handle multiple files on
-    right-click (cycling through arguments)? e.g., to open a group
-    and then commit as a group (seems to be no "open with
-    option when done this way); pass in additional files for access
-    (e.g., to save to a config file, to build an icon file in a predictable
-    location along with the other file data, etc.)
-1. Conditional logic to check if `-no-remote` (preferred is open) and if
-    not, open a specific or vice versa? (?)
-1. Demo todos
+1. Special *mode sources*
+    1. Ability to *pass in string* of HTML/JS to the add-on command line to
+        execute that instead of a specific file (so that an exe could include
+        the launching app and processing within one file)? (removing last?
+        advantage of exes beyond allowing file dropping/right-click usage
+        and own task bar icons? example: open a specific file, that gets sent
+        to a particular eval: protocol which listens for the content and then
+        passes it to a script that it dynamically loads
+    1. If WebAppFind implements `eval`-like behavior (see its todos for
+        more on this possibility), create batch files (also for Linux/Mac)
+        which *pass evalable JS files* (or embed JS strings) as a command line
+        argument which will be sent to FF for (privileged) evaluation along
+        with the optional WebAppFind files on which they are executed.
+1. *Features requiring extended privileges*
+    1. Ability to *manage previously associated items* (including if added to
+        `filebrowser-enhanced`) so that one knows which file types have
+        been associated through this add-on
+    1. Ability to proposed WebAppFind handle *multiple files on
+        right-click* (cycling through arguments)? e.g., to open a group
+        and then commit as a group (seems to be no "open with
+        option when done this way); pass in *additional files for access*
+        (e.g., to save to a config file, to build an icon file in a predictable
+        location along with the other file data, etc.); if done by right-click,
+        could do in `filebrowser-enhanced` at least
+1. [atyourcommand](https://github.com/brettz9/atyourcommand)
+    1. Support *direct integration of commands* into AtYourCommand
+1. *Demo* todos
     1. Demo dog-fooding reading/editing our special file type once
         separation-of-concerns/serialize to-do is complete (so it could be
         handled by other apps as with any other WebAppFind file) though
