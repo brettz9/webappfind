@@ -356,6 +356,9 @@ function init () {
                 }
             }
         } else if (id === 'templates') {
+            if (!val) {
+                return;
+            }
             // $('#templateName').value = val;
             EB.getTemplate({fileName: val}).then(getTemplateResponse);
         }
