@@ -76,7 +76,7 @@ function createRevealButton (sel) {
     return ['input', {
         type: 'button',
         style: 'border: none; margin-left: 5px; background-color: transparent; width: 25px; background-repeat: no-repeat; ' +
-                'background-size: 20px 20px; ' +
+                'background-size: 15px 15px; ' +
                 'background-image: url("' + options.folderImage + '");',
         'class': 'revealButton',
         dataset: {sel: sel}
