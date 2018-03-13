@@ -92,7 +92,13 @@ can cover the entire range of functionality available in the UI.
 
 1. IMPORTANT: See `execute.js`, `executableResponses.js`, etc. for specific
     todos already under-way
+1. Remove from WebAppFind/filebrowser-enhanced/AsYouWish to-dos any items
+    completed in process of this add-on
 1. As reimplement, uncomment hidden docs above
+
+1. IMPORTANT: Upgrade my quick-and-dirty, ironically non-concern-separated
+    data files approach in favor of some kind of data-only form serialization
+    (in case fields change), e.g., <https://github.com/macek/jquery-serialize-object>
 1. Ability to drop URL onto AppleScript and use that?
 1. Reimplement ability to invoke from command line (though native messaging)
     1. Expose full API for building executables to the command line
@@ -143,44 +149,28 @@ can cover the entire range of functionality available in the UI.
         a wiki to which sites can add their info for discovery?)
         1. Option to disable recording of such data discovered at
             various sites
-
-# Todos
-
-1. IMPORTANT: Upgrade my quick-and-dirty, ironically non-concern-separated
-    data files approach in favor of some kind of data-only form serialization
-    (in case fields change), e.g., https://github.com/macek/jquery-serialize-object
-1. Ask Mozilla re: `-new-instance` on Windows (if it is supposed to create
-    a new separate icon) and whether can add as feature, including for the
-    sake of this add-on
-1. Implement command line handler to support auto-opening exec dialog
-    on start so that until web apps support file writing to arbitrary locations
-    (WebActivity or new addition to WebAppFind?), one can at least treat
-    ExecutableBuilder as itself an executable (and be able to bake it into
+1. Command line for ExecutableBuilder: Until web apps support file
+    writing to arbitrary locations (WebActivity or new addition to
+    WebAppFind?), one can at least treat ExecutableBuilder as itself
+    an executable (and be able to bake it into
     an executable with its own icon, profile, etc.); also support other
     commands, so e.g., an AsYouWish application could provide an
-    alternative interface to the built-in exec dialog (and triggerable from
+    alternative interface to the built-in exec dialog (and trigger-able from
     WebAppFind); see Demo todos below on dog-fooding
+    1. Since can't open browser action, just open within some other window
 1. Add AsYouWish (and ExecutableBuilder and WebAppFind) optionally
     to profile folder (or global?) so apps can have
     privileges from any profile! (Ought to be desirable to have easy
     way to share back from one profile to another though in case
     people start building independent executables and then decide
     want to share again so as to allow independent executable)
-1. Attempt, implement and document editor associations (which apparently
-    cannot be set through the normal Windows UI as with "Open With") such
-    as allowing a web app to read batch files:
-    http://windowsitpro.com/windows-server/how-can-i-change-editor-used-edit-batchcommand-files
-
-# Other dependent README todos:
-
-1. Remove from WebAppFind/filebrowser-enhanced to-dos any items
-    completed in process of this add-on
+1. In place of or in addition to profiles, consider contextualIdentities
+1. Complete i18n work
 
 # Possible todos
 
 1. Profile - Request to work offline, use the profile without asking,
     open FF is not open.
-1. Complete i18n work
 1. Support direct integration of commands into
     [atyourcommand](https://github.com/brettz9/atyourcommand)
 1. Ability to manage previously added items (including if added to
@@ -195,7 +185,7 @@ can cover the entire range of functionality available in the UI.
     method and/or different environments--e.g., multiple tabs but
     only for HTML reading) can access it? (since --install-global-extension
     is removed from FF now, should apparently use this instead:
-    https://developer.mozilla.org/en-US/docs/Installing_extensions )
+    <https://developer.mozilla.org/en-US/docs/Installing_extensions>)
 1. If WebAppFind implements eval()-like behavior (see its todos for
     more on this possibility), create batch files (also for Linux/Mac) which
     pass evalable JS files (or embed JS strings) as a command line
@@ -229,7 +219,14 @@ can cover the entire range of functionality available in the UI.
 
 # Windows to-dos
 
+1. Ask Mozilla re: `-new-instance` on Windows (if it is supposed to create
+    a new separate icon) and whether can add as feature, including for the
+    sake of this add-on
 1. Deprecate executables in WebAppFind when batch approach done.
+1. Attempt, implement and document editor associations (which apparently
+    cannot be set through the normal Windows UI as with "Open With") such
+    as allowing a web app to read batch files:
+    <http://windowsitpro.com/windows-server/how-can-i-change-editor-used-edit-batchcommand-files>
 1. Build a batch file which can be invoked with a document file OR URL so
     that if in the task bar, a file or URL might be droppable upon it
     (if this is possible to do)
@@ -242,7 +239,7 @@ can cover the entire range of functionality available in the UI.
     use drag-onto-batch approach to pass in file path to Firefox with protocol
     (e.g., for creating and validating but especially the file-path-specific
     view and editing): see
-    http://stackoverflow.com/questions/6852833/running-a-batch-script-by-right-clicking-any-file
+    <http://stackoverflow.com/questions/6852833/running-a-batch-script-by-right-clicking-any-file>
     and cf. to drag-and-drop into browser; allow drag-and-drop of files onto
     add-on icon for processing similar to C++-based right-click? Drag files
     onto batch icon as another option?
