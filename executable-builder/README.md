@@ -77,6 +77,7 @@ can cover the entire range of functionality available in the UI.
     executables regardless of whether used for WebAppFind or not);
     dynamically reveal sections based on 'Open with WebAppFind?'
     radio group selection, hard-coding or not, etc.
+1. Profile building
 1. Allow sites to advertise (in `<meta>`?) a number of file extensions
     (of a certain total limited byte size and number?) which they
     support, so that the following can be done:
@@ -113,108 +114,112 @@ can cover the entire range of functionality available in the UI.
 # Todos
 
 1. IMPORTANT: Upgrade my quick-and-dirty, ironically non-concern-separated
-data files approach in favor of some kind of data-only form serialization (in
-case fields change), e.g., https://github.com/macek/jquery-serialize-object
-1. IMPORTANT: See execute.js, executableResponses.js, and
-componentRegistrations.js for specific todos already under-way
+    data files approach in favor of some kind of data-only form serialization
+    (in case fields change), e.g., https://github.com/macek/jquery-serialize-object
+1. IMPORTANT: See `execute.js`, `executableResponses.js`, and
+    `componentRegistrations.js` for specific todos already under-way
 1. Ask Mozilla re: `-new-instance` on Windows (if it is supposed to create
-a new separate icon) and whether can add as feature, including for the
-sake of this add-on
+    a new separate icon) and whether can add as feature, including for the
+    sake of this add-on
 1. Implement command line handler to support auto-opening exec dialog
-on start so that until web apps support file writing to arbitrary locations
-(WebActivity or new addition to WebAppFind?), one can at least treat
-ExecutableBuilder as itself an executable (and be able to bake it into
-an executable with its own icon, profile, etc.); also support other
-commands, so e.g., an AsYouWish application could provide an
-alternative interface to the built-in exec dialog (and triggerable from
-WebAppFind); see Demo todos below on dogfooding
+    on start so that until web apps support file writing to arbitrary locations
+    (WebActivity or new addition to WebAppFind?), one can at least treat
+    ExecutableBuilder as itself an executable (and be able to bake it into
+    an executable with its own icon, profile, etc.); also support other
+    commands, so e.g., an AsYouWish application could provide an
+    alternative interface to the built-in exec dialog (and triggerable from
+    WebAppFind); see Demo todos below on dog-fooding
 1. Add AsYouWish (and ExecutableBuilder and WebAppFind) optionally
-to profile folder (or global?) so apps can have
-privs from any profile! (Ought to be desirable to have easy
-way to share back from one profile to another though in case
-people start building independent executables and then decide
-want to share again so as to allow independent executable)
+    to profile folder (or global?) so apps can have
+    privileges from any profile! (Ought to be desirable to have easy
+    way to share back from one profile to another though in case
+    people start building independent executables and then decide
+    want to share again so as to allow independent executable)
 1. Attempt, implement and document editor associations (which apparently
-cannot be set through the normal Windows UI as with "Open With") such
-as allowing a web app to read batch files:
-http://windowsitpro.com/windows-server/how-can-i-change-editor-used-edit-batchcommand-files
-1. Profile building: <http://stackoverflow.com/a/22752481/271577>
+    cannot be set through the normal Windows UI as with "Open With") such
+    as allowing a web app to read batch files:
+    http://windowsitpro.com/windows-server/how-can-i-change-editor-used-edit-batchcommand-files
 
 # Other dependent read-me todos:
 
-1. Remove from WebAppFind/filebrowser-enhanced todos any items
-completed in process of this add-on
+1. Remove from WebAppFind/filebrowser-enhanced to-dos any items
+    completed in process of this add-on
+
+# Windows to-dos
+
 1. Deprecate executables in WebAppFind when batch approach done.
 1. Comparing to exes? adding to favorites, etc.? (any other
-unimplemented left to replicate and add as a todo?)
+    unimplemented left to replicate and add as a todo?)
 1. Open with batch ok for "Open with" but a problem with task bar
-(without tricks); any other reasons for exe over batch? try drag & drop
-onto cmd alias to batch (another advantage of executables) and describe
-usage with ExecutableBuilder-created batch files. Can
-use drag-onto-batch approach to pass in file path to Firefox with protocol
-(e.g., for creating and validating but especially the file-path-specific
-view and editing): see
-http://stackoverflow.com/questions/6852833/running-a-batch-script-by-right-clicking-any-file
-and cf. to drag-and-drop into browser; allow drag-and-drop of files onto
-add-on icon for processing similar to C++-based right-click? Drag files
-onto batch icon as another option?
-1. Save to SendTo folder (see [here](http://superuser.com/a/722699/156958)
-and [here](http://answers.microsoft.com/en-us/windows/forum/windows_vista-desktop/how-to-locate-the-sendto-folder-in-vista/78b16711-1135-4eb0-851a-8abae9bfe9ed)
-also for working with folders.
+    (without tricks); any other reasons for exe over batch? try drag & drop
+    onto cmd alias to batch (another advantage of executables) and describe
+    usage with ExecutableBuilder-created batch files. Can
+    use drag-onto-batch approach to pass in file path to Firefox with protocol
+    (e.g., for creating and validating but especially the file-path-specific
+    view and editing): see
+    http://stackoverflow.com/questions/6852833/running-a-batch-script-by-right-clicking-any-file
+    and cf. to drag-and-drop into browser; allow drag-and-drop of files onto
+    add-on icon for processing similar to C++-based right-click? Drag files
+    onto batch icon as another option?
+1. Save to `SendTo` folder (see [here](http://superuser.com/a/722699/156958)
+    and [here](http://answers.microsoft.com/en-us/windows/forum/windows_vista-desktop/how-to-locate-the-sendto-folder-in-vista/78b16711-1135-4eb0-851a-8abae9bfe9ed)
+    also for working with folders.
 
 # Possible todos
 
-1. Profile - Request to work offline, use the profile without asking, open FF is not open.
+1. Profile - Request to work offline, use the profile without asking,
+    open FF is not open.
 1. Complete i18n work
 1. Support direct integration of commands into
-[atyourcommand](https://github.com/brettz9/atyourcommand)
+    [atyourcommand](https://github.com/brettz9/atyourcommand)
 1. Ability to manage previously added items (including if added to
-extended filebrowser) so that one knows which file types have
-been associated through this add-on
+    extended filebrowser) so that one knows which file types have
+    been associated through this add-on
 1. Include ability to embed configuration information if WebAppFind
-command line starts to support more configuration options (e.g., full
-screen mode, or stage of type-detection algorithm to require or at
-which to begin).
+    command line starts to support more configuration options (e.g., full
+    screen mode, or stage of type-detection algorithm to require or at
+    which to begin).
 1. Try installing WebAppFind and ExecutableBuilder extensions globally so
-each profile (or multiple profiles--e.g., one profile for each WebAppFind
-method and/or different environments--e.g., multiple tabs but
-only for HTML reading) can access it? (since --install-global-extension
-is removed from FF now, should apparently use this instead:
-https://developer.mozilla.org/en-US/docs/Installing_extensions )
+    each profile (or multiple profiles--e.g., one profile for each WebAppFind
+    method and/or different environments--e.g., multiple tabs but
+    only for HTML reading) can access it? (since --install-global-extension
+    is removed from FF now, should apparently use this instead:
+    https://developer.mozilla.org/en-US/docs/Installing_extensions )
 1. If WebAppFind implements eval()-like behavior (see its todos for
-more on this possibility), create batch files (also for Linux/Mac) which
-pass evalable JS files (or embed JS strings) as a command line
-argument which will be sent to FF for (privileged) evaluation along with
-the optional WebAppFind files on which they are executed.
+    more on this possibility), create batch files (also for Linux/Mac) which
+    pass evalable JS files (or embed JS strings) as a command line
+    argument which will be sent to FF for (privileged) evaluation along with
+    the optional WebAppFind files on which they are executed.
 1. Ability to pass in string of HTML/JS to the add-on command line to
-execute that instead of a specific file (so that an exe could include
-the launching app and processing within one file)? (removing last?
-advantage of exes beyond allowing file dropping/right-click usage
-and own task bar icons? example: open a specific file, that gets sent
-to a particular eval: protocol which listens for the content and then
-passes it to a script that it dynamically loads
-1. Get code review of C++ file (e.g., ShellExecuteEx vs. CallProcess
-and -remote; other bugs?) and feedback on general approach,
-security concerns, etc. esp. if batch won't work for needs
+    execute that instead of a specific file (so that an exe could include
+    the launching app and processing within one file)? (removing last?
+    advantage of exes beyond allowing file dropping/right-click usage
+    and own task bar icons? example: open a specific file, that gets sent
+    to a particular eval: protocol which listens for the content and then
+    passes it to a script that it dynamically loads
+1. Get code review of C++ file (e.g., `ShellExecuteEx` vs. `CallProcess`
+    and `-remote`; other bugs?) and feedback on general approach,
+    security concerns, etc. esp. if batch won't work for needs
 1. Ability to proposed WebAppFind handle multiple files on
-right-click (cycling through arguments)? e.g., to open a group
-and then commit as a group (seems to be no "open with
-option when done this way); pass in additional files for access
-(e.g., to save to a config file, to build an icon file in a predictable
-location along with the other file data, etc.)
-1. Conditional logic to check if -no-remote (preferred is open) and if
-not, open a specific or vice versa? (?)
-1. Make SED file more configurable (and savable along with batch?)
+    right-click (cycling through arguments)? e.g., to open a group
+    and then commit as a group (seems to be no "open with
+    option when done this way); pass in additional files for access
+    (e.g., to save to a config file, to build an icon file in a predictable
+    location along with the other file data, etc.)
+1. Conditional logic to check if `-no-remote` (preferred is open) and if
+    not, open a specific or vice versa? (?)
 1. Demo todos
-    1. Demo dogfooding reading/editing our special file type once
-    separation-of-concerns/serialize to-do is complete (so it could be
-    handled by other apps as with any other WebAppFind file) though
-    would need AYW for privileges (as also could do with SVG icons
-    when done)
-1. If there is any advantage to expanding SED options, or if we implement
-some more robust way to handle exe building, e.g., so as to be able to
-include an icon without creating a shortcut, we may expand the current
-UI to handle this.
+    1. Demo dog-fooding reading/editing our special file type once
+        separation-of-concerns/serialize to-do is complete (so it could be
+        handled by other apps as with any other WebAppFind file) though
+        would need AYW for privileges (as also could do with SVG icons
+        when done)
+1. SED file
+    1. Make SED file more configurable (and savable along with batch?)
+    1. If there is any advantage to expanding SED options, or if we implement
+        some more robust way to handle exe building, e.g., so as to be able to
+        include an icon without creating a shortcut, we may expand the current
+        UI to handle this.
 
 # Appreciation
 
