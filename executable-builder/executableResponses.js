@@ -12,7 +12,8 @@ function l (msg) {
 const {getNodeJSON} = browser.extension.getBackgroundPage();
 
 /*
-In case we decide to create profiles on behalf of the user (without the need to visit the profile manager)
+In case we decide to create profiles on behalf of the user (without the need to
+    visit the profile manager):
 http://stackoverflow.com/questions/18711327/programmatically-create-firefox-profiles
 https://developer.mozilla.org/en-US/docs/XPCOM_Interface_Reference/nsIToolkitProfileService
 https://developer.mozilla.org/en-US/docs/XPCOM_Interface_Reference/nsIToolkitProfile
@@ -291,7 +292,8 @@ EB.saveExecutables = function (data) {
 
 // THE REMAINING WAS COPIED FROM filebrowser-enhanced fileBrowserResponses.js (RETURN ALL MODIFICATIONS THERE)
 function picker ({dirPath, selector, selectFolder, defaultExtension}) {
-    // TODO: Could implement as a Node-based file/directory picker; maybe this? https://github.com/Joker-Jelly/nfb
+    // TODO: Could reimplement as a Node-based file/directory picker;
+    //           maybe this? https://github.com/Joker-Jelly/nfb
     /*
     // Note: could use https://developer.mozilla.org/en-US/docs/Extensions/Using_the_DOM_File_API_in_chrome_code
     //         but this appears to be less feature rich

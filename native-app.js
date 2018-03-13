@@ -348,7 +348,7 @@ function processMessage (msgObj) {
     }
     switch (method) {
     case 'nodeEval': {
-        output.write('"Node eval"');
+        // output.write('"Node eval"');
         const {string, tabID} = msgObj;
         let result;
         try {
@@ -411,7 +411,7 @@ function processMessage (msgObj) {
 
 const wss = new WebSocket.Server({ port: 8080 });
 wss.on('connection', (ws) => {
-    output.write('"Begin test"');
+    // output.write('"Begin test"');
     ws.on('message', (msg) => { // Strings or buffer
         const msgObj = JSON.parse(msg);
         processMessage(msgObj).then((msgObj) => {

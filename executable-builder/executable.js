@@ -1,25 +1,34 @@
 /* eslint-env webextensions, browser */
 /* globals EB, jml */
+
 /*
 Info:
-1. On building profile dir. for executables, see http://stackoverflow.com/questions/18711327/programmatically-create-firefox-profiles
-and possibly https://developer.mozilla.org/en-US/docs/Profile_Manager ; also might just
-use command line
+1. On building profile dir. for executables, see
+    http://stackoverflow.com/questions/18711327/programmatically-create-firefox-profiles
+    and possibly https://developer.mozilla.org/en-US/docs/Profile_Manager ;
+    also might just use command line
 1. If need to convert PNG to ICO
-    var imgTools = Components.classes['@mozilla.org/image/tools;1'].getService(Components.interfaces.imgITools);
+    const imgTools = Components.classes['@mozilla.org/image/tools;1'].getService(Components.interfaces.imgITools);
     imgTools.encodeImage( , 'image/x-icon');
 1. With WebAppFind, tried -remote, -silent; didn't try -no-remote, -tray
 
 Todos:
-1. Split into generic and specific sections (so will allow building of executables regardless of whether used for WebAppFind or not); dynamically reveal sections based on 'Open with WebAppFind?' radio group selection, hard-coding or not, etc.
+1. Split into generic and specific sections (so will allow building of
+    executables regardless of whether used for WebAppFind or not);
+    dynamically reveal sections based on 'Open with WebAppFind?'
+    radio group selection, hard-coding or not, etc.
 
-1. Reported error (as with tooltip titles): autocomplete won't show up inside of panels: https://bugzilla.mozilla.org/show_bug.cgi?id=918600 (though currently not doing as panel anyways)
+1. Reported error (as with tooltip titles): autocomplete won't show up
+    inside of panels: https://bugzilla.mozilla.org/show_bug.cgi?id=918600
+    (though currently not doing as panel anyways)
 1. Build command line output including path flag
-    1. Use command line http://www.registryonwindows.com/registry-command-line.php (invokable
-from FF add-on) to add to registry re: open-with values or use js-ctypes or command line
-for integrating with deeper Windows (and Linux) functionality? e.g., adding items for 'open with'?
+    1. Use command line http://www.registryonwindows.com/registry-command-line.php
+        (invokable from FF add-on) to add to registry re: open-with values or
+        use js-ctypes or command line for integrating with deeper Windows
+        (and Linux) functionality? e.g., adding items for 'open with'?
         1. http://msdn.microsoft.com/en-us/library/windows/desktop/cc144158%28v=vs.85%29.aspx
-            1. See http://www.enzinger.net/en/FileAsso.html regarding SHChangeNotify SHCNE_ASSOCCHANGED to avoid need for restart!
+            1. See http://www.enzinger.net/en/FileAsso.html regarding
+                SHChangeNotify SHCNE_ASSOCCHANGED to avoid need for restart!
             1. Use DefaultIcon instead of building a shortcut?
         1. http://stackoverflow.com/questions/21082752/ftype-assoc-priority-and-adding-to-openwithlist-from-the-command-line/24343882?iemail=1&noredirect=1#24343882
         1. http://msdn.microsoft.com/en-us/library/windows/desktop/cc144148%28v=vs.85%29.aspx#fa_optional_keys_attributes
@@ -36,7 +45,8 @@ for integrating with deeper Windows (and Linux) functionality? e.g., adding item
         1. http://vim.wikia.com/wiki/Launch_files_in_new_tabs_under_Windows#Using_File_Associations
         1. http://ss64.com/nt/reg.html
         1. http://superuser.com/a/700773/156958 ?
-        1. Option to associate with Windows 'verbs' (i.e., Open, Edit, Print, Play, Preview or custom):
+        1. Option to associate with Windows 'verbs' (i.e., Open, Edit, Print, Play,
+            Preview or custom):
             1. http://msdn.microsoft.com/en-us/library/bb165967.aspx
             1. http://msdn.microsoft.com/en-us/library/windows/desktop/cc144175%28v=vs.85%29.aspx
         1. Creating Windows context menus including submenus!
@@ -215,10 +225,6 @@ function openOrCreateICOResponse () {
 // COPIED FROM filebrowser-enhanced directoryMod.js (RETURN ALL MODIFICATIONS THERE)
 function autocompleteValuesResponse ({listID, optValues}) {
     const datalist = document.getElementById(listID);
-    if (!datalist) {
-        // Todo: Remove this block after implemented
-        return;
-    }
     while (datalist.firstChild) {
         datalist.removeChild(datalist.firstChild);
     }
@@ -233,10 +239,6 @@ function autocompleteValuesResponse ({listID, optValues}) {
 
 function autocompleteURLHistoryResponse ({listID, optValues}) { // , optIcons
     const datalist = document.getElementById(listID);
-    if (!datalist) {
-        // Todo: Remove this block after implemented
-        return;
-    }
     while (datalist.firstChild) {
         datalist.removeChild(datalist.firstChild);
     }
@@ -294,7 +296,8 @@ function init () {
                 target.parentNode.removeChild(target.nextElementSibling);
             }
             if (val === getHardPath('TaskBar')) {
-                // Todo: Possible to allow pinning to task bar without saving the executable/batch there?
+                // Todo: Possible to allow pinning to task bar without
+                //         saving the executable/batch there?
                 target.parentNode.insertBefore(jml(
                     'div', {'class': 'pinAppHolder'}, [
                         ['label', {title: 'While on the task bar, a desktop file or URL can be drag-and-dropped onto it if the executable is dynamic or a specific one if the document is baked into the executable'}, [
@@ -711,11 +714,14 @@ function init () {
                 ]],
                 /*
                 Todo:
-                1. Separate executables like Prism?: hard-code a profile (create one programmatically for user in
-                an install script?) firefox.exe -no-remote -P executable http://example.com
-                1. Whether to auto-create a new profile just for this combination of options and a
-                -no-remote call to allow executable-like behavior (creates a separate icon instance
-                in the task bar though not a separate icon unless, again, the icon is attached to a short cut)
+                1. Separate executables like Prism?: hard-code a profile (create
+                    one programmatically for user in an install script?)
+                    firefox.exe -no-remote -P executable http://example.com
+                1. Whether to auto-create a new profile just for this combination
+                    of options and a -no-remote call to allow executable-like
+                    behavior (creates a separate icon instance in the task bar
+                    though not a separate icon unless, again, the icon is
+                    attached to a short cut)
                 */
                 ['div', [
                     ['label', {'for': 'profileName'}, [
@@ -747,7 +753,9 @@ function init () {
                 ['br'],
                 // Creates an autocomplete for URLs
                 // Todo:
-                // 1. An optional, hard-coded web app URL (to circumvent the normal detection procedures and always open with a given web app)
+                // 1. An optional, hard-coded web app URL (to circumvent the
+                //     normal detection procedures and always open with a
+                //     given web app)
                 ['label', [
                     'Hard-coded web app URI: ',
                     ['input', {
@@ -768,13 +776,17 @@ function init () {
                     ]]
                 ]],
                 ['br'],
-                //  Todo: 1. Whether web app to open by default in full-screen mode (could just let web app and user handle, but user may prefer to bake it in to a particular executable only)
+                //  Todo: 1. Whether web app to open by default in full-screen
+                //             mode (could just let web app and user handle, but
+                //             user may prefer to bake it in to a particular
+                //             executable only)
                 ['label', [
                     'Open web app/URL by default in full-screen mode?',
                     ['input', {type: 'checkbox'}]
                 ]],
                 ['br'],
-                //  Todo: 1. Batch file building section; Raw textarea (OR (only?) when webappfind is also installed...)
+                //  Todo: 1. Batch file building section; Raw textarea (OR
+                //              (only?) when webappfind is also installed...)
                 ['label', [
                     'Batch file commands in addition to any other options set above: ',
                     ['br'],
@@ -788,7 +800,8 @@ function init () {
                     ['textarea']
                 ]],
                 ['br'],
-                //  Todo: 1. JavaScript (implement with CodeMirror or option to load JS file (itself invocable with WebAppFind) instead)
+                //  Todo: 1. JavaScript (implement with CodeMirror or option to
+                //              load JS file (itself invocable with WebAppFind) instead)
                 ['label', [
                     'Hard-coded string to pass as evalable JavaScript to the WebAppFind web app: ',
                     ['br'],
@@ -827,25 +840,20 @@ const options = {
     folderImage: 'Yellow_folder_icon_open.png'
 };
 
-/*
-if (document.body) {
-    while (document.body.firstChild) {
-        document.body.removeChild(document.body.firstChild);
-    }
-}
-*/
+// To send messages within add-on
 // browser.runtime.sendMessage(Object.assign(obj || {}, {type}));
 init();
 
 function flattenDepthOne (arrays) {
     return [].concat(...arrays);
 }
-const metas = flattenDepthOne(await browser.tabs.executeScript({
+// Todo: Use
+/* const metas = */ flattenDepthOne(await browser.tabs.executeScript({
     allFrames: true,
     code: `
 [...document.querySelectorAll('meta[name="webappfind"]')].map((m) => m.content)
 `,
     runAt: 'document_end'
 }));
-console.log('metas-browser-action', metas);
+// console.log('metas-browser-action', metas);
 })();
