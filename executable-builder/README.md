@@ -4,26 +4,27 @@
 click the "Exec" icon in the add-on bar, the version in the master
 branch ought to allow the user-facing UI to be viewed.)***
 
-Executable Builder is a browser add-on (currently Firefox only) which
-allows for the building of desktop executables (currently Windows only)
-which can launch URLs and which are associated with their own icons.
-
-Executable Builder provides particular functionality for use with
-[WebAppFind](https://github.com/brettz9/webappfind) so that one
-can build, in a more customizable manner, executables which can
-pass a selected desktop file to a web application for viewing and
-optional editing. (Windows will find the executable if the user right-clicks
+Executable Builder is a component of WebAppFind which provides
+the functionality to build, in a more customizable manner, executables which
+can pass a selected desktop file to a web application for viewing and
+optional editing. (The Mac will find the executable if the user right-clicks
 "Open with..." over a given desktop file or if the user opts to select the
-executable as the default application handling for files of a given file
-extension.)
+executable as the default application handling for particular files or files
+of a given file extension.)
+
+The executables can have their own icons to give the feel on the
+desktop that the executable (which opens a web app) is as any other app.
+<!--
+filetypes.json: Add this note back once reimplemented
 
 For an example of such WebAppFind behavior customization,
 Executable Builder might be used to build an executable which
 hard-codes a particular web app as the handler for the clicked-on
-file instead of relying on WebAppFind's behavior of checking for a
+file--instead of relying on WebAppFind's behavior of checking for a
 protocol handler for the file's type (with the type determined by the
 file's extension or, if present, a `filetypes.json` file in the same directory
 as the file).
+-->
 
 For any WebAppFind executable, one may choose the level of privilege
 by which the web app may act on the supplied file (currently: "view", "edit",
