@@ -15,7 +15,6 @@
         "clipboardWrite",
         "cookies",
         "geolocation",
-        "history",
         "idle",
         "notifications",
         "topSites",
@@ -29,7 +28,7 @@
 
         "nativeMessaging", "<all_urls>",
 
-        "contextMenus", "activeTab", "tabs", "webNavigation",
+        "contextMenus", "activeTab", "tabs", "webNavigation", "history",
 
 "unlimitedStorage",
 

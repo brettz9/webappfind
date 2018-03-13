@@ -43,8 +43,25 @@ EB.getHardPaths = function () {
     return getNodeJSON('getHardPaths');
 };
 
-EB.autocompleteURLHistory = function (data) {
-    return getNodeJSON('autocompleteURLHistory', data);
+EB.autocompleteURLHistory = function ({listID, value: userVal}) {
+    return browser.history.search({
+        text: userVal,
+        maxResults: 100 // Default: 100
+    }).then((historyItems) => {
+        const optValues = historyItems.map((hi) => hi.url);
+        return Promise.resolve({
+            listID,
+            optValues,
+            // We could use a convoluted way of hiding tabs (which cannot be
+            //    created hidden but an empty one might be created on
+            //    start-up and then hidden); added to an issue to be able
+            //    to get favicons from history
+            // https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/tabs/hide
+            // https://bugzilla.mozilla.org/show_bug.cgi?id=1411120#c6
+            // optIcons,
+            userVal // Just for debugging on the other side
+        });
+    });
 };
 
 EB.openOrCreateICO = function () {

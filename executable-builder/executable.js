@@ -213,8 +213,8 @@ function openOrCreateICOResponse () {
 }
 
 // COPIED FROM filebrowser-enhanced directoryMod.js (RETURN ALL MODIFICATIONS THERE)
-function autocompleteValuesResponse (data) {
-    const datalist = document.getElementById(data.listID);
+function autocompleteValuesResponse ({listID, optValues}) {
+    const datalist = document.getElementById(listID);
     if (!datalist) {
         // Todo: Remove this block after implemented
         return;
@@ -222,7 +222,7 @@ function autocompleteValuesResponse (data) {
     while (datalist.firstChild) {
         datalist.removeChild(datalist.firstChild);
     }
-    data.optValues.forEach((optValue) => {
+    optValues.forEach((optValue) => {
         const option = jml('option', {
             // text: optValue,
             value: optValue
@@ -231,8 +231,8 @@ function autocompleteValuesResponse (data) {
     });
 }
 
-function autocompleteURLHistoryResponse (data) {
-    const datalist = document.getElementById(data.listID);
+function autocompleteURLHistoryResponse ({listID, optValues}) { // , optIcons
+    const datalist = document.getElementById(listID);
     if (!datalist) {
         // Todo: Remove this block after implemented
         return;
@@ -240,12 +240,13 @@ function autocompleteURLHistoryResponse (data) {
     while (datalist.firstChild) {
         datalist.removeChild(datalist.firstChild);
     }
-    data.optValues.forEach((optValue, i) => {
+    optValues.forEach((optValue, i) => {
         const option = jml('option', {
             // text: optValue,
-            value: optValue,
+            value: optValue
             // Works as a regular option, but not a datalist option (including if option text is provided)
-            style: 'background: no-repeat url(' + data.optIcons[i] + ');'
+            // Can't use currently due to https://bugzilla.mozilla.org/show_bug.cgi?id=1411120#c6
+            // style: 'background: no-repeat url(' + optIcons[i] + ');'
         });
         datalist.appendChild(option);
     });
@@ -282,10 +283,8 @@ function saveTemplateResult ({templateName}) {
 
 function init () {
     window.addEventListener('input', function ({target}) {
-        const id = target.id,
-            val = target.value,
-            dataset = target.dataset,
-            pathBoxInput = dataset.pathBoxInput;
+        const {id, dataset, value: val} = target,
+            {pathBoxInput} = dataset;
 
         if (!val) {
             return;
@@ -347,8 +346,8 @@ function init () {
     }
 
     window.addEventListener('change', function ({target}) {
-        const val = target.value;
-        if (target.id === 'templateName') {
+        const {id, value: val} = target;
+        if (id === 'templateName') {
             if ($('#rememberTemplateChanges').checked &&
                 templateExistsInMenu(val)
             ) {
@@ -357,7 +356,7 @@ function init () {
                     // return;
                 }
             }
-        } else if (target.id === 'templates') {
+        } else if (id === 'templates') {
             // $('#templateName').value = val;
             EB.getTemplate({fileName: val}).then(getTemplateResponse);
         }
@@ -385,7 +384,8 @@ function init () {
         const pathBoxSelect = dataset.pathBoxSelect ||
             (parentNode && parentNode.dataset && parentNode.dataset.pathBoxSelect);
         let content,
-            keyEv, options, executableNames, dirPaths, preserveShortcuts, pinApps, convertToExes, sedPreserves, batchPreserves,
+            keyEv, options, executableNames, dirPaths, preserveShortcuts,
+            pinApps, convertToExes, sedPreserves, batchPreserves,
             {id} = target,
             {sel} = dataset;
 
