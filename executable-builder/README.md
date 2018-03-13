@@ -12,8 +12,7 @@ optional editing. (The Mac will find the executable if the user right-clicks
 executable as the default application handling for particular files or files
 of a given file extension.)
 <!--
-TODO:
-`filetypes.json`: Add this note back once reimplemented
+TODO: Add when `filetypes.json` reimplemented:
 
 For an example of such WebAppFind behavior customization,
 Executable Builder might be used to build an executable which
@@ -35,39 +34,43 @@ Firefox command line parameters or pass a custom hard-coded string to
 the web app so that it may tweak its behavior accordingly.
 -->
 <!--
-TODO:
+TODO: Add when implemented
 The executables can have their own associated icons (which the add-on
 can help you to create) to give the feel on the desktop that the
 executable (which opens a web app) is as any other app.
 -->
 <!--
-TODO:
-in Windows Explorer, the start menu, the task bar,
-and in IE, in its location bar, tabs, favorites, and on the list of
-"Your most popular sites" or "Frequent".
+TODO: Add when implemented
+By having icons, this lets them show in Windows Explorer, the
+start menu, and the task bar.
 -->
-
+<!--
+TODO: Add when implemented
 If one opts to tie this executable to a separate Firefox profile,
 this icon will show up in the task bar independent from other
 Firefox windows. (If WebAppFind can be adapted to support XULRunner
 instead of Firefox, one might be able to get an even more light
 weight "executable" environment.)
+-->
 
 The executables built by Executable Builder are actually just simple
 files working with the command line which pass some additional
 instructions to it. In the case of WebAppFind executables, these
 will be passing command line instructions to Firefox.
 
+<!--
+TODO: Add when implemented
 Used in conjunction with Firefox profiles, one will get the benefits
 of former projects like Mozilla Prism/Chromeless/WebRunner which
-provided web applications as executables with their
-ability to show up independently in the task bar, but with the added
-optional ability of granting privileged features to web applications
+provided web applications as executables with their ability to show
+up independently in the task bar, but with the added optional ability
+of granting privileged features to web applications
 (such as one may get if using Executable Builder/WebAppFind
-with an AsYouWish application) and with the ability to utilize add-ons,
+with AsYouWish functionality) and with the ability to utilize add-ons,
 even a separate set of add-ons for each executable (and without
-the problem that all of these other mentioned executable projects
-are all now apparently defunct).
+the problem that all of these other executable projects are all
+now apparently defunct).
+-->
 
 <!--
 NOTE: This is not currently working due to restrictions with
