@@ -224,21 +224,21 @@ can cover the entire range of functionality available in the UI.
 
 # Windows to-dos
 
-1. Ask Mozilla re: `-new-instance` on Windows (if it is supposed to create
+1. Ask Mozilla re: *`-new-instance`* on Windows (if it is supposed to create
     a new separate icon) and whether can add as feature, including for the
     sake of this add-on
-1. Deprecate executables in WebAppFind when batch approach done.
-1. Attempt, implement and document editor associations (which apparently
+1. *Deprecate executables* in WebAppFind when batch approach done.
+1. Attempt, implement and document *editor associations* (which apparently
     cannot be set through the normal Windows UI as with "Open With") such
     as allowing a web app to read batch files:
     <http://windowsitpro.com/windows-server/how-can-i-change-editor-used-edit-batchcommand-files>
 1. Build a batch file which can be invoked with a document file OR URL so
-    that if in the task bar, a file or URL might be droppable upon it
+    that if in the task bar, a *file or URL might be droppable on it*
     (if this is possible to do)
-1. Comparing to exes? adding to favorites, etc.? (any other
-    unimplemented left to replicate and add as a todo?)
+1. *Add to favorites*
 1. Open with batch ok for "Open with" but a problem with task bar
-    (without tricks); any other reasons for exe over batch? try drag & drop
+    (without tricks); any other reasons for exe over batch? can add to favorites?
+    try *drag & drop*
     onto cmd alias to batch (another advantage of executables) and describe
     usage with ExecutableBuilder-created batch files. Can
     use drag-onto-batch approach to pass in file path to Firefox with protocol
@@ -248,18 +248,18 @@ can cover the entire range of functionality available in the UI.
     and cf. to drag-and-drop into browser; allow drag-and-drop of files onto
     add-on icon for processing similar to C++-based right-click? Drag files
     onto batch icon as another option?
-1. Save to `SendTo` folder (see [here](http://superuser.com/a/722699/156958)
+1. Save to *`SendTo` folder* (see [here](http://superuser.com/a/722699/156958)
     and [here](http://answers.microsoft.com/en-us/windows/forum/windows_vista-desktop/how-to-locate-the-sendto-folder-in-vista/78b16711-1135-4eb0-851a-8abae9bfe9ed)
     also for working with folders.
-1. SED file
-    1. Make SED file more configurable (and savable along with batch?)
-    1. If there is any advantage to expanding SED options, or if we implement
+1. *SED file*
+    1. Make SED file *more configurable* (and *savable* along with batch?)
+    1. If there is any advantage to *expanding SED options*, or if we implement
         some more robust way to handle exe building, e.g., so as to be able to
         include an icon without creating a shortcut, we may expand the current
         UI to handle this.
 1. Get code review of C++ file (e.g., `ShellExecuteEx` vs. `CallProcess`
     and `-remote`; other bugs?) and feedback on general approach,
-    security concerns, etc. esp. if batch won't work for needs
+    security concerns, etc. esp. *if batch won't work for needs*
 
 # Appreciation
 
