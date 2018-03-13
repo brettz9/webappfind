@@ -1,5 +1,5 @@
-/* eslint-env webextensions */
-/* globals EB, jml, DOMParser, XMLSerializer, alert, confirm */
+/* eslint-env webextensions, browser */
+/* globals EB, jml */
 /*
 Info:
 1. On building profile dir. for executables, see http://stackoverflow.com/questions/18711327/programmatically-create-firefox-profiles
