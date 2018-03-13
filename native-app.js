@@ -19,6 +19,7 @@ function escapeAppleScriptQuoted (s) {
 
 (() => {
 switch (method) { // We're reusing this executable to accept messages for setting up a client
+case 'execbuildopen':
 case 'webappfind':
 case 'client': {
     const ws = new WebSocket('ws://localhost:8080');
@@ -347,7 +348,11 @@ function processMessage (msgObj) {
         });
     }
     switch (method) {
-    case 'nodeEval': {
+    case 'execbuildopen': {
+        // Not working currently due to browser restrictions on opening popup
+        //    unless there is a user action
+        return Promise.resolve({method});
+    } case 'nodeEval': {
         // output.write('"Node eval"');
         const {string, tabID} = msgObj;
         let result;
@@ -381,6 +386,7 @@ function processMessage (msgObj) {
         });
     }
     case 'read':
+    case 'webappfind':
     case 'client': {
         if ('file' in msgObj) { // Site may still wish args passed to it
             // Todo: Document this and `binary` as command line

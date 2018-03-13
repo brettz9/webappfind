@@ -22,12 +22,12 @@ Executable Builder might be used to build an executable which
 hard-codes a particular web app as the handler for the clicked-on
 file instead of relying on WebAppFind's behavior of checking for a
 protocol handler for the file's type (with the type determined by the
-file's extension or, if present, a filetypes.json file in the same directory
+file's extension or, if present, a `filetypes.json` file in the same directory
 as the file).
 
 For any WebAppFind executable, one may choose the level of privilege
-by which the web app may act on the supplied file (currently: view, edit,
-viewbinary, or editbinary). One may customize how a new tab or window
+by which the web app may act on the supplied file (currently: "view", "edit",
+"viewbinary", or "editbinary"). One may customize how a new tab or window
 is created, over-ride preferences, or default the web app display of the
 opened file in full screen mode. Advanced users can include additional
 batch commands or Firefox command line parameters or pass a custom
@@ -60,18 +60,38 @@ even a separate set of add-ons for each executable (and without
 the problem that all of these other mentioned executable projects
 are all now apparently defunct).
 
+<!--
+NOTE: This is not currently working due to restrictions with
+[browserAction.openPopup](https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/browserAction/openPopup);
+it requires a user action to activate
+
 # Command line usage
 
 Once the add-on is installed, the following can be used in calls to
 Firefox in addition to Firefox's own flags.
 
-- `-execbuildopen` - Open the Executable Builder dialog.
+- `node native-app.js --method=execbuildopen` - Open the Executable Builder dialog.
 
 It is hoped that additional command line options will be added which
 can cover the entire range of functionality available in the UI.
+-->
 
 # To-dos for new Executable Builder (in WebAppFind)
 
+1. IMPORTANT: See `execute.js`, `executableResponses.js`, etc. for specific
+    todos already under-way
+1. Ability to drop URL onto AppleScript and use that?
+1. Reimplement ability to invoke from command line (though native messaging)
+    1. Expose full API for building executables to the command line
+        1. Support additional command line arguments to open up the executable
+            builder dialog from the desktop with initial values such as
+            executable or icon path, desktop/remote file or web app URL,
+            etc.; allow command the "Browse" dialog for desktop file to be
+            opened via command line or immediately to the document URL
+            autocomplete field (so that Executable Builder can easily add
+            an add-on bar/toolbar button to go immediately to picking a
+            file or URL)
+    1. Allow executable builder to build executables to run itself!
 1. Adapt to-dos below for current realities of being within WebAppFind
 1. Split into generic and specific sections (so will allow building of
     executables regardless of whether used for WebAppFind or not);
@@ -116,8 +136,6 @@ can cover the entire range of functionality available in the UI.
 1. IMPORTANT: Upgrade my quick-and-dirty, ironically non-concern-separated
     data files approach in favor of some kind of data-only form serialization
     (in case fields change), e.g., https://github.com/macek/jquery-serialize-object
-1. IMPORTANT: See `execute.js`, `executableResponses.js`, and
-    `componentRegistrations.js` for specific todos already under-way
 1. Ask Mozilla re: `-new-instance` on Windows (if it is supposed to create
     a new separate icon) and whether can add as feature, including for the
     sake of this add-on
@@ -140,7 +158,7 @@ can cover the entire range of functionality available in the UI.
     as allowing a web app to read batch files:
     http://windowsitpro.com/windows-server/how-can-i-change-editor-used-edit-batchcommand-files
 
-# Other dependent read-me todos:
+# Other dependent README todos:
 
 1. Remove from WebAppFind/filebrowser-enhanced to-dos any items
     completed in process of this add-on
@@ -148,6 +166,9 @@ can cover the entire range of functionality available in the UI.
 # Windows to-dos
 
 1. Deprecate executables in WebAppFind when batch approach done.
+1. Build a batch file which can be invoked with a document file OR URL so
+    that if in the task bar, a file or URL might be droppable upon it
+    (if this is possible to do)
 1. Comparing to exes? adding to favorites, etc.? (any other
     unimplemented left to replicate and add as a todo?)
 1. Open with batch ok for "Open with" but a problem with task bar
@@ -214,6 +235,10 @@ can cover the entire range of functionality available in the UI.
         handled by other apps as with any other WebAppFind file) though
         would need AYW for privileges (as also could do with SVG icons
         when done)
+    1. Provide sample batch file or exe; including ones which supply arguments
+        based on the current directory's path; the path could determine the
+        ultimate path of the to-be-created executable (or icon), a
+        hard-coded desktop (or remote) file or web app URL to open
 1. SED file
     1. Make SED file more configurable (and savable along with batch?)
     1. If there is any advantage to expanding SED options, or if we implement
