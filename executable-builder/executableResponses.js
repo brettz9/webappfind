@@ -18,6 +18,7 @@ http://stackoverflow.com/questions/18711327/programmatically-create-firefox-prof
 https://developer.mozilla.org/en-US/docs/XPCOM_Interface_Reference/nsIToolkitProfileService
 https://developer.mozilla.org/en-US/docs/XPCOM_Interface_Reference/nsIToolkitProfile
 http://kb.mozillazine.org/Profiles.ini_file
+https://developer.mozilla.org/en-US/docs/Profile_Manager
 */
 EB.createProfile = function ({name}) {
     // https://developer.mozilla.org/en-US/docs/XPCOM_Interface_Reference/nsIToolkitProfileService#createProfile%28%29
@@ -128,6 +129,7 @@ async function createBatchForShortcutCreation (data) {
         ':::oShellLink.TargetPath = ' + batchQuote(ff) + '\n' +
         // Todo: reconcile the following arguments to each other!
         ':::oShellLink.Arguments = "' +
+        // 1. With WebAppFind, tried -remote, -silent; didn't try -no-remote, -tray
         '-no-remote' + (profileName ? ' -P """' + stripQuotes(profileName) + '""' : '') + // Quotes not allowed in profile names anyways and double quotes could present an issue if already inside double quotes
         '::: -remote ""openurl(about:newtab)"""\n' +
         '::: -webappdoc ' + batchQuote(webappdoc) + '\n' +

@@ -2,26 +2,8 @@
 /* globals EB, jml */
 
 /*
-Info:
-1. On building profile dir. for executables, see
-    http://stackoverflow.com/questions/18711327/programmatically-create-firefox-profiles
-    and possibly https://developer.mozilla.org/en-US/docs/Profile_Manager ;
-    also might just use command line
-1. If need to convert PNG to ICO
-    const imgTools = Components.classes['@mozilla.org/image/tools;1'].getService(Components.interfaces.imgITools);
-    imgTools.encodeImage( , 'image/x-icon');
-1. With WebAppFind, tried -remote, -silent; didn't try -no-remote, -tray
-
 Todos:
-1. Split into generic and specific sections (so will allow building of
-    executables regardless of whether used for WebAppFind or not);
-    dynamically reveal sections based on 'Open with WebAppFind?'
-    radio group selection, hard-coding or not, etc.
-
-1. Reported error (as with tooltip titles): autocomplete won't show up
-    inside of panels: https://bugzilla.mozilla.org/show_bug.cgi?id=918600
-    (though currently not doing as panel anyways)
-1. Build command line output including path flag
+1. Build command line output including path flag (Windows info)
     1. Use command line http://www.registryonwindows.com/registry-command-line.php
         (invokable from FF add-on) to add to registry re: open-with values or
         use js-ctypes or command line for integrating with deeper Windows
@@ -53,7 +35,7 @@ Todos:
             1. http://msdn.microsoft.com/en-us/library/windows/desktop/cc144171%28v=vs.85%29.aspx
             1. http://msdn.microsoft.com/en-us/library/windows/desktop/cc144173%28v=vs.85%29.aspx
         1. Avoid need for separate batch by specifying executable and path
-        with needed command line options in registry?
+            with needed command line options in registry?
         1. Command line standards!!: http://technet.microsoft.com/en-us/library/ee156811.aspx
 1. Search for other 'todo' instances below
 */
@@ -97,12 +79,22 @@ function createFileExtensionControls () {
     Todos:
     1. Associate file extensions to file type, and file type to executable: ftype/assoc
     1. Make as default (or only use with open with...)); OpenWithProgids ?
-    1. reg query (add?) HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts\.svg\OpenWithList
-    1. List all file types in pull-down in case someone wants to create an explicit file type for a given extension (or just a file type in case the registry already handles extension-to-type associations) ('assoc' for all <.fileext>=<filetype>, 'assoc + <filetype>' to get <.fileext>=<long name>; 'ftype' for all <filetype>='<exe path>' %1, etc.)
-    1. List all existing extension-to-type associations, extension-to-long-name, type-to-exe, or extension-to-exe
-    1. See discussion on icons below for app ID association (and adding to recent docs or jump list customization)
-    1. Optionally pin apps programmatically to task bar (when task bar path is chosen), supporting dragging and dropping to it or requiring a hard-coded document path/URL
-    1. Support drag-and-drop of files to this dialog (to supply document path or URL if it is a URL)
+    1. reg query (add?)
+        HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts\.svg\OpenWithList
+    1. List all file types in pull-down in case someone wants to create an
+        explicit file type for a given extension (or just a file type in
+        case the registry already handles extension-to-type associations)
+        ('assoc' for all <.fileext>=<filetype>, 'assoc + <filetype>' to
+        get <.fileext>=<long name>; 'ftype' for all <filetype>='<exe path>' %1, etc.)
+    1. List all existing extension-to-type associations, extension-to-long-name,
+        type-to-exe, or extension-to-exe
+    1. See discussion on icons below for app ID association (and adding to
+        recent docs or jump list customization)
+    1. Optionally pin apps programmatically to task bar (when task bar path
+        is chosen), supporting dragging and dropping to it or requiring a
+        hard-coded document path/URL
+    1. Support drag-and-drop of files to this dialog (to supply document path or
+        URL if it is a URL)
     */
     const i = ++ctr;
     return ['div', {id: 'fileExtensionInfoHolder' + i}, [
@@ -246,7 +238,8 @@ function autocompleteURLHistoryResponse ({listID, optValues}) { // , optIcons
         const option = jml('option', {
             // text: optValue,
             value: optValue
-            // Works as a regular option, but not a datalist option (including if option text is provided)
+            // Works as a regular option, but not a datalist option (including
+            //    if option text is provided)
             // Can't use currently due to https://bugzilla.mozilla.org/show_bug.cgi?id=1411120#c6
             // style: 'background: no-repeat url(' + optIcons[i] + ');'
         });
@@ -651,14 +644,20 @@ function init () {
                         ico files, subject to a filetypes.json file in those
                         directories) (might utilize those paths already added for saving)
                         1. If filetypes.json has an icons section, use that by default instead?
-                        1. open SVG or ICO but save back at least to ICO and ideally to SVG (but multiple file saving not supported currently by WebAppFind, so do through add-on for now)
-                    1. Ensure icon will work by assigning appIDs to specific windows, profile (processes?), or app (idea to list FF tabs in jump list?); SHAddToRecentDocs may add app ID AND add the potentially useful behavior of putting web apps into recent docs (if add support, make this optional)
-                        Windows: Separate windows get app IDs (SHGetPropertyStoreForWindow)
-                        Process: SetCurrentProcessExplicitAppUserModelID
-                        File association registration (ProgIDs; in Win7, add AppUserModelID)
-                        Jump list destinations/tasks: ICustomDestinationList
-                        Shortcut (PKEY_AppUserModel_ID)
-                        SHAddToRecentDocs
+                        1. open SVG or ICO but save back at least to ICO and
+                            ideally to SVG (but multiple file saving not supported
+                            currently by WebAppFind, so do through add-on for now)
+                    1. Ensure icon will work by assigning appIDs to specific windows,
+                        profile (processes?), or app (idea to list FF tabs in jump
+                        list?); SHAddToRecentDocs may add app ID AND add the
+                        potentially useful behavior of putting web apps into recent
+                        docs (if add support, make this optional)
+                            Windows: Separate windows get app IDs (SHGetPropertyStoreForWindow)
+                            Process: SetCurrentProcessExplicitAppUserModelID
+                            File association registration (ProgIDs; in Win7, add AppUserModelID)
+                            Jump list destinations/tasks: ICustomDestinationList
+                            Shortcut (PKEY_AppUserModel_ID)
+                            SHAddToRecentDocs
                     */
                     ['button', {id: 'openOrCreateICO', title: 'If the ICO file at the supplied path does not exist, an empty file will be created which can then be edited. Be sure to save your changes to the ICO file when done.'}, [
                         'Create/Edit ICO file'
@@ -801,7 +800,8 @@ function init () {
                 ]],
                 ['br'],
                 //  Todo: 1. JavaScript (implement with CodeMirror or option to
-                //              load JS file (itself invocable with WebAppFind) instead)
+                //              load JS file (itself invocable with WebAppFind)
+                //              instead)
                 ['label', [
                     'Hard-coded string to pass as evalable JavaScript to the WebAppFind web app: ',
                     ['br'],

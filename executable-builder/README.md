@@ -73,6 +73,10 @@ can cover the entire range of functionality available in the UI.
 # To-dos for new Executable Builder (in WebAppFind)
 
 1. Adapt to-dos below for current realities of being within WebAppFind
+1. Split into generic and specific sections (so will allow building of
+    executables regardless of whether used for WebAppFind or not);
+    dynamically reveal sections based on 'Open with WebAppFind?'
+    radio group selection, hard-coding or not, etc.
 1. Allow sites to advertise (in `<meta>`?) a number of file extensions
     (of a certain total limited byte size and number?) which they
     support, so that the following can be done:
