@@ -186,6 +186,15 @@ can cover the entire range of functionality available in the UI.
 1. Save to `SendTo` folder (see [here](http://superuser.com/a/722699/156958)
     and [here](http://answers.microsoft.com/en-us/windows/forum/windows_vista-desktop/how-to-locate-the-sendto-folder-in-vista/78b16711-1135-4eb0-851a-8abae9bfe9ed)
     also for working with folders.
+1. SED file
+    1. Make SED file more configurable (and savable along with batch?)
+    1. If there is any advantage to expanding SED options, or if we implement
+        some more robust way to handle exe building, e.g., so as to be able to
+        include an icon without creating a shortcut, we may expand the current
+        UI to handle this.
+1. Get code review of C++ file (e.g., `ShellExecuteEx` vs. `CallProcess`
+    and `-remote`; other bugs?) and feedback on general approach,
+    security concerns, etc. esp. if batch won't work for needs
 
 # Possible todos
 
@@ -219,9 +228,6 @@ can cover the entire range of functionality available in the UI.
     and own task bar icons? example: open a specific file, that gets sent
     to a particular eval: protocol which listens for the content and then
     passes it to a script that it dynamically loads
-1. Get code review of C++ file (e.g., `ShellExecuteEx` vs. `CallProcess`
-    and `-remote`; other bugs?) and feedback on general approach,
-    security concerns, etc. esp. if batch won't work for needs
 1. Ability to proposed WebAppFind handle multiple files on
     right-click (cycling through arguments)? e.g., to open a group
     and then commit as a group (seems to be no "open with
@@ -240,12 +246,6 @@ can cover the entire range of functionality available in the UI.
         based on the current directory's path; the path could determine the
         ultimate path of the to-be-created executable (or icon), a
         hard-coded desktop (or remote) file or web app URL to open
-1. SED file
-    1. Make SED file more configurable (and savable along with batch?)
-    1. If there is any advantage to expanding SED options, or if we implement
-        some more robust way to handle exe building, e.g., so as to be able to
-        include an icon without creating a shortcut, we may expand the current
-        UI to handle this.
 
 # Appreciation
 
