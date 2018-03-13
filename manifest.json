@@ -45,12 +45,10 @@
 "proxy",
 "sessions",
 "storage",
+"tabHide",
 "theme"
 
     ],
-
-    "$$$comment-permissions": "`tabHide` is a permission we might add, but FF is currently giving warnings for it",
-
 
     "icons": {
         "48": "icons/icon48.png",
