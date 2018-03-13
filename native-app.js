@@ -215,7 +215,7 @@ const nodeJSONMethods = {
         return this._makeECDir().then((ec) => {
             const template = path.join(ec, fileName + '.html');
             unlink(template).catch((err) => {
-                if (err.code === 'ENOENT') { // File doens't exist
+                if (err.code === 'ENOENT') { // File doesn't exist
                     return {message: 'File file (' + template + ') + does not exist'};
                 }
                 return {message: err};
@@ -298,49 +298,56 @@ const nodeJSONMethods = {
         */
     },
     autocompleteValues ({value: userVal, dirOnly, listID}) {
-        console.log('stat', stat);
-        /*
-        const dir = path.dirname(userVal),
-            base = path.basename(userVal);
-        let optValues;
-
-        if (file.exists(userVal)) {
-            if (userVal.match(/(?:\/|\\)$/)) {
-                optValues = file.list(userVal).map(function (fileInDir) {
-                    return path.join(userVal, fileInDir);
-                });
-            } else {
-                optValues = [userVal];
+        let dir = userVal;
+        return readdir(userVal).catch((err) => {
+            if (err.code === 'ENOTDIR') { // Exists as file, not directory
+                return dirOnly ? [] : [userVal];
             }
-        } else if (file.exists(dir)) {
-            optValues = file.list(dir).filter((fileInDir) => {
-                return fileInDir.indexOf(base) === 0;
-            }).map((fileInDir) => {
+            if (err.code === 'ENOENT') { // File doesn't exist
+                const base = path.basename(userVal);
+                dir = path.dirname(userVal);
+                return readdir(dir).then((files) => { // May throw
+                    return files.filter((fileInDir) => {
+                        return fileInDir.startsWith(base);
+                    });
+                });
+            }
+            throw err;
+        }).then((files) => {
+            return files.map((fileInDir) => {
                 return path.join(dir, fileInDir);
             });
-        }
-
-        const optValuesRetrieved = dirOnly
-            ? Promise.all(optValues.map((optValue) => {
-                try {
-                    return stat(optValue).then((stats) => {
-                        return [stats.isDirectory(), optValue];
-                    });
-                } catch (err) {
-                    return [false];
-                }
-            })).then((optValues) => {
-                return optValues.filter(([bool]) => bool).map(([, optValue]) => optValue);
-            })
-            : Promise.resolve(optValues);
-        return optValuesRetrieved.then((optValues) => {
+        }).then((optValues) => {
+            if (!dirOnly) {
+                return optValues;
+            }
+            // Essentially we want an async reduce here (which we could do with better Promise methods):
+            return Promise.all(
+                optValues.map((optValue) => {
+                    try {
+                        return stat(optValue).then((stats) => {
+                            return [stats.isDirectory(), optValue];
+                        });
+                    } catch (err) {
+                        return [false];
+                    }
+                })
+            ).then((optValues) => {
+                return optValues.reduce((arr, [bool, optValue]) => {
+                    if (bool) arr.push(optValue);
+                    return arr;
+                }, []);
+                // return optValues.filter(([bool]) => bool).map(([, optValue]) => optValue);
+            });
+        }).catch(() => {
+            return [];
+        }).then((optValues) => {
             return {
                 listID,
                 optValues,
                 userVal // Just for debugging on the other side
             };
         });
-        */
     }
 };
 
