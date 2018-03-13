@@ -55,6 +55,7 @@ function l (msg) {
 }
 */
 const os = browser.runtime.PlatformOs;
+const ellipsis = '\u2026';
 let ct = 0, ctr = 0, k = 0;
 
 function $ (sel) {
@@ -173,7 +174,7 @@ function createPathInput () {
                 'class': 'dirPath'
             }],
             ['button', {dataset: {dirPick: i}}, [
-                'Browse\u2026'
+                `Browse${ellipsis}`
             ]],
             ' or ',
             ['select', {dataset: {pathBoxSelect: i}}, [
@@ -635,7 +636,7 @@ function init () {
                         size: 70, value: ''
                     }],
                     ['button', {id: 'iconPick'}, [
-                        'Browse\u2026'
+                        `Browse${ellipsis}`
                     ]],
                     createRevealButton('#iconPath'),
                     ' or ',
@@ -679,7 +680,7 @@ function init () {
                         size: 70, value: ''
                     }],
                     ['button', {id: 'desktopFilePick'}, [
-                        'Browse\u2026'
+                        `Browse${ellipsis}`
                     ]],
                     createRevealButton('#desktopFilePath'),
                     ['datalist', {id: 'desktopFilePathDatalist'}],
