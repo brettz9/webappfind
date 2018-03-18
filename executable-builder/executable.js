@@ -57,7 +57,7 @@ function $ (sel) {
     return document.querySelector(sel);
 }
 function $$ (sel) {
-    return document.querySelectorAll(sel);
+    return [...document.querySelectorAll(sel)];
 }
 function templateExistsInMenu (val) {
     return [...$('#templates').options].some((option) => {
@@ -373,10 +373,10 @@ function init () {
             return prev;
         }
         function reduceCheckedValue (sel) {
-            return [...$$(sel)].reduce(toCheckedValue, {});
+            return $$(sel).reduce(toCheckedValue, {});
         }
         function reduceValue (sel) {
-            return [...$$(sel)].map(toValue);
+            return $$(sel).map(toValue);
         }
         const {dataset, parentNode, value: val} = target;
         const {
