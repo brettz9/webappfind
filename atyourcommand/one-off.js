@@ -44,7 +44,7 @@ const
             selects: true
         })
     };
-let oldStorage = options.oldStorage,
+let {oldStorage} = options,
     currentName = '',
     createNewCommand = true,
     changed = false,
@@ -60,7 +60,7 @@ function $ (sel) {
     return document.querySelector(sel);
 }
 function $$ (sel) {
-    return document.querySelectorAll(sel);
+    return [...document.querySelectorAll(sel)];
 }
 /*
 function forSel (sel, cb) {
@@ -107,7 +107,7 @@ function addOptions (type) {
         sel = type === 'executables' ? '#' + type : '.ei-files-presets',
         selects = $$(sel);
 
-    Array.from(selects).forEach(function (select) {
+    selects.forEach(function (select) {
         while (select.firstChild) {
             select.removeChild(select.firstChild);
         }
