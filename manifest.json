@@ -5,7 +5,7 @@
     "version": "3.0.0",
     "author": "Brett Zamir",
     "homepage_url": "https://github.com/brettz9/webappfind",
-    "description": "Open desktop files into web apps",
+    "description": "__MSG_addon-description__",
 
     "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self';",
     "optional_permissions": [
@@ -60,7 +60,7 @@
         "browser_style": true,
         "default_area": "navbar",
         "default_icon": "/executable-builder/executable.svg",
-        "default_title": "__MSG_browserActionTitle__",
+        "default_title": "__MSG_browser-action-title__",
         "default_popup": "/executable-builder/index.html"
     },
 

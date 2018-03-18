@@ -6,8 +6,22 @@ textarea {
 }
 datalist option {
     padding-left: 22px;
-    bacgkround: white scroll bottom left;
+    background: white scroll bottom left;
 }
 :required {
     background-color: pink;
+}
+
+
+.revealButton {
+    width: 25px;
+    margin-left: 5px;
+
+    border: none;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-size: 15px 15px;
+
+    /* To i18nize: https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Internationalization#Locale-dependent_CSS */
+    background-image: url("Yellow_folder_icon_open.png");
 }

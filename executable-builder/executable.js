@@ -50,6 +50,9 @@ const os = browser.runtime.PlatformOs;
 const ellipsis = '\u2026';
 let ct = 0, ctr = 0, k = 0;
 
+function _ (...args) {
+    return browser.i18n.getMessage(...args);
+}
 function $ (sel) {
     return document.querySelector(sel);
 }
@@ -67,11 +70,8 @@ function getHardPath (dir) {
 function createRevealButton (sel) {
     return ['input', {
         type: 'button',
-        style: 'border: none; margin-left: 5px; background-color: transparent; width: 25px; background-repeat: no-repeat; ' +
-                'background-size: 15px 15px; ' +
-                'background-image: url("' + options.folderImage + '");',
-        'class': 'revealButton',
-        dataset: {sel: sel}
+        class: 'revealButton',
+        dataset: {sel}
     }];
 }
 function createFileExtensionControls () {
@@ -104,7 +104,7 @@ function createFileExtensionControls () {
         ]],
         ['br'],
         ['label', [
-            'File type to associate for this executable (or between it and any supplied extension): ',
+            _('file-type-associate'),
             ['input', {size: 10, 'class': 'fileExtension'}]
         ]],
         ['br'],
@@ -836,8 +836,7 @@ const [paths, profiles, templates] = await Promise.all([
 ]);
 console.log('ttt', templates);
 const options = {
-    ffIcon: getHardPath('ffIcon'),
-    folderImage: 'Yellow_folder_icon_open.png'
+    ffIcon: getHardPath('ffIcon')
 };
 
 // To send messages within add-on

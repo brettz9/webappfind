@@ -1,10 +1,23 @@
 {
-    "browserActionTitle": {
+    "addon-description": {
+        "message": "Open desktop files into web apps"
+    },
+    "browser-action-title": {
         "message": "WebAppFind",
         "description": "Title on toolbar"
     },
     "enable-asyouwish": {
         "message": "Enable AsYouWish for this tab",
         "description": "Whether to enable the privileged AsYouWish API for this tab"
+    },
+    "trust-site-addon-code": {
+        "message": "Are you sure you trust this site to evaluate potentially dangerous add-on code?"
+    },
+    "trust-site-node-code": {
+        "message": "Are you sure you trust this site to evaluate potentially dangerous Node.js code?"
+    },
+
+    "file-type-associate": {
+        "message": "File type to associate for this executable (or between it and any supplied extension): "
     }
 }
