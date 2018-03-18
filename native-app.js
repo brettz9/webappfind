@@ -10,6 +10,9 @@ const {
 const argv = require('minimist')(process.argv.slice(2));
 const {method} = argv;
 
+// Todo: We could i18nize this, but the command line allows for overriding anyways
+const fileSelectMessageDefault = 'Please select a file:';
+
 function escapeBashDoubleQuoted (s) {
     return s.replace(/[$`"\\*@]/g, '\\$&');
 }
@@ -59,7 +62,7 @@ on getFile (argv)
         try
             set input to choose file with prompt "` +
     escapeAppleScriptQuoted(
-        'fileSelectMessage' in argv ? argv.fileSelectMessage : 'Please select a file:'
+        'fileSelectMessage' in argv ? argv.fileSelectMessage : fileSelectMessageDefault
     ) + (
             argv.fileSelectType
                 ? `" of type {"${escapeAppleScriptQuoted(argv.fileSelectType)}"}`

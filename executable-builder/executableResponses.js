@@ -25,12 +25,11 @@ EB.createProfile = function ({name}) {
     return getNodeJSON('createProfile', {name});
 };
 
-EB.getProfiles = function () {
-    return getNodeJSON('getProfileInfo').then(({profiles}) => {
-        return Object.entries(profiles).filter(([p, profile]) => {
-            return p.startsWith('Profile');
-        }).map(([, profile]) => profile.Name);
-    });
+EB.getProfiles = async function () {
+    const {profiles} = await getNodeJSON('getProfileInfo');
+    return Object.entries(profiles).filter(([p, profile]) => {
+        return p.startsWith('Profile');
+    }).map(([, profile]) => profile.Name);
 };
 
 function getFirefoxExecutableAndDir () {
@@ -45,26 +44,25 @@ EB.getHardPaths = function () {
     return getNodeJSON('getHardPaths');
 };
 
-EB.autocompleteURLHistory = function ({listID, value: userVal}) {
-    return browser.history.search({
+EB.autocompleteURLHistory = async function ({listID, value: userVal}) {
+    const historyItems = await browser.history.search({
         text: userVal,
         maxResults: 100 // Default: 100
-    }).then((historyItems) => {
-        // console.log('historyItems', historyItems);
-        const optValues = historyItems.map((hi) => hi.url);
-        return Promise.resolve({
-            listID,
-            optValues,
-            // We could use a convoluted way of hiding tabs (which cannot be
-            //    created hidden but an empty one might be created on
-            //    start-up and then hidden); added to an issue to be able
-            //    to get favicons from history
-            // https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/tabs/hide
-            // https://bugzilla.mozilla.org/show_bug.cgi?id=1411120#c6
-            // optIcons,
-            userVal // Just for debugging on the other side
-        });
     });
+    // console.log('historyItems', historyItems);
+    const optValues = historyItems.map((hi) => hi.url);
+    return {
+        listID,
+        optValues,
+        // We could use a convoluted way of hiding tabs (which cannot be
+        //    created hidden but an empty one might be created on
+        //    start-up and then hidden); added to an issue to be able
+        //    to get favicons from history
+        // https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/tabs/hide
+        // https://bugzilla.mozilla.org/show_bug.cgi?id=1411120#c6
+        // optIcons,
+        userVal // Just for debugging on the other side
+    };
 };
 
 EB.openOrCreateICO = function () {
@@ -99,7 +97,7 @@ function stripQuotes (str) {
 }
 
 // Todo: Option to preserve shortcut, SED, and, if converting to exe, the batch file
-// Todo: Otherwise complete and test
+// Todo: Otherwise complete and test (and i18nize fileSelectMessage passed to native-app.js?)
 async function createBatchForShortcutCreation (data) {
     if (!data.shortcutPath) {
         throw new Error('A shortcut path must be supplied to createBatchForShortcutCreation()');
@@ -321,6 +319,7 @@ function picker ({dirPath, selector, selectFolder, defaultExtension}) {
             l('initWithPath error: ' + err);
         }
     }
+    // Todo: i18nize messages
     fp.init(
         windowMediator.getMostRecentWindow(null),
         selectFolder ? 'Pick a folder for the executable' : 'Pick an icon file',

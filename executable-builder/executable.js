@@ -509,7 +509,7 @@ function init () {
                     const ser = new XMLSerializer();
                     ser.$formSerialize = true;
                     content = ser.serializeToString($('#dynamic'));
-
+                    console.log('ser-content', content);
                     EB.saveTemplate({
                         templateName,
                         content
