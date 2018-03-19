@@ -47,8 +47,10 @@ function l (msg) {
 }
 */
 const os = browser.runtime.PlatformOs;
-const ellipsis = '\u2026';
-let ct = 0, ctr = 0, k = 0;
+const nbsp = '\u00a0';
+const nbsp3 = ` ${nbsp} `;
+
+let pathInputCtr = 0, fileExtIDCtr = 0, winOpenCtr = 0;
 
 function _ (...args) {
     return browser.i18n.getMessage(...args);
@@ -96,26 +98,26 @@ function createFileExtensionControls () {
     1. Support drag-and-drop of files to this dialog (to supply document path or
         URL if it is a URL)
     */
-    const i = ++ctr;
-    return ['div', {id: 'fileExtensionInfoHolder' + i}, [
+    const fileExtensionID = ++fileExtIDCtr;
+    return ['div', {id: 'fileExtensionInfoHolder' + fileExtensionID}, [
         ['label', [
-            `File extension to associate with this executable (for "Open With${ellipsis}"): `,
-            ['input', {size: 10, 'class': 'fileExtension'}]
+            _('file-extension-associate-open-with'),
+            ['input', {size: 10, class: 'fileExtension'}]
         ]],
         ['br'],
         ['label', [
             _('file-type-associate'),
-            ['input', {size: 10, 'class': 'fileExtension'}]
+            ['input', {size: 10, class: 'fileExtension'}]
         ]],
         ['br'],
         ['label', [
-            'Make the default execution handler for files with this extension?',
-            ['input', {type: 'checkbox', 'class': 'defaultFileExtension'}]
+            _('make-default-handler-for-extension'),
+            ['input', {type: 'checkbox', class: 'defaultFileExtension'}]
         ]],
-        ['button', {dataset: {fileExtensionID: i, type: 'add'}}, [
+        ['button', {dataset: {fileExtensionID, type: 'add'}}, [
             '+'
         ]],
-        ['button', {dataset: {fileExtensionID: i, type: 'remove'}}, [
+        ['button', {dataset: {fileExtensionID, type: 'remove'}}, [
             '-'
         ]],
         ['hr']
@@ -129,74 +131,88 @@ function createFileExtensionControls () {
 * does auto-complete for paths.
 */
 function createPathInput () {
-    const i = ++ct;
+    const i = ++pathInputCtr;
     return [
         'div', {id: 'pathBoxHolder' + i}, [
             ['label', [
-                'Executable name: ',
-                ['input', {required: 'true', 'class': 'executableName'}]
+                _('executable-name'),
+                ['input', {required: 'true', class: 'executableName'}]
             ]],
-            ' \u00a0 ',
+            nbsp3,
             ['label', [
-                'Preserve shortcut after execution: ',
-                ['input', {type: 'checkbox', 'class': 'preserveShortcut'}]
+                _('preserve-shortcut'),
+                ['input', {type: 'checkbox', class: 'preserveShortcut'}]
             ]],
-            ' \u00a0 ',
+            nbsp3,
             ['label', {'for': 'convertToExe' + i}, [
-                'Change batch to exe: '
+                _('change-batch-exe')
             ]],
-            ['input', {type: 'checkbox', id: 'convertToExe' + i, 'class': 'convertToExe', $on: {
+            ['input', {type: 'checkbox', id: 'convertToExe' + i, class: 'convertToExe', $on: {
                 click: (function (i) {
                     return function ({target}) {
                         if (target.checked) {
-                            target.parentNode.insertBefore(jml(
-                                'div', {'class': 'sedPreserveHolder'}, [
-                                    ['label', {title: 'Normally a SED file will be added and then removed. This option preserves it and will subsequently seek to use it.'}, [
-                                        'Preserve the SED file: ',
-                                        ['input', {'class': 'sedPreserve', dataset: {i}, type: 'checkbox'}]
+                            target.nextElementSibling.before(jml(
+                                'div', {class: 'sedPreserveHolder'}, [
+                                    ['label', {title: _('preserve-sed-file-explanation')}, [
+                                        _('preserve-sed-file'),
+                                        ['input', {
+                                            class: 'sedPreserve',
+                                            dataset: {i},
+                                            type: 'checkbox'
+                                        }]
                                     ]],
-                                    ' \u00a0 ',
-                                    ['label', {title: 'Normally the batch file will be cleaned up when incorporated into an exe. This preserves it and will subsequently seek to use it.'}, [
-                                        'Preserve the batch file: ',
-                                        ['input', {'class': 'batchPreserve', dataset: {i}, type: 'checkbox'}]
+                                    nbsp3,
+                                    ['label', {title: _('preserve-batch-file-explanation')}, [
+                                        _('preserve-batch-file'),
+                                        ['input', {
+                                            class: 'batchPreserve',
+                                            dataset: {i},
+                                            type: 'checkbox'
+                                        }]
                                     ]]
                                 ]
-                            ), target.nextElementSibling);
+                            ));
                         } else {
-                            target.parentNode.removeChild(target.nextElementSibling);
+                            target.nextElementSibling.remove();
                         }
                     };
                 }(i))
             }}],
             ['br'],
             ['label', {'for': 'pathBox' + i}, [
-                'Directory where the executable will be saved: '
+                _('executable-save-directory')
             ]],
             ['input', {
                 type: 'text', id: 'pathBox' + i, list: 'datalist', autocomplete: 'off',
                 required: 'true', size: 100, value: '', dataset: {pathBoxInput: i},
-                'class': 'dirPath'
+                class: 'dirPath'
             }],
             ['button', {dataset: {dirPick: i}}, [
-                `Browse${ellipsis}`
+                _('browse-file')
             ]],
-            ' or ',
+            ` ${_('or')} `,
             ['select', {dataset: {pathBoxSelect: i}}, [
-                ['option', {value: ''}, ['(Or choose a location)']],
-                ['option', {value: getHardPath('Executable')}, ['Executable folder within profile folder']],
-                ['option', {value: getHardPath('Desk')}, ['Desktop']],
-                ['option', {value: getHardPath('Strt')}, ['Start-up']],
-                (os === 'win' ? ['option', {value: getHardPath('Progs')}, ['Start menu']] : ''),
-                (os === 'win' ? ['option', {value: getHardPath('TaskBar')}, ['Task bar']] : ''),
-                ['option', {value: getHardPath('ProfD')}, ['Profile folder']],
-                ['option', {value: getHardPath('ProgF')}, ['Programs']]
+                ['option', {value: ''}, [_('or-choose-location')]],
+                ['option', {value: getHardPath('Executable')}, [
+                    _('executable-within-profile-folder')
+                ]],
+                ['option', {value: getHardPath('Desk')}, [_('Desktop')]],
+                ['option', {value: getHardPath('Strt')}, [_('Start-up')]],
+                (os === 'win' ? ['option', {value: getHardPath('Progs')}, [
+                    _('Start menu')
+                ]] : ''),
+                (os === 'win' ? ['option', {value: getHardPath('TaskBar')}, [
+                    _('Task bar')
+                ]] : ''),
+                ['option', {value: getHardPath('ProfD')}, [_('Profile folder')]],
+                ['option', {value: getHardPath('ProgF')}, [_('Programs')]]
             ]],
             createRevealButton('#pathBox' + i),
             ['button', {dataset: {pathInputID: i, type: 'add'}}, [
-                '+'
+                _('plus')
             ]],
             ['button', {dataset: {pathInputID: i, type: 'remove'}}, [
-                '-'
+                _('minus')
             ]],
             ['hr']
         ]
@@ -204,10 +220,9 @@ function createPathInput () {
 }
 
 function getProfiles () {
-    return profiles.reduce((opts, optVal) => {
-        opts.push(['option', [optVal]]);
-        return opts;
-    }, []);
+    return profiles.map((optVal) => {
+        return ['option', [optVal]];
+    });
 }
 
 // BEGIN EVENT ATTACHMENT
@@ -218,34 +233,32 @@ function openOrCreateICOResponse () {
 
 // COPIED FROM filebrowser-enhanced directoryMod.js (RETURN ALL MODIFICATIONS THERE)
 function autocompleteValuesResponse ({listID, optValues}) {
-    const datalist = document.getElementById(listID);
+    const datalist = $('#' + listID);
     while (datalist.firstChild) {
-        datalist.removeChild(datalist.firstChild);
+        datalist.firstChild.remove();
     }
-    optValues.forEach((optValue) => {
-        const option = jml('option', {
-            // text: optValue,
-            value: optValue
-        });
-        datalist.appendChild(option);
+    optValues.forEach((value) => {
+        jml('option', {
+            // text: value,
+            value
+        }, datalist);
     });
 }
 
 function autocompleteURLHistoryResponse ({listID, optValues}) { // , optIcons
-    const datalist = document.getElementById(listID);
+    const datalist = $('#' + listID);
     while (datalist.firstChild) {
-        datalist.removeChild(datalist.firstChild);
+        datalist.firstChild.remove();
     }
-    optValues.forEach((optValue, i) => {
-        const option = jml('option', {
-            // text: optValue,
-            value: optValue
+    optValues.forEach((value, i) => {
+        jml('option', {
+            // text: value,
+            value
             // Works as a regular option, but not a datalist option (including
             //    if option text is provided)
             // Can't use currently due to https://bugzilla.mozilla.org/show_bug.cgi?id=1411120#c6
             // style: 'background: no-repeat url(' + optIcons[i] + ');'
-        });
-        datalist.appendChild(option);
+        }, datalist);
     });
 }
 
@@ -259,11 +272,10 @@ function deleteTemplateResponse ({fileName}) {
 function getTemplateResponse (content) {
     const dom = new DOMParser().parseFromString(content, 'application/xhtml+xml');
     // dom.documentElement.cloneNode(true);
-    $('#dynamic').parentNode.replaceChild(dom.documentElement, $('#dynamic'));
+    $('#dynamic').replaceWith(dom.documentElement);
 }
 
-function fileOrDirResult (data) {
-    const {path, selector} = data;
+function fileOrDirResult ({path, selector}) {
     if (path) {
         $(selector).value = path;
     }
@@ -280,30 +292,34 @@ function saveTemplateResult ({templateName}) {
 
 function init () {
     window.addEventListener('input', function ({target}) {
-        const {id, dataset, value: val} = target,
+        const {id, dataset, value} = target,
             {pathBoxInput} = dataset;
 
-        if (!val) {
+        if (!value) {
             return;
         }
         if (pathBoxInput) {
             if ([...target.nextElementSibling.classList].includes('pinAppHolder')) {
-                target.parentNode.removeChild(target.nextElementSibling);
+                target.nextElementSibling.remove();
             }
-            if (val === getHardPath('TaskBar')) {
+            if (value === getHardPath('TaskBar')) {
                 // Todo: Possible to allow pinning to task bar without
                 //         saving the executable/batch there?
-                target.parentNode.insertBefore(jml(
-                    'div', {'class': 'pinAppHolder'}, [
-                        ['label', {title: 'While on the task bar, a desktop file or URL can be drag-and-dropped onto it if the executable is dynamic or a specific one if the document is baked into the executable'}, [
-                            'Pin app to task bar: ',
-                            ['input', {'class': 'pinApp', dataset: {i: pathBoxInput}, type: 'checkbox'}]
+                target.nextElementSibling.before(jml(
+                    'div', {class: 'pinAppHolder'}, [
+                        ['label', {title: _('pin-app-task-bar-explanation')}, [
+                            _('pin-app-task-bar'),
+                            ['input', {
+                                class: 'pinApp',
+                                dataset: {i: pathBoxInput},
+                                type: 'checkbox'
+                            }]
                         ]]
                     ]
-                ), target.nextElementSibling);
+                ));
             }
             EB.autocompleteValues({
-                value: val,
+                value,
                 listID: target.getAttribute('list'),
                 dirOnly: true
             }).then(autocompleteValuesResponse);
@@ -311,17 +327,17 @@ function init () {
             target.value = target.value.replace(/[^a-z]/, '');
         } else if (id === 'urlBox' || id === 'documentURLBox') {
             /*
-            if (val.length < 9) { // http://.
+            if (value.length < 9) { // http://.
                 return;
             }
             */
             EB.autocompleteURLHistory({
-                value: val,
+                value,
                 listID: target.getAttribute('list')
             }).then(autocompleteURLHistoryResponse);
         } else if (id === 'desktopFilePath' || id === 'iconPath') {
             EB.autocompleteValues({
-                value: val,
+                value,
                 listID: target.getAttribute('list')
             }).then(autocompleteValuesResponse);
         }
@@ -338,47 +354,44 @@ function init () {
         ) {
             e.target.value = '';
         } else {
-            e.target.value = 'ALT+CTRL+' + String.fromCharCode(e.charCode).toUpperCase(); // We upper-case as Windows auto-upper-cases in the UI
+            e.target.value = _('alt-ctrl', String.fromCharCode(e.charCode).toUpperCase()); // We upper-case as Windows auto-upper-cases in the UI
         }
         e.preventDefault();
     }
 
     window.addEventListener('change', function ({target}) {
-        const {id, value: val} = target;
+        const {id, value: fileName} = target;
         if (id === 'templateName') {
             if ($('#rememberTemplateChanges').checked &&
-                templateExistsInMenu(val)
+                templateExistsInMenu(fileName)
             ) {
-                if (!confirm('You have chosen a template which already exists, so any saves you make with this name will overwrite its contents with the updates made below. Continue?')) {
+                if (!confirm(_('overwrite-template-ok'))) {
                     target.value = '';
                     // return;
                 }
             }
         } else if (id === 'templates') {
-            if (!val) {
+            if (!fileName) {
                 return;
             }
-            // $('#templateName').value = val;
-            EB.getTemplate({fileName: val}).then(getTemplateResponse);
+            // $('#templateName').value = fileName;
+            EB.getTemplate({fileName}).then(getTemplateResponse);
         }
     });
 
     // Todo: Support keypress
     window.addEventListener('click', async function ({target}) {
-        function toValue (item) {
-            return item.value;
-        }
         function toCheckedValue (prev, pinApp) {
             prev[pinApp.dataset.i] = pinApp.checked;
             return prev;
         }
-        function reduceCheckedValue (sel) {
+        function reduceToCheckedValue (sel) {
             return $$(sel).reduce(toCheckedValue, {});
         }
-        function reduceValue (sel) {
-            return $$(sel).map(toValue);
+        function reduceToValue (sel) {
+            return $$(sel).map((i) => i.value);
         }
-        const {dataset, parentNode, value: val} = target;
+        const {dataset, parentNode, value} = target;
         const {
             type, dirPick, pathInputID, fileExtensionID
         } = dataset;
@@ -404,7 +417,7 @@ function init () {
                 const input = jml(...createPathInput());
                 const nextSibling = $('#' + holderID).nextElementSibling;
                 if (nextSibling) {
-                    $(parentHolderSel).insertBefore(input, nextSibling);
+                    nextSibling.before(input);
                 } else {
                     $(parentHolderSel).appendChild(input);
                 }
@@ -412,13 +425,13 @@ function init () {
                 if ($(parentHolderSel).children.length <= 3) { // Legend, datalist, and a single path control
                     return;
                 }
-                $('#' + holderID).parentNode.removeChild($('#' + holderID));
+                $('#' + holderID).remove();
             }
         } else if (pathBoxSelect) {
-            if (!val) {
+            if (!value) {
                 return;
             }
-            $('#pathBox' + pathBoxSelect).value = val;
+            $('#pathBox' + pathBoxSelect).value = value;
             // We need the input event to go off so as to display the checkbox if this is the task bar
             keyEv = document.createEvent('KeyboardEvent');
             keyEv.initKeyEvent('input', true, true, document.defaultView, false, false, false, false, 13, 0);
@@ -430,7 +443,7 @@ function init () {
                 const input = jml(...createFileExtensionControls());
                 const nextSibling = $('#' + holderID).nextElementSibling;
                 if (nextSibling) {
-                    $(parentHolderSel).insertBefore(input, nextSibling);
+                    nextSibling.before(input);
                 } else {
                     $(parentHolderSel).appendChild(input);
                 }
@@ -438,13 +451,13 @@ function init () {
                 if ($(parentHolderSel).children.length <= 1) { // A single path control
                     return;
                 }
-                $('#' + holderID).parentNode.removeChild($('#' + holderID));
+                $('#' + holderID).remove();
             }
         } else if (sel) {
             let selVal = $(sel).value;
             if (selVal.match(/^resource:/)) {
                 selVal = selVal.substring(0, selVal.lastIndexOf('/') + 1);
-                window.open(selVal, 'resource' + (k++));
+                window.open(selVal, 'resource' + (winOpenCtr++));
                 return;
             }
             if (selVal) {
@@ -464,16 +477,16 @@ function init () {
             case 'deleteTemplate':
                 const fileName = $('#templates').selectedOptions[0].value;
                 if (!fileName) {
-                    alert('In order to delete a template, you must choose one in the pull-down');
+                    alert(_('must-choose-one-to-delete'));
                     return;
                 }
                 EB.deleteTemplate({fileName}).then(deleteTemplateResponse);
                 break;
             case 'desktopFilePathSelect': case 'iconPathSelect':
-                if (!val) {
+                if (!value) {
                     return;
                 }
-                $('#' + id.replace(/Select$/, '')).value = val;
+                $('#' + id.replace(/Select$/, '')).value = value;
                 break;
             case 'desktopFilePick': case 'iconPick':
                 // Value can be blank (if user just wishes to browse)
@@ -488,7 +501,7 @@ function init () {
                 EB.openOrCreateICO().then(openOrCreateICOResponse);
                 break;
             case 'profileNameSelect':
-                $('#profileName').value = val;
+                $('#profileName').value = value;
                 break;
             case 'manageProfiles':
                 EB.manageProfiles();
@@ -496,17 +509,18 @@ function init () {
             case 'createExecutable':
                 // Todo: Auto-name executable and auto-add path by default
                 if (!$('.executableName').value) {
-                    alert('You must specify at least one executable file name');
+                    alert(_('must-add-one-executable-name'));
                     return;
                 }
                 if (!$('.dirPath').value) {
-                    alert('You must supply a path for your executable');
+                    alert(_('must-add-executable-path'));
                     return;
                 }
             case 'runCommands': // eslint-disable-line no-fallthrough
-                const templateName = $('#templateName').value;
+                const templateName = $('#templateName').value || null;
                 if ($('#rememberTemplateChanges').checked &&
-                    templateName !== '') {
+                    templateName !== null
+                ) {
                     // Save the file, over-writing any existing file
                     const ser = new XMLSerializer();
                     ser.$formSerialize = true;
@@ -518,14 +532,14 @@ function init () {
                     }).then(saveTemplateResult);
                 }
 
-                executableNames = reduceValue('.executableName');
-                dirPaths = reduceValue('.dirPath');
-                preserveShortcuts = reduceValue('.preserveShortcut');
-                convertToExes = reduceValue('.convertToExe');
+                executableNames = reduceToValue('.executableName');
+                dirPaths = reduceToValue('.dirPath');
+                preserveShortcuts = reduceToValue('.preserveShortcut');
+                convertToExes = reduceToValue('.convertToExe');
 
-                pinApps = reduceCheckedValue('.pinApp');
-                sedPreserves = reduceCheckedValue('.sedPreserve');
-                batchPreserves = reduceCheckedValue('.batchPreserve');
+                pinApps = reduceToCheckedValue('.pinApp');
+                sedPreserves = reduceToCheckedValue('.sedPreserve');
+                batchPreserves = reduceToCheckedValue('.batchPreserve');
 
                 options = {
                     executableNames,
@@ -535,7 +549,7 @@ function init () {
                     pinApps,
                     sedPreserves,
                     batchPreserves,
-                    templateName: templateName || null,
+                    templateName,
                     description: $('#description').value || '',
                     profileName: $('#profileName').value || null,
                     iconPath: $('#iconPath').value || null,
@@ -561,59 +575,62 @@ function init () {
             }
         }
     });
-    document.body.appendChild(jml('div',
+    jml('div',
         [
-            ['select', {id: 'templates'},
-                templates.reduce((opts, template) => {
-                    opts.push(['option', [template]]);
-                    return opts;
-                }, [
-                    ['option', {value: ''}, ['(Choose a template with which to populate this form)']]
-                ])
-            ],
-            ['button', {id: 'deleteTemplate'}, ['Delete this template']],
+            ['select', {id: 'templates'}, [
+                ['option', {value: ''}, [_('choose-template')]],
+                ...templates.map((template) => {
+                    return ['option', [template]];
+                })
+            ]],
+            ['button', {id: 'deleteTemplate'}, [_('delete-template')]],
             ['br', 'br'],
             ['label', [
-                'Remember changes to this template\'s content? ',
+                _('remember-template-changes'),
+                ' ',
                 ['input', {id: 'rememberTemplateChanges', type: 'checkbox', checked: 'checked'}]
             ]],
             ['br', 'br'],
             ['div', {id: 'dynamic'}, [
                 ['label', [
-                    'Template name: ',
+                    _('template-name'),
+                    ' ',
                     ['input', {id: 'templateName'}]
                 ]],
-                ' \u00a0 ',
+                nbsp3,
                 ['label', [
-                    'Description: ',
+                    _('description'),
+                    ' ',
                     ['input', {id: 'description'}]
                 ]],
                 ['fieldset', {id: 'pathHolder'}, [
-                    ['legend', ['Executable directory(ies)']],
+                    ['legend', [_('executable-directories')]],
                     ['datalist', {id: 'datalist'}],
                     createPathInput()
                 ]],
                 ['div', [
                     ['label', [
-                        'Window style',
+                        _('window-style'),
+                        ' ',
                         ['select', {id: 'windowStyleSelect'}, [
                             ['option', {
                                 value: '1',
-                                title: 'Activates and displays a window. If the window is minimized or maximized, the system restores it to its original size and position.'
-                            }, ['Activate - Restore from minimized/maximized']],
+                                title: _('window-activate-restore-explanation')
+                            }, [_('window-activate-restore')]],
                             ['option', {
                                 value: '3',
-                                title: 'Activates the window and displays it as a maximized window.'
-                            }, ['Activate - Maximize on open']],
+                                title: _('window-activate-maximize-explanation')
+                            }, [_('window-activate-maximize')]],
                             ['option', {
                                 value: '7',
-                                title: 'Minimizes the window and activates the next top-level window.'
-                            }, ['Minimize on open (and activate next top-level)']]
+                                title: _('window-minimize-explanation')
+                            }, [_('window-minimize')]]
                         ]]
                     ]],
-                    ' \u00a0 ',
+                    ['br'],
                     ['label', [
-                        'Global hot key combination to activate: ',
+                        _('global-hot-key'),
+                        ' ',
                         ['input', {
                             id: 'hotKey',
                             $on: {keypress: modifierKeypress}
@@ -621,23 +638,25 @@ function init () {
                     ]],
                     ['br'],
                     ['label', {'for': 'iconPath'}, [
-                        'Icon path for the executable: '
+                        _('icon-path-executable'),
+                        ' '
                     ]],
                     ['select', {id: 'iconPathSelect'}, [
-                        ['option', {value: ''}, ['(Choose a location)']],
-                        ['option', {value: getHardPath('Desk')}, ['Desktop']],
-                        ['option', {value: getHardPath('Pict')}, ['Pictures']],
-                        ['option', {value: options.ffIcon}, ['Firefox icon']]
+                        ['option', {value: ''}, [_('choose-location')]],
+                        ['option', {value: getHardPath('Desk')}, [_('Desktop')]],
+                        ['option', {value: getHardPath('Pict')}, [_('Pictures')]],
+                        ['option', {value: getHardPath('ffIcon')}, [_('firefox-icon')]]
                     ]],
                     ['input', {
                         type: 'text', id: 'iconPath', list: 'datalist', autocomplete: 'off',
                         size: 70, value: ''
                     }],
+                    ' ',
                     ['button', {id: 'iconPick'}, [
-                        `Browse${ellipsis}`
+                        _('browse-file')
                     ]],
                     createRevealButton('#iconPath'),
-                    ' or ',
+                    ` ${_('or')} `,
                     /*
                     Todo:
                     1. Icon (Use export-as-png in SVG Edit; need filetypes.json ICO
@@ -661,39 +680,47 @@ function init () {
                             Shortcut (PKEY_AppUserModel_ID)
                             SHAddToRecentDocs
                     */
-                    ['button', {id: 'openOrCreateICO', title: 'If the ICO file at the supplied path does not exist, an empty file will be created which can then be edited. Be sure to save your changes to the ICO file when done.'}, [
-                        'Create/Edit ICO file'
+                    ['button', {
+                        id: 'openOrCreateICO',
+                        title: _('create-edit-ico-file-explanation')
+                    }, [
+                        _('create-edit-ico-file')
                     ]]
                 ]],
                 ['fieldset', [
-                    ['legend', ['File/type association']],
+                    ['legend', [_('file-type-association')]],
                     ['div', {id: 'fileExtensionHolder'}, [
                         createFileExtensionControls()
                     ]],
-                    ' OR ',
+                    ` ${_('or').toUpperCase()} `,
                     ['label', {'for': 'desktopFilePath'}, [
-                        'Hard-coded desktop file: '
+                        _('hard-coded-desktop-file'),
+                        ' '
                     ]],
                     ['select', {id: 'desktopFilePathSelect'}, [
-                        ['option', {value: ''}, ['(Choose a location)']],
-                        ['option', {value: getHardPath('Docs')}, ['Documents']],
-                        ['option', {value: getHardPath('Desk')}, ['Desktop']]
+                        ['option', {value: ''}, [_('choose-location')]],
+                        ['option', {value: getHardPath('Docs')}, [_('Documents')]],
+                        ['option', {value: getHardPath('Desk')}, [_('Desktop')]]
                     ]],
                     ['input', {
-                        type: 'text', id: 'desktopFilePath', list: 'desktopFilePathDatalist', autocomplete: 'off',
+                        type: 'text', id: 'desktopFilePath',
+                        list: 'desktopFilePathDatalist', autocomplete: 'off',
                         size: 70, value: ''
                     }],
+                    ' ',
                     ['button', {id: 'desktopFilePick'}, [
-                        `Browse${ellipsis}`
+                        _('browse-file')
                     ]],
                     createRevealButton('#desktopFilePath'),
                     ['datalist', {id: 'desktopFilePathDatalist'}],
                     ['br'],
-                    ' OR ',
+                    ` ${_('or').toUpperCase()} `,
                     ['label', [
-                        'Hard-coded URL document file: ',
+                        _('hard-coded-url-document-file'),
+                        ' ',
                         ['input', {
-                            type: 'url', id: 'documentURLBox', list: 'documentURLDatalist', autocomplete: 'off',
+                            type: 'url', id: 'documentURLBox',
+                            list: 'documentURLDatalist', autocomplete: 'off',
                             size: 100, value: ''
                         }],
                         ['datalist', {id: 'documentURLDatalist'}]
@@ -702,15 +729,15 @@ function init () {
                 ['div', [
                     ['label', [
                         ['input', {type: 'radio', name: 'executableType', checked: 'checked'}],
-                        'Open with WebAppFind?'
+                        _('open-with-webappfind')
                     ]],
                     ['label', [
                         ['input', {type: 'radio', name: 'executableType'}],
-                        'Open a hard-coded URL only?'
+                        _('open-hard-coded-url-only')
                     ]],
                     ['label', [
                         ['input', {type: 'radio', name: 'executableType'}],
-                        'Don\'t open any URL'
+                        _('dont-open-url')
                     ]]
                 ]],
                 /*
@@ -726,31 +753,39 @@ function init () {
                 */
                 ['div', [
                     ['label', {'for': 'profileName'}, [
-                        'Profile to associate with this executable: '
+                        _('profile-for-executable'),
+                        ' '
                     ]],
                     ['select', {id: 'profileNameSelect'}, getProfiles()],
+                    ' ',
                     ['input', {id: 'profileName'}],
+                    ' ',
                     ['button', {id: 'manageProfiles'}, [
-                        'Manage profiles'
+                        _('manage-profiles')
                     ]]
                 ]],
                 ['label', [
-                    'Mode: ',
+                    _('mode'),
+                    ' ',
                     ['select', {id: 'mode'}, [
-                        ['option', {value: 'view'}, ['View']],
-                        ['option', {value: 'binaryview'}, ['Binary view']],
-                        ['option', {value: 'edit'}, ['Edit']],
-                        ['option', {value: 'binaryedit'}, ['Binary edit']]
+                        ['option', {value: 'view'}, [_('view-mode')]],
+                        ['option', {value: 'binaryview'}, [_('binary-view-mode')]],
+                        ['option', {value: 'edit'}, [_('edit-mode')]],
+                        ['option', {value: 'binaryedit'}, [_('binary-edit-mode')]]
                     ]]
                 ]],
-                ' \u00a0 ',
+                nbsp3,
                 ['label', [
-                    'Custom mode: ',
+                    _('custom-mode'),
+                    ' ',
                     ['input', {id: 'customMode'}]
                 ]],
                 ['br'],
                 // Todo:
-                ['label', ['WebAppFind preference overrides: ']],
+                ['label', [
+                    _('webappfind-preference-overrides'),
+                    ' '
+                ]],
                 ['br'],
                 // Creates an autocomplete for URLs
                 // Todo:
@@ -758,9 +793,11 @@ function init () {
                 //     normal detection procedures and always open with a
                 //     given web app)
                 ['label', [
-                    'Hard-coded web app URI: ',
+                    _('hard-coded-web-app-URI'),
+                    ' ',
                     ['input', {
-                        type: 'url', id: 'urlBox', list: 'urlDatalist', autocomplete: 'off',
+                        type: 'url', id: 'urlBox',
+                        list: 'urlDatalist', autocomplete: 'off',
                         size: 100, value: ''
                     }],
                     ['datalist', {id: 'urlDatalist'}]
@@ -769,11 +806,12 @@ function init () {
                 ['br'],
                 // Todo: implement
                 ['label', [
-                    'Behavior upon opening of web app/URL: ',
+                    _('behavior-upon-URL-open'),
+                    ' ',
                     ['select', [
-                        ['option', ['New tab']],
-                        ['option', ['New window']],
-                        ['option', ['Hidden window']]
+                        ['option', [_('behavior-new-tab')]],
+                        ['option', [_('behavior-new-window')]],
+                        ['option', [_('behavior-hidden-window')]]
                     ]]
                 ]],
                 ['br'],
@@ -782,21 +820,23 @@ function init () {
                 //             user may prefer to bake it in to a particular
                 //             executable only)
                 ['label', [
-                    'Open web app/URL by default in full-screen mode?',
+                    _('open-fullscreen-mode'),
                     ['input', {type: 'checkbox'}]
                 ]],
                 ['br'],
                 //  Todo: 1. Batch file building section; Raw textarea (OR
                 //              (only?) when webappfind is also installed...)
                 ['label', [
-                    'Batch file commands in addition to any other options set above: ',
+                    _('extra-batch-file-commands'),
+                    ' ',
                     ['br'],
                     ['textarea']
                 ]],
                 ['br'],
                 //  Todo: 1. Strings
                 ['label', [
-                    'Hard-coded string to pass as content to the WebAppFind web app: ',
+                    _('hard-coded-string-to-pass'),
+                    ' ',
                     ['br'],
                     ['textarea']
                 ]],
@@ -805,29 +845,31 @@ function init () {
                 //              load JS file (itself invocable with WebAppFind)
                 //              instead)
                 ['label', [
-                    'Hard-coded string to pass as evalable JavaScript to the WebAppFind web app: ',
+                    _('hard-coded-eval-string-to-pass'),
+                    ' ',
                     ['br'],
                     ['textarea']
                 ]],
                 ['br'],
                 //  Todo: 1. Arguments
                 ['label', [
-                    'Command line arguments in addition to any other options set above: ',
+                    _('extra-command-line-args'),
+                    ' ',
                     // ['br'],
                     ['input', {size: 100}]
                 ]],
                 ['br'],
                 ['button', {id: 'createExecutable'}, [
-                    'Create executable(s) and save template'
+                    _('create-executable-save-template')
                 ]],
-                ' \u00a0 ',
+                nbsp3,
                 ['button', {id: 'runCommands'}, [
-                    'Run commands and save template'
+                    _('run-commands-save-template')
                 ]]
             ]]
         ],
-        null
-    ));
+        document.body
+    );
 }
 
 // We could abstract this, but it's light enough for now to keep flexible
@@ -837,24 +879,18 @@ const [paths, profiles, templates] = await Promise.all([
     EB.getTemplates()
 ]);
 console.log('ttt', templates);
-const options = {
-    ffIcon: getHardPath('ffIcon')
-};
 
 // To send messages within add-on
 // browser.runtime.sendMessage(Object.assign(obj || {}, {type}));
 init();
 
-function flattenDepthOne (arrays) {
-    return [].concat(...arrays);
-}
 // Todo: Use
-/* const metas = */ flattenDepthOne(await browser.tabs.executeScript({
+/* const metas = */ (await browser.tabs.executeScript({
     allFrames: true,
     code: `
 [...document.querySelectorAll('meta[name="webappfind"]')].map((m) => m.content)
 `,
     runAt: 'document_end'
-}));
+})).flatten();
 // console.log('metas-browser-action', metas);
 })();

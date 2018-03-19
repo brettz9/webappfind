@@ -17,7 +17,245 @@
         "message": "Are you sure you trust this site to evaluate potentially dangerous Node.js code?"
     },
 
+    "file-extension-associate-open-with": {
+        "message": "File extension to associate with this executable (for \"Open With\u2026\"): "
+    },
     "file-type-associate": {
         "message": "File type to associate for this executable (or between it and any supplied extension): "
+    },
+    "make-default-handler-for-extension": {
+        "message": "Make the default execution handler for files with this extension?"
+    },
+
+    "executable-name": {
+        "message": "Executable name: "
+    },
+    "preserve-shortcut": {
+        "message": "Preserve shortcut after execution: "
+    },
+    "change-batch-exe": {
+        "message": "Change batch to exe: "
+    },
+    "preserve-sed-file-explanation": {
+        "message": "Normally a SED file will be added and then removed. This option preserves it and will subsequently seek to use it."
+    },
+    "preserve-sed-file": {
+        "message": "Preserve the SED file: "
+    },
+    "preserve-batch-file-explanation": {
+        "message": "Normally the batch file will be cleaned up when incorporated into an exe. This preserves it and will subsequently seek to use it."
+    },
+    "preserve-batch-file": {
+        "message": "Preserve the batch file: "
+    },
+    "executable-save-directory": {
+        "message": "Directory where the executable will be saved: "
+    },
+    "browse-file": {
+        "message": "Browse\u2026"
+    },
+    "or": {
+        "message": "or"
+    },
+    "or-choose-location": {
+        "message": "(Or choose a location)"
+    },
+    "executable-within-profile-folder": {
+        "message": "Executable folder within profile folder"
+    },
+    "Desktop": {
+        "message": "Desktop"
+    },
+    "Start-up": {
+        "message": "Start-up"
+    },
+    "Start menu": {
+        "message": "Start menu"
+    },
+    "Task bar": {
+        "message": "Task bar"
+    },
+    "Profile folder": {
+        "message": "Profile folder"
+    },
+    "Programs": {
+        "message": "Programs"
+    },
+    "plus": {
+        "message": "+"
+    },
+    "minus": {
+        "message": "-"
+    },
+    "pin-app-task-bar-explanation": {
+        "message": "While on the task bar, a desktop file or URL can be drag-and-dropped onto it if the executable is dynamic or a specific one if the document is baked into the executable"
+    },
+    "pin-app-task-bar": {
+        "message": "Pin app to task bar: "
+    },
+    "alt-ctrl": {
+        "message": "ALT+CTRL+$KEY$",
+        "placeholders": {
+            "key": {
+                "content": "$1",
+                "example": "X"
+            }
+        }
+    },
+    "overwrite-template-ok": {
+        "message": "You have chosen a template which already exists, so any saves you make with this name will overwrite its contents with the updates made below. Continue?"
+    },
+    "must-choose-one-to-delete": {
+        "message": "In order to delete a template, you must choose one in the pull-down"
+    },
+    "must-add-one-executable-name": {
+        "message": "You must specify at least one executable file name"
+    },
+    "must-add-executable-path": {
+        "message": "You must supply a path for your executable"
+    },
+    "choose-template": {
+        "message": "(Choose a template with which to populate this form)"
+    },
+    "delete-template": {
+        "message": "Delete this template"
+    },
+    "remember-template-changes": {
+        "message": "Remember changes to this template's content?"
+    },
+    "template-name": {
+        "message": "Template name:"
+    },
+    "description": {
+        "message": "Description:"
+    },
+    "executable-directories": {
+        "message": "Executable directory(ies)"
+    },
+    "window-style": {
+        "message": "Window style"
+    },
+    "window-activate-restore-explanation": {
+        "message": "Activates and displays a window. If the window is minimized or maximized, the system restores it to its original size and position."
+    },
+    "window-activate-restore": {
+        "message": "Activate - Restore from minimized/maximized"
+    },
+    "window-activate-maximize-explanation": {
+        "message": "Activates the window and displays it as a maximized window."
+    },
+    "window-activate-maximize": {
+        "message": "Activate - Maximize on open"
+    },
+    "window-minimize-explanation": {
+        "message": "Minimizes the window and activates the next top-level window."
+    },
+    "window-minimize": {
+        "message": "Minimize on open (and activate next top-level)"
+    },
+    "global-hot-key": {
+        "message": "Global hot key combination to activate:"
+    },
+    "icon-path-executable": {
+        "message": "Icon path for the executable:"
+    },
+    "choose-location": {
+        "message": "(Choose a location)"
+    },
+    "Pictures": {
+        "message": "Pictures"
+    },
+    "firefox-icon": {
+        "message": "Firefox icon"
+    },
+    "create-edit-ico-file-explanation": {
+        "message": "If the ICO file at the supplied path does not exist, an empty file will be created which can then be edited. Be sure to save your changes to the ICO file when done."
+    },
+    "create-edit-ico-file": {
+        "message": "Create/Edit ICO file"
+    },
+    "file-type-association": {
+        "message": "File/type association"
+    },
+    "hard-coded-desktop-file": {
+        "message": "Hard-coded desktop file:"
+    },
+    "Documents": {
+        "message": "Documents"
+    },
+    "hard-coded-url-document-file": {
+        "message": "Hard-coded URL document file:"
+    },
+    "open-with-webappfind": {
+        "message": "Open with WebAppFind?"
+    },
+    "open-hard-coded-url-only": {
+        "message": "Open a hard-coded URL only?"
+    },
+    "dont-open-url": {
+        "message": "Don't open any URL"
+    },
+    "profile-for-executable": {
+        "message": "Profile to associate with this executable:"
+    },
+    "manage-profiles": {
+        "message": "Manage profiles"
+    },
+    "mode": {
+        "message": "Mode:"
+    },
+    "view-mode": {
+        "message": "View"
+    },
+    "binary-view-mode": {
+        "message": "Binary view"
+    },
+    "edit-mode": {
+        "message": "Edit"
+    },
+    "binary-edit-mode": {
+        "message": "Binary edit"
+    },
+    "custom-mode": {
+        "message": "Custom mode:"
+    },
+    "webappfind-preference-overrides": {
+        "message": "WebAppFind preference overrides:"
+    },
+    "hard-coded-web-app-URI": {
+        "message": "Hard-coded web app URI:"
+    },
+    "behavior-upon-URL-open": {
+        "message": "Behavior upon opening of web app/URL:"
+    },
+    "behavior-new-tab": {
+        "message": "New tab"
+    },
+    "behavior-new-window": {
+        "message": "New window"
+    },
+    "behavior-hidden-window": {
+        "message": "Hidden window"
+    },
+    "open-fullscreen-mode": {
+        "message": "Open web app/URL by default in full-screen mode?"
+    },
+    "extra-batch-file-commands": {
+        "message": "Batch file commands in addition to any other options set above:"
+    },
+    "hard-coded-string-to-pass": {
+        "message": "Hard-coded string to pass as content to the WebAppFind web app:"
+    },
+    "hard-coded-eval-string-to-pass": {
+        "message": "Hard-coded string to pass as evalable JavaScript to the WebAppFind web app:"
+    },
+    "extra-command-line-args": {
+        "message": "Command line arguments in addition to any other options set above:"
+    },
+    "create-executable-save-template": {
+        "message": "Create executable(s) and save template"
+    },
+    "run-commands-save-template": {
+        "message": "Run commands and save template"
     }
 }
