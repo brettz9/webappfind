@@ -5,7 +5,7 @@ var EB = {}; // eslint-disable-line no-var
 (() => {
 'use strict';
 
-/**
+/**/
 // For debugging Jamilih
 if (1) { // eslint-disable-line no-constant-condition
     ['getHardPaths', 'getProfiles', 'getTemplates'].forEach((method) => {
@@ -13,7 +13,7 @@ if (1) { // eslint-disable-line no-constant-condition
     });
     return;
 }
-**/
+/**/
 
 function l (msg) {
     console.log(msg);
