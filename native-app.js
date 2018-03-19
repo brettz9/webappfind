@@ -97,11 +97,12 @@ on getFile (argv)
             set input to choose file with prompt "` +
     escapeAppleScriptQuoted(
         'fileSelectMessage' in argv ? argv.fileSelectMessage : fileSelectMessageDefault
-    ) + (
-            argv.fileSelectType
-                ? `" of type {"${escapeAppleScriptQuoted(argv.fileSelectType)}"}`
-                : ''
-        ) + `
+    ) +
+    (
+        argv.fileSelectType
+            ? `" of type {"${escapeAppleScriptQuoted(argv.fileSelectType)}"}`
+            : ''
+    ) + `
         on error -- cancelled
             return
         end try
@@ -247,8 +248,8 @@ const nodeJSONMethods = {
     },
     saveTemplate ({templateName, content, lastTemplate}) {
         const profD = directories.ProfD,
-            template = path.join(profD, 'executable-creator', templateName + '.html');
-        lastTemplate = lastTemplate ? path.join(profD, 'executable-creator', lastTemplate + '.html') : null;
+            template = path.join(profD, 'executable-creator', templateName + '.json');
+        lastTemplate = lastTemplate ? path.join(profD, 'executable-creator', lastTemplate + '.json') : null;
 
         return this._makeECDir().then((ec) => {
             return writeFile(template, content);
@@ -265,7 +266,7 @@ const nodeJSONMethods = {
     },
     deleteTemplate ({fileName}) {
         return this._makeECDir().then((ec) => {
-            const template = path.join(ec, fileName + '.html');
+            const template = path.join(ec, fileName + '.json');
             unlink(template).catch((err) => {
                 if (err.code === 'ENOENT') { // File doesn't exist
                     return {message: 'File file (' + template + ') + does not exist'};
@@ -278,7 +279,7 @@ const nodeJSONMethods = {
     },
     getTemplate ({fileName}) {
         const profD = directories.ProfD,
-            template = path.join(profD, 'executable-creator', fileName + '.html');
+            template = path.join(profD, 'executable-creator', fileName + '.json');
         return readFile(template, 'utf8');
     },
     _makeProfileDir (dir) {
@@ -298,8 +299,8 @@ const nodeJSONMethods = {
             return readdir(ec);
         }).then((files) => {
             return files
-                .filter((f) => f.match(/\.html$/))
-                .map((f) => f.replace(/\.html$/, ''));
+                .filter((f) => f.match(/\.json$/))
+                .map((f) => f.replace(/\.json$/, ''));
         });
     },
     autocompleteValues ({value: userVal, dirOnly, listID}) {
