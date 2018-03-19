@@ -72,12 +72,34 @@ the problem that all of these other executable projects are all
 now apparently defunct).
 -->
 
+# Command line usage
+
+## Building an AppleScript executable that can be used with "Open with..." to interact with WebAppFind
+
+See the [User Guide](./docs/User-Guide.md)
+
+## Directly interacting with WebAppFind
+
+Similar to the AppleScript creation commands in the
+[User Guide](./docs/User-Guide.md) (where relevant), except that `method`
+should be `client` (instead of `build-openwith-exec`).
+
+```
+node native-app.js --method=client --file="path/to/my/file" --mode=view --binary=true --site=http://example.com --args="--a=1 --b=2"
+```
+
+## Creating URL shortcuts
+
+This functionality is not quite WebAppFind-related, but provided as a convenience.
+
+```
+node native-app.js --method=urlshortcut --path=/path/to/create.webloc --url="http://example.com"
+```
+
 <!--
 NOTE: This is not currently working due to restrictions with
 [browserAction.openPopup](https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/browserAction/openPopup);
 it requires a user action to activate
-
-# Command line usage
 
 Once the add-on is installed, the following can be used in calls to
 Firefox in addition to Firefox's own flags.
@@ -96,9 +118,6 @@ can cover the entire range of functionality available in the UI.
     (WebAppFind/filebrowser-enhanced/AsYouWish) as completed in process of
     this add-on
 1. As reimplement, *uncomment hidden docs* above
-
-1. *Other executable types*
-    1. Ability to *drop URL onto AppleScript* and use that?
 
 1. *UI*
     1. Upgrade my quick-and-dirty, ironically non-concern-separated data files
@@ -208,6 +227,12 @@ can cover the entire range of functionality available in the UI.
         (e.g., to save to a config file, to build an icon file in a predictable
         location along with the other file data, etc.); if done by right-click,
         could do in `filebrowser-enhanced` at least
+1. *Other executable types*
+    1. Option to accept *URL shortcut file for dropping onto* and use its URL
+        with hard-baked file params; see `urlshortcut` method for format of
+        this file so as to be able to parse it for the URL; for Executable
+        Builder, this would be HTML drag-and-drop, but could be AppleScript
+        for direct
 1. [atyourcommand](https://github.com/brettz9/atyourcommand)
     1. Support *direct integration of commands* into AtYourCommand
 1. *Demo* todos

@@ -22,6 +22,39 @@ function escapeAppleScriptQuoted (s) {
 
 (() => {
 switch (method) { // We're reusing this executable to accept messages for setting up a client
+case 'urlshortcut':
+    const {url, path} = argv;
+    if (!url) {
+        console.error('No URL provided');
+        return;
+    }
+    if (!path) {
+        console.error('No path provided');
+        return;
+    }
+    if (!(/\.webloc$/).test(path)) {
+        console.error('The path must end in ".webloc"');
+        return;
+    }
+    const template = `
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+\t<key>URL</key>
+\t<string>${url}</string>
+</dict>
+</plist>
+`;
+    writeFile(path, template).then(() => {
+        console.log(`Wrote file to ${path} for URL: ${url}`);
+    }).catch((err) => {
+        if (err.code === 'EEXIST') {
+            return;
+        }
+        console.error('Error writing file', err);
+    });
+    return;
 case 'execbuildopen':
 case 'webappfind':
 case 'client': {
@@ -42,8 +75,9 @@ case 'client': {
     // 2) https://www.safaribooksonline.com/library/view/applescript-in-a/1565928415/re154.html
 
     // Todo: Allow calling this functionality from within the add-on
+    // -- Command line usage example: open ./webappfind-as.app --args /Users/brett/myFile.txt (doesn't work in all contexts apparently)
     const appleScript = `
--- Command line usage example: open ./webappfind-as.app --args /Users/brett/myFile.txt
+-- Command line usage example: osascript ./webappfind-as.app /Users/brett/myFile.txt
 --   Could pass in other flags at end too, but not usable with "open with"
 
 on open argv -- For "open with" and drag-and-drop (or baked in file or file selector when none present)
