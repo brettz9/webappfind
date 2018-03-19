@@ -97,7 +97,6 @@ can cover the entire range of functionality available in the UI.
     this add-on
 1. As reimplement, *uncomment hidden docs* above
 
-1. Complete *i18n* work
 1. *Other executable types*
     1. Ability to *drop URL onto AppleScript* and use that?
 
