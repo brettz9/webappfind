@@ -14,6 +14,7 @@ if (1) { // eslint-disable-line no-constant-condition
     return;
 }
 **/
+
 function l (msg) {
     console.log(msg);
 }
