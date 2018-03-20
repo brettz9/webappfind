@@ -120,9 +120,6 @@ can cover the entire range of functionality available in the UI.
 1. As reimplement, *uncomment hidden docs* above
 
 1. *UI*
-    1. Upgrade my quick-and-dirty, ironically non-concern-separated data files
-        approach in favor of some kind of *data-only form serialization*
-        (in case fields change), e.g., <https://github.com/macek/jquery-serialize-object>
     1. *Split form into generic and specific sections* (so will allow building of
         executables regardless of *whether used for WebAppFind or not*);
         *dynamically reveal* sections based on 'Open with WebAppFind?'
