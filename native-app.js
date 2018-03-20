@@ -267,7 +267,7 @@ const nodeJSONMethods = {
     deleteTemplate ({fileName}) {
         return this._makeECDir().then((ec) => {
             const template = path.join(ec, fileName + '.json');
-            unlink(template).catch((err) => {
+            return unlink(template).catch((err) => {
                 if (err.code === 'ENOENT') { // File doesn't exist
                     return {message: 'File file (' + template + ') + does not exist'};
                 }

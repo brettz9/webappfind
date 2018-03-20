@@ -628,7 +628,7 @@ function getTemplateResponse (content) {
         ['file-extension-associate-open-with', 'FileExtensionInfo']
     ].forEach(([name, baseName]) => {
         const jsonLength = json[name].length;
-        const formLength = $('#dynamic')[name + '[]'].length;
+        const formLength = $$(`[name="${name}[]"]`).length; // $('#dynamic')[name + '[]'] only got one item
         let diff = Math.abs(jsonLength - formLength);
         if (!diff) {
             return;
