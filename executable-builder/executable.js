@@ -162,6 +162,8 @@ function createPathInput () {
                 class: 'executableName'
             }]
         ]],
+        /*
+        // TODO: Reenable for Windows at least when ready
         nbsp3,
         ['label', [
             _('preserve-shortcut'),
@@ -210,6 +212,7 @@ function createPathInput () {
                 }
             }}
         ],
+        */
         ['br'],
         ['label', {for: 'pathBox' + i}, [
             _('executable-save-directory')
@@ -222,10 +225,13 @@ function createPathInput () {
             required: 'true', size: 100, value: '', dataset: {pathBoxInput: i},
             class: 'dirPath'
         }],
+        /*
+        // TODO: Reenable when ready
         ['button', {dataset: {dirPick: i}}, [
             _('browse-file')
         ]],
         ` ${_('or')} `,
+        */
         ['select', {dataset: {pathBoxSelect: i}}, [
             ['option', {value: ''}, [_('or-choose-location')]],
             ['option', {value: getHardPath('Executable')}, [
@@ -259,12 +265,17 @@ function createPathInput () {
     ]];
 }
 
+/*
+// TODO: Reenable when ready
 function getProfiles () {
     return profiles.map((optVal) => {
         return ['option', [optVal]];
     });
 }
+*/
 
+/*
+// TODO: Reenable for Windows at least when ready
 function modifierKeypress (e) {
     // Windows only allows ctrl+alt+XX for a shortcut; otherwise, we could use https://gist.github.com/brettz9/8661692
     if (
@@ -280,6 +291,7 @@ function modifierKeypress (e) {
     }
     e.preventDefault();
 }
+*/
 
 function createTemplatedForm () {
     return ['form', {id: 'dynamic', $on: {submit (e) {
@@ -294,13 +306,15 @@ function createTemplatedForm () {
         ['label', [
             _('description'),
             ' ',
-            ['input', {name: 'description'}]
+            ['textarea', {name: 'description'}]
         ]],
         ['fieldset', {id: 'pathHolder'}, [
             ['legend', [_('executable-directories')]],
             ['datalist', {id: 'datalist'}],
             createPathInput()
         ]],
+        /*
+        // TODO: Reenable for Windows at least when ready
         ['div', [
             ['label', [
                 _('window-style'),
@@ -329,6 +343,9 @@ function createTemplatedForm () {
                     $on: {keypress: modifierKeypress}
                 }]
             ]],
+            */
+        /*
+            // TODO: Reenable when ready
             ['br'],
             ['label', {for: 'iconPath'}, [
                 _('icon-path-executable'),
@@ -345,12 +362,16 @@ function createTemplatedForm () {
                 size: 70, value: ''
             }],
             ' ',
+            */
+        /*
+            // TODO: Reenable for Windows at least when ready
             ['button', {id: 'iconPick'}, [
                 _('browse-file')
             ]],
             createRevealButton('[name=iconPath]'),
             ` ${_('or')} `,
-            /*
+            */
+        /*
             Todo:
             1. Icon (Use export-as-png in SVG Edit; need filetypes.json ICO
             handler--allow testing by previewing as favicon)
@@ -372,7 +393,6 @@ function createTemplatedForm () {
                     Jump list destinations/tasks: ICustomDestinationList
                     Shortcut (PKEY_AppUserModel_ID)
                     SHAddToRecentDocs
-            */
             ['button', {
                 id: 'openOrCreateICO',
                 title: _('create-edit-ico-file-explanation')
@@ -380,6 +400,11 @@ function createTemplatedForm () {
                 _('create-edit-ico-file')
             ]]
         ]],
+        */
+        /*
+        // TODO: Reenable for Windows at least when ready
+        // TODO: Put this into a radio stack of three options (with 2
+        //          hidden at a time)
         ['fieldset', [
             ['legend', [_('file-type-association')]],
             ['div', {id: 'fileExtensionHolder'}, [
@@ -409,6 +434,8 @@ function createTemplatedForm () {
             ['br'],
             ` ${_('or').toUpperCase()} `,
             ['label', [
+                // Esp. if implementing PUT, can send back to
+                //    this location where obtained
                 _('hard-coded-url-document-file'),
                 ' ',
                 ['input', {
@@ -419,6 +446,9 @@ function createTemplatedForm () {
                 ['datalist', {id: 'documentURLDatalist'}]
             ]]
         ]],
+        */
+        /*
+        // TODO: Reenable when ready
         ['div', [
             ['label', [
                 ['input', {
@@ -446,6 +476,7 @@ function createTemplatedForm () {
                 _('dont-open-url')
             ]]
         ]],
+        */
         /*
         Todo:
         1. Separate executables like Prism?: hard-code a profile (create
@@ -457,6 +488,8 @@ function createTemplatedForm () {
             though not a separate icon unless, again, the icon is
             attached to a short cut)
         */
+        /*
+        // TODO: Reenable for Windows at least when ready
         ['div', [
             ['label', {for: 'profileName'}, [
                 _('profile-for-executable'),
@@ -470,6 +503,7 @@ function createTemplatedForm () {
                 _('manage-profiles')
             ]]
         ]],
+        */
         ['label', [
             _('mode'),
             ' ',
@@ -480,18 +514,24 @@ function createTemplatedForm () {
                 ['option', {value: 'binaryedit'}, [_('binary-edit-mode')]]
             ]]
         ]],
+        /*
+        // TODO: Reenable for Windows at least when ready
+        // TODO: Change to array of custom modes
         nbsp3,
         ['label', [
             _('custom-mode'),
             ' ',
             ['input', {name: 'customMode'}]
         ]],
+        */
+        /*
+        // TODO: Reenable for Windows at least when ready
         ['br'],
-        // Todo:
         ['label', [
             _('webappfind-preference-overrides'),
             ' '
         ]],
+        */
         ['br'],
         // Creates an autocomplete for URLs
         // Todo:
@@ -510,6 +550,7 @@ function createTemplatedForm () {
         ]],
         ['br'],
         ['br'],
+        /*
         // Todo: implement
         ['label', [
             _('behavior-upon-URL-open'),
@@ -521,17 +562,21 @@ function createTemplatedForm () {
             ]]
         ]],
         ['br'],
+        */
         //  Todo: 1. Whether web app to open by default in full-screen
         //             mode (could just let web app and user handle, but
         //             user may prefer to bake it in to a particular
         //             executable only)
+        /*
         ['label', [
             _('open-fullscreen-mode'),
             ['input', {name: 'open-fullscreen-mode', type: 'checkbox'}]
         ]],
         ['br'],
+        */
         //  Todo: 1. Batch file building section; Raw textarea (OR
         //              (only?) when webappfind is also installed...)
+        /*
         ['label', [
             _('extra-batch-file-commands'),
             ' ',
@@ -565,6 +610,7 @@ function createTemplatedForm () {
             ['input', {size: 100, name: 'extra-command-line-args'}]
         ]],
         ['br'],
+        */
         ['button', {id: 'createExecutable'}, [
             _('create-executable-save-template')
         ]],
@@ -624,8 +670,9 @@ function deleteTemplateResponse ({fileName}) {
 function getTemplateResponse (content) {
     const json = JSON.parse(content);
     [
-        ['executable-name', 'ExecutableInfo'],
-        ['file-extension-associate-open-with', 'FileExtensionInfo']
+        ['executable-name', 'ExecutableInfo']
+        // TODO: Reenable when ready
+        // , ['file-extension-associate-open-with', 'FileExtensionInfo']
     ].forEach(([name, baseName]) => {
         const jsonLength = json[name].length;
         const formLength = $$(`[name="${name}[]"]`).length; // $('#dynamic')[name + '[]'] only got one item
@@ -969,10 +1016,11 @@ function init () {
 }
 
 // We could abstract this, but it's light enough for now to keep flexible
-const [paths, profiles, templates] = await Promise.all([
+const [paths, templates] = await Promise.all([ /*, profiles */
     EB.getHardPaths(),
-    EB.getProfiles(),
     EB.getTemplates()
+    // TODO: Reenable for Windows at least when ready
+    // , EB.getProfiles()
 ]);
 console.log('ttt', templates);
 
