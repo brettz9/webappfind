@@ -129,10 +129,16 @@ function createFileExtensionControls () {
                 class: 'defaultFileExtension'
             }]
         ]],
-        ['button', {dataset: {fileExtensionID, type: 'add'}}, [
+        ['button', {
+            class: 'addFileExtensionInfo',
+            dataset: {fileExtensionID, type: 'add'}
+        }, [
             _('plus')
         ]],
-        ['button', {dataset: {fileExtensionID, type: 'remove'}}, [
+        ['button', {
+            class: 'removeFileExtensionInfo',
+            dataset: {fileExtensionID, type: 'remove'}
+        }, [
             _('minus')
         ]],
         ['hr']
@@ -237,10 +243,16 @@ function createPathInput () {
             ['option', {value: getHardPath('ProgF')}, [_('Programs')]]
         ]],
         createRevealButton('#pathBox' + i),
-        ['button', {dataset: {pathInputID: i, type: 'add'}}, [
+        ['button', {
+            class: 'addExecutableInfo',
+            dataset: {pathInputID: i, type: 'add'}
+        }, [
             _('plus')
         ]],
-        ['button', {dataset: {pathInputID: i, type: 'remove'}}, [
+        ['button', {
+            class: 'removeExecutableInfo',
+            dataset: {pathInputID: i, type: 'remove'}
+        }, [
             _('minus')
         ]],
         ['hr']
@@ -611,6 +623,22 @@ function deleteTemplateResponse ({fileName}) {
 
 function getTemplateResponse (content) {
     const json = JSON.parse(content);
+    [
+        ['executable-name', 'ExecutableInfo'],
+        ['file-extension-associate-open-with', 'FileExtensionInfo']
+    ].forEach(([name, baseName]) => {
+        const jsonLength = json[name].length;
+        const formLength = $('#dynamic')[name + '[]'].length;
+        let diff = Math.abs(jsonLength - formLength);
+        if (!diff) {
+            return;
+        }
+        const sel = '.' + (jsonLength > formLength ? 'add' : 'remove') + baseName;
+        while (diff) {
+            document.querySelector(sel).click();
+            diff--;
+        }
+    });
     // json['executable-name'].length
     // json['file-extension-associate-open-with'].length
     console.log('json', json);
