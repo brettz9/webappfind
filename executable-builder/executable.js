@@ -130,10 +130,10 @@ function createFileExtensionControls () {
             }]
         ]],
         ['button', {dataset: {fileExtensionID, type: 'add'}}, [
-            '+'
+            _('plus')
         ]],
         ['button', {dataset: {fileExtensionID, type: 'remove'}}, [
-            '-'
+            _('minus')
         ]],
         ['hr']
     ]];
@@ -611,6 +611,8 @@ function deleteTemplateResponse ({fileName}) {
 
 function getTemplateResponse (content) {
     const json = JSON.parse(content);
+    // json['executable-name'].length
+    // json['file-extension-associate-open-with'].length
     console.log('json', json);
     formDeserialize($('#dynamic'), json);
 }
