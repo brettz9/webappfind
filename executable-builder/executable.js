@@ -947,6 +947,8 @@ function init () {
                     }).then(saveTemplateResult);
                 }
 
+                // TODO: We may be able to avoid most of this just using the
+                //          results of `formSerialize` above
                 const executableNames = reduceToValue('.executableName');
                 const dirPaths = reduceToValue('.dirPath');
                 const preserveShortcuts = reduceToValue('.preserveShortcut');
