@@ -124,6 +124,7 @@ can cover the entire range of functionality available in the UI.
         executables regardless of *whether used for WebAppFind or not*);
         *dynamically reveal* sections based on 'Open with WebAppFind?'
         radio group selection, hard-coding or not, etc. (as simpler *Wizard*)
+    1. Add *copy path to clipboard*
 1. Allow sites to advertise (in *`<meta>`*?) a number of file extensions
     (of a certain total limited byte size and number?) which they
     support, so that the following can be done:
@@ -242,8 +243,6 @@ can cover the entire range of functionality available in the UI.
         based on the current directory's path; the path could determine the
         ultimate path of the to-be-created executable (or icon), a
         hard-coded desktop (or remote) file or web app URL to open
-1. *UI* to-dos
-    1. Add "copy path to clipboard"
 
 # Windows to-dos
 
