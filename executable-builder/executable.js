@@ -1,5 +1,7 @@
 /* eslint-env webextensions */
-/* globals EB, jml, formSerialize, formDeserialize, confirm, alert */
+/* globals EB, jml, FormSerialize, confirm, alert */
+
+const {serialize: formSerialize, deserialize: formDeserialize} = FormSerialize;
 
 /*
 Todos:
