@@ -242,6 +242,8 @@ can cover the entire range of functionality available in the UI.
         based on the current directory's path; the path could determine the
         ultimate path of the to-be-created executable (or icon), a
         hard-coded desktop (or remote) file or web app URL to open
+1. *UI* to-dos
+    1. Add "copy path to clipboard"
 
 # Windows to-dos
 
