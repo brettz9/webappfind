@@ -157,4 +157,8 @@ it as a user), see the [Developer-Guide](./Developer-Guide.md).
 ## Tools and Comparisons
 
 For tips for using with other tools and comparison to other similar tools,
-see [Tools-and-Comparisons](./docs/Tools-and-Comparisons.md)
+see [Tools-and-Comparisons](./Tools-and-Comparisons.md)
+
+## Executable Builder
+
+See [executable-builder/README.md](../executable-builder/README.md)
