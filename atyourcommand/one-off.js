@@ -1,4 +1,5 @@
-/* globals Tags, ExpandableInputs, jml, $, confirm, alert */
+/* eslint-env browser */
+/* globals Tags, ExpandableInputs, jml, $ */
 const $J = $;
 $.noConflict();
 (() => {
@@ -15,7 +16,7 @@ const
         // browser.runtime.sendMessage(Object.assign(obj || {}, {type}));
     },
     options = {},
-    locale = options.locale,
+    {locale} = options,
     eiLocale = options.ei_locale, // eslint-disable-line camelcase
     inputs = {
         args: new ExpandableInputs({
@@ -62,11 +63,6 @@ function $ (sel) {
 function $$ (sel) {
     return [...document.querySelectorAll(sel)];
 }
-/*
-function forSel (sel, cb) {
-    Array.from($$(sel)).forEach(cb);
-}
-*/
 function _ (key) {
     return locale[key] || '(Non-internationalized string--FIXME!)' + key;
 }
@@ -78,17 +74,19 @@ function _ (key) {
 * @param {string} [ns] Namespace to add to locale string
 */
 function buildOptions (optTexts, values, ns) {
-    return optTexts.map(function (optText, i) {
-        const optValue = values[i] || optText;
-        return ['option', {value: optValue}, [_((ns ? (ns + '_') : '') + optText)]];
+    return optTexts.map((optText, i) => {
+        const value = values[i] || optText;
+        return ['option', {value}, [
+            _((ns ? (ns + '_') : '') + optText)
+        ]];
     });
 }
 
 // BEHAVIORAL UTILITIES
 function setMultipleSelectOfValue (sel, vals) {
     const names = typeof sel === 'string' ? $(sel) : sel;
-    Array.from(names.options).forEach(function (option) {
-        if (vals.indexOf(option.value) > -1) {
+    [...names.options].forEach((option) => {
+        if (vals.includes(option.value)) {
             option.selected = true;
         }
     });
@@ -96,8 +94,8 @@ function setMultipleSelectOfValue (sel, vals) {
 
 function setSelectOfValue (sel, val) {
     const names = typeof sel === 'string' ? $(sel) : sel;
-    const idx = Array.from(names.options).findIndex(function (option) {
-        return option.value === val;
+    const idx = [...names.options].findIndex(({value}) => {
+        return value === val;
     });
     names.selectedIndex = idx === -1 ? 0 : idx;
 }
@@ -107,15 +105,15 @@ function addOptions (type) {
         sel = type === 'executables' ? '#' + type : '.ei-files-presets',
         selects = $$(sel);
 
-    selects.forEach(function (select) {
+    selects.forEach((select) => {
         while (select.firstChild) {
-            select.removeChild(select.firstChild);
+            select.firstChild.remove();
         }
 
-        paths.forEach(function (pathInfo) {
+        paths.forEach(([text, value]) => {
             const option = document.createElement('option');
-            option.text = pathInfo[0];
-            option.value = pathInfo[1];
+            option.text = text;
+            option.value = value;
             select.appendChild(option);
         });
         if (type === 'temps') {
@@ -150,7 +148,7 @@ function populateEmptyForm () {
     $('#restrict-contexts').selectedIndex = 0;
     $('#own-context').value = '';
 
-    ['args', 'urls', 'files'].forEach(function (inputType) {
+    ['args', 'urls', 'files'].forEach((inputType) => {
         inputs[inputType].setTextValues();
     });
     inputs.files.setValues('directory');
@@ -169,17 +167,18 @@ function populateFormWithStorage (name) {
     // Todo: Could make class for each type of storage (select,
     //   input, etc.) and just invoke its destroy() or create() methods
     //   here, rather than adding specific details in every place needed.
-    const {executablePath} = oldStorage[currentName];
+    const oldStorageForName = oldStorage[currentName];
+    const {executablePath, restrictContexts, ownContext, dirs} = oldStorageForName;
     setSelectOfValue('#executables', executablePath);
     $('#executablePath').value = executablePath;
 
-    setMultipleSelectOfValue('#restrict-contexts', oldStorage[currentName].restrictContexts);
-    $('#own-context').value = oldStorage[currentName].ownContext;
+    setMultipleSelectOfValue('#restrict-contexts', restrictContexts);
+    $('#own-context').value = ownContext;
 
-    ['args', 'urls', 'files'].forEach(function (inputType) {
-        inputs[inputType].setTextValues(oldStorage[currentName][inputType]);
+    ['args', 'urls', 'files'].forEach((inputType) => {
+        inputs[inputType].setTextValues(oldStorageForName[inputType]);
     });
-    inputs.files.setValues('directory', oldStorage[currentName].dirs);
+    inputs.files.setValues('directory', dirs);
     addOptions('temps'); // Todo: make a way for the select to be populated through the ExpandableInputs API
     resetChanges();
 }
@@ -192,18 +191,14 @@ function fileOrDirResult ({path, selector}) {
 
 function rebuildCommandList () {
     while ($('#selectNames').firstChild) {
-        $('#selectNames').removeChild($('#selectNames').firstChild);
+        $('#selectNames').firstChild.remove();
     }
-
-    jml({'#': Object.keys(oldStorage).sort().reduce(
-        function (opts, commandName) {
-            opts.push(['option', [commandName]]);
-            return opts;
-        },
-        [
-            ['option', {value: '', selected: 'selected'}, [_('create_new_command')]]
-        ]
-    )}, $('#selectNames'));
+    jml({'#': [
+        ['option', {value: '', selected: 'selected'}, [_('create_new_command')]],
+        ...Object.keys(oldStorage).sort().map((commandName) => {
+            return ['option', [commandName]];
+        })
+    ]}, $('#selectNames'));
 }
 
 function finished () {
@@ -211,7 +206,7 @@ function finished () {
     if (!$('#keepOpen').checked) {
         emit('buttonClick', {id: 'cancel'});
     } else {
-        setTimeout(function () {
+        setTimeout(() => {
             $('#processExecuted').style.display = 'none';
         }, 2000);
     }
@@ -246,50 +241,55 @@ function getSuffixForOS () {
 
 document.title = _('title');
 jml('div', [
-    ['div', (function (options) {
+    ['div', (() => {
         const atts = {id: 'names'};
         if (options.itemType === 'one-off') {
             atts.hidden = true;
         }
         return atts;
-    }(options)), [
-        ['select', {id: 'selectNames', size: 39, $on: {click: function (e) {
-            if (changed) {
-                const abandonUnsaved = confirm(_('have_unsaved_changes'));
-                if (!abandonUnsaved) {
-                    setSelectOfValue('#selectNames', currentName);
-                    return;
+    })(), [
+        ['select', {id: 'selectNames', size: 39, $on: {
+            click ({target: {value: name}}) {
+                if (changed) {
+                    const abandonUnsaved = confirm(_('have_unsaved_changes'));
+                    if (!abandonUnsaved) {
+                        setSelectOfValue('#selectNames', currentName);
+                        return;
+                    }
+                }
+                if (name === '') { // Create new command
+                    populateEmptyForm();
+                } else {
+                    populateFormWithStorage(name);
                 }
             }
-            const name = e.target.value;
-            if (name === '') { // Create new command
-                populateEmptyForm();
-            } else {
-                populateFormWithStorage(name);
-            }
-        }}}]
+        }}]
     ]],
-    ['div', (function (options) {
-        const atts = {id: 'main', $on: {change: function (e) {
-            changed = true;
-            if (e.target.id === 'command-name') {
-                nameChanged = true;
+    ['div', (() => {
+        const atts = {id: 'main', $on: {
+            change ({target: {id}}) {
+                changed = true;
+                if (id === 'command-name') {
+                    nameChanged = true;
+                }
             }
-        }}};
+        }};
         atts.className = options.itemType === 'one-off' ? 'closed' : 'open';
         return atts;
-    }(options)), [
-        ['button', {id: 'showNames', $on: {click: function () {
-            $('#names').hidden = !$('#names').hidden;
-            const showNames = $('#showNames');
-            if (!$('#names').hidden) {
-                $('#main').className = 'open';
-                showNames.replaceChild(document.createTextNode(_('lt')), showNames.firstChild);
-            } else {
-                $('#main').className = 'closed';
-                showNames.replaceChild(document.createTextNode(_('gt')), showNames.firstChild);
+    })(), [
+        ['button', {id: 'showNames', $on: {
+            click () {
+                $('#names').hidden = !$('#names').hidden;
+                const showNames = $('#showNames');
+                if (!$('#names').hidden) {
+                    $('#main').className = 'open';
+                    showNames.firstChild.replaceWith(_('lt'));
+                } else {
+                    $('#main').className = 'closed';
+                    showNames.firstChild.replaceWith(_('gt'));
+                }
             }
-        }}}, [
+        }}, [
             _(options.itemType === 'one-off' ? 'gt' : 'lt')
         ]],
         ['div', {id: 'processExecuted', style: 'display:none;'}, [
@@ -304,7 +304,7 @@ jml('div', [
                 _('prefixes_can_be_applied'),
                 ['dl', [
                     'save-temp', 'ucencode-', 'uencode-', 'escquotes-'
-                ].reduce(function (children, prefix) {
+                ].reduce((children, prefix) => { // Todo: Replace with `flatMap` when decided: https://github.com/tc39/proposal-flatMap/pull/56
                     children.push(['dt', [prefix]]);
                     children.push(['dd', [_('prefix_' + prefix)]]);
                     return children;
@@ -317,7 +317,7 @@ jml('div', [
                     'linkPageURLAsNativePath', 'linkPageTitle',
                     'linkBodyText', 'linkPageHTML',
                     'imageDataURL', 'imageDataBinary'
-                ].reduce(function (children, seq) {
+                ].reduce((children, seq) => { // Todo: Replace with `flatMap` when decided: https://github.com/tc39/proposal-flatMap/pull/56
                     children.push(['dt', [seq]]);
                     children.push(['dd', [_('seq_' + seq)]]);
                     return children;
@@ -345,44 +345,55 @@ jml('div', [
                     'linkPageURLAsNativePath', 'linkPageTitle',
                     'linkBodyText', 'linkPageHTML',
                     'imageDataURL', 'imageDataBinary'
-                ].reduce(function (children, seq) {
+                ].reduce((children, seq) => { // Todo: Replace with `flatMap` when decided: https://github.com/tc39/proposal-flatMap/pull/56
                     children.push(['dt', [seq]]);
                     children.push(['dd']);
                     return children;
                 }, [])]
             ]]
         ]],
-        ['form', {$on: {click: [function (e) {
-            const cl = e.target.classList;
-            if (!this.checkValidity() && // Also "setCustomValidity" and individual items also have "validationMessage" property
-                (cl.contains('execute') || cl.contains('save') || cl.contains('batch_export'))
-            ) {
-                e.stopPropagation(); // Don't allow it to get to submit
-            }
-        }, !!'capturing']}}, [
+        ['form', {$on: {
+            click: [(e) => {
+                const cl = e.target.classList;
+                if (!this.checkValidity() && // Also "setCustomValidity" and individual items also have "validationMessage" property
+                    (cl.contains('execute') || cl.contains('save') || cl.contains('batch_export'))
+                ) {
+                    e.stopPropagation(); // Don't allow it to get to submit
+                }
+            }, !!'capturing']
+        }}, [
             ['div', {id: 'command-name-section'}, [
                 ['label', {title: _('if_present_command_saved')}, [
                     _('Command name') + ' ',
-                    ['input', (function (options) {
+                    ['input', (() => {
                         const atts = {id: 'command-name', size: '35'};
                         if (options.itemType === 'commands') {
                             atts.autofocus = 'autofocus';
                         }
                         return atts;
-                    }(options))]
+                    })()]
                 ]],
                 ['br'],
                 ['label', [
                     _('Restrict contexts') + ' ',
-                    ['select', {multiple: 'multiple', title: _('Italicized_obtained_from_source_page_context'), id: 'restrict-contexts', $on: {click: function (e) {
-                        // Not sure why we're losing focus or the click event is going through here but not in my multiple-select demo
-                        // ms.focus();
-                        e.stopPropagation();
-                    }}}, Tags.map(function (groupInfo) {
-                        return ['optgroup', {label: _(groupInfo[0])}, groupInfo[1].map(function (tagInfo) {
+                    ['select', {
+                        multiple: 'multiple',
+                        title: _('Italicized_obtained_from_source_page_context'),
+                        id: 'restrict-contexts',
+                        $on: {
+                            click (e) {
+                                // Not sure why we're losing focus or the click event is going through here but not in my multiple-select demo
+                                // ms.focus();
+                                e.stopPropagation();
+                            }
+                        }
+                    }, Tags.map((groupInfo) => {
+                        return ['optgroup', {
+                            label: _(groupInfo[0])
+                        }, groupInfo[1].map((tagInfo) => {
                             const atts = {};
                             if (tagInfo && typeof tagInfo === 'object' && tagInfo[1].hidden === true) {
-                                atts['class'] = 'hiddenContext';
+                                atts.class = 'hiddenContext';
                             }
                             return ['option', atts, [
                                 typeof tagInfo === 'string' ? tagInfo : tagInfo[0]
@@ -412,14 +423,24 @@ jml('div', [
                         ['label', {'for': 'executablePath'}, [_('Path of executable')]]
                     ]],
                     ['td', [
-                        ['select', {id: 'executables', 'class': 'ei-exe-presets', dataset: {ei_sel: '#executablePath'}}],
+                        ['select', {id: 'executables', 'class': 'ei-exe-presets', dataset: {
+                            ei_sel: '#executablePath'
+                        }}],
                         ['input', {
-                            type: 'text', size: '55', id: 'executablePath', 'class': 'ei-exe-path',
+                            type: 'text', size: '55', id: 'executablePath', class: 'ei-exe-path',
                             list: 'datalist', autocomplete: 'off', value: '', required: 'required'
                         }],
-                        ['input', {type: 'button', id: 'executablePick', 'class': 'ei-exe-picker', dataset: {ei_sel: '#executablePath', 'ei_default-extension': 'exe'}, value: _('Browse')}],
+                        ['input', {
+                            type: 'button', id: 'executablePick', class: 'ei-exe-picker',
+                            dataset: {ei_sel: '#executablePath', 'ei_default-extension': 'exe'},
+                            value: _('Browse')
+                        }],
                         ['datalist', {id: 'datalist'}],
-                        ['input', {type: 'button', 'class': 'ei-exe-revealButton', dataset: {ei_sel: '#executablePath'}}]
+                        ['input', {
+                            type: 'button',
+                            class: 'ei-exe-revealButton',
+                            dataset: {ei_sel: '#executablePath'}
+                        }]
                     ]]
                 ]]
             ]],
@@ -437,7 +458,11 @@ jml('div', [
                 ['label', [_('keep_dialog_open'), ['input', {type: 'checkbox', id: 'keepOpen'}]]],
                 ['br'],
                 ['button', {'class': 'passData save'}, [_('Save')]],
-                ['button', {id: 'delete', 'class': 'passData delete', hidden: true}, [_('Delete')]],
+                ['button', {
+                    id: 'delete',
+                    class: 'passData delete',
+                    hidden: true
+                }, [_('Delete')]],
                 // ['br'],
                 ['button', {'class': 'passData execute'}, [_('Execute_on_current_page')]],
                 ['button', {id: 'cancel'}, [_('Cancel')]]
@@ -445,7 +470,10 @@ jml('div', [
             ['div', {'class': 'export'}, [
                 ['label', [
                     _('os_format_for_batch_export'),
-                    ['select', {id: 'export-os-type'}, buildOptions(['Linux', 'Mac', 'Windows'], ['linux', 'darwin', 'winnt'])]
+                    ['select', {id: 'export-os-type'}, buildOptions(
+                        ['Linux', 'Mac', 'Windows'],
+                        ['linux', 'darwin', 'winnt']
+                    )]
                     // Also could add values (and i18n and localize text) for these auto-lower-cased values from https://developer.mozilla.org/en-US/docs/OS_TARGET:
                     //   'android', 'SunOS', 'FreeBSD', 'OpenBSD', 'NetBSD', 'OS2', 'BeOS', 'IRIX64', 'AIX', 'HP-UX', 'DragonFly', 'skyos', 'riscos', 'NTO', 'OSF1'
                 ]],
@@ -502,7 +530,11 @@ $('body').addEventListener('click', function (e) {
     } else if (cl.contains('batch_export')) {
         const commandText = 'todo: serialize the form into a batch file here';
         const uri = 'data:,' + encodeURIComponent(commandText);
-        const a = jml('a', {style: 'display: none;', download: ($('#command-name').value || 'command') + getSuffixForOS(), href: uri}, ['hidden'], $('body'));
+        const a = jml('a', {
+            style: 'display: none;',
+            download: ($('#command-name').value || 'command') + getSuffixForOS(),
+            href: uri
+        }, ['hidden'], $('body'));
         a.click();
         e.preventDefault(); // Avoid blanking out
     } else if (cl.contains('passData')) {
@@ -534,14 +566,18 @@ $('body').addEventListener('click', function (e) {
                     }
                 }
                 // Proceed with rename, so first delete old value (todo: could ensure first added)
-                emit('buttonClick', {name: $('#command-name').defaultValue, remove: true, keepForm: true});
+                emit('buttonClick', {
+                    name: $('#command-name').defaultValue,
+                    remove: true,
+                    keepForm: true
+                });
             } else if (!changed && !cl.contains('execute')) {
                 alert(_('no_changes_to_save'));
                 return;
             }
         }
         const data = {
-            name: name,
+            name,
             save: true,
             detail: {
                 executablePath: $('#executablePath').value,
@@ -549,8 +585,8 @@ $('body').addEventListener('click', function (e) {
                 files: inputs.files.getTextValues(),
                 urls: inputs.urls.getTextValues(),
                 dirs: inputs.files.getValues('directory'),
-                restrictContexts: Array.from($('#restrict-contexts').selectedOptions).map(function (option) {
-                    return option.value;
+                restrictContexts: [...$('#restrict-contexts').selectedOptions].map(({value}) => {
+                    return value;
                 }),
                 ownContext: $('#own-context').value
             }
@@ -562,11 +598,11 @@ $('body').addEventListener('click', function (e) {
     }
 });
 
-$('body').addEventListener('input', function (e) {
-    const target = e.target, val = e.target.value;
+$('body').addEventListener('input', function ({target}) {
+    const {value} = target;
     if (target.classList.contains('ei-files-path') || target.classList.contains('ei-exe-path')) {
         emit('autocompleteValues', {
-            value: val,
+            value,
             listID: target.getAttribute('list')
         });
     }
@@ -576,12 +612,12 @@ $('body').addEventListener('input', function (e) {
 on('autocompleteValuesResponse', function (data) {
     const datalist = document.getElementById(data.listID);
     while (datalist.firstChild) {
-        datalist.removeChild(datalist.firstChild);
+        datalist.firstChild.remove();
     }
-    data.optValues.forEach(function (optValue) {
+    data.optValues.forEach((value) => {
         const option = jml('option', {
-            // text: optValue,
-            value: optValue
+            // text: value,
+            value
         });
         datalist.appendChild(option);
     });
@@ -599,13 +635,16 @@ on('removeStorage', removeStorage);
 
 // Insert this as a class, so it works for others inserted into doc
 $('#dynamicStyleRules').sheet.insertRule(
-    '.ei-files-revealButton, .ei-exe-revealButton {background-image: url("' + options.folderImage + '");}', 0
+    `.ei-files-revealButton, .ei-exe-revealButton {
+        background-image: url("${options.folderImage}");
+    }`, 0
 );
 
 rebuildCommandList();
 
-// Todo: For prefs when prev. values stored, call multiple times and populate and reduce when not used
-['args', 'urls', 'files'].forEach(function (inputType) {
+// Todo: For prefs when prev. values stored, call multiple times and
+//         populate and reduce when not used
+['args', 'urls', 'files'].forEach((inputType) => {
     inputs[inputType].add();
 });
 })();

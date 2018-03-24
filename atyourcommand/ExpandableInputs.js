@@ -3,7 +3,7 @@
 * @class ExpandableInputs
 * @requires jamilih
 */
-window.ExpandableInputs = (function (undef) {
+window.ExpandableInputs = (function () {
 'use strict';
 /*
 // DEBUGGING
@@ -63,7 +63,7 @@ function ExpandableInputs (cfg) {
     this.inputType = cfg.inputType && cfg.inputType !== 'file' ? cfg.inputType : 'text';
     this.selects = cfg.selects || false;
     this.inputSize = cfg.inputSize || 50;
-    if (cfg.rows !== undef) {
+    if (cfg.rows !== undefined) {
         this.rows = cfg.rows;
     }
     this.locale = cfg.locale || {
@@ -98,18 +98,20 @@ ExpandableInputs.prototype.remove = function (id) {
     if ($$('.' + prefixedNS + 'row').length === 1) { // Don't delete if only one remaining
         return true;
     }
-    $(rowIDSel).parentNode.removeChild($(rowIDSel));
+    $(rowIDSel).remove();
     // Renumber to ensure inputs remain incrementing by one
     this.num = 1;
-    Array.from($$('.' + prefixedNS + 'number')).forEach(function (numHolder) {
-        numHolder.replaceChild(document.createTextNode(this.getLabel(this.num++)), numHolder.firstChild);
-    }, this);
+    [...$$('.' + prefixedNS + 'number')].forEach((numHolder) => {
+        numHolder.firstChild.replaceWith(
+            this.getLabel(this.num++)
+        );
+    });
     return false;
 };
 ExpandableInputs.prototype.addTableEvent = function () {
     const that = this;
     $('#' + this.table).addEventListener('click', function (e) {
-        const dataset = e.target.dataset;
+        const {dataset} = e.target;
         if (!dataset || !dataset.ei_type) {
             return;
         }
@@ -134,11 +136,8 @@ ExpandableInputs.prototype.addTableEvent = function () {
 
 ExpandableInputs.prototype.getValues = function (type) {
     const selector = '.' + this.getPrefixedNamespace() + type;
-    return Array.from($$(selector)).map(function (arg) {
-        if (arg.type === 'checkbox') {
-            return arg.checked;
-        }
-        return arg.value;
+    return [...$$(selector)].map(({type, checked, value}) => {
+        return type === 'checkbox' ? checked : value;
     });
 };
 ExpandableInputs.prototype.getTextValues = function () {
@@ -150,21 +149,21 @@ ExpandableInputs.prototype.setValues = function (type, storage) {
     const prefixedNS = this.getPrefixedNamespace();
     const selector = '.' + prefixedNS + type;
     storage = storage || [];
-    if (Array.from($$(selector)).length !== storage.length) { // Don't remove if already the right number
-        Array.from($$('.' + prefixedNS + 'row')).forEach(function (row) {
-            row.parentNode.removeChild(row);
+    if ($$(selector).length !== storage.length) { // Don't remove if already the right number
+        [...$$('.' + prefixedNS + 'row')].forEach((row) => {
+            row.remove();
         });
         this.resetCount();
         if (!storage.length) {
             this.add();
             return;
         }
-        storage.forEach(function () {
+        storage.forEach(() => {
             this.add();
-        }, this);
+        });
     }
 
-    Array.from($$(selector)).forEach(function (arg, i) {
+    [...$$(selector)].forEach((arg, i) => {
         const data = storage[i];
         if (arg.type === 'checkbox') {
             arg.checked = data || false;
@@ -179,77 +178,81 @@ ExpandableInputs.prototype.setTextValues = function (storage) {
 };
 
 ExpandableInputs.prototype.add = function () {
-    const that = this,
-        prefixedNS = this.getPrefixedNamespace();
+    const prefixedNS = this.getPrefixedNamespace();
     if (!this.tableEventAdded) {
         this.addTableEvent();
         this.tableEventAdded = true;
     }
     $('#' + this.table).appendChild(jml(
         'tr', {
-            'id': prefixedNS + 'row-' + this.id,
-            'class': prefixedNS + 'row'
+            id: prefixedNS + 'row-' + this.id,
+            class: prefixedNS + 'row'
         }, [
             ['td', [
                 ['label', {
-                    'for': prefixedNS + 'input-' + this.id,
-                    'class': prefixedNS + 'number'
+                    for: prefixedNS + 'input-' + this.id,
+                    class: prefixedNS + 'number'
                 }, [this.getLabel(this.num)]]
             ]],
             ['td', [
                 (this.fileType && this.selects
                     ? ($$('.' + prefixedNS + 'presets').length > 0
-                        ? (function () {
+                        ? (() => {
                             const select = $('.' + prefixedNS + 'presets').cloneNode(true);
-                            select.id = prefixedNS + 'select-' + that.id;
-                            select.dataset.ei_sel = '#' + prefixedNS + 'input-' + that.id;
+                            select.id = prefixedNS + 'select-' + this.id;
+                            select.dataset.ei_sel = '#' + prefixedNS + 'input-' + this.id;
                             return select;
-                        }())
+                        })()
                         : ['select', {
                             id: prefixedNS + 'select-' + this.id,
-                            'class': prefixedNS + 'presets',
+                            class: prefixedNS + 'presets',
                             dataset: {ei_sel: '#' + prefixedNS + 'input-' + this.id}
                         }]
                     )
                     : ''
                 ),
-                [(this.hasOwnProperty('rows') ? 'textarea' : 'input'), (function () {
+                [(this.hasOwnProperty('rows') ? 'textarea' : 'input'), (() => {
                     const atts = {
-                        id: prefixedNS + 'input-' + that.id,
-                        'class': prefixedNS + 'input ' + prefixedNS + 'path'
+                        id: prefixedNS + 'input-' + this.id,
+                        class: prefixedNS + 'input ' + prefixedNS + 'path'
                     };
-                    if (that.hasOwnProperty('rows')) { // textarea
-                        atts.cols = that.inputSize;
-                        atts.rows = that.rows;
+                    if (this.hasOwnProperty('rows')) { // textarea
+                        atts.cols = this.inputSize;
+                        atts.rows = this.rows;
                     } else { // input
-                        atts.size = that.inputSize;
-                        atts.type = that.inputType;
+                        atts.size = this.inputSize;
+                        atts.type = this.inputType;
                         atts.value = '';
                     }
-                    if (that.fileType) {
-                        atts.list = prefixedNS + 'fileDatalist-' + that.id;
+                    if (this.fileType) {
+                        atts.list = prefixedNS + 'fileDatalist-' + this.id;
                         atts.autocomplete = 'off';
                     }
                     return atts;
-                }())],
+                })()],
                 (this.fileType
                     ? {'#': [
                         ['datalist', {id: prefixedNS + 'fileDatalist-' + this.id}],
                         ['input', {
                             type: 'button',
-                            'class': prefixedNS + 'picker',
+                            class: prefixedNS + 'picker',
                             dataset: {
                                 ei_sel: '#' + prefixedNS + 'input-' + this.id,
                                 ei_directory: '#' + prefixedNS + 'directory' + this.id
                             },
                             value: this.locale.browse
                         }],
-                        ['input', {type: 'button', 'class': prefixedNS + 'revealButton', value: this.locale.reveal, dataset: {ei_sel: '#' + prefixedNS + 'input-' + this.id}}],
+                        ['input', {
+                            type: 'button',
+                            class: prefixedNS + 'revealButton',
+                            value: this.locale.reveal,
+                            dataset: {ei_sel: '#' + prefixedNS + 'input-' + this.id}
+                        }],
                         ['label', [
                             ['input', {
                                 id: prefixedNS + 'directory' + this.id,
                                 type: 'checkbox',
-                                'class': prefixedNS + 'directory'
+                                class: prefixedNS + 'directory'
                             }],
                             this.locale.directory
                         ]]
@@ -259,13 +262,13 @@ ExpandableInputs.prototype.add = function () {
             ]],
             ['td', [
                 ['button', {
-                    'class': prefixedNS + 'add',
+                    class: prefixedNS + 'add',
                     dataset: {ei_type: 'add'}
                 }, [this.locale.plus]]
             ]],
             ['td', [
                 ['button', {
-                    'class': prefixedNS + 'remove',
+                    class: prefixedNS + 'remove',
                     dataset: {ei_id: this.id, ei_type: 'remove'}
                 }, [this.locale.minus]]
             ]]

@@ -1030,13 +1030,19 @@ console.log('ttt', templates);
 // browser.runtime.sendMessage(Object.assign(obj || {}, {type}));
 init();
 
+// Todo: Replace with equivalent to `Array.prototype.flatten` when decided:
+//    https://github.com/tc39/proposal-flatMap/pull/56
+function flatten (arr) {
+    return [].concat(...arr);
+}
+
 // Todo: Use
-/* const metas = */ (await browser.tabs.executeScript({
+/* const metas = */ flatten(await browser.tabs.executeScript({
     allFrames: true,
     code: `
 [...document.querySelectorAll('meta[name="webappfind"]')].map((m) => m.content)
 `,
     runAt: 'document_end'
-})).flatten();
+}));
 // console.log('metas-browser-action', metas);
 })();

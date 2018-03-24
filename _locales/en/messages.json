@@ -6,6 +6,13 @@
         "message": "WebAppFind",
         "description": "Title on toolbar"
     },
+    "atyourcommand-window-title": {
+        "message": "AtYourCommand",
+        "description": "Added in title of window to denote this is AtYourCommand functionality"
+    },
+    "open-atyourcommand": {
+        "message": "Open AtYourCommand"
+    },
     "enable-asyouwish": {
         "message": "Enable AsYouWish for this tab",
         "description": "Whether to enable the privileged AsYouWish API for this tab"
