@@ -1,6 +1,5 @@
-/* eslint-env browser */
-/* globals Tags, ExpandableInputs, jml, $ */
-const $J = $;
+/* eslint-env webextensions, browser */
+/* globals Tags, ExpandableInputs, jml, jQuery, $ */
 $.noConflict();
 (() => {
 'use strict';
@@ -16,8 +15,7 @@ const
         // browser.runtime.sendMessage(Object.assign(obj || {}, {type}));
     },
     options = {},
-    {locale} = options,
-    eiLocale = options.ei_locale, // eslint-disable-line camelcase
+    eiLocale = options.ei_locale || {}, // eslint-disable-line camelcase
     inputs = {
         args: new ExpandableInputs({
             locale: eiLocale,
@@ -63,8 +61,8 @@ function $ (sel) {
 function $$ (sel) {
     return [...document.querySelectorAll(sel)];
 }
-function _ (key) {
-    return locale[key] || '(Non-internationalized string--FIXME!)' + key;
+function _ (...args) {
+    return browser.i18n.getMessage(...args) || `(Non-internationalized string--FIXME!) ${args.join(', ')}`;
 }
 
 // TEMPLATE UTILITIES
@@ -487,7 +485,7 @@ jml('div', [
 // ADD EVENTS
 
 /* const ms = */
-$J('#restrict-contexts').multipleSelect({
+jQuery('#restrict-contexts').multipleSelect({
     filter: true,
     hideOptgroupCheckboxes: true,
     filterAcceptOnEnter: true,

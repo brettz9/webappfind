@@ -10,8 +10,8 @@
         "message": "AtYourCommand",
         "description": "Added in title of window to denote this is AtYourCommand functionality"
     },
-    "open-atyourcommand": {
-        "message": "Open AtYourCommand"
+    "open-oneoff-atyourcommand": {
+        "message": "Open One-off AtYourCommand"
     },
     "enable-asyouwish": {
         "message": "Enable AsYouWish for this tab",
@@ -264,5 +264,274 @@
     },
     "run-commands-save-template": {
         "message": "Run commands and save template"
+    },
+
+    "At Your Command": {
+        "message": "At Your Command"
+    },
+    "Create a one-off command": {
+        "message": "Create a one-off command"
+    },
+    "One-off": {
+        "message": "One-off"
+    },
+    "Open preferences": {
+        "message": "Open preferences"
+    },
+
+    "title": {
+        "message": "One-off"
+    },
+    "Substitutions used": {
+        "message": "Substitutions used"
+    },
+    "currently_available_sequences": {
+        "message": "The currently available sequences are as follows. Note that if you execute now, we will utilize the information displayed for the substitutions even if you change the selected text before closing this dialog. Items marked in red with an asterisk are currently being employed within your arguments in at least one place."
+    },
+    "Process executed": {
+        "message": "Process executed!"
+    },
+    "Substitutions explained": {
+        "message": "Substitutions explained"
+    },
+    "Substitution_sequences_allow": {
+        "message": "Substitution sequences allow dynamic insertion of web content into a command line. They all begin and end with the delimiters \"<\" and \">\", respectively. If you need these in raw form, add a backslash before the character (a single backslash before it will be stripped). If you need these delimiters anywhere within a resulting URL, you should be using %3C and %3E, respectively, anyways."
+    },
+    "prefixes_can_be_applied": {
+        "message": "A prefix or prefixes can be applied before any sequence."
+    },
+
+    "seq_eval": {
+        "message": "Evaluate the JavaScript following the \"eval\" and a space. Substitutions will be usable within the string."
+    },
+    "seq_contentType": {
+        "message": "The content type of the current page"
+    },
+    "seq_pageURL": {
+        "message": "The URL of the current page"
+    },
+    "seq_pageTitle": {
+        "message": "The title of the current page"
+    },
+    "seq_pageHTML": {
+        "message": "The HTML source of the current page"
+    },
+    "seq_bodyText": {
+        "message": "The text of the current page (the concatenated text of the current document's body content)"
+    },
+    "seq_selectedHTML": {
+        "message": "The HTML source of the text highlighted on the current page"
+    },
+    "seq_selectedText": {
+        "message": "The text highlighted on the current page"
+    },
+    "seq_linkPageURLAsNativePath": {
+        "message": "The clicked link's location as a native path (e.g., \"C:\\\")"
+    },
+    "seq_linkPageTitle": {
+        "message": "The fetched title of the clicked link"
+    },
+    "seq_linkBodyText": {
+        "message": "The fetched body as text of the clicked link"
+    },
+    "seq_linkPageHTML": {
+        "message": "The fetched HTML source of the clicked link"
+    },
+    "seq_imageDataURL": {
+        "message": "The selected image content as a data: URL"
+    },
+    "seq_imageDataBinary": {
+        "message": "The selected image content as a binary string"
+    },
+
+
+    "Sequences": {
+        "message": "Sequences:"
+    },
+    "Path of executable": {
+        "message": "Path of executable:"
+    },
+    "Browse": {
+        "message": "Browse\u2026"
+    },
+    "Hard-coded files and URLs": {
+        "message": "Hard-coded files and URLs:"
+    },
+    "keep_dialog_open": {
+        "message": "Keep this dialog open after execution?"
+    },
+    "Execute_on_current_page": {
+        "message": "Execute (on current page)"
+    },
+    "Cancel": {
+        "message": "Cancel"
+    },
+
+    "prefix_save-temp": {
+        "message": "Added to indicate that the targeted contents should first be saved to a temporary file. This can be used for copying a whole file (or URLs too even if sending a PUT back to the server for the original location). Can be followed by whitespace and \"overwrite=\" and \"yes\", \"no\", or \"prompt\" to indicate what to do when a file in the location already exists. Can be followed by whitespace and \"continue=\" and \"yes\" or \"no\" for whether to continue execution when a file is found in the location and \"overwrite\" is \"no\" or \"prompt\" with a resulting \"no\" answer by the user. Can be followed by %N where \"N\" is the number of the directory argument below."
+    },
+    "prefix_ucencode-": {
+        "message": "Encode the content for safe inclusion within a URI component (the portion beginning with \"?\")"
+    },
+    "prefix_uencode-": {
+        "message": "Encode the content for safe inclusion AS a whole URI"
+    },
+    "prefix_escquotes-": {
+        "message": "Escape quotes (Note that this might be applied automatically to content in the future)"
+    },
+
+
+    "expandable_inputs_browse": {
+        "message": "Browse\u2026"
+    },
+    "expandable_inputs_directory": {
+        "message": "Directory?"
+    },
+    "expandable_inputs_plus": {
+        "message": "+"
+    },
+    "expandable_inputs_minus": {
+        "message": "-"
+    },
+    "expandable_inputs_reveal": {
+        "message": "\u0020"
+    },
+
+    "filepicker_pickFolder": {
+        "message": "Pick a folder for the executable"
+    },
+    "filepicker_pickFile": {
+        "message": "Pick an executable file"
+    },
+
+    "expandable_inputs_args_num": {
+        "message": "Arg %s:"
+    },
+    "expandable_inputs_url_num": {
+        "message": "URL %s:"
+    },
+    "expandable_inputs_file_num": {
+        "message": "File %s:"
+    },
+
+    "Edit commands": {
+        "message": "Edit commands"
+    },
+    "lt": {
+        "message": "\u003c Hide Names"
+    },
+    "gt": {
+        "message": "\u003e Show names"
+    },
+    "create_new_command": {
+        "message": "(Create new command)"
+    },
+    "if_present_command_saved": {
+        "message": "If present, this command will be saved"
+    },
+    "Command name": {
+        "message": "Command name:"
+    },
+    "Save": {
+        "message": "Save"
+    },
+    "supply_name": {
+        "message": "Please supply a name in order to save this command"
+    },
+    "Delete": {
+        "message": "Delete"
+    },
+    "have_unsaved_changes": {
+        "message": "You have unsaved changes; clicking ok will abandon the changes; clicking cancel and then save will let you avoid losing the changes."
+    },
+    "have_unsaved_name_change": {
+        "message": "You have made a change to the command name. Click \"ok\" to confirm the rename; if you click \"cancel\", you can make any further changes and click \"save\" again to create a new command with these details without changing the old command."
+    },
+    "no_changes_to_save": {
+        "message": "You do not have any changes to save"
+    },
+    "sure_wish_delete": {
+        "message": "Are you sure you wish to delete this command?"
+    },
+    "name_already_exists_overwrite": {
+        "message": "A command with that name already exists. Overwrite?"
+    },
+    "Restrict contexts": {
+        "message": "Restrict contexts:"
+    },
+    "or": {
+        "message": "or"
+    },
+    "Specify your own context": {
+        "message": "Specify your own context"
+    },
+    "Images": {
+        "message": "Images"
+    },
+    "frames": {
+        "message": "Frames"
+    },
+    "navigation": {
+        "message": "Navigation"
+    },
+    "block": {
+        "message": "Block"
+    },
+    "lists": {
+        "message": "Lists"
+    },
+    "tables": {
+        "message": "Tables"
+    },
+    "forms": {
+        "message": "Forms"
+    },
+    "links and anchors": {
+        "message": "Links and anchors"
+    },
+    "inline": {
+        "message": "Inline"
+    },
+    "time": {
+        "message": "Time"
+    },
+    "images": {
+        "message": "Images"
+    },
+    "other media": {
+        "message": "Other media"
+    },
+    "plugins": {
+        "message": "Plugins"
+    },
+    "empty but visible": {
+        "message": "Empty but visible"
+    },
+    "hidden": {
+        "message": "Hidden"
+    },
+    "templates": {
+        "message": "Templates"
+    },
+    "scripting": {
+        "message": "Scripting"
+    },
+    "Italicized_obtained_from_source_page_context": {
+        "message": "Italicized items are obtained from source and are only available in page context (when nothing is highlighted and one right-clicks on the page)."
+    },
+    "Windows": {
+        "message": "Windows"
+    },
+    "Linux": {
+        "message": "Linux"
+    },
+    "Mac": {
+        "message": "Mac"
+    },
+    "os_format_for_batch_export": {
+        "message": "OS format for batch export"
+    },
+    "Export to batch": {
+        "message": "Export to batch"
     }
 }
