@@ -631,13 +631,6 @@ on('removeStorage', removeStorage);
 
 // INITIAL BEHAVIORS
 
-// Insert this as a class, so it works for others inserted into doc
-$('#dynamicStyleRules').sheet.insertRule(
-    `.ei-files-revealButton, .ei-exe-revealButton {
-        background-image: url("${options.folderImage}");
-    }`, 0
-);
-
 rebuildCommandList();
 
 // Todo: For prefs when prev. values stored, call multiple times and
