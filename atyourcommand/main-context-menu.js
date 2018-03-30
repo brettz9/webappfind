@@ -11,7 +11,7 @@ self.on('context', function (node) {'use strict';
 // Get around eslint-config-standard limitation on "exported" directive
 //   by exporting as follows:
 //   https://github.com/standard/standard/issues/614
-window.getPageData = function getPageData () {
+const getPageData = window.getPageData = function getPageData () {
     // Todo: Support retrieval of current selected element
     //   (by selector?) once it may be supported:
     //   https://bugzilla.mozilla.org/show_bug.cgi?id=1325814
@@ -53,4 +53,5 @@ window.getPageData = function getPageData () {
     return msg; // We need privs on the dialogs we open
 };
 // Can't clone above export
-'end on a note which Firefox approves'; // eslint-disable-line no-unused-expressions
+// 'end on a note which Firefox approves'; // eslint-disable-line no-unused-expressions
+getPageData();
