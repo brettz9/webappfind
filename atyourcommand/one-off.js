@@ -1,5 +1,19 @@
 /* eslint-env webextensions, browser */
 /* globals Tags, ExpandableInputs, jml, jQuery, $ */
+
+// msg: Passed JSON object
+// sender: https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/runtime/MessageSender
+// sendResponse: One time callback
+browser.runtime.onMessage.addListener((msgObj, sender, sendResponse) => {
+    // Todo: Implement this, and also add a "Loading..." message while waiting
+    //         for this message
+    // Has now received arguments, so we can inject...
+    // We might `executeScript` to check for
+    //  `window.getSelection()` (see append-to-clipboard add-on)
+    //  to get raw HTML of a selection (but unfortunately not a clicked
+    //  element without a selection)
+});
+
 $.noConflict();
 (() => {
 'use strict';
