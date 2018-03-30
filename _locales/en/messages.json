@@ -10,7 +10,7 @@
         "message": "AtYourCommand",
         "description": "Added in title of window to denote this is AtYourCommand functionality"
     },
-    "open-oneoff-atyourcommand": {
+    "atyourcommand-open-oneoff": {
         "message": "Open One-off AtYourCommand"
     },
     "enable-asyouwish": {

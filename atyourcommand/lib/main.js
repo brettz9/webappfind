@@ -14,7 +14,8 @@ exports.main = function () {
         ss = require('sdk/simple-storage').storage,
         openDialog = require('./openDialog'),
         platform = require('sdk/system').platform,
-        fileHelpers = require('./fileHelpers'), getExePaths = fileHelpers.getExePaths, getTempPaths = fileHelpers.getTempPaths, autocompleteValues = fileHelpers.autocompleteValues, picker = fileHelpers.picker, reveal = fileHelpers.reveal;
+        fileHelpers = require('./fileHelpers'),
+        {getExePaths, getTempPaths, autocompleteValues, picker, reveal} = fileHelpers;
 
     if (!ss.commands) {
         ss.commands = {};
@@ -138,7 +139,7 @@ exports.main = function () {
             contentScriptFile: data.url('main-context-menu.js'), // loads before contentScript if we want some default code
             // contentScript: '',
             // image: data.url(''),
-            onMessage: function (data) {
+            onMessage (data) {
                 execute(data.name, details);
             }
         };
@@ -171,17 +172,7 @@ exports.main = function () {
     }
 
     const mainMenu = cm.Menu({
-        label: _('At Your Command'),
-        context: cm.PageContext(),
-        contentScriptFile: data.url('main-context-menu.js'),
-        items: [
-            // cm.Item({label: 'Open in WebAppFind edit mode', data: ''}), // Todo: Put this into default storage
-            // Todo: invite (or utilize?) sharing of i18n with AppLauncher
-            cm.Item({label: _('Create a one-off command'), data: 'one-off'}),
-            cm.Item({label: _('Edit commands'), data: 'commands'})
-            // cm.Item({label: _('Open preferences'), data: 'prefs'})
-        ],
-        onMessage: function (e) {
+        onMessage (e) {
             let win;
             const itemType = e.data || e.selector; // Prioritize built-in names
             switch (itemType) {
@@ -193,8 +184,10 @@ exports.main = function () {
                     outerHeight: ss.windowCoords.outerHeight,
                     contentScript: {
                         files: [
-                            'bower_components/jquery/dist/jquery.min.js', 'bower_components/multiple-select-brett/jquery.multiple.select.js',
-                            'node_modules/jamilih/jml.js', 'ExpandableInputs.js', 'tags.js', 'one-off.js'
+                            'bower_components/jquery/dist/jquery.min.js',
+                            'bower_components/multiple-select-brett/jquery.multiple.select.js',
+                            'node_modules/jamilih/jml.js',
+                            'ExpandableInputs.js', 'tags.js', 'one-off.js'
                         ],
                         when: 'ready',
                         options: { // any JSON-serializable key/values
@@ -244,12 +237,12 @@ exports.main = function () {
                             }, {})
                         }
                     },
-                    ready: function (worker, on, emit) {
+                    ready (worker, on, emit) {
                         on({
-                            autocompleteValues: function (data) {
+                            autocompleteValues (data) {
                                 emit('autocompleteValuesResponse', autocompleteValues(data));
                             },
-                            filePick: function (data) {
+                            filePick (data) {
                                 picker(data, null, ['pickFolder', 'pickFile'].reduce(function (locale, key) {
                                     locale[key] = _('filepicker_' + key);
                                     return locale;
@@ -259,10 +252,10 @@ exports.main = function () {
                                 });
                                 emit('filePickResponse');
                             },
-                            reveal: function (data) {
+                            reveal (data) {
                                 reveal(data);
                             },
-                            buttonClick: function (data) {
+                            buttonClick (data) {
                                 const {name} = data, {commands} = ss;
                                 if (data.remove) {
                                     remove(name);

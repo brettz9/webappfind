@@ -37,7 +37,10 @@ const
             namespace: 'args',
             label: eiLocale.args_num,
             inputSize: 60,
-            rows: 1 // Might perhaps make this optional to save space, but this triggers creation of a textarea so args could be more readable (since to auto-escape newlines as needed)
+            // Might perhaps make this optional to save space, but this
+            //  triggers creation of a textarea so args could be more
+            //  readable (since to auto-escape newlines as needed)
+            rows: 1
         }),
         urls: new ExpandableInputs({
             locale: eiLocale,
@@ -76,7 +79,8 @@ function $$ (sel) {
     return [...document.querySelectorAll(sel)];
 }
 function _ (...args) {
-    return browser.i18n.getMessage(...args) || `(Non-internationalized string--FIXME!) ${args.join(', ')}`;
+    return browser.i18n.getMessage(...args) ||
+        `(Non-internationalized string--FIXME!) ${args.join(', ')}`;
 }
 
 // TEMPLATE UTILITIES
@@ -126,7 +130,7 @@ function addOptions (type) {
             const option = document.createElement('option');
             option.text = text;
             option.value = value;
-            select.appendChild(option);
+            select.append(option);
         });
         if (type === 'temps') {
             setSelectOfValue(select, $('#' + select.id.replace('-select-', '-input-')).value);
@@ -145,7 +149,8 @@ function resetChanges () {
 }
 
 function populateEmptyForm () {
-    $('#selectNames').selectedIndex = 0; // Unlike populateFormWithStorage, we will always need to set the name
+    // Unlike populateFormWithStorage, we will always need to set the name
+    $('#selectNames').selectedIndex = 0;
     $('#executablePath').focus();
 
     createNewCommand = true;
@@ -164,7 +169,8 @@ function populateEmptyForm () {
         inputs[inputType].setTextValues();
     });
     inputs.files.setValues('directory');
-    addOptions('temps'); // Todo: make a way for the select to be populated through the ExpandableInputs API
+    // Todo: make a way for the select to be populated through the ExpandableInputs API
+    addOptions('temps');
     resetChanges();
 }
 
@@ -191,7 +197,8 @@ function populateFormWithStorage (name) {
         inputs[inputType].setTextValues(oldStorageForName[inputType]);
     });
     inputs.files.setValues('directory', dirs);
-    addOptions('temps'); // Todo: make a way for the select to be populated through the ExpandableInputs API
+    // Todo: make a way for the select to be populated through the ExpandableInputs API
+    addOptions('temps');
     resetChanges();
 }
 
@@ -227,7 +234,9 @@ function newStorage (data) {
     oldStorage = data.commands;
     rebuildCommandList();
     setSelectOfValue('#selectNames', data.name);
-    populateFormWithStorage(data.name); // Important to update other flags even if just changed, so convenient to just re-run
+    // Important to update other flags even if just changed,
+    //    so convenient to just re-run
+    populateFormWithStorage(data.name);
 }
 function removeStorage (data) {
     oldStorage = data.commands;
@@ -316,7 +325,8 @@ jml('div', [
                 _('prefixes_can_be_applied'),
                 ['dl', [
                     'save-temp', 'ucencode-', 'uencode-', 'escquotes-'
-                ].reduce((children, prefix) => { // Todo: Replace with `flatMap` when decided: https://github.com/tc39/proposal-flatMap/pull/56
+                ].reduce((children, prefix) => {
+                    // Todo: Replace with `flatMap` when decided: https://github.com/tc39/proposal-flatMap/pull/56
                     children.push(['dt', [prefix]]);
                     children.push(['dd', [_('prefix_' + prefix)]]);
                     return children;
@@ -329,7 +339,8 @@ jml('div', [
                     'linkPageURLAsNativePath', 'linkPageTitle',
                     'linkBodyText', 'linkPageHTML',
                     'imageDataURL', 'imageDataBinary'
-                ].reduce((children, seq) => { // Todo: Replace with `flatMap` when decided: https://github.com/tc39/proposal-flatMap/pull/56
+                ].reduce((children, seq) => {
+                    // Todo: Replace with `flatMap` when decided: https://github.com/tc39/proposal-flatMap/pull/56
                     children.push(['dt', [seq]]);
                     children.push(['dd', [_('seq_' + seq)]]);
                     return children;
@@ -357,7 +368,8 @@ jml('div', [
                     'linkPageURLAsNativePath', 'linkPageTitle',
                     'linkBodyText', 'linkPageHTML',
                     'imageDataURL', 'imageDataBinary'
-                ].reduce((children, seq) => { // Todo: Replace with `flatMap` when decided: https://github.com/tc39/proposal-flatMap/pull/56
+                ].reduce((children, seq) => {
+                    // Todo: Replace with `flatMap` when decided: https://github.com/tc39/proposal-flatMap/pull/56
                     children.push(['dt', [seq]]);
                     children.push(['dd']);
                     return children;
@@ -367,7 +379,9 @@ jml('div', [
         ['form', {$on: {
             click: [(e) => {
                 const cl = e.target.classList;
-                if (!this.checkValidity() && // Also "setCustomValidity" and individual items also have "validationMessage" property
+                // Also "setCustomValidity" and individual items also have
+                //    "validationMessage" property
+                if (!this.checkValidity() &&
                     (cl.contains('execute') || cl.contains('save') || cl.contains('batch_export'))
                 ) {
                     e.stopPropagation(); // Don't allow it to get to submit
@@ -394,22 +408,25 @@ jml('div', [
                         id: 'restrict-contexts',
                         $on: {
                             click (e) {
-                                // Not sure why we're losing focus or the click event is going through here but not in my multiple-select demo
+                                // Not sure why we're losing focus or the click event
+                                //   is going through here but not in my multiple-select demo
                                 // ms.focus();
                                 e.stopPropagation();
                             }
                         }
-                    }, Tags.map((groupInfo) => {
+                    }, Tags.map(([mainElement, childElements]) => {
                         return ['optgroup', {
-                            label: _(groupInfo[0])
-                        }, groupInfo[1].map((tagInfo) => {
+                            label: _(mainElement)
+                        }, childElements.map((tagInfo) => {
                             const atts = {};
-                            if (tagInfo && typeof tagInfo === 'object' && tagInfo[1].hidden === true) {
-                                atts.class = 'hiddenContext';
+                            let attInfo;
+                            if (typeof tagInfo !== 'string') {
+                                [tagInfo, attInfo] = tagInfo;
+                                if (attInfo.hidden === true) {
+                                    atts.class = 'hiddenContext';
+                                }
                             }
-                            return ['option', atts, [
-                                typeof tagInfo === 'string' ? tagInfo : tagInfo[0]
-                            ]];
+                            return ['option', atts, [tagInfo]];
                         })];
                     })]
                 ]],
@@ -439,12 +456,17 @@ jml('div', [
                             ei_sel: '#executablePath'
                         }}],
                         ['input', {
-                            type: 'text', size: '55', id: 'executablePath', class: 'ei-exe-path',
-                            list: 'datalist', autocomplete: 'off', value: '', required: 'required'
+                            type: 'text', size: '55', id: 'executablePath',
+                            class: 'ei-exe-path',
+                            list: 'datalist', autocomplete: 'off', value: '',
+                            required: 'required'
                         }],
                         ['input', {
                             type: 'button', id: 'executablePick', class: 'ei-exe-picker',
-                            dataset: {ei_sel: '#executablePath', 'ei_default-extension': 'exe'},
+                            dataset: {
+                                ei_sel: '#executablePath',
+                                'ei_default-extension': 'exe'
+                            },
                             value: _('Browse')
                         }],
                         ['datalist', {id: 'datalist'}],
@@ -467,7 +489,10 @@ jml('div', [
             ]],
             ['br'],
             ['div', {'class': 'execution'}, [
-                ['label', [_('keep_dialog_open'), ['input', {type: 'checkbox', id: 'keepOpen'}]]],
+                ['label', [
+                    _('keep_dialog_open'),
+                    ['input', {type: 'checkbox', id: 'keepOpen'}]
+                ]],
                 ['br'],
                 ['button', {'class': 'passData save'}, [_('Save')]],
                 ['button', {
@@ -486,8 +511,12 @@ jml('div', [
                         ['Linux', 'Mac', 'Windows'],
                         ['linux', 'darwin', 'winnt']
                     )]
-                    // Also could add values (and i18n and localize text) for these auto-lower-cased values from https://developer.mozilla.org/en-US/docs/OS_TARGET:
-                    //   'android', 'SunOS', 'FreeBSD', 'OpenBSD', 'NetBSD', 'OS2', 'BeOS', 'IRIX64', 'AIX', 'HP-UX', 'DragonFly', 'skyos', 'riscos', 'NTO', 'OSF1'
+                    // Also could add values (and i18n and localize text) for
+                    //   these auto-lower-cased values from
+                    //       https://developer.mozilla.org/en-US/docs/OS_TARGET:
+                    //   'android', 'SunOS', 'FreeBSD', 'OpenBSD',
+                    //   'NetBSD', 'OS2', 'BeOS', 'IRIX64', 'AIX',
+                    //   'HP-UX', 'DragonFly', 'skyos', 'riscos', 'NTO', 'OSF1'
                 ]],
                 ['br'],
                 ['button', {'class': 'batch_export'}, [_('Export to batch')]]
@@ -508,20 +537,29 @@ jQuery('#restrict-contexts').multipleSelect({
 
 // Todo: put these checks as methods on a class for each type of control (can still call from body listener)
 $('body').addEventListener('click', function (e) {
-    let val, sel, selVal;
+    let value, sel, selVal;
     const {target} = e,
-        {dataset} = target || {},
+        {dataset, parentNode} = target || {},
         cl = target.classList;
 
-    if (cl.contains('ei-files-presets') || (target.parentNode && target.parentNode.classList.contains('ei-files-presets')) ||
-        cl.contains('ei-exe-presets') || (target.parentNode && target.parentNode.classList.contains('ei-exe-presets'))) {
-        val = target.value;
-        if (!val) {
+    if (cl.contains('ei-files-presets') ||
+        (
+            parentNode &&
+            parentNode.classList.contains('ei-files-presets')
+        ) ||
+            cl.contains('ei-exe-presets') ||
+            (
+                parentNode &&
+                parentNode.classList.contains('ei-exe-presets')
+            )
+    ) {
+        ({value} = target);
+        if (!value) {
             return;
         }
-        sel = dataset.ei_sel || (target.parentNode && target.parentNode.dataset.ei_sel);
+        sel = dataset.ei_sel || (parentNode && parentNode.dataset.ei_sel);
         if (sel) {
-            $(sel).value = val;
+            $(sel).value = value;
         }
     } else if (cl.contains('ei-files-picker') || cl.contains('ei-exe-picker')) {
         sel = dataset.ei_sel;
@@ -529,7 +567,9 @@ $('body').addEventListener('click', function (e) {
             dirPath: $(sel).value,
             selector: sel,
             defaultExtension: dataset.ei_defaultExtension || undefined,
-            selectFolder: ($(dataset.ei_directory) && $(dataset.ei_directory).checked) ? true : undefined
+            selectFolder: ($(dataset.ei_directory) && $(dataset.ei_directory).checked)
+                ? true
+                : undefined
         });
     } else if (cl.contains('ei-files-revealButton') || cl.contains('ei-exe-revealButton')) {
         sel = dataset.ei_sel;
@@ -537,7 +577,7 @@ $('body').addEventListener('click', function (e) {
         if (selVal) {
             emit('reveal', selVal);
         }
-    } else if (e.target.id === 'cancel') {
+    } else if (target.id === 'cancel') {
         emit('buttonClick', {close: true});
     } else if (cl.contains('batch_export')) {
         const commandText = 'todo: serialize the form into a batch file here';
@@ -574,10 +614,13 @@ $('body').addEventListener('click', function (e) {
                     if (!renameInsteadOfNew) { // User wishes to create a new record (or cancel)
                         $('#selectNames').selectedIndex = 0;
                         nameChanged = false;
-                        return; // Return so that user has some way of correcting or avoiding (without renaming)
+                        // Return so that user has some way of correcting or
+                        //   avoiding (without renaming)
+                        return;
                     }
                 }
-                // Proceed with rename, so first delete old value (todo: could ensure first added)
+                // Proceed with rename, so first delete old value
+                //    (todo: could ensure first added)
                 emit('buttonClick', {
                     name: $('#command-name').defaultValue,
                     remove: true,
@@ -612,7 +655,9 @@ $('body').addEventListener('click', function (e) {
 
 $('body').addEventListener('input', function ({target}) {
     const {value} = target;
-    if (target.classList.contains('ei-files-path') || target.classList.contains('ei-exe-path')) {
+    if (target.classList.contains('ei-files-path') ||
+        target.classList.contains('ei-exe-path')
+    ) {
         emit('autocompleteValues', {
             value,
             listID: target.getAttribute('list')
@@ -621,7 +666,7 @@ $('body').addEventListener('input', function ({target}) {
 });
 
 // COPIED FROM filebrowser-enhanced directoryMod.js (RETURN ALL MODIFICATIONS THERE)
-on('autocompleteValuesResponse', function (data) {
+on('autocompleteValuesResponse', (data) => {
     const datalist = document.getElementById(data.listID);
     while (datalist.firstChild) {
         datalist.firstChild.remove();
@@ -631,7 +676,7 @@ on('autocompleteValuesResponse', function (data) {
             // text: value,
             value
         });
-        datalist.appendChild(option);
+        datalist.append(option);
     });
 });
 
