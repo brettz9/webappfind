@@ -1,4 +1,3 @@
-/* globals self */
 /*
 // For "context" events, "node" will always be the SelectorContext node,
 //  even if a child node is the one responsible for activating the menu
@@ -7,13 +6,19 @@ self.on('context', function (node) {'use strict';
 */
 // For "click" events where "SelectorContext" was used, "node" will be
 //  the SelectorContext node; otherwise, it will be the actual node clicked
-self.on('click', function (node, data) {
-    'use strict';
-    data = typeof data === 'string' ? {data: data} : data;
-    const msg = {
-        data: data.data,
-        selector: data.selector,
+'use strict';
 
+// Get around eslint-config-standard limitation on "exported" directive
+//   by exporting as follows:
+//   https://github.com/standard/standard/issues/614
+window.getPageData = function getPageData () {
+    // Todo: Support retrieval of current selected element
+    //   (by selector?) once it may be supported:
+    //   https://bugzilla.mozilla.org/show_bug.cgi?id=1325814
+    // Todo: retrieve "linkPageTitle", "linkBodyText", and "linkPageHTML"
+    // Todo: Allow passing in to get custom properties?
+    const selection = window.getSelection();
+    const msg = {
         // Todo: ensure all of the following are documented
         // Other non-element magic items?
         contentType: document.contentType,
@@ -36,18 +41,16 @@ self.on('click', function (node, data) {
         //             themselves) but desktop apps may need
 
         // Todo: add to these magic items, depending also on whether there is a context or not
-        selectedHTML: node.outerHTML,
-        selectedText: node.textContent,
+        selectedHTML: selection && selection.outerHTML,
+        selectedText: selection && selection.textContent,
+        nodeName: selection && (selection.nodeName || selection.firstElementChild.nodeName.toLowerCase()),
         // Todo: Change to require user to specify these (since associatable with specific tags)
         pageTitle: document.title, // hidden
         pageHTML: document.documentElement.outerHTML, // Treat like hidden to avoid need to select anything
         bodyText: document.body.textContent // Treat like hidden to avoid need to select anything
     };
-    /* const nodeName = */ node.nodeName.toLowerCase();
-    if (data.customProperty) {
-        msg.customProperty = node[data.customProperty];
-    }
-    // Retrieve "linkPageTitle", "linkBodyText", and "linkPageHTML" only as needed
 
-    self.postMessage(msg); // We need privs on the dialogs we open
-});
+    return msg; // We need privs on the dialogs we open
+};
+// Can't clone above export
+'end on a note which Firefox approves'; // eslint-disable-line no-unused-expressions
