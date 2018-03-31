@@ -67,6 +67,7 @@
     "background": {
         "scripts": [
             "/polyfills/browser-polyfill.js",
+            "/lib/setSelectorContext.js",
             "/lib/background.js"
         ]
     },

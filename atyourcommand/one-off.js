@@ -117,33 +117,7 @@ function execute (name, details) {
 }
 
 const dynamicCMItems = {}, dynamicCMItems2 = {};
-function addDynamicCMContent (name, details) {
-    // todo: handle details.ownContext
-    // todo: handle details.restrictContexts
-    const itemConfig = {
-        label: name,
-        data: {
-            selector: 'dynamic_' + name,
-            customProperty: ''
-        }, // Namespace to distinguish from our built-in names
-        context: details.ownContext
-            ? SelectorContext(details.ownContext)
-            : ['page'],
-        contentScriptFile: data.url('main-context-menu.js'), // loads before contentScript if we want some default code
-        // contentScript: '',
-        // image: data.url(''),
-        onMessage (data) {
-            execute(data.name, details);
-        }
-    };
-    let item = dynamicCMItems[name] = cm.Item(itemConfig);
 
-    // We need to duplicate contexts since array of contexts not working properly
-    const itemConfigCopy = Object.create(itemConfig);
-    itemConfigCopy.context = ['selection'];
-    item = dynamicCMItems2[name] = cm.Item(itemConfigCopy);
-    mainMenu.addItem(item);
-}
 function save (name, data) {
     ss.commands[name] = data;
     addDynamicCMContent(name, data);
@@ -155,12 +129,6 @@ function remove (name) {
     }
     if (dynamicCMItems2[name]) {
         dynamicCMItems2[name].destroy();
-    }
-}
-
-function populateDynamicCMItems () {
-    for (const name in ss.commands) {
-        addDynamicCMContent(name, ss.commands[name]);
     }
 }
 
@@ -265,7 +233,7 @@ browser.runtime.onMessage.addListener((msgObj, sender, sendResponse) => {
             });
         }
     };
-    populateDynamicCMItems();
+    sendResponse({});
 });
 
 window.addEventListener('resize', async function () {
