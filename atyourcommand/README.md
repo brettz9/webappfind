@@ -108,6 +108,7 @@ new command mode (with the list pre-closed)
 1. Allow context menu, with dynamic submenu that checks content type
     of highlighted link and provides content handlers (and same with
     protocol handlers)
+1. Content-type handler processor (web request?) set to process as they arrive
 1. Submit to AMO
 
 # Higher priority to-dos (longer)
