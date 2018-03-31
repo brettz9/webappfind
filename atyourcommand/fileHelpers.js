@@ -156,9 +156,9 @@ function picker (data, filterMap, locale, emit) {
             res = path;
         }
         if (selectFolder) {
-            emit('dirPickResult', {path: res, selector: selector, selectFolder: selectFolder});
+            emit('dirPickResult', {path: res, selector, selectFolder});
         } else {
-            emit('filePickResult', {path: res, selector: selector});
+            emit('filePickResult', {path: res, selector});
         }
         return false;
     }});

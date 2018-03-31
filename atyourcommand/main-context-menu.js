@@ -11,7 +11,9 @@ self.on('context', function (node) {'use strict';
 // Get around eslint-config-standard limitation on "exported" directive
 //   by exporting as follows:
 //   https://github.com/standard/standard/issues/614
-const getPageData = window.getPageData = function getPageData () {
+const getPageData = window.getPageData = function getPageData ({
+    customProperties = {customProperties: []}
+}) {
     // Todo: Support retrieval of current selected element
     //   (by selector?) once it may be supported:
     //   https://bugzilla.mozilla.org/show_bug.cgi?id=1325814
@@ -49,7 +51,9 @@ const getPageData = window.getPageData = function getPageData () {
         pageHTML: document.documentElement.outerHTML, // Treat like hidden to avoid need to select anything
         bodyText: document.body.textContent // Treat like hidden to avoid need to select anything
     };
-
+    customProperties.forEach((customProperty) => {
+        msg[customProperty] = selection[customProperty];
+    });
     return msg; // We need privs on the dialogs we open
 };
 // Can't clone above export

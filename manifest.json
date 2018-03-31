@@ -67,6 +67,8 @@
     "background": {
         "scripts": [
             "/polyfills/browser-polyfill.js",
+            "/lib/xregexp-all.js",
+            "/lib/execute.js",
             "/lib/setSelectorContext.js",
             "/lib/background.js"
         ]

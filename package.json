@@ -43,6 +43,7 @@
     "webext-run": "web-ext run --browser-console",
     "webext-build": "web-ext build",
     "copy-polyfill": "node ./copy-polyfill",
+    "copy-xregexp": "cp node_modules/xregexp/xregexp-all.js lib/xregexp-all.js",
     "eslint": "eslint .",
     "lint": "npm run eslint && npm run copy-polyfill && npm run webext-lint",
     "run": "npm run eslint && npm run copy-polyfill && npm run webext-run",
