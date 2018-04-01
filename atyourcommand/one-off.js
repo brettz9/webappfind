@@ -1,11 +1,9 @@
 /* eslint-env webextensions, browser */
-/* globals Tags, ExpandableInputs, jml, jQuery, $ */
+/* globals AYC, Tags, ExpandableInputs, jml, jQuery, $ */
 
 const data = require('sdk/self').data,
-    cm = require('sdk/context-menu'),
     ss = require('sdk/simple-storage').storage,
-    platform = require('sdk/system').platform,
-    {getExePaths, getTempPaths, autocompleteValues, picker, reveal} = require('./fileHelpers');
+    platform = require('sdk/system').platform;
 
 // msg: Passed JSON object
 // sender: https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/runtime/MessageSender
@@ -93,21 +91,21 @@ browser.runtime.onMessage.addListener((msgObj, sender, sendResponse) => {
         },
         ready (worker, on, emit) {
             on({
-                autocompleteValues (data) {
-                    emit('autocompleteValuesResponse', autocompleteValues(data));
+                async autocompleteValues (data) {
+                    emit('autocompleteValuesResponse', await AYC.autocompleteValues(data));
                 },
                 filePick (data) {
-                    picker(data, null, ['pickFolder', 'pickFile'].reduce((locale, key) => {
-                        locale[key] = _('filepicker_' + key);
-                        return locale;
-                    }, {}),
-                    (arg1, arg2) => {
-                        emit(arg1, arg2);
+                    picker({
+                        ...data,
+                        locale: {
+                            pickFolder: _('filepicker_pickFolder'),
+                            pickFile: _('filepicker_pickFile')
+                        }
+                    }).then(({type, ...args}) => {
+                        const {selector} = data;
+                        emit(type, {selector, ...args});
                     });
                     emit('filePickResponse');
-                },
-                reveal (data) {
-                    reveal(data);
                 },
                 buttonClick (data) {
                     const {name, keepForm, close} = data,
@@ -130,8 +128,8 @@ browser.runtime.onMessage.addListener((msgObj, sender, sendResponse) => {
                 }
             });
             emit({
-                executables: getExePaths(),
-                temps: getTempPaths(),
+                executables: AYC.getExePaths(),
+                temps: AYC.getTempPaths(),
                 defaultOS: platform
             });
         }
@@ -253,12 +251,10 @@ function addOptions (type) {
             select.firstChild.remove();
         }
 
-        paths.forEach(([text, value]) => {
-            const option = document.createElement('option');
-            option.text = text;
-            option.value = value;
-            select.append(option);
-        });
+        jml({'#': paths.map(([text, value]) => {
+            return ['option', {value}, [text]];
+        })}, select);
+
         if (type === 'temps') {
             setSelectOfValue(select, $('#' + select.id.replace('-select-', '-input-')).value);
         }
@@ -702,7 +698,7 @@ $('body').addEventListener('click', function (e) {
         sel = dataset.ei_sel;
         selVal = sel && $(sel).value;
         if (selVal) {
-            emit('reveal', selVal);
+            AYC.reveal(selVal);
         }
     } else if (target.id === 'cancel') {
         emit('buttonClick', {close: true});
@@ -785,7 +781,7 @@ $('body').addEventListener('input', function ({target}) {
     if (target.classList.contains('ei-files-path') ||
         target.classList.contains('ei-exe-path')
     ) {
-        emit('autocompleteValues', {
+        AYC.autocompleteValues({
             value,
             listID: target.getAttribute('list')
         });
@@ -794,7 +790,7 @@ $('body').addEventListener('input', function ({target}) {
 
 // COPIED FROM filebrowser-enhanced directoryMod.js (RETURN ALL MODIFICATIONS THERE)
 on('autocompleteValuesResponse', (data) => {
-    const datalist = document.getElementById(data.listID);
+    const datalist = $('#' + data.listID);
     while (datalist.firstChild) {
         datalist.firstChild.remove();
     }

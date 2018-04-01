@@ -812,8 +812,9 @@ function init () {
             // Value can be blank (if user just wishes to browse)
             EB.dirPick({
                 dirPath: $('#pathBox' + dirPick).value,
-                selector: '#pathBox' + dirPick,
                 selectFolder: dirPick
+            }).then((result) => {
+                return {...result, selector: '#pathBox' + dirPick};
             }).then(dirPickResult);
         } else if (pathInputID) {
             const holderID = 'pathBoxHolder' + pathInputID;
@@ -904,11 +905,12 @@ function init () {
                 break;
             case 'desktopFilePick': case 'iconPick': {
                 // Value can be blank (if user just wishes to browse)
-                const sel = '#' + id.replace(/Pick$/, 'Path');
+                const selector = '#' + id.replace(/Pick$/, 'Path');
                 EB.filePick({
-                    dirPath: $(sel).value,
-                    selector: sel,
+                    dirPath: $(selector).value,
                     defaultExtension: 'ico' // Todo: Fix for desktopFilePick
+                }).then((result) => {
+                    return {...result, selector};
                 }).then(filePickResult);
                 break;
             } case 'openOrCreateICO':

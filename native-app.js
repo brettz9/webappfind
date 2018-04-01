@@ -178,6 +178,8 @@ if (isWin) {
     // Mac apparently doesn't have a folder used for adding items to the dock (apparently it is a preference instead)
     directories.TaskBar = directories.AppData + '\\Microsoft\\Internet Explorer\\Quick Launch\\User Pinned\\TaskBar';
 }
+const cmdExe = path.join(directories.SysD, 'cmd.exe');
+
 const profilesINI = isWin
     ? '%appdata%\\Mozilla\\Firefox\\profiles.ini'
     : `${homedir}/Library/Application Support/Firefox/profiles.ini`;
@@ -202,7 +204,7 @@ const nodeJSONMethods = {
         return execFile('nautilus', fileName); // Ubuntu
     },
     createProfile ({name}) {
-        return this._makeProfileDir(name).catch((err) => {
+        return this._makeProfileSubDirectory(name).catch((err) => {
             if (err.code !== 'EEXIST') {
                 throw err;
             }
@@ -222,8 +224,7 @@ const nodeJSONMethods = {
         return this.execFirefox({args: ['-P', '-no-remote']});
     },
     cmd ({args}) {
-        const cmdDir = path.join(directories.SysD, 'cmd.exe');
-        return execFile(cmdDir, args);
+        return execFile(cmdExe, args);
     },
     getProfileInfo () {
         return readFile(profilesINI, 'utf8').then((contents) => {
@@ -231,8 +232,9 @@ const nodeJSONMethods = {
         });
     },
     getHardPaths () {
-        return this._makeProfileDir('executables').then((Executable) => {
+        return this._makeProfileSubDirectory('executables').then((Executable) => {
             return Object.assign({
+                cmdExe,
                 ffIcon: path.join(__dirname, 'executable-builder', 'firefox32.ico'),
                 // The following was having problems at least for web-ext runner
                 // ffIcon: path.join(directories.ProfD, 'webappfind', 'executable-builder', 'firefox32.ico'),
@@ -282,7 +284,7 @@ const nodeJSONMethods = {
             template = path.join(profD, 'executable-creator', fileName + '.json');
         return readFile(template, 'utf8');
     },
-    _makeProfileDir (dir) {
+    _makeProfileSubDirectory (dir) {
         const profD = directories.ProfD,
             pDir = path.join(profD, dir);
         return mkdirp(pDir).catch((err) => {
@@ -292,7 +294,7 @@ const nodeJSONMethods = {
         }).then(() => pDir);
     },
     _makeECDir () {
-        return this._makeProfileDir('executable-creator');
+        return this._makeProfileSubDirectory('executable-creator');
     },
     getTemplates () {
         return this._makeECDir().then((ec) => {
