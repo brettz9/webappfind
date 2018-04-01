@@ -10,9 +10,7 @@ const data = require('sdk/self').data,
 // msg: Passed JSON object
 // sender: https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/runtime/MessageSender
 // sendResponse: One time callback
-if (!ss.commands) {
-    ss.commands = {};
-}
+
 function _ (...args) {
     return browser.i18n.getMessage(...args) ||
         `(Non-internationalized string--FIXME!) ${args.join(', ')}`;
@@ -20,18 +18,21 @@ function _ (...args) {
 
 const dynamicCMItems = {}, dynamicCMItems2 = {};
 
-function save (name, data) {
-    ss.commands[name] = data;
-    addDynamicCMContent(name, data);
+async function save (name, data) {
+    await browser.storage.local.set({
+        [name]: data
+    });
+    updateContextMenus();
 }
-function remove (name) {
-    delete ss.commands[name];
+async function remove (name) {
+    await browser.storage.local.remove([name]);
     if (dynamicCMItems[name]) {
         dynamicCMItems[name].destroy();
     }
     if (dynamicCMItems2[name]) {
         dynamicCMItems2[name].destroy();
     }
+    updateContextMenus();
 }
 
 browser.runtime.onMessage.addListener((msgObj, sender, sendResponse) => {
