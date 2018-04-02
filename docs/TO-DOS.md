@@ -86,7 +86,7 @@ simply be able to run commands manually from the command line.
     instructions to Windows. If the tab is determined to not be needed
     (e.g., if the user has opted to allow desktop opening of the file when
     no protocols are found), the add-on will simply auto-close the tab
-    that this parameter opens.
+    that this parameter opens. <!-- To-do: make this cross-browser -->
 
 ## To-dos (Reimplementing preferences/basics)
 
@@ -94,7 +94,7 @@ simply be able to run commands manually from the command line.
 1. See current code for other to-dos
 1. LOOK AT old-app folders for implementation aspects and to-dos to add here
 1. When done, remove generated AppleScript app(s) from repo
-1. Ensure working in Chrome as well as Firefox
+1. Ensure working in Chrome as well as Firefox (Edge, Safari, etc.)
 
 1. From Node WebSockets -> add-on, we need to open website and `postMessage`
     into it and be able to handle opposite direction, including for writing
@@ -129,21 +129,22 @@ simply be able to run commands manually from the command line.
         such sandboxing.
     1. Option to enable `file:` protocol (though mention it is currently risky
         in Firefox to use `postMessage` for security and privacy given its lack
-        of scoping); report issue to FF if issue not already added (also for
-        better means than '\*' for add-on communication?). However, this option
-        would be quite useful, especially if the todo just above on restricting
-        external access were implemented, given that web apps could be
-        installed to work with one's files (ideally without concerns that the
-        data was going to be sent anywhere, and if the todo to confirm saves
-        were implemented, one could also see what changes were being made to
-        a file before being actually saved). Unfortunately, `file:` sites
-        cannot register themselves as protocol handlers, so the user would
-        need to configure their settings so as to rely on the default handlers
-        in `filetypes.json` to be able to use such a file (or we would need
-        to create our own mechanism, such as through `postMessage` back to
-        the add-on (or a change in the file's GET parameters or perhaps
-        modification of an element within the document), to allow a `file:`
-        site to request permission to become usable as a protocol handler).
+        of scoping); report issue to Firefox if issue not already added (also
+        for better means than '\*' for add-on communication?). However, this
+        option would be quite useful, especially if the todo just above on
+        restricting external access were implemented, given that web apps
+        could be installed to work with one's files (ideally without concerns
+        that the data was going to be sent anywhere, and if the todo to
+        confirm saves were implemented, one could also see what changes were
+        being made to a file before being actually saved). Unfortunately,
+        `file:` sites cannot register themselves as protocol handlers, so the
+        user would need to configure their settings so as to rely on the
+        default handlers in `filetypes.json` to be able to use such a file
+        (or we would need to create our own mechanism, such as through
+        `postMessage` back to the add-on (or a change in the file's GET
+        parameters or perhaps modification of an element within the
+        document), to allow a `file:` site to request permission to become
+        usable as a protocol handler).
 1. Reimplement protocol registration functionality and create tests using
     `registerProtocolHandler` (also for JS/JSON/mytype); also consider
     HTML head meta-data for flagging availability of file registrations
@@ -257,7 +258,7 @@ The following steps may currently be altered by user preference.
                 (containing *fileType*, *mode*, *customMode*, and *pathID*
                 properties); note that user preferences may determine that
                 the path ID is not the actual path but a mere GUID.) Although
-                this may be changed in the future, file:// URLs currently do
+                this may be changed in the future, `file://` URLs currently do
                 not work with WebAppFind message posting (due to current
                 privacy leaks in Firefox with add-on-to-file-protocol-webpage
                 communication) (As I recall, custom DOM events didn't work
@@ -425,7 +426,7 @@ or on the desktop.
             arbitrary command line args). Batch scripts (including the
             functionality to optionally receive file arguments or paths to JS
             files if AYW was used or XHR paths were used) could thus be written
-            in JS and take advantage of FF cross-platform features (like
+            in JS and take advantage of browser cross-platform features (like
             [Node.js command line scripts](http://www.2ality.com/2011/12/nodejs-shell-scripting.html)
             but browser aware too). Could use in conjunction with proposed
             "hidden" flag to avoid adding a tab (or do so by default).
@@ -637,7 +638,7 @@ with WebDav commands?):
 1. Ensure the `filetypes.json` in this repo references updated apps once
     WebAppFind reimplemented.
 1. If API stabilizes and functional, file feature request to get the
-    functionality built into Firefox.
+    functionality built into webextensions.
 
 ## To-dos (Future, fairly minor yet new functionality)
 
@@ -790,8 +791,8 @@ with WebDav commands?):
         and in use, allow path-reading as long as site is AYW-approved and the
         page is registered for the protocol--so one can bookmark a path and
         always load it or load with other approved paths (e.g., in different
-        tabs within a webapp); also can remember paths to invoke upon FF start
-        up ("website addons").
+        tabs within a webapp); also can remember paths to invoke upon browser
+        start up ("website addons").
     1. Create a shared add-on dependency for WebAppFind and AsYouWish exposing
         perhaps at least for privilege escalation with some of the underlying
         non-SDK APIs (e.g., a privilege to save only to a specific directory if

@@ -1,7 +1,6 @@
 /* eslint-env webextensions */
-// Todo: Merge this with `executableResponses.js` and add as dependency for both
-var AYC; // eslint-disable-line no-var, no-unused-vars
-(async () => {
+
+var FileBridge = (() => { // eslint-disable-line no-var, no-unused-vars
 'use strict';
 
 const {getNodeJSON} = browser.extension.getBackgroundPage();
@@ -10,48 +9,20 @@ function l (msg) {
     console.log(msg);
 }
 
-function getHardPaths () {
-    return getNodeJSON('getHardPaths');
+function autocompletePaths (data) {
+    return getNodeJSON('autocompletePaths', data);
 }
 
-function getHardPath (dir) {
-    return paths[dir];
-}
-
-async function getFirefoxExecutable () {
-    const [aFile] = await getNodeJSON('getFirefoxExecutableAndDir');
-    return aFile;
-}
-
-AYC.getTempPaths = function () {
-    return {
-        type: 'temps',
-        paths: [
-            ['System temp', getHardPath('TmpD')]
-        ]
-    };
-};
-AYC.getExePaths = function () {
-    return {
-        type: 'executables',
-        paths: [
-            ['Firefox', firefoxExecutablePath],
-            ['Command prompt', paths.cmdExe]
-        ]
-    };
-};
-
-AYC.autocompleteValues = function (data) {
-    return getNodeJSON('autocompleteValues', data);
-};
-
-AYC.reveal = function (data) {
+function reveal (data) {
     return getNodeJSON('reveal', data);
-};
+}
 
+// THE REMAINING WAS COPIED FROM filebrowser-enhanced fileBrowserResponses.js
+//    (RETURN ALL MODIFICATIONS THERE)
 // Todo: Apply these changes in other add-ons using it;
 //   also add this as a filterMap where needed [{type: '*.ico', message: "Icon file"}]
-AYC.picker = function ({dirPath, selectFolder, defaultExtension, filterMap = [], locale}) {
+// Todo: Fix so not using Firefox/Mozilla code!
+function picker ({dirPath, selectFolder, defaultExtension, filterMap = [], locale}) {
     // TODO: Could reimplement as a Node-based file/directory picker;
     //           maybe this? https://github.com/Joker-Jelly/nfb
     // Note: could use https://developer.mozilla.org/en-US/docs/Extensions/Using_the_DOM_File_API_in_chrome_code
@@ -108,10 +79,14 @@ AYC.picker = function ({dirPath, selectFolder, defaultExtension, filterMap = [],
             const {file: {path}} = fp;
         } */
     });
-};
+}
+const filePick = picker, dirPick = picker;
 
-const [paths, firefoxExecutablePath] = await Promise.all([ /*, profiles */
-    getHardPaths(),
-    getFirefoxExecutable()
-]);
+return {
+    autocompletePaths,
+    reveal,
+    picker,
+    filePick,
+    dirPick
+};
 })();

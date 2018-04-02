@@ -5,7 +5,7 @@
     "version": "3.0.0",
     "author": "Brett Zamir",
     "homepage_url": "https://github.com/brettz9/webappfind",
-    "description": "__MSG_addon-description__",
+    "description": "__MSG_addon_description__",
 
     "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self';",
     "optional_permissions": [
@@ -60,14 +60,15 @@
         "browser_style": true,
         "default_area": "navbar",
         "default_icon": "/executable-builder/executable.svg",
-        "default_title": "__MSG_browser-action-title__",
+        "default_title": "__MSG_browser_action_title__",
         "default_popup": "/executable-builder/index.html"
     },
 
     "background": {
         "scripts": [
             "/polyfills/browser-polyfill.js",
-            "/lib/xregexp-all.js",
+            "/vendor/xregexp/xregexp-all.js",
+            "/node-bridges/ExecBridge.js",
             "/lib/execute.js",
             "/lib/setSelectorContext.js",
             "/lib/background.js"

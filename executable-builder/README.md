@@ -30,7 +30,7 @@ TODO: Add when implemented
 One may customize how a new tab or window is created, over-ride
 preferences, or default the web app display of the opened file in full
 screen mode. Advanced users can include additional batch commands or
-Firefox command line parameters or pass a custom hard-coded string to
+browser command line parameters or pass a custom hard-coded string to
 the web app so that it may tweak its behavior accordingly.
 -->
 <!--
@@ -46,9 +46,9 @@ start menu, and the task bar.
 -->
 <!--
 TODO: Add when implemented
-If one opts to tie this executable to a separate Firefox profile,
+If one opts to tie this executable to a separate browser profile,
 this icon will show up in the task bar independent from other
-Firefox windows. (If WebAppFind can be adapted to support XULRunner
+browser windows. (If WebAppFind can be adapted to support XULRunner
 instead of Firefox, one might be able to get an even more light
 weight "executable" environment.)
 -->
@@ -56,11 +56,11 @@ weight "executable" environment.)
 The executables built by Executable Builder are actually just simple
 files working with the command line which pass some additional
 instructions to it. In the case of WebAppFind executables, these
-will be passing command line instructions to Firefox.
+will be passing command line instructions to the browser.
 
 <!--
 TODO: Add when implemented
-Used in conjunction with Firefox profiles, one will get the benefits
+Used in conjunction with browser profiles, one will get the benefits
 of former projects like Mozilla Prism/Chromeless/WebRunner which
 provided web applications as executables with their ability to show
 up independently in the task bar, but with the added optional ability
@@ -102,7 +102,7 @@ NOTE: This is not currently working due to restrictions with
 it requires a user action to activate
 
 Once the add-on is installed, the following can be used in calls to
-Firefox in addition to Firefox's own flags.
+browser in addition to browser's own flags.
 
 - `node native-app.js --method=execbuildopen` - Open the Executable Builder dialog.
 
@@ -187,15 +187,15 @@ can cover the entire range of functionality available in the UI.
         want to share again so as to allow independent executable)
     1. In place of or in addition to profiles, consider *contextualIdentities*
     1. Profile - Request to *work offline*, use the *profile without asking*,
-        *open if FF is not open*.
+        *open if browser is not open*.
     1. Conditional logic to *check if `-no-remote`* (preferred is open) and if
         not, open a specific profile or vice versa? (?)
     1. Try *installing WebAppFind and ExecutableBuilder extensions globally* so
         each profile (or multiple profiles--e.g., one profile for each
         WebAppFind method and/or different environments--e.g., multiple tabs
         but only for HTML reading) can access it? (since
-        `--install-global-extension` is removed from FF now, should apparently
-        use this instead:
+        `--install-global-extension` is removed from Firefox now, should
+        apparently use this instead (cross-browser?):
         <https://developer.mozilla.org/en-US/docs/Installing_extensions>)
 1. Include ability to embed configuration information if WebAppFind
     command line starts to support more configuration options (e.g., *full
@@ -212,7 +212,7 @@ can cover the entire range of functionality available in the UI.
     1. If WebAppFind implements `eval`-like behavior (see its todos for
         more on this possibility), create batch files (also for Linux/Mac)
         which *pass evalable JS files* (or embed JS strings) as a command line
-        argument which will be sent to FF for (privileged) evaluation along
+        argument which will be sent to browser for (privileged) evaluation along
         with the optional WebAppFind files on which they are executed.
 1. *Features requiring extended privileges*
     1. Ability to *manage previously associated items* (including if added to
@@ -263,7 +263,7 @@ can cover the entire range of functionality available in the UI.
     try *drag & drop*
     onto cmd alias to batch (another advantage of executables) and describe
     usage with ExecutableBuilder-created batch files. Can
-    use drag-onto-batch approach to pass in file path to Firefox with protocol
+    use drag-onto-batch approach to pass in file path to browser with protocol
     (e.g., for creating and validating but especially the file-path-specific
     view and editing): see
     <http://stackoverflow.com/questions/6852833/running-a-batch-script-by-right-clicking-any-file>

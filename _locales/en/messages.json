@@ -1,88 +1,88 @@
 {
-    "addon-description": {
+    "addon_description": {
         "message": "Open desktop files into web apps"
     },
-    "browser-action-title": {
+    "browser_action_title": {
         "message": "WebAppFind",
         "description": "Title on toolbar"
     },
-    "atyourcommand-window-title": {
+    "atyourcommand_window_title": {
         "message": "AtYourCommand",
         "description": "Added in title of window to denote this is AtYourCommand functionality"
     },
-    "atyourcommand-open-oneoff": {
+    "atyourcommand_open_oneoff": {
         "message": "Open One-off AtYourCommand"
     },
-    "enable-asyouwish": {
+    "enable_asyouwish": {
         "message": "Enable AsYouWish for this tab",
         "description": "Whether to enable the privileged AsYouWish API for this tab"
     },
-    "trust-site-addon-code": {
+    "trust_site_addon_code": {
         "message": "Are you sure you trust this site to evaluate potentially dangerous add-on code?"
     },
-    "trust-site-node-code": {
+    "trust_site_node_code": {
         "message": "Are you sure you trust this site to evaluate potentially dangerous Node.js code?"
     },
 
-    "file-extension-associate-open-with": {
+    "file_extension_associate_open_with": {
         "message": "File extension to associate with this executable (for \"Open With\u2026\"): "
     },
-    "file-type-associate": {
+    "file_type_associate": {
         "message": "File type to associate for this executable (or between it and any supplied extension): "
     },
-    "make-default-handler-for-extension": {
+    "make_default_handler_for_extension": {
         "message": "Make the default execution handler for files with this extension?"
     },
 
-    "executable-name": {
+    "executable_name": {
         "message": "Executable name: "
     },
-    "preserve-shortcut": {
+    "preserve_shortcut": {
         "message": "Preserve shortcut after execution: "
     },
-    "change-batch-exe": {
+    "change_batch_exe": {
         "message": "Change batch to exe: "
     },
-    "preserve-sed-file-explanation": {
+    "preserve_sed_file_explanation": {
         "message": "Normally a SED file will be added and then removed. This option preserves it and will subsequently seek to use it."
     },
-    "preserve-sed-file": {
+    "preserve_sed_file": {
         "message": "Preserve the SED file: "
     },
-    "preserve-batch-file-explanation": {
+    "preserve_batch_file_explanation": {
         "message": "Normally the batch file will be cleaned up when incorporated into an exe. This preserves it and will subsequently seek to use it."
     },
-    "preserve-batch-file": {
+    "preserve_batch_file": {
         "message": "Preserve the batch file: "
     },
-    "executable-save-directory": {
+    "executable_save_directory": {
         "message": "Directory where the executable will be saved: "
     },
-    "browse-file": {
+    "browse_file": {
         "message": "Browse\u2026"
     },
     "or": {
         "message": "or"
     },
-    "or-choose-location": {
+    "or_choose_location": {
         "message": "(Or choose a location)"
     },
-    "executable-within-profile-folder": {
+    "executable_within_profile_folder": {
         "message": "Executable folder within profile folder"
     },
     "Desktop": {
         "message": "Desktop"
     },
-    "Start-up": {
+    "Start_up": {
         "message": "Start-up"
     },
-    "Start menu": {
+    "Start_menu": {
         "message": "Start menu"
     },
-    "Task bar": {
+    "Task_bar": {
         "message": "Task bar"
     },
-    "Profile folder": {
+    "Profile_folder": {
         "message": "Profile folder"
     },
     "Programs": {
@@ -94,13 +94,13 @@
     "minus": {
         "message": "-"
     },
-    "pin-app-task-bar-explanation": {
+    "pin_app_task_bar_explanation": {
         "message": "While on the task bar, a desktop file or URL can be drag-and-dropped onto it if the executable is dynamic or a specific one if the document is baked into the executable"
     },
-    "pin-app-task-bar": {
+    "pin_app_task_bar": {
         "message": "Pin app to task bar: "
     },
-    "alt-ctrl": {
+    "alt_ctrl": {
         "message": "ALT+CTRL+$KEY$",
         "placeholders": {
             "key": {
@@ -109,189 +109,186 @@
             }
         }
     },
-    "overwrite-template-ok": {
+    "overwrite_template_ok": {
         "message": "You have chosen a template which already exists, so any saves you make with this name will overwrite its contents with the updates made below. Continue?"
     },
-    "must-choose-one-to-delete": {
+    "must_choose_one_to_delete": {
         "message": "In order to delete a template, you must choose one in the pull-down"
     },
-    "must-add-one-executable-name": {
+    "must_add_one_executable_name": {
         "message": "You must specify at least one executable file name"
     },
-    "must-add-executable-path": {
+    "must_add_executable_path": {
         "message": "You must supply a path for your executable"
     },
-    "choose-template": {
+    "choose_template": {
         "message": "(Choose a template with which to populate this form)"
     },
-    "delete-template": {
+    "delete_template": {
         "message": "Delete this template"
     },
-    "remember-template-changes": {
+    "remember_template_changes": {
         "message": "Remember changes to this template's content?"
     },
-    "template-name": {
+    "template_name": {
         "message": "Template name:"
     },
     "description": {
         "message": "Description:"
     },
-    "executable-directories": {
+    "executable_directories": {
         "message": "Executable directory(ies)"
     },
-    "window-style": {
+    "window_style": {
         "message": "Window style"
     },
-    "window-activate-restore-explanation": {
+    "window_activate_restore_explanation": {
         "message": "Activates and displays a window. If the window is minimized or maximized, the system restores it to its original size and position."
     },
-    "window-activate-restore": {
+    "window_activate_restore": {
         "message": "Activate - Restore from minimized/maximized"
     },
-    "window-activate-maximize-explanation": {
+    "window_activate_maximize_explanation": {
         "message": "Activates the window and displays it as a maximized window."
     },
-    "window-activate-maximize": {
+    "window_activate_maximize": {
         "message": "Activate - Maximize on open"
     },
-    "window-minimize-explanation": {
+    "window_minimize_explanation": {
         "message": "Minimizes the window and activates the next top-level window."
     },
-    "window-minimize": {
+    "window_minimize": {
         "message": "Minimize on open (and activate next top-level)"
     },
-    "global-hot-key": {
+    "global_hot_key": {
         "message": "Global hot key combination to activate:"
     },
-    "icon-path-executable": {
+    "icon_path_executable": {
         "message": "Icon path for the executable:"
     },
-    "choose-location": {
+    "choose_location": {
         "message": "(Choose a location)"
     },
     "Pictures": {
         "message": "Pictures"
     },
-    "firefox-icon": {
-        "message": "Firefox icon"
+    "browser_icon": {
+        "message": "Browser icon"
     },
-    "create-edit-ico-file-explanation": {
+    "create_edit_ico_file_explanation": {
         "message": "If the ICO file at the supplied path does not exist, an empty file will be created which can then be edited. Be sure to save your changes to the ICO file when done."
     },
-    "create-edit-ico-file": {
+    "create_edit_ico_file": {
         "message": "Create/Edit ICO file"
     },
-    "file-type-association": {
+    "file_type_association": {
         "message": "File/type association"
     },
-    "hard-coded-desktop-file": {
+    "hard_coded_desktop_file": {
         "message": "Hard-coded desktop file:"
     },
     "Documents": {
         "message": "Documents"
     },
-    "hard-coded-url-document-file": {
+    "hard_coded_url_document_file": {
         "message": "Hard-coded URL document file:"
     },
-    "open-with-webappfind": {
+    "open_with_webappfind": {
         "message": "Open with WebAppFind?"
     },
-    "open-hard-coded-url-only": {
+    "open_hard_coded_url_only": {
         "message": "Open a hard-coded URL only?"
     },
-    "dont-open-url": {
+    "dont_open_url": {
         "message": "Don't open any URL"
     },
-    "profile-for-executable": {
+    "profile_for_executable": {
         "message": "Profile to associate with this executable:"
     },
-    "manage-profiles": {
+    "manage_profiles": {
         "message": "Manage profiles"
     },
     "mode": {
         "message": "Mode:"
     },
-    "view-mode": {
+    "view_mode": {
         "message": "View"
     },
-    "binary-view-mode": {
+    "binary_view_mode": {
         "message": "Binary view"
     },
-    "edit-mode": {
+    "edit_mode": {
         "message": "Edit"
     },
-    "binary-edit-mode": {
+    "binary_edit_mode": {
         "message": "Binary edit"
     },
-    "custom-mode": {
+    "custom_mode": {
         "message": "Custom mode:"
     },
-    "webappfind-preference-overrides": {
+    "webappfind_preference_overrides": {
         "message": "WebAppFind preference overrides:"
     },
-    "hard-coded-web-app-URI": {
+    "hard_coded_web_app_URI": {
         "message": "Hard-coded web app URI:"
     },
-    "behavior-upon-URL-open": {
+    "behavior_upon_URL_open": {
         "message": "Behavior upon opening of web app/URL:"
     },
-    "behavior-new-tab": {
+    "behavior_new_tab": {
         "message": "New tab"
     },
-    "behavior-new-window": {
+    "behavior_new_window": {
         "message": "New window"
     },
-    "behavior-hidden-window": {
+    "behavior_hidden_window": {
         "message": "Hidden window"
     },
-    "open-fullscreen-mode": {
+    "open_fullscreen_mode": {
         "message": "Open web app/URL by default in full-screen mode?"
     },
-    "extra-batch-file-commands": {
+    "extra_batch_file_commands": {
         "message": "Batch file commands in addition to any other options set above:"
     },
-    "hard-coded-string-to-pass": {
+    "hard_coded_string_to_pass": {
         "message": "Hard-coded string to pass as content to the WebAppFind web app:"
     },
-    "hard-coded-eval-string-to-pass": {
+    "hard_coded_eval_string_to_pass": {
         "message": "Hard-coded string to pass as evalable JavaScript to the WebAppFind web app:"
     },
-    "extra-command-line-args": {
+    "extra_command_line_args": {
         "message": "Command line arguments in addition to any other options set above:"
     },
-    "create-executable-save-template": {
+    "create_executable_save_template": {
         "message": "Create executable(s) and save template"
     },
-    "run-commands-save-template": {
+    "run_commands_save_template": {
         "message": "Run commands and save template"
     },
 
-    "At Your Command": {
-        "message": "At Your Command"
-    },
-    "Create a one-off command": {
+    "Create_a_one_off_command": {
         "message": "Create a one-off command"
     },
-    "One-off": {
+    "One_off": {
         "message": "One-off"
     },
-    "Open preferences": {
+    "Open_preferences": {
         "message": "Open preferences"
     },
 
-    "title": {
+    "atyourcommand_doc_title": {
         "message": "One-off"
     },
-    "Substitutions used": {
+    "Substitutions_used": {
         "message": "Substitutions used"
     },
     "currently_available_sequences": {
         "message": "The currently available sequences are as follows. Note that if you execute now, we will utilize the information displayed for the substitutions even if you change the selected text before closing this dialog. Items marked in red with an asterisk are currently being employed within your arguments in at least one place."
     },
-    "Process executed": {
+    "Process_executed": {
         "message": "Process executed!"
     },
-    "Substitutions explained": {
+    "Substitutions_explained": {
         "message": "Substitutions explained"
     },
     "Substitution_sequences_allow": {
@@ -348,13 +345,13 @@
     "Sequences": {
         "message": "Sequences:"
     },
-    "Path of executable": {
+    "Path_of_executable": {
         "message": "Path of executable:"
     },
     "Browse": {
         "message": "Browse\u2026"
     },
-    "Hard-coded files and URLs": {
+    "Hard_coded_files_and_URLs": {
         "message": "Hard-coded files and URLs:"
     },
     "keep_dialog_open": {
@@ -367,16 +364,16 @@
         "message": "Cancel"
     },
 
-    "prefix_save-temp": {
+    "prefix_save_temp": {
         "message": "Added to indicate that the targeted contents should first be saved to a temporary file. This can be used for copying a whole file (or URLs too even if sending a PUT back to the server for the original location). Can be followed by whitespace and \"overwrite=\" and \"yes\", \"no\", or \"prompt\" to indicate what to do when a file in the location already exists. Can be followed by whitespace and \"continue=\" and \"yes\" or \"no\" for whether to continue execution when a file is found in the location and \"overwrite\" is \"no\" or \"prompt\" with a resulting \"no\" answer by the user. Can be followed by %N where \"N\" is the number of the directory argument below."
     },
-    "prefix_ucencode-": {
+    "prefix_ucencode_": {
         "message": "Encode the content for safe inclusion within a URI component (the portion beginning with \"?\")"
     },
-    "prefix_uencode-": {
+    "prefix_uencode_": {
         "message": "Encode the content for safe inclusion AS a whole URI"
     },
-    "prefix_escquotes-": {
+    "prefix_escquotes_": {
         "message": "Escape quotes (Note that this might be applied automatically to content in the future)"
     },
 
@@ -414,7 +411,7 @@
         "message": "File %s:"
     },
 
-    "Edit commands": {
+    "Edit_commands": {
         "message": "Edit commands"
     },
     "lt": {
@@ -429,7 +426,7 @@
     "if_present_command_saved": {
         "message": "If present, this command will be saved"
     },
-    "Command name": {
+    "Command_name": {
         "message": "Command name:"
     },
     "Save": {
@@ -456,13 +453,13 @@
     "name_already_exists_overwrite": {
         "message": "A command with that name already exists. Overwrite?"
     },
-    "Restrict contexts": {
+    "Restrict_contexts": {
         "message": "Restrict contexts:"
     },
     "or": {
         "message": "or"
     },
-    "Specify your own context": {
+    "Specify_your_own_context": {
         "message": "Specify your own context"
     },
     "Images": {
@@ -486,7 +483,7 @@
     "forms": {
         "message": "Forms"
     },
-    "links and anchors": {
+    "links_and_anchors": {
         "message": "Links and anchors"
     },
     "inline": {
@@ -498,13 +495,13 @@
     "images": {
         "message": "Images"
     },
-    "other media": {
+    "other_media": {
         "message": "Other media"
     },
     "plugins": {
         "message": "Plugins"
     },
-    "empty but visible": {
+    "empty_but_visible": {
         "message": "Empty but visible"
     },
     "hidden": {
@@ -531,7 +528,7 @@
     "os_format_for_batch_export": {
         "message": "OS format for batch export"
     },
-    "Export to batch": {
+    "Export_to_batch": {
         "message": "Export to batch"
     }
 }

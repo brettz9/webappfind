@@ -1,5 +1,7 @@
 /* eslint-env webextensions */
-/* globals EB, jml, FormSerialize, confirm, alert */
+/* globals EnvironmentBridge, TemplateFileBridge, FileBridge, ProfileBridge,
+    BrowserHistory, ExecutableBuilder,
+    jml, FormSerialize, confirm, alert */
 
 const {serialize: formSerialize, deserialize: formDeserialize} = FormSerialize;
 
@@ -8,7 +10,7 @@ Todos:
 1. Get rid of `confirm`, `alert`
 1. Build command line output including path flag (Windows info)
     1. Use command line http://www.registryonwindows.com/registry-command-line.php
-        (invokable from FF add-on) to add to registry re: open-with values or
+        (invokable from browser add-on) to add to registry re: open-with values or
         use js-ctypes or command line for integrating with deeper Windows
         (and Linux) functionality? e.g., adding items for 'open with'?
         1. http://msdn.microsoft.com/en-us/library/windows/desktop/cc144158%28v=vs.85%29.aspx
@@ -56,7 +58,11 @@ const nbsp3 = ` ${nbsp} `;
 let pathInputCtr = 0, fileExtIDCtr = 0, winOpenCtr = 0;
 
 function _ (...args) {
-    return browser.i18n.getMessage(...args);
+    try {
+        return browser.i18n.getMessage(...args);
+    } catch (err) {
+        return `(Non-internationalized string--FIXME!) ${args.join(', ')}`;
+    }
 }
 function $ (sel) {
     return document.querySelector(sel);
@@ -104,28 +110,28 @@ function createFileExtensionControls () {
     const fileExtensionID = ++fileExtIDCtr;
     return ['div', {id: 'fileExtensionInfoHolder' + fileExtensionID}, [
         ['label', [
-            _('file-extension-associate-open-with'),
+            _('file_extension_associate_open_with'),
             ['input', {
-                name: 'file-extension-associate-open-with[]',
+                name: 'file_extension_associate_open_with[]',
                 size: 10,
                 class: 'fileExtension'
             }]
         ]],
         ['br'],
         ['label', [
-            _('file-type-associate'),
+            _('file_type_associate'),
             ['input', {
-                name: 'file-type-associate[]',
+                name: 'file_type_associate[]',
                 size: 10,
                 class: 'fileExtension'
             }]
         ]],
         ['br'],
         ['label', [
-            _('make-default-handler-for-extension'),
+            _('make_default_handler_for_extension'),
             ['input', {
                 type: 'checkbox',
-                name: 'make-default-handler-for-extension[]',
+                name: 'make_default_handler_for_extension[]',
                 class: 'defaultFileExtension'
             }]
         ]],
@@ -155,9 +161,9 @@ function createPathInput () {
     const i = ++pathInputCtr;
     return ['div', {id: 'pathBoxHolder' + i}, [
         ['label', [
-            _('executable-name'),
+            _('executable_name'),
             ['input', {
-                name: 'executable-name[]',
+                name: 'executable_name[]',
                 required: 'true',
                 class: 'executableName'
             }]
@@ -166,16 +172,16 @@ function createPathInput () {
         // TODO: Reenable for Windows at least when ready
         nbsp3,
         ['label', [
-            _('preserve-shortcut'),
+            _('preserve_shortcut'),
             ['input', {
-                name: 'preserve-shortcut[]',
+                name: 'preserve_shortcut[]',
                 type: 'checkbox',
                 class: 'preserveShortcut'
             }]
         ]],
         nbsp3,
         ['label', {for: 'convertToExe' + i}, [
-            _('change-batch-exe')
+            _('change_batch_exe')
         ]],
         ['input', {
             type: 'checkbox',
@@ -190,8 +196,8 @@ function createPathInput () {
                     }
                     target.nextElementSibling.before(jml(
                         'div', {class: 'sedPreserveHolder'}, [
-                            ['label', {title: _('preserve-sed-file-explanation')}, [
-                                _('preserve-sed-file'),
+                            ['label', {title: _('preserve_sed_file_explanation')}, [
+                                _('preserve_sed_file'),
                                 ['input', {
                                     class: 'sedPreserve',
                                     dataset: {i},
@@ -199,8 +205,8 @@ function createPathInput () {
                                 }]
                             ]],
                             nbsp3,
-                            ['label', {title: _('preserve-batch-file-explanation')}, [
-                                _('preserve-batch-file'),
+                            ['label', {title: _('preserve_batch_file_explanation')}, [
+                                _('preserve_batch_file'),
                                 ['input', {
                                     class: 'batchPreserve',
                                     dataset: {i},
@@ -215,7 +221,7 @@ function createPathInput () {
         */
         ['br'],
         ['label', {for: 'pathBox' + i}, [
-            _('executable-save-directory')
+            _('executable_save_directory')
         ]],
         ['input', {
             type: 'text',
@@ -228,24 +234,24 @@ function createPathInput () {
         /*
         // TODO: Reenable when ready
         ['button', {dataset: {dirPick: i}}, [
-            _('browse-file')
+            _('browse_file')
         ]],
         ` ${_('or')} `,
         */
         ['select', {dataset: {pathBoxSelect: i}}, [
-            ['option', {value: ''}, [_('or-choose-location')]],
+            ['option', {value: ''}, [_('or_choose_location')]],
             ['option', {value: getHardPath('Executable')}, [
-                _('executable-within-profile-folder')
+                _('executable_within_profile_folder')
             ]],
             ['option', {value: getHardPath('Desk')}, [_('Desktop')]],
-            ['option', {value: getHardPath('Strt')}, [_('Start-up')]],
+            ['option', {value: getHardPath('Strt')}, [_('Start_up')]],
             (os === 'win' ? ['option', {value: getHardPath('Progs')}, [
-                _('Start menu')
+                _('Start_menu')
             ]] : ''),
             (os === 'win' ? ['option', {value: getHardPath('TaskBar')}, [
-                _('Task bar')
+                _('Task_bar')
             ]] : ''),
-            ['option', {value: getHardPath('ProfD')}, [_('Profile folder')]],
+            ['option', {value: getHardPath('ProfD')}, [_('Profile_folder')]],
             ['option', {value: getHardPath('ProgF')}, [_('Programs')]]
         ]],
         createRevealButton('#pathBox' + i),
@@ -287,7 +293,7 @@ function modifierKeypress (e) {
     ) {
         e.target.value = '';
     } else {
-        e.target.value = _('alt-ctrl', String.fromCharCode(e.charCode).toUpperCase()); // We upper-case as Windows auto-upper-cases in the UI
+        e.target.value = _('alt_ctrl', String.fromCharCode(e.charCode).toUpperCase()); // We upper-case as Windows auto-upper-cases in the UI
     }
     e.preventDefault();
 }
@@ -298,7 +304,7 @@ function createTemplatedForm () {
         e.preventDefault();
     }}}, [
         ['label', [
-            _('template-name'),
+            _('template_name'),
             ' ',
             ['input', {name: 'templateName'}]
         ]],
@@ -309,7 +315,7 @@ function createTemplatedForm () {
             ['textarea', {name: 'description'}]
         ]],
         ['fieldset', {id: 'pathHolder'}, [
-            ['legend', [_('executable-directories')]],
+            ['legend', [_('executable_directories')]],
             ['datalist', {id: 'datalist'}],
             createPathInput()
         ]],
@@ -317,26 +323,26 @@ function createTemplatedForm () {
         // TODO: Reenable for Windows at least when ready
         ['div', [
             ['label', [
-                _('window-style'),
+                _('window_style'),
                 ' ',
                 ['select', {name: 'windowStyleSelect'}, [
                     ['option', {
                         value: '1',
-                        title: _('window-activate-restore-explanation')
-                    }, [_('window-activate-restore')]],
+                        title: _('window_activate_restore_explanation')
+                    }, [_('window_activate_restore')]],
                     ['option', {
                         value: '3',
-                        title: _('window-activate-maximize-explanation')
-                    }, [_('window-activate-maximize')]],
+                        title: _('window_activate_maximize_explanation')
+                    }, [_('window_activate_maximize')]],
                     ['option', {
                         value: '7',
-                        title: _('window-minimize-explanation')
-                    }, [_('window-minimize')]]
+                        title: _('window_minimize_explanation')
+                    }, [_('window_minimize')]]
                 ]]
             ]],
             ['br'],
             ['label', [
-                _('global-hot-key'),
+                _('global_hot_key'),
                 ' ',
                 ['input', {
                     name: 'hotKey',
@@ -348,14 +354,14 @@ function createTemplatedForm () {
             // TODO: Reenable when ready
             ['br'],
             ['label', {for: 'iconPath'}, [
-                _('icon-path-executable'),
+                _('icon_path_executable'),
                 ' '
             ]],
             ['select', {id: 'iconPathSelect'}, [
-                ['option', {value: ''}, [_('choose-location')]],
+                ['option', {value: ''}, [_('choose_location')]],
                 ['option', {value: getHardPath('Desk')}, [_('Desktop')]],
                 ['option', {value: getHardPath('Pict')}, [_('Pictures')]],
-                ['option', {value: getHardPath('ffIcon')}, [_('firefox-icon')]]
+                ['option', {value: getHardPath('browserIcon')}, [_('browser_icon')]]
             ]],
             ['input', {
                 type: 'text', id: 'iconPath', name: 'iconPath', list: 'datalist', autocomplete: 'off',
@@ -366,7 +372,7 @@ function createTemplatedForm () {
         /*
             // TODO: Reenable for Windows at least when ready
             ['button', {id: 'iconPick'}, [
-                _('browse-file')
+                _('browse_file')
             ]],
             createRevealButton('[name=iconPath]'),
             ` ${_('or')} `,
@@ -383,7 +389,7 @@ function createTemplatedForm () {
                     ideally to SVG (but multiple file saving not supported
                     currently by WebAppFind, so do through add-on for now)
             1. Ensure icon will work by assigning appIDs to specific windows,
-                profile (processes?), or app (idea to list FF tabs in jump
+                profile (processes?), or app (idea to list browser tabs in jump
                 list?); SHAddToRecentDocs may add app ID AND add the
                 potentially useful behavior of putting web apps into recent
                 docs (if add support, make this optional)
@@ -395,9 +401,9 @@ function createTemplatedForm () {
                     SHAddToRecentDocs
             ['button', {
                 id: 'openOrCreateICO',
-                title: _('create-edit-ico-file-explanation')
+                title: _('create_edit_ico_file_explanation')
             }, [
-                _('create-edit-ico-file')
+                _('create_edit_ico_file')
             ]]
         ]],
         */
@@ -406,17 +412,17 @@ function createTemplatedForm () {
         // TODO: Put this into a radio stack of three options (with 2
         //          hidden at a time)
         ['fieldset', [
-            ['legend', [_('file-type-association')]],
+            ['legend', [_('file_type_association')]],
             ['div', {id: 'fileExtensionHolder'}, [
                 createFileExtensionControls()
             ]],
             ` ${_('or').toUpperCase()} `,
             ['label', {for: 'desktopFilePath'}, [
-                _('hard-coded-desktop-file'),
+                _('hard_coded_desktop_file'),
                 ' '
             ]],
             ['select', {id: 'desktopFilePathSelect'}, [
-                ['option', {value: ''}, [_('choose-location')]],
+                ['option', {value: ''}, [_('choose_location')]],
                 ['option', {value: getHardPath('Docs')}, [_('Documents')]],
                 ['option', {value: getHardPath('Desk')}, [_('Desktop')]]
             ]],
@@ -427,7 +433,7 @@ function createTemplatedForm () {
             }],
             ' ',
             ['button', {id: 'desktopFilePick'}, [
-                _('browse-file')
+                _('browse_file')
             ]],
             createRevealButton('[name=desktopFilePath]'),
             ['datalist', {id: 'desktopFilePathDatalist'}],
@@ -436,7 +442,7 @@ function createTemplatedForm () {
             ['label', [
                 // Esp. if implementing PUT, can send back to
                 //    this location where obtained
-                _('hard-coded-url-document-file'),
+                _('hard_coded_url_document_file'),
                 ' ',
                 ['input', {
                     type: 'url', name: 'documentURLBox',
@@ -453,27 +459,27 @@ function createTemplatedForm () {
             ['label', [
                 ['input', {
                     type: 'radio',
-                    value: 'open-with-webappfind',
+                    value: 'open_with_webappfind',
                     name: 'executableType',
                     checked: 'checked'
                 }],
-                _('open-with-webappfind')
+                _('open_with_webappfind')
             ]],
             ['label', [
                 ['input', {
                     type: 'radio',
-                    value: 'open-hard-coded-url-only',
+                    value: 'open_hard_coded_url_only',
                     name: 'executableType'
                 }],
-                _('open-hard-coded-url-only')
+                _('open_hard_coded_url_only')
             ]],
             ['label', [
                 ['input', {
                     type: 'radio',
-                    value: 'dont-open-url',
+                    value: 'dont_open_url',
                     name: 'executableType'
                 }],
-                _('dont-open-url')
+                _('dont_open_url')
             ]]
         ]],
         */
@@ -481,7 +487,8 @@ function createTemplatedForm () {
         Todo:
         1. Separate executables like Prism?: hard-code a profile (create
             one programmatically for user in an install script?)
-            firefox.exe -no-remote -P executable http://example.com
+            1. Use ProfileBridge.createProfile
+                1. e.g., firefox.exe -no-remote -P executable http://example.com
         1. Whether to auto-create a new profile just for this combination
             of options and a -no-remote call to allow executable-like
             behavior (creates a separate icon instance in the task bar
@@ -492,7 +499,7 @@ function createTemplatedForm () {
         // TODO: Reenable for Windows at least when ready
         ['div', [
             ['label', {for: 'profileName'}, [
-                _('profile-for-executable'),
+                _('profile_for_executable'),
                 ' '
             ]],
             ['select', {id: 'profileNameSelect'}, getProfiles()],
@@ -500,7 +507,7 @@ function createTemplatedForm () {
             ['input', {id: 'profileName', name: 'profileName'}],
             ' ',
             ['button', {id: 'manageProfiles'}, [
-                _('manage-profiles')
+                _('manage_profiles')
             ]]
         ]],
         */
@@ -508,10 +515,10 @@ function createTemplatedForm () {
             _('mode'),
             ' ',
             ['select', {name: 'mode'}, [
-                ['option', {value: 'view'}, [_('view-mode')]],
-                ['option', {value: 'binaryview'}, [_('binary-view-mode')]],
-                ['option', {value: 'edit'}, [_('edit-mode')]],
-                ['option', {value: 'binaryedit'}, [_('binary-edit-mode')]]
+                ['option', {value: 'view'}, [_('view_mode')]],
+                ['option', {value: 'binaryview'}, [_('binary_view_mode')]],
+                ['option', {value: 'edit'}, [_('edit_mode')]],
+                ['option', {value: 'binaryedit'}, [_('binary_edit_mode')]]
             ]]
         ]],
         /*
@@ -519,7 +526,7 @@ function createTemplatedForm () {
         // TODO: Change to array of custom modes
         nbsp3,
         ['label', [
-            _('custom-mode'),
+            _('custom_mode'),
             ' ',
             ['input', {name: 'customMode'}]
         ]],
@@ -528,7 +535,7 @@ function createTemplatedForm () {
         // TODO: Reenable for Windows at least when ready
         ['br'],
         ['label', [
-            _('webappfind-preference-overrides'),
+            _('webappfind_preference_overrides'),
             ' '
         ]],
         */
@@ -539,7 +546,7 @@ function createTemplatedForm () {
         //     normal detection procedures and always open with a
         //     given web app)
         ['label', [
-            _('hard-coded-web-app-URI'),
+            _('hard_coded_web_app_URI'),
             ' ',
             ['input', {
                 type: 'url', name: 'urlBox',
@@ -553,12 +560,12 @@ function createTemplatedForm () {
         /*
         // Todo: implement
         ['label', [
-            _('behavior-upon-URL-open'),
+            _('behavior_upon_URL_open'),
             ' ',
             ['select', {name: 'behaviorUponURLOpen'}, [
-                ['option', {value: 'new-tab'}, [_('behavior-new-tab')]],
-                ['option', {value: 'new-window'}, [_('behavior-new-window')]],
-                ['option', {value: 'hidden-window'}, [_('behavior-hidden-window')]]
+                ['option', {value: 'new-tab'}, [_('behavior_new_tab')]],
+                ['option', {value: 'new-window'}, [_('behavior_new_window')]],
+                ['option', {value: 'hidden-window'}, [_('behavior_hidden_window')]]
             ]]
         ]],
         ['br'],
@@ -569,8 +576,8 @@ function createTemplatedForm () {
         //             executable only)
         /*
         ['label', [
-            _('open-fullscreen-mode'),
-            ['input', {name: 'open-fullscreen-mode', type: 'checkbox'}]
+            _('open_fullscreen_mode'),
+            ['input', {name: 'open_fullscreen_mode', type: 'checkbox'}]
         ]],
         ['br'],
         */
@@ -578,45 +585,45 @@ function createTemplatedForm () {
         //              (only?) when webappfind is also installed...)
         /*
         ['label', [
-            _('extra-batch-file-commands'),
+            _('extra_batch_file_commands'),
             ' ',
             ['br'],
-            ['textarea', {name: 'extra-batch-file-commands'}]
+            ['textarea', {name: 'extra_batch_file_commands'}]
         ]],
         ['br'],
         //  Todo: 1. Strings
         ['label', [
-            _('hard-coded-string-to-pass'),
+            _('hard_coded_string_to_pass'),
             ' ',
             ['br'],
-            ['textarea', {name: 'hard-coded-string-to-pass'}]
+            ['textarea', {name: 'hard_coded_string_to_pass'}]
         ]],
         ['br'],
         //  Todo: 1. JavaScript (implement with CodeMirror or option to
         //              load JS file (itself invocable with WebAppFind)
         //              instead)
         ['label', [
-            _('hard-coded-eval-string-to-pass'),
+            _('hard_coded_eval_string_to_pass'),
             ' ',
             ['br'],
-            ['textarea', {name: 'hard-coded-eval-string-to-pass'}]
+            ['textarea', {name: 'hard_coded_eval_string_to_pass'}]
         ]],
         ['br'],
         //  Todo: 1. Arguments
         ['label', [
-            _('extra-command-line-args'),
+            _('extra_command_line_args'),
             ' ',
             // ['br'],
-            ['input', {size: 100, name: 'extra-command-line-args'}]
+            ['input', {size: 100, name: 'extra_command_line_args'}]
         ]],
         ['br'],
         */
         ['button', {id: 'createExecutable'}, [
-            _('create-executable-save-template')
+            _('create_executable_save_template')
         ]],
         nbsp3,
         ['button', {id: 'runCommands'}, [
-            _('run-commands-save-template')
+            _('run_commands_save_template')
         ]]
     ]];
 }
@@ -628,7 +635,7 @@ function openOrCreateICOResponse () {
 }
 
 // COPIED FROM filebrowser-enhanced directoryMod.js (RETURN ALL MODIFICATIONS THERE)
-function autocompleteValuesResponse ({listID, optValues}) {
+function autocompletePathsResponse ({listID, optValues}) {
     const datalist = $('#' + listID);
     while (datalist.firstChild) {
         datalist.firstChild.remove();
@@ -670,9 +677,9 @@ function deleteTemplateResponse ({fileName}) {
 function getTemplateResponse (content) {
     const json = JSON.parse(content);
     [
-        ['executable-name', 'ExecutableInfo']
+        ['executable_name', 'ExecutableInfo']
         // TODO: Reenable when ready
-        // , ['file-extension-associate-open-with', 'FileExtensionInfo']
+        // , ['file_extension_associate_open_with', 'FileExtensionInfo']
     ].forEach(([name, baseName]) => {
         const jsonLength = json[name].length;
         const formLength = $$(`[name="${name}[]"]`).length; // $('#dynamic')[name + '[]'] only got one item
@@ -686,8 +693,8 @@ function getTemplateResponse (content) {
             diff--;
         }
     });
-    // json['executable-name'].length
-    // json['file-extension-associate-open-with'].length
+    // json['executable_name'].length
+    // json['file_extension_associate_open_with'].length
     console.log('json', json);
     formDeserialize($('#dynamic'), json);
 }
@@ -723,8 +730,8 @@ function init () {
                 //         saving the executable/batch there?
                 nextElementSibling.before(jml(
                     'div', {class: 'pinAppHolder'}, [
-                        ['label', {title: _('pin-app-task-bar-explanation')}, [
-                            _('pin-app-task-bar'),
+                        ['label', {title: _('pin_app_task_bar_explanation')}, [
+                            _('pin_app_task_bar'),
                             ['input', {
                                 class: 'pinApp',
                                 dataset: {i: pathBoxInput},
@@ -734,11 +741,11 @@ function init () {
                     ]
                 ));
             }
-            EB.autocompleteValues({
+            FileBridge.autocompletePaths({
                 value,
                 listID: target.getAttribute('list'),
                 dirOnly: true
-            }).then(autocompleteValuesResponse);
+            }).then(autocompletePathsResponse);
             return;
         }
         switch (name) {
@@ -751,16 +758,16 @@ function init () {
                 return;
             }
             */
-            EB.autocompleteURLHistory({
+            BrowserHistory.autocompleteURLHistory({
                 value,
                 listID: target.getAttribute('list')
             }).then(autocompleteURLHistoryResponse);
             break;
         } case 'desktopFilePath': case 'iconPath': {
-            EB.autocompleteValues({
+            FileBridge.autocompletePaths({
                 value,
                 listID: target.getAttribute('list')
-            }).then(autocompleteValuesResponse);
+            }).then(autocompletePathsResponse);
             break;
         }
         }
@@ -773,7 +780,7 @@ function init () {
             if ($('#rememberTemplateChanges').checked &&
                 templateExistsInMenu(fileName)
             ) {
-                if (!confirm(_('overwrite-template-ok'))) {
+                if (!confirm(_('overwrite_template_ok'))) {
                     target.value = '';
                     // return;
                 }
@@ -784,7 +791,7 @@ function init () {
                 return;
             }
             // $('#templateName').value = fileName;
-            EB.getTemplate({fileName}).then(getTemplateResponse);
+            TemplateFileBridge.getTemplate({fileName}).then(getTemplateResponse);
             break;
         }
         }
@@ -810,7 +817,7 @@ function init () {
 
         if (dirPick) {
             // Value can be blank (if user just wishes to browse)
-            EB.dirPick({
+            FileBridge.dirPick({
                 dirPath: $('#pathBox' + dirPick).value,
                 selectFolder: dirPick
             }).then((result) => {
@@ -875,14 +882,14 @@ function init () {
                 return;
             }
             if (selVal) {
-                EB.reveal(selVal);
+                FileBridge.reveal(selVal);
             }
         } else {
             let {id} = target;
             if (nodeName.toLowerCase() === 'option') {
                 switch (parentNode.id) {
                 case 'iconPathSelect': case 'profileNameSelect': case 'desktopFilePathSelect':
-                    id = parentNode.id;
+                    ({id} = parentNode);
                     break;
                 default:
                     return;
@@ -892,10 +899,10 @@ function init () {
             case 'deleteTemplate':
                 const fileName = $('[name=templates]').selectedOptions[0].value;
                 if (!fileName) {
-                    alert(_('must-choose-one-to-delete'));
+                    alert(_('must_choose_one_to_delete'));
                     return;
                 }
-                EB.deleteTemplate({fileName}).then(deleteTemplateResponse);
+                TemplateFileBridge.deleteTemplate({fileName}).then(deleteTemplateResponse);
                 break;
             case 'desktopFilePathSelect': case 'iconPathSelect':
                 if (!value) {
@@ -906,7 +913,7 @@ function init () {
             case 'desktopFilePick': case 'iconPick': {
                 // Value can be blank (if user just wishes to browse)
                 const selector = '#' + id.replace(/Pick$/, 'Path');
-                EB.filePick({
+                FileBridge.filePick({
                     dirPath: $(selector).value,
                     defaultExtension: 'ico' // Todo: Fix for desktopFilePick
                 }).then((result) => {
@@ -914,22 +921,22 @@ function init () {
                 }).then(filePickResult);
                 break;
             } case 'openOrCreateICO':
-                EB.openOrCreateICO().then(openOrCreateICOResponse);
+                ExecutableBuilder.openOrCreateICO().then(openOrCreateICOResponse);
                 break;
             case 'profileNameSelect':
                 $('[name=profileName]').value = value;
                 break;
             case 'manageProfiles':
-                EB.manageProfiles();
+                ProfileBridge.manageProfiles();
                 break;
             case 'createExecutable':
                 // Todo: Auto-name executable and auto-add path by default
                 if (!$('.executableName').value) {
-                    alert(_('must-add-one-executable-name'));
+                    alert(_('must_add_one_executable_name'));
                     return;
                 }
                 if (!$('.dirPath').value) {
-                    alert(_('must-add-executable-path'));
+                    alert(_('must_add_executable_path'));
                     return;
                 }
             case 'runCommands': // eslint-disable-line no-fallthrough
@@ -943,7 +950,7 @@ function init () {
                         formSerialize($('#dynamic'), {empty: true, hash: true})
                     );
                     console.log('ser-content', content);
-                    EB.saveTemplate({
+                    TemplateFileBridge.saveTemplate({
                         templateName,
                         content
                     }).then(saveTemplateResult);
@@ -982,12 +989,13 @@ function init () {
                                                 null
                 };
 
-                EB.saveExecutables(options);
+                ExecutableBuilder.saveExecutables(options);
 
                 // $('.fileExtension').value // defaultFileExtension
-                // emit('associateFileExtension');
+                // Todo: File association bridge file and handle response
+                // FileAssociationBridge.associateFileExtension(...);
                 /*
-                    await EB.cmd({args: []});
+                    await ExecBridge.cmd({args: []});
                     alert('Command run!');
                 */
                 break;
@@ -996,15 +1004,15 @@ function init () {
     });
     jml('div', [
         ['select', {name: 'templates'}, [
-            ['option', {value: ''}, [_('choose-template')]],
+            ['option', {value: ''}, [_('choose_template')]],
             ...templates.map((template) => {
                 return ['option', [template]];
             })
         ]],
-        ['button', {id: 'deleteTemplate'}, [_('delete-template')]],
+        ['button', {id: 'deleteTemplate'}, [_('delete_template')]],
         ['br', 'br'],
         ['label', [
-            _('remember-template-changes'),
+            _('remember_template_changes'),
             ' ',
             // We don't give a `name` here as we don't want to
             //    remember this during serialization
@@ -1021,10 +1029,10 @@ function init () {
 
 // We could abstract this, but it's light enough for now to keep flexible
 const [paths, templates] = await Promise.all([ /*, profiles */
-    EB.getHardPaths(),
-    EB.getTemplates()
+    EnvironmentBridge.getHardPaths(),
+    TemplateFileBridge.getTemplates()
     // TODO: Reenable for Windows at least when ready
-    // , EB.getProfiles()
+    // , ProfileBridge.getProfiles()
 ]);
 console.log('ttt', templates);
 

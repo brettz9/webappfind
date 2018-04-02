@@ -12,8 +12,8 @@ self.on('context', function (node) {'use strict';
 //   by exporting as follows:
 //   https://github.com/standard/standard/issues/614
 const getPageData = window.getPageData = function getPageData ({
-    customProperties = {customProperties: []}
-}) {
+    customProperties = []
+} = {customProperties: []}) {
     // Todo: Support retrieval of current selected element
     //   (by selector?) once it may be supported:
     //   https://bugzilla.mozilla.org/show_bug.cgi?id=1325814
@@ -30,7 +30,7 @@ const getPageData = window.getPageData = function getPageData ({
         referrer: document.referrer,
         // Todo: allow user to designate individual:
         //   cookies/FileSystem/indexedDB/localStorage/
-        //   sessionStorage/applicationCache!!!!!;
+        //   sessionStorage/cache!!!!!;
         //   comma-separated list (or using privileges, get all of
         //   cookies/localStorage for the page); means to supply
         //   privileged write (or listen)-access
@@ -45,7 +45,7 @@ const getPageData = window.getPageData = function getPageData ({
         // Todo: add to these magic items, depending also on whether there is a context or not
         selectedHTML: selection && selection.outerHTML,
         selectedText: selection && selection.textContent,
-        nodeName: selection && (selection.nodeName || selection.firstElementChild.nodeName.toLowerCase()),
+        nodeName: selection && (selection.nodeName || (selection.firstElementChild && selection.firstElementChild.nodeName.toLowerCase())),
         // Todo: Change to require user to specify these (since associatable with specific tags)
         pageTitle: document.title, // hidden
         pageHTML: document.documentElement.outerHTML, // Treat like hidden to avoid need to select anything

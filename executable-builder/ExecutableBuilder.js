@@ -1,99 +1,16 @@
 /* eslint-env webextensions */
+/* globals EnvironmentBridge */
 
-var EB = {}; // eslint-disable-line no-var
-
-(() => {
+var ExecutableBuilder = (() => { // eslint-disable-line no-var, no-unused-vars
 'use strict';
-
-/**
-// For debugging Jamilih
-if (1) { // eslint-disable-line no-constant-condition
-    ['getHardPaths', 'getProfiles', 'getTemplates'].forEach((method) => {
-        EB[method] = () => [];
-    });
-    return;
-}
-/**/
 
 function l (msg) {
     console.log(msg);
 }
 
-const {getNodeJSON} = browser.extension.getBackgroundPage();
-
-/*
-In case we decide to create profiles on behalf of the user (without the need to
-    visit the profile manager):
-http://stackoverflow.com/questions/18711327/programmatically-create-firefox-profiles
-https://developer.mozilla.org/en-US/docs/XPCOM_Interface_Reference/nsIToolkitProfileService
-https://developer.mozilla.org/en-US/docs/XPCOM_Interface_Reference/nsIToolkitProfile
-http://kb.mozillazine.org/Profiles.ini_file
-https://developer.mozilla.org/en-US/docs/Profile_Manager
-*/
-EB.createProfile = function ({name}) {
-    // https://developer.mozilla.org/en-US/docs/XPCOM_Interface_Reference/nsIToolkitProfileService#createProfile%28%29
-    return getNodeJSON('createProfile', {name});
-};
-
-EB.getProfiles = async function () {
-    const {profiles} = await getNodeJSON('getProfileInfo');
-    return Object.entries(profiles).filter(([p, profile]) => {
-        return p.startsWith('Profile');
-    }).map(([, profile]) => profile.Name);
-};
-
-function getFirefoxExecutableAndDir () {
-    return getNodeJSON('getFirefoxExecutableAndDir');
-}
-
-EB.manageProfiles = function () {
-    return getNodeJSON('manageProfiles');
-};
-
-EB.getHardPaths = function () {
-    return getNodeJSON('getHardPaths');
-};
-
-EB.autocompleteURLHistory = async function ({listID, value: userVal}) {
-    const historyItems = await browser.history.search({
-        text: userVal,
-        maxResults: 100 // Default: 100
-    });
-    // console.log('historyItems', historyItems);
-    const optValues = historyItems.map((hi) => hi.url);
-    return {
-        listID,
-        optValues,
-        // We could use a convoluted way of hiding tabs (which cannot be
-        //    created hidden but an empty one might be created on
-        //    start-up and then hidden); added to an issue to be able
-        //    to get favicons from history
-        // https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/tabs/hide
-        // https://bugzilla.mozilla.org/show_bug.cgi?id=1411120#c6
-        // optIcons,
-        userVal // Just for debugging on the other side
-    };
-};
-
-EB.openOrCreateICO = function () {
+function openOrCreateICO () {
     // TODO:
     throw new Error('Not yet implemented');
-};
-
-EB.saveTemplate = function (data) {
-    return getNodeJSON('saveTemplate', data);
-};
-
-EB.deleteTemplate = function (data) {
-    return getNodeJSON('deleteTemplate', data);
-};
-
-EB.getTemplate = function (data) {
-    return getNodeJSON('getTemplate', data);
-};
-
-EB.getTemplates = function () {
-    return getNodeJSON('getTemplates');
 };
 
 function batchQuote (item) {
@@ -107,7 +24,8 @@ function stripQuotes (str) {
 }
 
 // Todo: Option to preserve shortcut, SED, and, if converting to exe, the batch file
-// Todo: Otherwise complete and test (and i18nize fileSelectMessage passed to native-app.js?)
+// Todo: Otherwise i18nize, complete, and test (and i18nize
+//          fileSelectMessage passed to native-app.js?)
 async function createBatchForShortcutCreation (data) {
     if (!data.shortcutPath) {
         throw new Error('A shortcut path must be supplied to createBatchForShortcutCreation()');
@@ -116,7 +34,7 @@ async function createBatchForShortcutCreation (data) {
     const {
             shortcutPath,
             profileName, // OPTIONAL
-            description = 'Firefox Shortcut',
+            description = 'Browser Shortcut',
             iconPath, // OPTIONAL
             hotKey, // OPTIONAL // Todo: Give user a non-textual way to input
             /*
@@ -131,10 +49,10 @@ async function createBatchForShortcutCreation (data) {
             webappmode,
             webappcustommode
         } = data,
-        [ff, ffDir] = await getFirefoxExecutableAndDir(),
+        [browser, browserDir] = await EnvironmentBridge.getBrowserExecutableAndDir(),
         batch = ':::set WshShell = WScript.CreateObject("WScript.Shell")\n' +
         ':::set oShellLink = WshShell.CreateShortcut(' + batchQuote(shortcutPath) + ')\n' +
-        ':::oShellLink.TargetPath = ' + batchQuote(ff) + '\n' +
+        ':::oShellLink.TargetPath = ' + batchQuote(browser) + '\n' +
         // Todo: reconcile the following arguments to each other!
         ':::oShellLink.Arguments = "' +
         // 1. With WebAppFind, tried -remote, -silent; didn't try -no-remote, -tray
@@ -153,20 +71,11 @@ async function createBatchForShortcutCreation (data) {
         (iconPath ? ':::oShellLink.IconLocation = ' + batchQuote(iconPath) + '\n' : '') +
         (hotKey ? ':::oShellLink.HotKey = ' + batchQuote(hotKey) + '\n' : '') +
         ':::oShellLink.WindowStyle = ' + stripQuotes(windowStyle) + '\n' +
-        ':::oShellLink.WorkingDirectory = ' + batchQuote(ffDir) + '\n' +
+        ':::oShellLink.WorkingDirectory = ' + batchQuote(browserDir) + '\n' +
         ':::oShellLink.Save\n\n' +
         'findstr "^:::" "%~sf0">tempExecBuilder.vbs & cscript //nologo tempExecBuilder.vbs %1 & del tempExecBuilder.vbs\n';
     return batch;
 }
-
-/**
-* Call the command line with the supplied arguments
-* @param {object} Object with property "args"
-* @example {args: ['-P', '-no-remote']}
-*/
-EB.cmd = function (args) {
-    return getNodeJSON('cmd', args);
-};
 
 function buildSED (userSED) {
     // Possible values from http://www.mdgx.com/INF_web/cdfinfo.htm
@@ -266,10 +175,8 @@ function buildSED (userSED) {
     return serializeSED(defaultSED);
 }
 
-EB.saveExecutables = function (data) {
-    const templateName = data.templateName,
-        executableNames = data.executableNames,
-        dirPaths = data.dirPaths;
+function saveExecutables (data) {
+    const {templateName, executableNames, dirPaths} = data;
     /*
     let sed,
         {description, preserveShortcuts, convertToExes, pinApps, sedPreserves, batchPreserves} = data;
@@ -299,77 +206,8 @@ EB.saveExecutables = function (data) {
         l(sed);
     });
 };
-
-// THE REMAINING WAS COPIED FROM filebrowser-enhanced fileBrowserResponses.js (RETURN ALL MODIFICATIONS THERE)
-// Todo: Apply these changes in other add-ons using it;
-//   also add this as a filterMap where needed [{type: '*.ico', message: "Icon file"}]
-function picker ({dirPath, selectFolder, defaultExtension, filterMap = [], locale}) {
-    // TODO: Could reimplement as a Node-based file/directory picker;
-    //           maybe this? https://github.com/Joker-Jelly/nfb
-    // Note: could use https://developer.mozilla.org/en-US/docs/Extensions/Using_the_DOM_File_API_in_chrome_code
-    //         but this appears to be less feature rich
-    const Cc = 0, Ci = 0, file = 0;
-    const windowMediator = Cc['@mozilla.org/appshell/window-mediator;1'].getService(Ci.nsIWindowMediator),
-        nsIFilePicker = Ci.nsIFilePicker,
-        fp = Cc['@mozilla.org/filepicker;1'].createInstance(nsIFilePicker);
-    if (!selectFolder) {
-        fp.defaultExtension = defaultExtension;
-        // fp.appendFilter('ICO (.ico)', '*.ico');
-        // fp.appendFilter('SVG (.svg)', '*.svg');
-        // fp.appendFilter('Icon file', '*.ico; *.svg');
-        filterMap.forEach(({message, type}) => {
-            fp.appendFilter(message, type);
-        });
-    }
-
-    if (dirPath) {
-        try {
-            const dir = Cc['@mozilla.org/file/local;1'].createInstance(Ci.nsIFile);
-            dir.initWithPath(dirPath);
-            if (!dir.isDirectory()) { // Todo: Return this change to other add-ons
-                dir.initWithPath(file.dirname(dirPath));
-            }
-            fp.displayDirectory = dir;
-        } catch (err) {
-            l('initWithPath error: ' + err);
-        }
-    }
-    // Todo: i18nize messages
-    fp.init(
-        windowMediator.getMostRecentWindow(null),
-        selectFolder ? locale.pickFolder : locale.pickFile,
-        selectFolder ? nsIFilePicker.modeGetFolder : nsIFilePicker.modeOpen
-    );
-
-    return new Promise((resolve, reject) => {
-        fp.open({done (rv) {
-            let path = '';
-            if (rv === nsIFilePicker.returnOK || rv === nsIFilePicker.returnReplace) {
-                ({file: {path}} = fp);
-            }
-            if (selectFolder) {
-                resolve({type: 'dirPickResult', path, selectFolder});
-            } else {
-                resolve({type: 'filePickResult', path});
-            }
-            return false;
-        }});
-        /*
-        const rv = fp.show();
-        if (rv == nsIFilePicker.returnOK || rv == nsIFilePicker.returnReplace) {
-            const {file: {path}} = fp;
-        } */
-    });
-}
-
-EB.dirPick = picker;
-EB.filePick = picker;
-
-EB.reveal = function (data) {
-    return getNodeJSON('reveal', data);
-};
-
-EB.autocompleteValues = function (data) {
-    return getNodeJSON('autocompleteValues', data);
+return {
+    openOrCreateICO,
+    saveExecutables
 };
 })();

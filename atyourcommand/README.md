@@ -2,9 +2,10 @@
 
 ***NOTE: This project is not yet functional.***
 
-Firefox add-on for opening arbitrary web content into the command line
-(which also enables opening arbitrary web content into other web apps
-via [WebAppFind](https://github.com/brettz9/webappfind)).
+A webextensions add-on (currently Firefox only) for opening arbitrary web
+content into the command line (which also enables opening arbitrary web
+content into other web apps via
+[WebAppFind](https://github.com/brettz9/webappfind)).
 
 A number of automatic substitutions are available (and documented within
 the dialog) such as obtaining the current URL, title,
@@ -68,7 +69,7 @@ new command mode (with the list pre-closed)
         or textarea contents), hidden window, or dialog within right-clicked
         window.
     1. Allow command type which directly makes a PUT/POST/GET with contents
-        and optionally headers/values (or make an SQLite command in Firefox or
+        and optionally headers/values (or make an IndexedDB command in browser or
         write output to file and optionally open that file in the browser or
         outside optionally with WebAppFind/filetypes.json), into window which is
         hidden or not, and optionally switching to that window.
@@ -114,7 +115,7 @@ new command mode (with the list pre-closed)
 # Higher priority to-dos (longer)
 
 1. Work to utilize content type or file extension and supply to web app
-    1. Implement content type through own listener or by registering Firefox+add-on
+    1. Implement content type through own listener or by registering browser+add-on
         with the OS somehow as an app?
 1. **Grab contents as text or HTML in custom manner** (allowing for
     CSS-Selector-enhanced HTTPQuery syntax like `div.myClass:text()` or
@@ -150,7 +151,7 @@ new command mode (with the list pre-closed)
     toward allowing universal and
     neutral APIs to obtain and save *portions* of documents as well as whole
     documents among open data sources and applications (e.g., to right-click
-    when using a Firefox add-on for localStorage, FileSystem, or IndexedDB
+    when using a browser add-on for localStorage, FileSystem, or IndexedDB
     browsing and send the data to the command line, including optionally
     to WebAppFind for discovering a suitable web-app, and allowing an API
     for saving back, thus freeing the user from local storage data lock-in).
@@ -159,8 +160,8 @@ new command mode (with the list pre-closed)
     replacing just that portion with whatever value is indicated by the user or
     by the web app which was delegated responsibility for the PUT/PATCH (an
     HTML/XML document is itself a kind of database).
-1. Add interfaces to the likes of Firefox's **SQLite** database (including
-    for access to its localStorage contents) or to **FileWriter/FileSystem**
+1. Add interfaces to the likes of browser's database (including for access to
+    its localStorage or indexedDB contents) or to **FileWriter/FileSystem**
     and **cached files** (e.g., when right-clicking on a document, getting its
     HTML cache or resource file cache files, or its localStorage, cookies, etc. so
     no data is inaccessible) and **HTTPQuery/PATCH** requests against
@@ -202,7 +203,7 @@ new command mode (with the list pre-closed)
         desktop file or remote URLs, etc. as content; will thereby also be
         able to support (and demo) WebAppFind invocation from remote
     1. Ensure format as portable as possible (e.g., just reference
-      Firefox executable instead of specific path to FF executable)
+        browser executable instead of specific path to browser executable)
 1. De-coupling remote content from its executable (as in regular
     atyourcommand) but remember upon future loads of the content
   1. Modify [Open In Browser](https://addons.mozilla.org/En-us/firefox/addon/open-in-browser/)
@@ -242,7 +243,7 @@ new command mode (with the list pre-closed)
 1. Add support for HTML fragments, `<div>`'s, or JSON-stringified
     arrays for hidden items like the `<script src>`'s, `<link href>`'s or
     `<html manifest>` on the page.
-1. Include **pre-sets for opening into WebAppFind (and Firefox)** and
+1. Include **pre-sets for opening into WebAppFind (and browser)** and
     example like Notepad++
 1. In handling file:// URLs and c:\ paths that are right-clicked (or currently
     loaded), consider whether to handle **revealing a desktop folder** (or
@@ -282,7 +283,7 @@ new command mode (with the list pre-closed)
     "Gopher (protocol) over HTTP" (FTP, WebDAV?)
   1. Problem with informational message--needs to map to real files; use
     instead hidden files of given extension with optional sticky coordinates
-  1. Use **WebDAV** request (via same-site Ajax or Firefox add-on privileged
+  1. Use **WebDAV** request (via same-site Ajax or browser add-on privileged
     cross-domain (already with WebDAV add-on?)) for directory (propfind
     overloaded, was it?) so request for individual file reading or writing
     (as with directory listing) can be made over HTTP (including reverse webappfind)
@@ -313,7 +314,7 @@ new command mode (with the list pre-closed)
   1. Break apart functionality to specialize in context menu
       text and URL manipulations? (If so, ensure some other way to
       have full control over where tools appear; do this by modifying
-      the Firefox Add-ons SDK itself so capability baked-in?)
+      the webextensions API itself so capability baked-in?)
   1. Integrate with or replicate Greasemonkey behavior also?
   1. Get context menu to support hiding items via whitelist or
       blacklist until exposed by a key command (so that for normal

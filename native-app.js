@@ -158,7 +158,12 @@ process.stdin
 // https://github.com/NiklasGollenstede/native-ext/blob/master/browser.js#L128-L154
 const directories = {};
 const homedir = require('os').homedir();
-if (process.env.MOZ_CRASHREPORTER_EVENTS_DIRECTORY) {
+
+const isFirefox = true; // Todo: Detect; in addon through `browser.runtime.getBrowserInfo()`
+if (!isFirefox) {
+    // Todo: Set ProfD for other browsers
+    throw new Error('Other browser besides Firefox not yet supported');
+} else if (process.env.MOZ_CRASHREPORTER_EVENTS_DIRECTORY) {
     directories.ProfD = path.resolve(process.env.MOZ_CRASHREPORTER_EVENTS_DIRECTORY, '../..');
 } else {
     throw new Error(`MOZ_CRASHREPORTER_EVENTS_DIRECTORY environment variable not set by Firefox`);
@@ -178,8 +183,12 @@ if (isWin) {
     // Mac apparently doesn't have a folder used for adding items to the dock (apparently it is a preference instead)
     directories.TaskBar = directories.AppData + '\\Microsoft\\Internet Explorer\\Quick Launch\\User Pinned\\TaskBar';
 }
-const cmdExe = path.join(directories.SysD, 'cmd.exe');
+const cmdExe = isWin
+    ? path.join(directories.SysD, 'cmd.exe')
+    : '/Applications/Utilities/Terminal.app';
 
+// Todo: Detect browser instead (though adjust if they don't have profiles or
+//    work as such)
 const profilesINI = isWin
     ? '%appdata%\\Mozilla\\Firefox\\profiles.ini'
     : `${homedir}/Library/Application Support/Firefox/profiles.ini`;
@@ -192,7 +201,15 @@ const regexEscape = (str) => String.prototype.replace.call(
 );
 
 const nodeJSONMethods = {
+    // Todo: Modularize these (corresponding to `/node-bridges` files), though
+    //         moving project-specific dependencies to that folder, e.g.,
+    //         TemplateFileBridge is for executable builder templates, and it
+    //         should be moved there with a lower-level
+    //         FileBridge/EnvironmentBridge dependency
     execFile,
+    cmd ({args}) {
+        return execFile(cmdExe, args);
+    },
     reveal ({fileName}) {
         if (isWin) {
             return execFile('Explorer', ['/select', fileName]);
@@ -203,109 +220,9 @@ const nodeJSONMethods = {
         // Todo: Check this (and other areas) working for Linux
         return execFile('nautilus', fileName); // Ubuntu
     },
-    createProfile ({name}) {
-        return this._makeProfileSubDirectory(name).catch((err) => {
-            if (err.code !== 'EEXIST') {
-                throw err;
-            }
-        }).then((pd) => {
-            return this.execFirefox({args: ['-no-remote', `-profile ${pd}`]});
-        }).then((result) => {
-            // Todo: Could add to ini
-            return result;
-        });
-    },
-    execFirefox ({args}) {
-        return this.getFirefoxExecutableAndDir().then(([file]) => {
-            return execFile(file, args);
-        });
-    },
-    manageProfiles () {
-        return this.execFirefox({args: ['-P', '-no-remote']});
-    },
-    cmd ({args}) {
-        return execFile(cmdExe, args);
-    },
-    getProfileInfo () {
-        return readFile(profilesINI, 'utf8').then((contents) => {
-            return {profiles: ini.parse(contents)};
-        });
-    },
-    getHardPaths () {
-        return this._makeProfileSubDirectory('executables').then((Executable) => {
-            return Object.assign({
-                cmdExe,
-                ffIcon: path.join(__dirname, 'executable-builder', 'firefox32.ico'),
-                // The following was having problems at least for web-ext runner
-                // ffIcon: path.join(directories.ProfD, 'webappfind', 'executable-builder', 'firefox32.ico'),
-                Executable
-            }, directories);
-        });
-    },
-    getFirefoxExecutableAndDir () {
-        return Promise.resolve([path.join(
-            directories.Progs,
-            (isWin ? 'firefox.exe' : 'Firefox.app')
-        ), directories.Progs]);
-    },
-    saveTemplate ({templateName, content, lastTemplate}) {
-        const profD = directories.ProfD,
-            template = path.join(profD, 'executable-creator', templateName + '.json');
-        lastTemplate = lastTemplate ? path.join(profD, 'executable-creator', lastTemplate + '.json') : null;
 
-        return this._makeECDir().then((ec) => {
-            return writeFile(template, content);
-        }).then(() => {
-            if (lastTemplate) { // Currently not in use
-                return writeFile(lastTemplate);
-            }
-        }).then(() => {
-            return {
-                templateName,
-                message: 'Save successful! in (' + template + ')'
-            };
-        });
-    },
-    deleteTemplate ({fileName}) {
-        return this._makeECDir().then((ec) => {
-            const template = path.join(ec, fileName + '.json');
-            return unlink(template).catch((err) => {
-                if (err.code === 'ENOENT') { // File doesn't exist
-                    return {message: 'File file (' + template + ') + does not exist'};
-                }
-                return {message: err};
-            }).then(() => {
-                return {message: 'File removed!', fileName};
-            });
-        });
-    },
-    getTemplate ({fileName}) {
-        const profD = directories.ProfD,
-            template = path.join(profD, 'executable-creator', fileName + '.json');
-        return readFile(template, 'utf8');
-    },
-    _makeProfileSubDirectory (dir) {
-        const profD = directories.ProfD,
-            pDir = path.join(profD, dir);
-        return mkdirp(pDir).catch((err) => {
-            if (err.code !== 'EEXIST') {
-                throw err;
-            }
-        }).then(() => pDir);
-    },
-    _makeECDir () {
-        return this._makeProfileSubDirectory('executable-creator');
-    },
-    getTemplates () {
-        return this._makeECDir().then((ec) => {
-            return readdir(ec);
-        }).then((files) => {
-            return files
-                .filter((f) => f.match(/\.json$/))
-                .map((f) => f.replace(/\.json$/, ''));
-        });
-    },
-    autocompleteValues ({value: userVal, dirOnly, listID}) {
+    // Todo: Move to own /node-bridges/ file after exposing readdir, etc.
+    autocompletePaths ({value: userVal, dirOnly, listID}) {
         let dir = userVal;
         return readdir(userVal).catch((err) => {
             if (err.code === 'ENOTDIR') { // Exists as file, not directory
@@ -356,6 +273,124 @@ const nodeJSONMethods = {
                 optValues,
                 userVal // Just for debugging on the other side
             };
+        });
+    },
+
+    getBrowserExecutableAndDir () {
+        // Todo: Detect browser or require browser argument and act accordingly?
+        return Promise.resolve([path.join(
+            directories.ProgF,
+            (isWin ? 'firefox.exe' : 'Firefox.app')
+        ), directories.ProgF]);
+    },
+
+    // Move to /node-bridges/ProfileBridge.js (copying getHardPaths (and
+    //    _makeProfileSubDirectory dependency) methods into files using getHardPaths,
+    //    i.e., EnvironmentBridge, executable.js)
+    _makeProfileSubDirectory (dir) {
+        const profD = directories.ProfD,
+            pDir = path.join(profD, dir);
+        return mkdirp(pDir).catch((err) => {
+            if (err.code !== 'EEXIST') {
+                throw err;
+            }
+        }).then(() => pDir);
+    },
+    getHardPaths () {
+        return this._makeProfileSubDirectory('executables').then((Executable) => {
+            return Object.assign({
+                cmdExe,
+                // Todo: Make browser-specific
+                browserIcon: path.join(__dirname, 'executable-builder', 'firefox32.ico'),
+                // The following was having problems at least for web-ext runner
+                // browserIcon: path.join(directories.ProfD, 'webappfind', 'executable-builder', 'firefox32.ico'),
+                Executable
+            }, directories);
+        });
+    },
+    execBrowser ({args}) {
+        return this.getBrowserExecutableAndDir().then(([file]) => {
+            return execFile(file, args);
+        });
+    },
+    createProfile ({name}) {
+        return this._makeProfileSubDirectory(name).catch((err) => {
+            if (err.code !== 'EEXIST') {
+                throw err;
+            }
+        }).then((pd) => {
+            // Todo: Detect browser to determine args
+            let args;
+            if (isFirefox) {
+                args = ['-no-remote', `-profile ${pd}`];
+            }
+            return this.execBrowser({args});
+        }).then((result) => {
+            // Todo: Could add to ini
+            return result;
+        });
+    },
+    manageProfiles () {
+        // Todo: Detect browser to determine args
+        let args;
+        if (isFirefox) {
+            args = ['-P', '-no-remote'];
+        }
+        return this.execBrowser({args});
+    },
+    getProfileInfo () {
+        return readFile(profilesINI, 'utf8').then((contents) => {
+            return {profiles: ini.parse(contents)};
+        });
+    },
+
+    // Move to /node-bridges/TemplateFileBridge.js
+    _makeECDir () {
+        return this._makeProfileSubDirectory('executable-creator');
+    },
+    saveTemplate ({templateName, content, lastTemplate}) {
+        const profD = directories.ProfD,
+            template = path.join(profD, 'executable-creator', templateName + '.json');
+        lastTemplate = lastTemplate ? path.join(profD, 'executable-creator', lastTemplate + '.json') : null;
+
+        return this._makeECDir().then((ec) => {
+            return writeFile(template, content);
+        }).then(() => {
+            if (lastTemplate) { // Currently not in use
+                return writeFile(lastTemplate);
+            }
+        }).then(() => {
+            return {
+                templateName,
+                message: 'Save successful! in (' + template + ')'
+            };
+        });
+    },
+    deleteTemplate ({fileName}) {
+        return this._makeECDir().then((ec) => {
+            const template = path.join(ec, fileName + '.json');
+            return unlink(template).catch((err) => {
+                if (err.code === 'ENOENT') { // File doesn't exist
+                    return {message: 'File file (' + template + ') + does not exist'};
+                }
+                return {message: err};
+            }).then(() => {
+                return {message: 'File removed!', fileName};
+            });
+        });
+    },
+    getTemplate ({fileName}) {
+        const profD = directories.ProfD,
+            template = path.join(profD, 'executable-creator', fileName + '.json');
+        return readFile(template, 'utf8');
+    },
+    getTemplates () {
+        return this._makeECDir().then((ec) => {
+            return readdir(ec);
+        }).then((files) => {
+            return files
+                .filter((f) => f.match(/\.json$/))
+                .map((f) => f.replace(/\.json$/, ''));
         });
     }
 };

@@ -4,21 +4,23 @@
 	<meta charset="utf-8" />
 	<title>AtYourCommand</title>
 	<link rel="stylesheet" href="one-off.css" />
-	<link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css" />
-	<link rel="stylesheet" href="../node_modules/multiple-select/multiple-select.css" />
+	<link rel="stylesheet" href="/vendor/bootstrap/dist/css/bootstrap.css" />
+	<link rel="stylesheet" href="/vendor/multiple-select/multiple-select.css" />
 	<link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon" />
 
 	<!--
 	TODO: Use ES6 modules once Firefox enables by default
 	-->
-	<!-- Todo: Copy these out of node_modules! -->
-	<script src="../node_modules/jquery/dist/jquery.js"></script>
-	<script src="../node_modules/multiple-select/dist/multiple-select-umd.js"></script>
-	<script src="../node_modules/jamilih/jml.js"></script>
+	<script src="/vendor/jquery/dist/jquery.js"></script>
+	<script src="/vendor/multiple-select/dist/multiple-select-umd.js"></script>
+	<script src="/vendor/jamilih/jml.js"></script>
 
 	<script src="ExpandableInputs.js"></script>
 	<script src="tags.js"></script>
-	<script src="fileHelpers.js"></script>
+	<script src="/node-bridges/EnvironmentBridge.js"></script>
+	<script src="/node-bridges/FileBridge.js"></script>
+	<script src="/vendor/xregexp/xregexp-all.js"></script>
+	<script src="/lib/execute.js"></script>
 </head>
 <body>
 	<script src="one-off.js"></script>
