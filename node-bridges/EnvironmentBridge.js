@@ -1,4 +1,5 @@
 /* eslint-env webextensions */
+/* globals _ */
 
 var EnvironmentBridge = (() => { // eslint-disable-line no-var, no-unused-vars
 'use strict';
@@ -26,7 +27,7 @@ async function getTempPaths () {
     return {
         type: 'temps',
         paths: [
-            ['System temp', await getHardPath('TmpD')]
+            [_('System_temp'), await getHardPath('TmpD')]
         ]
     };
 };
@@ -35,8 +36,8 @@ async function getExePaths () {
     return {
         type: 'executables',
         paths: [
-            ['Firefox', firefoxExecutablePath],
-            ['Command prompt', paths.cmdExe]
+            [_('Firefox'), firefoxExecutablePath],
+            [_('Command_prompt'), paths.cmdExe]
         ]
     };
 }

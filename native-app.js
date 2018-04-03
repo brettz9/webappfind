@@ -177,6 +177,7 @@ directories.Docs = isWin ? '%UserProfile%\\Documents' : `${homedir}/Documents`;
 directories.AppData = isWin ? '%AppData%' : '~/Library/Application Support';
 directories.ProgF = isWin ? '%ProgramFiles%' : '/Applications';
 directories.Strt = isWin ? directories.AppData + '\\Microsoft\\Windows\\Start Menu\\Programs\\Startup' : '/Library/StartupItems';
+directories.TmpD = isWin ? '%AppData%\\Local\\Temp' : '/tmp'; // Linux: '/tmp'
 if (isWin) {
     directories.SysD = '%WinDir%';
     directories.Progs = directories.AppData + '\\Microsoft\\Windows\\Start Menu\\Programs';

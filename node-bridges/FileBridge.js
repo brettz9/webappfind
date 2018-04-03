@@ -20,7 +20,7 @@ function reveal (data) {
 // THE REMAINING WAS COPIED FROM filebrowser-enhanced fileBrowserResponses.js
 //    (RETURN ALL MODIFICATIONS THERE)
 // Todo: Apply these changes in other add-ons using it;
-//   also add this as a filterMap where needed [{type: '*.ico', message: "Icon file"}]
+//   also add this as a filterMap where needed [{type: '*.ico', message: _('Icon_file')}]
 // Todo: Fix so not using Firefox/Mozilla code!
 function picker ({dirPath, selectFolder, defaultExtension, filterMap = [], locale}) {
     // TODO: Could reimplement as a Node-based file/directory picker;

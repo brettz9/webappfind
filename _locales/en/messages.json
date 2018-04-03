@@ -536,5 +536,17 @@
     },
     "loading": {
         "message": "Loading..."
+    },
+    "Icon_file": {
+        "message": "Icon_file"
+    },
+    "System_temp": {
+        "message": "Sytem temp"
+    },
+    "Firefox": {
+        "message": "Firefox"
+    },
+    "Command_prompt": {
+        "message": "Command prompt"
     }
 }
