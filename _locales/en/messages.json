@@ -397,13 +397,6 @@
         "message": "\u0020"
     },
 
-    "filepicker_pickFolder": {
-        "message": "Pick a folder for the executable"
-    },
-    "filepicker_pickFile": {
-        "message": "Pick an executable file"
-    },
-
     "expandable_inputs_argsNum": {
         "message": "Arg %s:"
     },

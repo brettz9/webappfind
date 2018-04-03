@@ -22,7 +22,19 @@ function reveal (data) {
 // Todo: Apply these changes in other add-ons using it;
 //   also add this as a filterMap where needed [{type: '*.ico', message: _('Icon_file')}]
 // Todo: Fix so not using Firefox/Mozilla code!
-function picker ({dirPath, selectFolder, defaultExtension, filterMap = [], locale}) {
+const defaultLocaleStrings = {
+    en: {
+        pickFolder: 'Pick a folder for the executable',
+        pickFile: 'Pick an executable file'
+    }
+};
+function picker ({dirPath, selectFolder, defaultExtension, filterMap = [], locale, localeStrings}) {
+    localeStrings = Object.assign(
+        {},
+        defaultLocaleStrings.en,
+        defaultLocaleStrings[locale],
+        localeStrings
+    );
     // TODO: Could reimplement as a Node-based file/directory picker;
     //           maybe this? https://github.com/Joker-Jelly/nfb
     // Note: could use https://developer.mozilla.org/en-US/docs/Extensions/Using_the_DOM_File_API_in_chrome_code
@@ -56,7 +68,7 @@ function picker ({dirPath, selectFolder, defaultExtension, filterMap = [], local
     // Todo: i18nize messages
     fp.init(
         windowMediator.getMostRecentWindow(null),
-        selectFolder ? locale.pickFolder : locale.pickFile,
+        selectFolder ? localeStrings.pickFolder : localeStrings.pickFile,
         selectFolder ? nsIFilePicker.modeGetFolder : nsIFilePicker.modeOpen
     );
 

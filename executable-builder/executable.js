@@ -5,7 +5,8 @@
 // import {Dialog} from '../utils/dialogs.js';
 
 const {Dialog} = dialogImport;
-const dialogs = new Dialog({locale: browser.i18n.getUILanguage()});
+const uiLanguage = browser.i18n.getUILanguage();
+const dialogs = new Dialog({locale: uiLanguage});
 
 const {serialize: formSerialize, deserialize: formDeserialize} = FormSerialize;
 
@@ -227,13 +228,11 @@ function createPathInput () {
             required: 'true', size: 100, value: '', dataset: {pathBoxInput: i},
             class: 'dirPath'
         }],
-        /*
         // TODO: Reenable when ready
         ['button', {dataset: {dirPick: i}}, [
             _('browse_file')
         ]],
         ` ${_('or')} `,
-        */
         ['select', {dataset: {pathBoxSelect: i}}, [
             ['option', {value: ''}, [_('or_choose_location')]],
             ['option', {value: getHardPath('Executable')}, [
@@ -816,6 +815,7 @@ function init () {
         if (dirPick) {
             // Value can be blank (if user just wishes to browse)
             FileBridge.dirPick({
+                locale: uiLanguage,
                 dirPath: $('#pathBox' + dirPick).value,
                 selectFolder: dirPick
             }).then((result) => {
@@ -921,6 +921,7 @@ function init () {
                 // Value can be blank (if user just wishes to browse)
                 const selector = '#' + id.replace(/Pick$/, 'Path');
                 FileBridge.filePick({
+                    locale: uiLanguage,
                     dirPath: $(selector).value,
                     defaultExtension: 'ico' // Todo: Fix for desktopFilePick
                 }).then((result) => {

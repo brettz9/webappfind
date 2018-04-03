@@ -312,10 +312,7 @@ async function filePick (data) {
     const {selector} = data;
     const {type, ...args} = await FileBridge.picker({
         ...data,
-        locale: {
-            pickFolder: _('filepicker_pickFolder'),
-            pickFile: _('filepicker_pickFile')
-        }
+        locale: uiLanguage
     });
     fileOrDirResult({selector, ...args});
 }
