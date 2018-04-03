@@ -2,13 +2,14 @@
 /* globals EnvironmentBridge, FileBridge,
     execute,
     Tags, ExpandableInputs, jml, jQuery, $,
-    dialogImport, templateUtils
+    dialogImport, templateUtils, _
 */
 'use strict';
 
-// import {dialogs} from '../utils/dialogs.js';
+// import {Dialog} from '../utils/dialogs.js';
 // import {$e, U} from './templateUtils.js';
-const {dialogs} = dialogImport;
+const {Dialog} = dialogImport;
+const dialogs = new Dialog({locale: browser.i18n.getUILanguage()});
 const {U} = templateUtils;
 
 window.addEventListener('resize', function () {
@@ -21,14 +22,6 @@ $.noConflict();
 (async () => {
 const {updateContextMenus} = browser.extension.getBackgroundPage();
 const platform = browser.runtime.PlatformOs;
-
-function _ (...args) {
-    try {
-        return browser.i18n.getMessage(...args);
-    } catch (err) {
-        return `(Non-internationalized string--FIXME!) ${args.join(', ')}`;
-    }
-}
 
 const dynamicCMItems = {}, dynamicCMItems2 = {};
 

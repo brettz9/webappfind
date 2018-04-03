@@ -68,6 +68,7 @@
         "scripts": [
             "/polyfills/browser-polyfill.js",
             "/vendor/xregexp/xregexp-all.js",
+            "/utils/i18n.js",
             "/node-bridges/ExecBridge.js",
             "/lib/execute.js",
             "/lib/setSelectorContext.js",

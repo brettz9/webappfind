@@ -1,10 +1,11 @@
 /* eslint-env webextensions */
 /* globals EnvironmentBridge, TemplateFileBridge, FileBridge, ProfileBridge,
     BrowserHistory, ExecutableBuilder,
-    jml, FormSerialize, dialogImport */
-// import {dialogs} from '../utils/dialogs.js';
+    jml, FormSerialize, dialogImport, _ */
+// import {Dialog} from '../utils/dialogs.js';
 
-const {dialogs} = dialogImport;
+const {Dialog} = dialogImport;
+const dialogs = new Dialog({locale: browser.i18n.getUILanguage()});
 
 const {serialize: formSerialize, deserialize: formDeserialize} = FormSerialize;
 
@@ -59,13 +60,6 @@ const nbsp3 = ` ${nbsp} `;
 
 let pathInputCtr = 0, fileExtIDCtr = 0, winOpenCtr = 0;
 
-function _ (...args) {
-    try {
-        return browser.i18n.getMessage(...args);
-    } catch (err) {
-        return `(Non-internationalized string--FIXME!) ${args.join(', ')}`;
-    }
-}
 function $ (sel) {
     return document.querySelector(sel);
 }

@@ -5,6 +5,7 @@ var dialogImport; // eslint-disable-line no-var, no-unused-vars
 (() => {
 const {$e, U} = templateUtils;
 
+const defaultLocale = 'en';
 const localeStrings = {
     en: {
         submit: 'Submit',
@@ -17,8 +18,13 @@ class Dialog {
     constructor ({locale, localeObject} = {}) {
         this.setLocale({locale, localeObject});
     }
-    setLocale ({locale = 'en', localeObject = {}}) {
-        this.localeStrings = Object.assign({}, localeStrings[locale], localeObject);
+    setLocale ({locale = {}, localeObject = {}}) {
+        this.localeStrings = Object.assign(
+            {},
+            localeStrings[defaultLocale],
+            localeStrings[locale],
+            localeObject
+        );
     }
     makeDialog ({atts = {}, children = [], close, remove = true}) {
         if (close) {
