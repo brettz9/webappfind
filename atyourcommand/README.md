@@ -22,10 +22,10 @@ To develop with source, install with npm:
 # Immediate to-dos
 
 1. **Display of commands** in context menu or with list of commands
-in edit mode (with the list of commands pre-opened) or in
-new command mode (with the list pre-closed)
+    in edit mode (with the list of commands pre-opened) or in
+    new command mode (with the list pre-closed)
 
-1. **Add separate multiple selects:**
+1. **Add separate multiple selects**
     1. Pull-down to choose main selector
     1. Non-hidden nodes (to be tied to self); also allows text box
         entry for selector
@@ -96,9 +96,9 @@ new command mode (with the list pre-closed)
       could allow for convenient reuse of the content when attaching the batch
       script to a "Open with..." handler. Use approach like
       http://stackoverflow.com/a/5215844/271577
-1. Hide currently unimplemented features such as context current
-    value detection and add instead as to-do.
-1. Document README as well as instructions within the dialog for
+1. **Hide currently unimplemented features** such as context current
+    value detection and add instead as to-dos.
+1. **Document README** as well as instructions within the dialog for
     implemented use cases as needed
     1. Document how restricted contexts are not only used for restricting
       context, but also will be associated with a particular retrieval method
@@ -106,17 +106,12 @@ new command mode (with the list pre-closed)
       to the app (the property instead of attribute) unless another generic
       type of variable substitution such as obtaining the node as HTML
       or the node's textContent is provided).
-1. Allow context menu, with dynamic submenu that checks content type
-    of highlighted link and provides content handlers (and same with
-    protocol handlers)
-1. Content-type handler processor (web request?) set to process as they arrive
-1. Submit to AMO
+1. Submit to **AMO/Chrome Web Store**
 
 # Higher priority to-dos (longer)
 
-1. Work to utilize content type or file extension and supply to web app
-    1. Implement content type through own listener or by registering browser+add-on
-        with the OS somehow as an app?
+1. **File picker** from Ajax and local Node.js (using Miller columns browser?);
+    see commented out code.
 1. **Grab contents as text or HTML in custom manner** (allowing for
     CSS-Selector-enhanced HTTPQuery syntax like `div.myClass:text()` or
     `a[href]:attr()` (and enhanced further to support `:selected()`, `:checked()`,
@@ -205,11 +200,19 @@ new command mode (with the list pre-closed)
     1. Ensure format as portable as possible (e.g., just reference
         browser executable instead of specific path to browser executable)
 1. De-coupling remote content from its executable (as in regular
-    atyourcommand) but remember upon future loads of the content
-  1. Modify [Open In Browser](https://addons.mozilla.org/En-us/firefox/addon/open-in-browser/)
-      add-on to allow launching of a file URL including with own args (and
-      optional saving/editing of the command for reuse across atyourcommand
-      content)
+    atyourcommand) but **remember upon future loads of the content**
+    1. Allow context menu, with dynamic submenu that **checks content type**
+        of highlighted link and provides content handlers (and same with
+        **protocol handlers**)
+    1. **Content-type handler** processor (web request?) set to process as
+        they arrive
+    1. Work to utilize **content type or file extension** and supply to web app
+        1. Implement content type through own listener or by registering
+            browser+add-on with the OS somehow as an app?
+    1. Modify [Open In Browser](https://addons.mozilla.org/En-us/firefox/addon/open-in-browser/)
+        add-on to allow launching of a file URL including with own args (and
+        optional saving/editing of the command for reuse across atyourcommand
+        content)
     1. Overlay
         [Open In Browser](https://addons.mozilla.org/En-us/firefox/addon/open-in-browser/)
         but make it support **site prefs** (but not by domain as with Mozilla content prefs!)
@@ -308,25 +311,26 @@ new command mode (with the list pre-closed)
 
 # To-dos related to context-aware power-use or web-desktop interaction but beyond current scope of atyourcommand
 
-1. https://github.com/piroor/ctxextensions (restartless and to AMO?);
-    support not only full custom control over context menu, but also
-    toolbar, menu, add-on bar, key command, etc.
-  1. Break apart functionality to specialize in context menu
-      text and URL manipulations? (If so, ensure some other way to
+1. [ctxextensions](https://github.com/piroor/ctxextensions)
+    (webextensions and to AMO?); support not only full custom control
+    over context menu, but also
+    **toolbar, menu, add-on bar, key command, etc.**
+  1. Break apart functionality to specialize in **context menu
+      text and URL manipulations**? (If so, ensure some other way to
       have full control over where tools appear; do this by modifying
       the webextensions API itself so capability baked-in?)
-  1. Integrate with or replicate Greasemonkey behavior also?
-  1. Get context menu to support hiding items via whitelist or
-      blacklist until exposed by a key command (so that for normal
+  1. Integrate with or replicate **Greasemonkey** behavior also?
+  1. Get context menu to support **hiding context menu items** via whitelist
+      or blacklist until exposed by a key command (so that for normal
       browsing, the context menu is light, but can be made more
       powerful at a keystroke).
-1. Utilize (JavaScript-based) Blockly for pipelining of any kind of
+1. Utilize (JavaScript-based) **Blockly** for pipelining of any kind of
     command (though avoid baking in UI as UI should be flexible, e.g.,
-    to allow use in menu, toolbar, add-on bar, etc.); also macro-like
+    to allow use in menu, toolbar, add-on bar, etc.); also **macro-like**
     development; tie into ExecutableBuilder for this as well.
 1. When allowing users to create command line commands
     for context menus/menus/toolbars/add-on bar/etc., allow and demo
-    (with Blockly?) JS prompts (useful for dynamic batch), e.g., to
+    (with Blockly?) **JS prompts** (useful for dynamic batch), e.g., to
     replicate atyourcommand functionality. Might automatically provide
     prompts when a variable is indicated without a value unless
     marked as having a default (including an empty one).

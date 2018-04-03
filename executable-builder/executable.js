@@ -228,11 +228,15 @@ function createPathInput () {
             required: 'true', size: 100, value: '', dataset: {pathBoxInput: i},
             class: 'dirPath'
         }],
-        // TODO: Reenable when ready
+        /*
+        // Todo: We might reenable this if we implement a
+        //   Ajax+Node-based file picker (could even use
+        //   Miller columns, etc.)
         ['button', {dataset: {dirPick: i}}, [
             _('browse_file')
         ]],
         ` ${_('or')} `,
+        */
         ['select', {dataset: {pathBoxSelect: i}}, [
             ['option', {value: ''}, [_('or_choose_location')]],
             ['option', {value: getHardPath('Executable')}, [
@@ -365,7 +369,9 @@ function createTemplatedForm () {
             ' ',
             */
         /*
-            // TODO: Reenable for Windows at least when ready
+            // Todo: We might reenable this if we implement a
+            //   Ajax+Node-based file picker (could even use
+            //   Miller columns, etc.)
             ['button', {id: 'iconPick'}, [
                 _('browse_file')
             ]],
@@ -403,7 +409,9 @@ function createTemplatedForm () {
         ]],
         */
         /*
-        // TODO: Reenable for Windows at least when ready
+        // Todo: We might reenable this if we implement a
+        //   Ajax+Node-based file picker (could even use
+        //   Miller columns, etc.)
         // TODO: Put this into a radio stack of three options (with 2
         //          hidden at a time)
         ['fieldset', [

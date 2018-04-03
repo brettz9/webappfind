@@ -125,6 +125,8 @@ can cover the entire range of functionality available in the UI.
         *dynamically reveal* sections based on 'Open with WebAppFind?'
         radio group selection, hard-coding or not, etc. (as simpler *Wizard*)
     1. Add *copy path to clipboard*
+    1. File picker from Ajax and local Node.js (using Miller columns browser?);
+        see commented out code.
 1. Allow sites to advertise (in *`<meta>`*?) a number of file extensions
     (of a certain total limited byte size and number?) which they
     support, so that the following can be done:

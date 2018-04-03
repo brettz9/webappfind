@@ -250,6 +250,10 @@ ExpandableInputs.prototype.add = function () {
                     ? {'#': [
                         ' ',
                         ['datalist', {id: prefixedNS + 'fileDatalist-' + this.id}],
+                        /*
+                        // Todo: We might reenable this if we implement a
+                        //   Ajax+Node-based file picker (could even use
+                        //   Miller columns, etc.)
                         ['input', {
                             type: 'button',
                             class: prefixedNS + 'picker',
@@ -259,13 +263,18 @@ ExpandableInputs.prototype.add = function () {
                             },
                             value: this.localeStrings.browse
                         }],
+                        */
                         ['input', {
                             type: 'button',
                             class: prefixedNS + 'revealButton',
                             value: this.localeStrings.reveal,
                             dataset: {ei_sel: '#' + prefixedNS + 'input-' + this.id}
-                        }],
-                        ['label', [
+                        }]
+                        /*
+                        // Todo: We might reenable this if we implement a
+                        //   Ajax+Node-based file picker (could even use
+                        //   Miller columns, etc.)
+                        , ['label', [
                             ['input', {
                                 id: prefixedNS + 'directory' + this.id,
                                 type: 'checkbox',
@@ -273,7 +282,7 @@ ExpandableInputs.prototype.add = function () {
                             }],
                             ' ',
                             this.localeStrings.directory
-                        ]]
+                        ]] */
                     ]}
                     : ''
                 )

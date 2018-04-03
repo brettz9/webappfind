@@ -244,7 +244,9 @@ function populateEmptyForm (inputs) {
     ['args', 'urls', 'files'].forEach((inputType) => {
         inputs[inputType].setTextValues();
     });
-    inputs.files.setValues('directory');
+    // Todo: Uncomment if we get directory selection working
+    //    (e.g., Ajax+Node.js local file browser)
+    // inputs.files.setValues('directory');
     // Todo: make a way for the select to be populated through the ExpandableInputs API
     addOptions('temps');
     resetChanges();
@@ -262,7 +264,7 @@ function populateFormWithStorage (name, inputs) {
     //   input, etc.) and just invoke its destroy() or create() methods
     //   here, rather than adding specific details in every place needed.
     const oldStorageForName = oldStorage[currentName];
-    const {executablePath, restrictContexts, ownContext, dirs} = oldStorageForName;
+    const {executablePath, restrictContexts, ownContext} = oldStorageForName;
     setSelectOfValue('#executables', executablePath);
     $('#executablePath').value = executablePath;
 
@@ -272,7 +274,9 @@ function populateFormWithStorage (name, inputs) {
     ['args', 'urls', 'files'].forEach((inputType) => {
         inputs[inputType].setTextValues(oldStorageForName[inputType]);
     });
-    inputs.files.setValues('directory', dirs);
+    // Todo: Uncomment if we get directory selection working
+    //    (e.g., Ajax+Node.js local file browser)
+    // inputs.files.setValues('directory', oldStorageForName.dirs);
     // Todo: make a way for the select to be populated through the ExpandableInputs API
     addOptions('temps');
     resetChanges();
@@ -473,6 +477,9 @@ function init ({itemType, executables, temps, eiLocale, eiLabels: {argsNum, urlN
                 ]]
             ]],
             ['form', {$on: {
+                submit (e) {
+                    e.preventDefault();
+                },
                 click: [function (e) {
                     const cl = e.target.classList;
                     // Also "setCustomValidity" and individual items also have
@@ -559,7 +566,24 @@ function init ({itemType, executables, temps, eiLocale, eiLabels: {argsNum, urlN
                                 list: 'datalist', autocomplete: 'off', value: '',
                                 required: 'required'
                             }],
+                            /*
                             ' ',
+                            _('or'),
+                            // The following with `webkitRelativePath` will only get
+                            //   the direct parent folder name and the file name
+                            ['input', {
+                                type: 'file', id: 'executablePick', class: 'ei-exe-picker',
+                                accept: '.exe, .app',
+                                webkitdirectory: 'webkitdirectory',
+                                dataset: {
+                                    ei_sel: '#executablePath'
+                                }
+                            }],
+                            */
+                            /*
+                            // Todo: We might reenable this if we implement a
+                            //   Ajax+Node-based file picker (could even use
+                            //   Miller columns, etc.)
                             ['input', {
                                 type: 'button', id: 'executablePick', class: 'ei-exe-picker',
                                 dataset: {
@@ -568,6 +592,7 @@ function init ({itemType, executables, temps, eiLocale, eiLabels: {argsNum, urlN
                                 },
                                 value: _('Browse')
                             }],
+                            */
                             ['datalist', {id: 'datalist'}],
                             ['input', {
                                 type: 'button',
@@ -667,6 +692,7 @@ function init ({itemType, executables, temps, eiLocale, eiLabels: {argsNum, urlN
             }
         } else if (cl.contains('ei-files-picker') || cl.contains('ei-exe-picker')) {
             sel = dataset.ei_sel;
+            // Use .select() on input type=file picker?
             filePick({
                 dirPath: $(sel).value,
                 selector: sel,
@@ -752,7 +778,9 @@ function init ({itemType, executables, temps, eiLocale, eiLabels: {argsNum, urlN
                     args: inputs.args.getTextValues(),
                     files: inputs.files.getTextValues(),
                     urls: inputs.urls.getTextValues(),
-                    dirs: inputs.files.getValues('directory'),
+                    // Todo: Uncomment if we get directory selection working
+                    //    (e.g., Ajax+Node.js local file browser)
+                    // dirs: inputs.files.getValues('directory'),
                     restrictContexts: [...$('#restrict-contexts').selectedOptions].map(({value}) => {
                         return value;
                     }),
