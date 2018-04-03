@@ -533,5 +533,8 @@
     },
     "Export_to_batch": {
         "message": "Export to batch"
+    },
+    "loading": {
+        "message": "Loading..."
     }
 }

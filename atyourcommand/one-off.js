@@ -87,13 +87,23 @@ async function buttonClick (data) {
     }
 }
 
+const
+    optionData = {};
+let currentName = '',
+    createNewCommand = true,
+    changed = false,
+    nameChanged = false;
+
+let oldStorage;
+try {
+    ({commands: oldStorage = {}} = await browser.storage.local.get('commands'));
+} catch (err) {}
+
 // msgObj: Passed JSON object
 // sender: https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/runtime/MessageSender
 // sendResponse: One time callback
 browser.runtime.onMessage.addListener(async (msgObj, sender, sendResponse) => {
     const {itemType} = msgObj;
-    // Todo: Implement this, and also add a "Loading..." message while waiting
-    //         for this message
     // Has now received arguments, so we can inject...
     // We might `executeScript` to check for
     //  `window.getSelection()` (see append-to-clipboard add-on)
@@ -115,21 +125,14 @@ browser.runtime.onMessage.addListener(async (msgObj, sender, sendResponse) => {
             return locale;
         }, {})
     };
-    init(options);
+    try {
+        init(options);
+    } catch (err) { // Get stack trace which Firefox isn't otherwise giving
+        console.log('err', err);
+        throw err;
+    }
     sendResponse({});
 });
-
-const
-    optionData = {};
-let currentName = '',
-    createNewCommand = true,
-    changed = false,
-    nameChanged = false;
-
-let oldStorage;
-try {
-    ({commands: oldStorage} = await browser.storage.local.get('commands'));
-} catch (err) {}
 
 // GENERIC UTILITIES
 /*
@@ -322,6 +325,12 @@ async function filePick (data) {
 }
 // ADD INITIAL CONTENT ONCE DATA AVAILABLE
 document.title = _('atyourcommand_doc_title');
+
+// Todo: Why are we not seeing this?
+jml('div', {id: 'loading'}, [
+    _('loading')
+], $('body'));
+
 function init ({itemType, executables, temps, eiLocale = {}}) {
     const inputs = {
         args: new ExpandableInputs({
@@ -353,6 +362,7 @@ function init ({itemType, executables, temps, eiLocale = {}}) {
             selects: true
         })
     };
+    $('#loading').remove();
     jml('div', [
         ['div', (() => {
             const atts = {id: 'names'};

@@ -1,6 +1,6 @@
 #main {
 	overflow:auto;
-	height: 650px;
+	height: 750px;
 }
 #main.closed {
 	float: left;
@@ -77,4 +77,9 @@ select widget except for the first item, "select all" */
 
 .ei-files-revealButton, .ei-exe-revealButton {
 	background-image: url("/executable-builder/Yellow_folder_icon_open.png");
+}
+
+#loading {
+	font-style: italic;
+	font-size: x-large;
 }
