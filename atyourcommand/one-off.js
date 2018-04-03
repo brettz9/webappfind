@@ -1,8 +1,14 @@
-/* eslint-env webextensions, browser */
+/* eslint-env webextensions */
 /* globals EnvironmentBridge, FileBridge,
     execute,
-    Tags, ExpandableInputs, jml, jQuery, $
+    Tags, ExpandableInputs, jml, jQuery, $,
+    dialogImport
 */
+'use strict';
+
+// import {dialogs} from '../utils/dialogs.js';
+const {dialogs} = dialogImport;
+
 window.addEventListener('resize', async function () {
     await browser.storage.local.set({
         windowCoords: [window.outerWidth, window.outerHeight]
@@ -11,7 +17,6 @@ window.addEventListener('resize', async function () {
 
 $.noConflict();
 (async () => {
-'use strict';
 const {updateContextMenus} = browser.extension.getBackgroundPage();
 const platform = browser.runtime.PlatformOs;
 
@@ -357,13 +362,14 @@ function init ({itemType, executables, temps, eiLocale = {}}) {
             return atts;
         })(), [
             ['select', {id: 'selectNames', size: 39, $on: {
-                click ({target: {value: name}}) {
+                async click ({target: {value: name}}) {
                     if (changed) {
-                        const abandonUnsaved = confirm(_('have_unsaved_changes'));
-                        if (!abandonUnsaved) {
-                            setSelectOfValue('#selectNames', currentName);
+                        try {
+                            await dialogs.confirm(_('have_unsaved_changes'));
+                        } catch (cancelled) {
                             return;
                         }
+                        setSelectOfValue('#selectNames', currentName);
                     }
                     if (name === '') { // Create new command
                         populateEmptyForm(inputs);
@@ -627,7 +633,7 @@ function init ({itemType, executables, temps, eiLocale = {}}) {
 
     // Todo: put these checks as methods on a class for each type of control
     //        (can still call from body listener)
-    $('body').addEventListener('click', function (e) {
+    $('body').addEventListener('click', async function (e) {
         let value, sel, selVal;
         const {target} = e,
             {dataset, parentNode} = target || {},
@@ -683,26 +689,31 @@ function init ({itemType, executables, temps, eiLocale = {}}) {
         } else if (cl.contains('passData')) {
             const name = $('#command-name').value;
             if (cl.contains('delete')) {
-                const ok = confirm(_('sure_wish_delete'));
-                if (ok) {
-                    buttonClick({name: name, remove: true, inputs});
+                try {
+                    await dialogs.confirm(_('sure_wish_delete'));
+                } catch (cancelled) {
+                    return;
                 }
+                buttonClick({name: name, remove: true, inputs});
                 return;
             }
             if (cl.contains('save')) {
                 if (!name) {
-                    alert(_('supply_name'));
+                    await dialogs.alert(_('supply_name'));
                     return;
                 }
                 if (nameChanged) {
                     if (oldStorage[name]) {
-                        const overwrite = confirm(_('name_already_exists_overwrite'));
-                        if (!overwrite) {
+                        try {
+                            await dialogs.confirm(_('name_already_exists_overwrite'));
+                        } catch (cancelled) {
                             return;
                         }
                     } else if (!createNewCommand) {
-                        const renameInsteadOfNew = confirm(_('have_unsaved_name_change'));
-                        if (!renameInsteadOfNew) { // User wishes to create a new record (or cancel)
+                        // User wishes to create a new record (or cancel)
+                        try {
+                            await dialogs.confirm(_('have_unsaved_name_change'));
+                        } catch (cancelled) {
                             $('#selectNames').selectedIndex = 0;
                             nameChanged = false;
                             // Return so that user has some way of correcting or
@@ -719,7 +730,7 @@ function init ({itemType, executables, temps, eiLocale = {}}) {
                         keepForm: true
                     });
                 } else if (!changed && !cl.contains('execute')) {
-                    alert(_('no_changes_to_save'));
+                    await dialogs.alert(_('no_changes_to_save'));
                     return;
                 }
             }

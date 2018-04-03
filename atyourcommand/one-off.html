@@ -3,9 +3,11 @@
 <head>
 	<meta charset="utf-8" />
 	<title>AtYourCommand</title>
-	<link rel="stylesheet" href="one-off.css" />
+	<!-- TODO: Use loadStylesheets?-->
+	<link rel="stylesheet" href="/vendor/dialog-polyfill/dialog-polyfill.css" />
 	<link rel="stylesheet" href="/vendor/bootstrap/dist/css/bootstrap.css" />
 	<link rel="stylesheet" href="/vendor/multiple-select/multiple-select.css" />
+	<link rel="stylesheet" href="one-off.css" />
 	<link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon" />
 
 	<!--
@@ -20,9 +22,13 @@
 	<script src="/node-bridges/EnvironmentBridge.js"></script>
 	<script src="/node-bridges/FileBridge.js"></script>
 	<script src="/vendor/xregexp/xregexp-all.js"></script>
+
+	<script src="/utils/templateUtils.js"></script>
+    <script src="/vendor/dialog-polyfill/dialog-polyfill.js"></script>
+    <script src="/utils/dialogs.js"></script>
 	<script src="/lib/execute.js"></script>
+	<script defer="" src="one-off.js"></script>
 </head>
 <body>
-	<script src="one-off.js"></script>
 </body>
 </html>
