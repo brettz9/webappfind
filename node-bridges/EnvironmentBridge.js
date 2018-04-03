@@ -11,7 +11,7 @@ function getHardPaths () {
 }
 
 async function getHardPath (dir) {
-    await init();
+    const [paths] = await initPromise;
     return paths[dir];
 }
 
@@ -32,7 +32,7 @@ async function getTempPaths () {
     };
 };
 async function getExePaths () {
-    await init();
+    const [paths, firefoxExecutablePath] = await initPromise;
     return {
         type: 'executables',
         paths: [
@@ -42,18 +42,19 @@ async function getExePaths () {
     };
 }
 
-let paths, firefoxExecutablePath;
+let initPromise;
 
 async function init () {
-    if (paths) {
-        return;
+    if (initPromise) {
+        return initPromise;
     }
-    ([paths, firefoxExecutablePath] = await Promise.all([ /*, profiles */
+    initPromise = Promise.all([ /*, profiles */
         getHardPaths(),
         getBrowserExecutable()
-    ]));
-};
-init();
+    ]);
+    return initPromise;
+}
+init(); // Get things started
 
 return {
     getHardPaths,
