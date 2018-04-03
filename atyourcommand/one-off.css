@@ -29,7 +29,13 @@
 #substitutions-explanation-container, #substitutions-used-container,
 #fileArguments, #URLArguments {
 	float: left;
-	width: 49.5%;
+	width: 49.0%;
+}
+#fileArguments {
+	margin-right: 0.5%;
+}
+#URLArguments {
+	margin-left: 0.5%;
 }
 #substitutions-explanation, #substitutions-used,
 #executableTableContainer, #fileAndURLArgumentContainer {
@@ -49,7 +55,7 @@
 	height: 205px;
 }
 .execution {
-	text-align:center;
+	text-align: center;
 }
 .execution, .export {
 	float: left;
@@ -82,4 +88,13 @@ select widget except for the first item, "select all" */
 #loading {
 	font-style: italic;
 	font-size: x-large;
+}
+.ei-files-number {
+	width: 50px;
+}
+.ei-urls-number {
+	width: 50px;
+}
+.submit {
+	text-align: center;
 }

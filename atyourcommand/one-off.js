@@ -8,8 +8,9 @@
 
 // import {Dialog} from '../utils/dialogs.js';
 // import {$e, U} from './templateUtils.js';
+const uiLanguage = browser.i18n.getUILanguage();
 const {Dialog} = dialogImport;
-const dialogs = new Dialog({locale: browser.i18n.getUILanguage()});
+const dialogs = new Dialog({locale: uiLanguage});
 const {U} = templateUtils;
 
 window.addEventListener('resize', function () {
@@ -112,9 +113,9 @@ browser.runtime.onMessage.addListener(async (msgObj, sender, sendResponse) => {
         itemType,
         executables,
         temps,
-        eiLocale: [
-            'browse', 'directory', 'plus', 'minus', 'reveal',
-            'args_num', 'url_num', 'file_num'
+        eiLocale: uiLanguage,
+        eiLabels: [
+            'argsNum', 'urlNum', 'fileNum'
         ].reduce((locale, key) => {
             locale[key] = _('expandable_inputs_' + key);
             return locale;
@@ -326,13 +327,13 @@ jml('div', {id: 'loading'}, [
     _('loading')
 ], $('body'));
 
-function init ({itemType, executables, temps, eiLocale = {}}) {
+function init ({itemType, executables, temps, eiLocale, eiLabels: {argsNum, urlNum, fileNum}}) {
     const inputs = {
         args: new ExpandableInputs({
             locale: eiLocale,
             table: 'executableTable',
             namespace: 'args',
-            label: eiLocale.args_num,
+            label: argsNum,
             inputSize: 60,
             // Might perhaps make this optional to save space, but this
             //  triggers creation of a textarea so args could be more
@@ -343,7 +344,7 @@ function init ({itemType, executables, temps, eiLocale = {}}) {
             locale: eiLocale,
             table: 'URLArguments',
             namespace: 'urls',
-            label: eiLocale.url_num,
+            label: urlNum,
             inputSize: 40,
             inputType: 'url'
         }),
@@ -351,7 +352,7 @@ function init ({itemType, executables, temps, eiLocale = {}}) {
             locale: eiLocale,
             table: 'fileArguments',
             namespace: 'files',
-            label: eiLocale.file_num,
+            label: fileNum,
             inputSize: 25,
             inputType: 'file',
             selects: true
@@ -561,6 +562,7 @@ function init ({itemType, executables, temps, eiLocale = {}}) {
                                 list: 'datalist', autocomplete: 'off', value: '',
                                 required: 'required'
                             }],
+                            ' ',
                             ['input', {
                                 type: 'button', id: 'executablePick', class: 'ei-exe-picker',
                                 dataset: {

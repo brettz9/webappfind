@@ -404,13 +404,13 @@
         "message": "Pick an executable file"
     },
 
-    "expandable_inputs_args_num": {
+    "expandable_inputs_argsNum": {
         "message": "Arg %s:"
     },
-    "expandable_inputs_url_num": {
+    "expandable_inputs_urlNum": {
         "message": "URL %s:"
     },
-    "expandable_inputs_file_num": {
+    "expandable_inputs_fileNum": {
         "message": "File %s:"
     },
 

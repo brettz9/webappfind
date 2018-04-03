@@ -16,6 +16,16 @@ function l (str) {
 // STATIC VARS
 let ns = 0; // Used to prevent conflicts if the user does not supply their own namespace
 
+const defaultLocaleStrings = {
+    en: {
+        browse: 'Browse\u2026',
+        directory: 'Directory?',
+        plus: '+',
+        minus: '-',
+        reveal: '' // We use a background-image of a folder instead of text
+    }
+};
+
 // UTILITIES
 
 /**
@@ -47,7 +57,8 @@ function $$ (sel) {
 * @param {boolean} [cfg.selects=false] Whether to include a select menu for preset file paths or directories
 * @param {number} [cfg.inputSize=50] The size for text inputs
 * @param {number} [cfg.rows] The number of rows; auto-changes input to a textarea (even if set to 1)
-* @param {string} [cfg.locale] A locale. Default to an English locale. (Note that the label property ought to also be localized.)
+* @param {string} [cfg.locale] A locale language code. Defaults to "en". (Note that the suppied label property ought to also be localized.)
+* @param {string} [cfg.localeStrings] A localeStrings. Default to an English localeStrings. (Note that the supplied label property ought to also be localized.)
 */
 function ExpandableInputs (cfg) {
     if (!(this instanceof ExpandableInputs)) {
@@ -67,13 +78,12 @@ function ExpandableInputs (cfg) {
     if (cfg.rows !== undefined) {
         this.rows = cfg.rows;
     }
-    this.locale = cfg.locale || {
-        browse: 'Browse\u2026',
-        directory: 'Directory?',
-        plus: '+',
-        minus: '-',
-        reveal: '' // We use a background-image of a folder instead of text
-    };
+    this.localeStrings = Object.assign(
+        {},
+        defaultLocaleStrings.en,
+        defaultLocaleStrings[cfg.locale] || {},
+        cfg.localeStrings || {}
+    );
 
     // State variables
     this.fileType = cfg.inputType === 'file';
@@ -235,6 +245,7 @@ ExpandableInputs.prototype.add = function () {
                 })()],
                 (this.fileType
                     ? {'#': [
+                        ' ',
                         ['datalist', {id: prefixedNS + 'fileDatalist-' + this.id}],
                         ['input', {
                             type: 'button',
@@ -243,12 +254,12 @@ ExpandableInputs.prototype.add = function () {
                                 ei_sel: '#' + prefixedNS + 'input-' + this.id,
                                 ei_directory: '#' + prefixedNS + 'directory' + this.id
                             },
-                            value: this.locale.browse
+                            value: this.localeStrings.browse
                         }],
                         ['input', {
                             type: 'button',
                             class: prefixedNS + 'revealButton',
-                            value: this.locale.reveal,
+                            value: this.localeStrings.reveal,
                             dataset: {ei_sel: '#' + prefixedNS + 'input-' + this.id}
                         }],
                         ['label', [
@@ -258,7 +269,7 @@ ExpandableInputs.prototype.add = function () {
                                 class: prefixedNS + 'directory'
                             }],
                             ' ',
-                            this.locale.directory
+                            this.localeStrings.directory
                         ]]
                     ]}
                     : ''
@@ -269,13 +280,13 @@ ExpandableInputs.prototype.add = function () {
                 ['button', {
                     class: prefixedNS + 'add',
                     dataset: {ei_type: 'add'}
-                }, [this.locale.plus]]
+                }, [this.localeStrings.plus]]
             ]],
             ['td', [
                 ['button', {
                     class: prefixedNS + 'remove',
                     dataset: {ei_id: this.id, ei_type: 'remove'}
-                }, [this.locale.minus]]
+                }, [this.localeStrings.minus]]
             ]]
         ], null
     ));
