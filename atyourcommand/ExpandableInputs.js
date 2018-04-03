@@ -1,3 +1,4 @@
+/* eslint-env browser */
 /* globals jml */
 /**
 * @class ExpandableInputs
@@ -121,8 +122,10 @@ ExpandableInputs.prototype.addTableEvent = function () {
 
             // Allow DOM listening for removal
             if (!noneToRemove) {
-                const e = document.createEvent('HTMLEvents');
-                e.initEvent('change', true, true);
+                const e = new Event('change', {
+                    bubbles: true,
+                    cancelable: true
+                });
                 $('#' + that.table).dispatchEvent(e);
             }
 
@@ -192,7 +195,7 @@ ExpandableInputs.prototype.add = function () {
                 ['label', {
                     for: prefixedNS + 'input-' + this.id,
                     class: prefixedNS + 'number'
-                }, [this.getLabel(this.num)]]
+                }, [this.getLabel(this.num), ['span', [' \u00a0']]]]
             ]],
             ['td', [
                 (this.fileType && this.selects
@@ -254,12 +257,14 @@ ExpandableInputs.prototype.add = function () {
                                 type: 'checkbox',
                                 class: prefixedNS + 'directory'
                             }],
+                            ' ',
                             this.locale.directory
                         ]]
                     ]}
                     : ''
                 )
             ]],
+            ['td', ['\u00a0']],
             ['td', [
                 ['button', {
                     class: prefixedNS + 'add',

@@ -2,15 +2,17 @@
 /* globals EnvironmentBridge, FileBridge,
     execute,
     Tags, ExpandableInputs, jml, jQuery, $,
-    dialogImport
+    dialogImport, templateUtils
 */
 'use strict';
 
 // import {dialogs} from '../utils/dialogs.js';
+// import {$e, U} from './templateUtils.js';
 const {dialogs} = dialogImport;
+const {U} = templateUtils;
 
-window.addEventListener('resize', async function () {
-    await browser.storage.local.set({
+window.addEventListener('resize', function () {
+    browser.storage.local.set({
         windowCoords: [window.outerWidth, window.outerHeight]
     });
 });
@@ -559,6 +561,7 @@ function init ({itemType, executables, temps, eiLocale = {}}) {
                             ['select', {id: 'executables', 'class': 'ei-exe-presets', dataset: {
                                 ei_sel: '#executablePath'
                             }}],
+                            ' ',
                             ['input', {
                                 type: 'text', size: '55', id: 'executablePath',
                                 class: 'ei-exe-path',
@@ -594,8 +597,9 @@ function init ({itemType, executables, temps, eiLocale = {}}) {
                 ['br'],
                 ['div', {'class': 'execution'}, [
                     ['label', [
-                        _('keep_dialog_open'),
-                        ['input', {type: 'checkbox', id: 'keepOpen'}]
+                        ['input', {type: 'checkbox', id: 'keepOpen'}],
+                        ' ',
+                        _('keep_dialog_open')
                     ]],
                     ['br'],
                     ['button', {'class': 'passData save'}, [_('Save')]],
@@ -611,6 +615,7 @@ function init ({itemType, executables, temps, eiLocale = {}}) {
                 ['div', {'class': 'export'}, [
                     ['label', [
                         _('os_format_for_batch_export'),
+                        U.nbsp.repeat(2),
                         ['select', {id: 'export-os-type'}, buildOptions(
                             ['Linux', 'Mac', 'Windows'],
                             ['linux', 'mac', 'win']
@@ -704,7 +709,7 @@ function init ({itemType, executables, temps, eiLocale = {}}) {
                 } catch (cancelled) {
                     return;
                 }
-                buttonClick({name: name, remove: true, inputs});
+                buttonClick({name, remove: true, inputs});
                 return;
             }
             if (cl.contains('save')) {

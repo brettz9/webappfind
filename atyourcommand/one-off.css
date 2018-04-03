@@ -1,15 +1,15 @@
 #main {
-	overflow:auto;
-	height: 750px;
+	overflow: auto;
+	height: 694px;
 }
 #main.closed {
 	float: left;
-	width:99%;
+	width: 99%;
 	padding-left: 1%;
 }
 #main.open {
 	float: left;
-	width:70%;
+	width: 70%;
 }
 #names {
 	float: left;
