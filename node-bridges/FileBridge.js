@@ -28,6 +28,8 @@ const defaultLocaleStrings = {
         pickFile: 'Pick an executable file'
     }
 };
+// TODO: Could reimplement as a Node-based file/directory picker;
+//           maybe this? https://github.com/Joker-Jelly/nfb
 function picker ({dirPath, selectFolder, defaultExtension, filterMap = [], locale, localeStrings}) {
     localeStrings = Object.assign(
         {},
@@ -35,8 +37,6 @@ function picker ({dirPath, selectFolder, defaultExtension, filterMap = [], local
         defaultLocaleStrings[locale],
         localeStrings
     );
-    // TODO: Could reimplement as a Node-based file/directory picker;
-    //           maybe this? https://github.com/Joker-Jelly/nfb
     // Note: could use https://developer.mozilla.org/en-US/docs/Extensions/Using_the_DOM_File_API_in_chrome_code
     //         but this appears to be less feature rich
     const Cc = 0, Ci = 0, file = 0;
