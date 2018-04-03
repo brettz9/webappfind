@@ -69,20 +69,21 @@ To develop with source, install with npm:
         or textarea contents), hidden window, or dialog within right-clicked
         window.
     1. Allow command type which directly makes a PUT/POST/GET with contents
-        and optionally headers/values (or make an IndexedDB command in browser or
-        write output to file and optionally open that file in the browser or
-        outside optionally with WebAppFind/filetypes.json), into window which is
-        hidden or not, and optionally switching to that window.
+        and optionally headers/values (or make an IndexedDB command in browser
+        or write output to file and optionally open that file in the browser or
+        outside optionally with WebAppFind/filetypes.json), into window which
+        is hidden or not, and optionally switching to that window.
     1. Support text or CSS path offset of highlighted text so if supplying
         all page text, an app can reconstruct the position of the highlighted
-        text/elements in context (e.g., to allow supplying a correction of edited
-            text to Github through its API).
+        text/elements in context (e.g., to allow supplying a correction of
+        edited text to Github through its API).
     1. Ensure format of data is as abstract as possible in every way so as to
         avoid OS-specific syntax.
-    1. Investigate **other applauncher.js aspects** for possible types of substitutions?
-    1. Allow even the executable to be dynamic by prompt (e.g., if right-clicking
-        executable file in filebrowser-enhanced and want to send args to it: whether
-        fixed or themselves also obtained by prompt)
+    1. Investigate **other applauncher.js aspects** for possible types of
+        substitutions?
+    1. Allow even the executable to be dynamic by prompt (e.g., if
+        right-clicking executable file in filebrowser-enhanced and want to
+        send args to it: whether fixed or themselves also obtained by prompt)
     1. Ensure can grab the current URL as a path and use that within
         substitutions (not only the executable but other arguments); make
         usable for OpenWith or SendTo batch files (as in WebAppfind)
@@ -92,12 +93,12 @@ To develop with source, install with npm:
     to reuse with OpenWith..., e.g., using WebAppFind).
     1. **Exporting as batch files**
       (also in conjunction with
-      [Executable Builder](https://github.com/brettz9/executable-builder/)) which
-      could allow for convenient reuse of the content when attaching the batch
-      script to a "Open with..." handler. Use approach like
-      http://stackoverflow.com/a/5215844/271577
-1. **Hide currently unimplemented features** such as context current
-    value detection and add instead as to-dos.
+      [Executable Builder](https://github.com/brettz9/executable-builder/))
+      which could allow for convenient reuse of the content when attaching
+      the batch script to a "Open with..." handler. Use approach like
+      <http://stackoverflow.com/a/5215844/271577>
+1. **Hide currently unimplemented features** such as context current value
+    detection and add instead as to-dos.
 1. **Document README** as well as instructions within the dialog for
     implemented use cases as needed
     1. Document how restricted contexts are not only used for restricting
@@ -120,47 +121,47 @@ To develop with source, install with npm:
     manner would allow for distinguishing between where to restrict context and
     from where to obtain the content (but current ability for presets should
     be kept for convenience)--could thus have, e.g., page context with specific
-    node selection, or a selection or selector context different from the chosen
-    node(s), etc.
+    node selection, or a selection or selector context different from the
+    chosen node(s), etc.
     1. Option to supply prompt for selector or JS/jQuery eval at run-time
 1. Support **eval-able custom selector definition retrieval**
     for context determination (as with custom selector definitions for node
     retrieval).
-1. **Opinion piece** on great importance of data ownership and decoupling of local
-    or remote data from applications (also discuss need for return to (user-approved)
-    `globalStorage` for application independence and potential use in websites adopting
-    application-neutral add-on frameworks, and
+1. **Opinion piece** on great importance of data ownership and decoupling of
+    local or remote data from applications (also discuss need for return to
+    (user-approved) `globalStorage` for application independence and potential
+    use in websites adopting application-neutral add-on frameworks, and
     [SharedStorage](https://gist.github.com/brettz9/8876920),
     [AsYouWish namespaced storage](https://github.com/brettz9/asyouwish/),
     and the HTML5 download attribute (whose ability to save anywhere is nice
     but does not allow the site to prompt for a specific directory and does not
-    allow for automatic reading back of the file),
-    as hacks in the interim). Also consider idea for requesting or providing content
-    (prefs, request for privs, drafts/documents/chat logs/social media content) stored
-    in such `globalStorage` under user-approved (or site-approved) license and
-    purchasing terms negotiated in the browser with acceptable third-party verifiers.
-    Cover need for "data ownership" to more frequently accompany privacy
-    discussions. Ridiculousness of effort at code being decoupled when web (and
-    desktop in connection with the web) is itself not decoupled. Also cover the
-    ideas for PUT requests (for decoupled saving), SQL/local file/cache (see below)
-    toward allowing universal and
-    neutral APIs to obtain and save *portions* of documents as well as whole
-    documents among open data sources and applications (e.g., to right-click
-    when using a browser add-on for localStorage, FileSystem, or IndexedDB
-    browsing and send the data to the command line, including optionally
-    to WebAppFind for discovering a suitable web-app, and allowing an API
-    for saving back, thus freeing the user from local storage data lock-in).
-    Likewise for right-clicking a particular element (or XPath/CSS Selector
-    expression?) within a document to do a PATCH back to the server for
-    replacing just that portion with whatever value is indicated by the user or
-    by the web app which was delegated responsibility for the PUT/PATCH (an
-    HTML/XML document is itself a kind of database).
+    allow for automatic reading back of the file), as hacks in the interim).
+    Also consider idea for requesting or providing content (prefs, request
+    for privs, drafts/documents/chat logs/social media content) stored in such
+    `globalStorage` under user-approved (or site-approved) license and
+    purchasing terms negotiated in the browser with acceptable third-party
+    verifiers. Cover need for "data ownership" to more frequently accompany
+    privacy discussions. Ridiculousness of effort at code being decoupled when
+    web (and desktop in connection with the web) is itself not decoupled. Also
+    cover the ideas for PUT requests (for decoupled saving), SQL/local
+    file/cache (see below) toward allowing universal and neutral APIs to obtain
+    and save *portions* of documents as well as whole documents among open
+    data sources and applications (e.g., to right-click when using a browser
+    add-on for localStorage, FileSystem, or IndexedDB browsing and send the
+    data to the command line, including optionally to WebAppFind for
+    discovering a suitable web-app, and allowing an API for saving back,
+    thus freeing the user from local storage data lock-in). Likewise for
+    right-clicking a particular element (or XPath/CSS Selector expression?)
+    within a document to do a PATCH back to the server for replacing just that
+    portion with whatever value is indicated by the user or by the web app
+    which was delegated responsibility for the PUT/PATCH (an HTML/XML document
+    is itself a kind of database).
 1. Add interfaces to the likes of browser's database (including for access to
     its localStorage or indexedDB contents) or to **FileWriter/FileSystem**
     and **cached files** (e.g., when right-clicking on a document, getting its
-    HTML cache or resource file cache files, or its localStorage, cookies, etc. so
-    no data is inaccessible) and **HTTPQuery/PATCH** requests against
-    local as well as remote data for a potentially friendly and uniform approach
+    HTML cache or resource file cache files, or its localStorage, cookies, etc.
+    so no data is inaccessible) and **HTTPQuery/PATCH** requests against local
+    as well as remote data for a potentially friendly and uniform approach
     (which could subsume the local SQLite API as well). Also add context menu
     to Inspector and source-view to allow HTML snippets to be shuffled off (as
     with right-clicking content in the browser window itself). Also add for
@@ -170,9 +171,9 @@ To develop with source, install with npm:
 1. Conditional operator for **PUT, HTTPQuery support detection**;
     if supported, change text sent to command line accordingly (convenience)
 1. Idea for command line apps to align themselves with a uniform,
-    atyourcommand-friendly syntax to simplify supplying of data (and to allow for
-    UI-building of such arguments for apps which are compliant). Indicate on
-    wiki projects supporting. (Or better yet, **parse existing help files or
+    atyourcommand-friendly syntax to simplify supplying of data (and to allow
+    for UI-building of such arguments for apps which are compliant). Indicate
+    on wiki projects supporting. (Or better yet, **parse existing help files or
     command line help flag commands**, if structured enough.) Also
     allow **joining of commands**. This could actually work with WebAppFind,
     e.g., to make flags prefixed with webappfind- along with its own modes
@@ -192,7 +193,8 @@ To develop with source, install with npm:
 1. **Remote site supply of commands**
     1. Way for websites to register commands or groups of commands upon
         user introspection and permission
-    1. Served with special content type and protocol meant for external launching?
+    1. Served with special content type and protocol meant for external
+        launching?
     1. Create protocol to force dialog asking to launch app (so if user
         clicks link, will get asked), optionally with args, and optionally with
         desktop file or remote URLs, etc. as content; will thereby also be
@@ -215,8 +217,8 @@ To develop with source, install with npm:
         content)
     1. Overlay
         [Open In Browser](https://addons.mozilla.org/En-us/firefox/addon/open-in-browser/)
-        but make it support **site prefs** (but not by domain as with Mozilla content prefs!)
-        (in addition to mapping MIME to commands)
+        but make it support **site prefs** (but not by domain as with Mozilla
+        content prefs!) (in addition to mapping MIME to commands)
         so choice will be remembered (checkbox to remember choice including
         any arguments, passing URL and/or file contents); also allow
         WebAppFind detection (e.g., remote filetypes.json?) in addition
@@ -225,11 +227,12 @@ To develop with source, install with npm:
         web apps automatically with web data (and with PUT requests back to
         server, could get full round-trip decoupling of data and app)
     1. Allow all file:// URLs to optionally be opened externally as per
-        https://support.mozilla.org/en-US/questions/758172
-        or to auto-apply WebAppFind to such file:// URLs (always or selectively)
-        so this content could be sent to a web app as well as desktop app
-    1. Cover usage of http://kb.mozillazine.org/View_source.editor.external and
-        http://kb.mozillazine.org/View_source.editor.path
+        <https://support.mozilla.org/en-US/questions/758172>
+        or to auto-apply WebAppFind to such file:// URLs (always or
+        selectively) so this content could be sent to a web app as well as
+        desktop app
+    1. Cover usage of <http://kb.mozillazine.org/View_source.editor.external> and
+        <http://kb.mozillazine.org/View_source.editor.path>
   1. As with my possible todo for
       [Open In Browser](https://addons.mozilla.org/En-us/firefox/addon/open-in-browser/)
       site prefs, make the filebrowser-enhanced context
@@ -250,18 +253,21 @@ To develop with source, install with npm:
     example like Notepad++
 1. In handling file:// URLs and c:\ paths that are right-clicked (or currently
     loaded), consider whether to handle **revealing a desktop folder** (or
-    **copying folder/file path**), **bare execution on desktop or with web app**
-    (without specific executable, args, etc. or with hard-coded/prompt/etc.),
-    e.g., for executables/batch files, etc. in this add-on or filebrowser enhanced
-    (and see the latter's to-do about splitting off its context menu/add-on bar
-    file:// capabilities into separate add-on).
-1. Allow specification of `URLContext()`'s (any need to utilize PredicateContext's?).
+    **copying folder/file path**), **bare execution on desktop or with web
+    app** (without specific executable, args, etc. or with
+    hard-coded/prompt/etc.), e.g., for executables/batch files, etc. in this
+    add-on or filebrowser enhanced (and see the latter's to-do about
+    splitting off its context menu/add-on bar `file://` capabilities into
+    separate add-on).
+1. Allow specification of webextensions current equivalent of `URLContext()`'s
+    (any need to utilize PredicateContext's?).
 
 # Possible to-dos
 
 1. As per AppLauncher feature request, default to a **specific, configurable
     executable path** (or save multiple options for drop-down)
-1. Allow storage of **own "path" environment** for greater portability across OS.
+1. Allow storage of **own "path" environment** for greater portability
+    across OS.
 1. Option to **view groups of selectors by output type** (e.g., HTML string,
     URL, etc.), instead of just by concept (e.g., "image URL" and "SVG
     as string" being in same image group).
@@ -289,7 +295,8 @@ To develop with source, install with npm:
   1. Use **WebDAV** request (via same-site Ajax or browser add-on privileged
     cross-domain (already with WebDAV add-on?)) for directory (propfind
     overloaded, was it?) so request for individual file reading or writing
-    (as with directory listing) can be made over HTTP (including reverse webappfind)
+    (as with directory listing) can be made over HTTP (including reverse
+    webappfind)
 1. **Converting batch files upon import** (to the extent possible)
 1. Option to have **context menu items, based on the substitutions used** (in
     addition to user choice), cause them to only appear under certain, correct
@@ -305,9 +312,11 @@ To develop with source, install with npm:
     1. Could create a convention to get data out of a plug-in by right-click
         (and demo - see
         [MDN - Scripting plugins](https://developer.mozilla.org/en-US/Add-ons/Plugins/Gecko_Plugin_API_Reference/Scripting_plugins#How_to_call_plugin_native_methods));
-        also for a full-page plugin (see [MDN Plug-in Basics](https://developer.mozilla.org/en-US/Add-ons/Plugins/Gecko_Plugin_API_Reference/Plug-in_Basics))?
+        also for a full-page plugin (see
+        [MDN Plug-in Basics](https://developer.mozilla.org/en-US/Add-ons/Plugins/Gecko_Plugin_API_Reference/Plug-in_Basics))?
         Note that plugins are [deprecated](https://developer.mozilla.org/en-US/Add-ons/Plugins), however.
-1. Rename or add to URLs (including as textarea) to allow any kind of **variable**?
+1. Rename or add to URLs (including as textarea) to allow any kind of
+    **variable**?
 
 # To-dos related to context-aware power-use or web-desktop interaction but beyond current scope of atyourcommand
 
