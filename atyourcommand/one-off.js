@@ -683,6 +683,8 @@ function init ({itemType, executables, temps, eiLocale, eiLabels: {argsNum, urlN
             selVal = sel && $(sel).value;
             if (selVal) {
                 FileBridge.reveal({fileName: selVal});
+            } else {
+                dialogs.alert(_('choose_file_to_reveal'));
             }
         } else if (target.id === 'cancel') {
             buttonClick({close: true});

@@ -881,6 +881,8 @@ function init () {
             }
             if (selVal) {
                 FileBridge.reveal({fileName: selVal});
+            } else {
+                dialogs.alert(_('choose_file_to_reveal'));
             }
         } else {
             let {id} = target;

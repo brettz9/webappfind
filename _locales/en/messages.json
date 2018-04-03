@@ -548,5 +548,8 @@
     },
     "Command_prompt": {
         "message": "Command prompt"
+    },
+    "choose_file_to_reveal": {
+        "message": "Please choose a file to reveal"
     }
 }
