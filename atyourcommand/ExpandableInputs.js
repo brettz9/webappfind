@@ -243,6 +243,9 @@ ExpandableInputs.prototype.add = function () {
                     }
                     return atts;
                 })()],
+                // Todo: Should have user supply own callback to ensure
+                //        reveal button, etc. has functionality, and
+                //        ensure only those desired are added
                 (this.fileType
                     ? {'#': [
                         ' ',

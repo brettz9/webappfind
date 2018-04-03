@@ -880,7 +880,7 @@ function init () {
                 return;
             }
             if (selVal) {
-                FileBridge.reveal(selVal);
+                FileBridge.reveal({fileName: selVal});
             }
         } else {
             let {id} = target;

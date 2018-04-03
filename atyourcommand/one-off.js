@@ -682,7 +682,7 @@ function init ({itemType, executables, temps, eiLocale, eiLabels: {argsNum, urlN
             sel = dataset.ei_sel;
             selVal = sel && $(sel).value;
             if (selVal) {
-                FileBridge.reveal(selVal);
+                FileBridge.reveal({fileName: selVal});
             }
         } else if (target.id === 'cancel') {
             buttonClick({close: true});
