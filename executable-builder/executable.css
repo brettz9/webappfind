@@ -11,7 +11,9 @@ datalist option {
 :required {
     background-color: pink;
 }
-
+.submit {
+    text-align: center;
+}
 
 .revealButton {
     width: 25px;

@@ -469,7 +469,8 @@ function init ({itemType, executables, temps, eiLocale = {}}) {
                     // Also "setCustomValidity" and individual items also have
                     //    "validationMessage" property
                     if (!this.checkValidity() &&
-                        (cl.contains('execute') || cl.contains('save') || cl.contains('batch_export'))
+                        (cl.contains('execute') || cl.contains('save') ||
+                            cl.contains('batch_export'))
                     ) {
                         e.stopPropagation(); // Don't allow it to get to submit
                     }

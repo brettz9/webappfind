@@ -1,13 +1,15 @@
 /* eslint-env webextensions */
 /* globals EnvironmentBridge, TemplateFileBridge, FileBridge, ProfileBridge,
     BrowserHistory, ExecutableBuilder,
-    jml, FormSerialize, confirm, alert */
+    jml, FormSerialize, dialogImport */
+// import {dialogs} from '../utils/dialogs.js';
+
+const {dialogs} = dialogImport;
 
 const {serialize: formSerialize, deserialize: formDeserialize} = FormSerialize;
 
 /*
 Todos:
-1. Get rid of `confirm`, `alert`
 1. Build command line output including path flag (Windows info)
     1. Use command line http://www.registryonwindows.com/registry-command-line.php
         (invokable from browser add-on) to add to registry re: open-with values or
@@ -671,7 +673,7 @@ function deleteTemplateResponse ({fileName}) {
             return option.text === fileName;
         })
     );
-    // alert(message);
+    // dialogs.alert(message);
 }
 
 function getTemplateResponse (content) {
@@ -711,7 +713,7 @@ function saveTemplateResult ({templateName}) {
     if (!templateExistsInMenu(templateName)) {
         $('[name=templates]').add(jml('option', [templateName]));
     }
-    // alert(message);
+    // dialogs.alert(message);
 }
 
 function init () {
@@ -773,17 +775,19 @@ function init () {
         }
     });
 
-    window.addEventListener('change', function ({target}) {
+    window.addEventListener('change', async function ({target}) {
         const {name, value: fileName} = target;
         switch (name) {
         case 'templateName': {
             if ($('#rememberTemplateChanges').checked &&
                 templateExistsInMenu(fileName)
             ) {
-                if (!confirm(_('overwrite_template_ok'))) {
-                    target.value = '';
-                    // return;
+                try {
+                    await dialogs.confirm(_('overwrite_template_ok'));
+                } catch (cancelled) {
+                    return;
                 }
+                target.value = '';
             }
             break;
         } case 'templates': {
@@ -897,9 +901,16 @@ function init () {
             }
             switch (id) {
             case 'deleteTemplate':
-                const fileName = $('[name=templates]').selectedOptions[0].value;
-                if (!fileName) {
-                    alert(_('must_choose_one_to_delete'));
+                let fileName;
+                try {
+                    fileName = $('[name=templates]').selectedOptions[0].value;
+                    if (!fileName) {
+                        dialogs.alert(_('must_choose_one_to_delete'));
+                        return;
+                    }
+                    await dialogs.confirm(_('delete_template_ok'));
+                } catch (cancelled) {
+                    // console.log(cancelled);
                     return;
                 }
                 TemplateFileBridge.deleteTemplate({fileName}).then(deleteTemplateResponse);
@@ -932,11 +943,11 @@ function init () {
             case 'createExecutable':
                 // Todo: Auto-name executable and auto-add path by default
                 if (!$('.executableName').value) {
-                    alert(_('must_add_one_executable_name'));
+                    dialogs.alert(_('must_add_one_executable_name'));
                     return;
                 }
                 if (!$('.dirPath').value) {
-                    alert(_('must_add_executable_path'));
+                    dialogs.alert(_('must_add_executable_path'));
                     return;
                 }
             case 'runCommands': // eslint-disable-line no-fallthrough
@@ -996,7 +1007,7 @@ function init () {
                 // FileAssociationBridge.associateFileExtension(...);
                 /*
                     await ExecBridge.cmd({args: []});
-                    alert('Command run!');
+                    dialogs.alert('Command run!');
                 */
                 break;
             }

@@ -112,6 +112,9 @@
     "overwrite_template_ok": {
         "message": "You have chosen a template which already exists, so any saves you make with this name will overwrite its contents with the updates made below. Continue?"
     },
+    "delete_template_ok": {
+        "message": "Are you sure you wish to delete the template?"
+    },
     "must_choose_one_to_delete": {
         "message": "In order to delete a template, you must choose one in the pull-down"
     },
