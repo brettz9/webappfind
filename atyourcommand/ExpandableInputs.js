@@ -1,11 +1,9 @@
 /* eslint-env browser */
-/* globals jml */
+import jml from '/vendor/jamilih/dist/jml-es.js';
+
 /**
 * @class ExpandableInputs
-* @requires jamilih
 */
-window.ExpandableInputs = (function () {
-'use strict';
 /*
 // DEBUGGING
 function l (str) {
@@ -306,5 +304,4 @@ ExpandableInputs.prototype.add = function () {
     this.num++;
 };
 
-return ExpandableInputs;
-}());
+export default ExpandableInputs;

@@ -1,6 +1,6 @@
 /* eslint-env browser, webextensions */
 var postMessageRelay; // eslint-disable-line no-var, no-unused-vars
-(function () {
+(() => {
 'use strict';
 
 const port = browser.runtime.connect({name: 'webappfind-postMessage-content-script'});
@@ -97,4 +97,4 @@ port.onMessage.addListener(function ({type, result, pathID, error}) {
         webappfindStart(result);
     }
 });
-}());
+})();

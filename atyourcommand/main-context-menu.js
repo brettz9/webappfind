@@ -1,12 +1,13 @@
-/*
-// For "context" events, "node" will always be the SelectorContext node,
-//  even if a child node is the one responsible for activating the menu
-self.on('context', function (node) {'use strict';
-});
-*/
 // For "click" events where "SelectorContext" was used, "node" will be
 //  the SelectorContext node; otherwise, it will be the actual node clicked
 'use strict';
+
+/*
+// For "context" events, "node" will always be the SelectorContext node,
+//  even if a child node is the one responsible for activating the menu
+self.on('context', function (node) {
+});
+*/
 
 // Get around eslint-config-standard limitation on "exported" directive
 //   by exporting as follows:

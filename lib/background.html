@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>-</title>
+        <!--
+            Todo: This should be able to be removed in favor of adding
+            `/lib/background.js` to `background: {scripts: []}`
+            once https://bugzilla.mozilla.org/show_bug.cgi?id=1394303
+            may be implemented
+        -->
+        <!--
+        Waiting to convert to ES6 Modules (also need to change npm
+        script copy routines)
+        - https://github.com/mozilla/webextension-polyfill/issues/109
+        - https://github.com/slevithan/xregexp/pull/234
+        -->
+        <script src="/polyfills/browser-polyfill.js"></script>
+        <script src="/vendor/xregexp/xregexp-all.js"></script>
+
+        <script type="module" src="/lib/background.js"></script>
+    </head>
+    <body>
+    </body>
+</html>

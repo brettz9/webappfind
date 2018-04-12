@@ -1,17 +1,21 @@
 /* eslint-env webextensions */
-/* globals EnvironmentBridge, FileBridge,
-    execute,
-    Tags, ExpandableInputs, jml, jQuery, $,
-    dialogImport, templateUtils, _
-*/
-'use strict';
+/* globals jQuery */
 
-// import {Dialog} from '../utils/dialogs.js';
-// import {$e, U} from './templateUtils.js';
+import Tags from './Tags.js';
+import ExpandableInputs from './ExpandableInputs.js';
+import execute from '/lib/execute.js';
+import jml from '/vendor/jamilih/dist/jml-es.js';
+import {_} from '/utils/i18n.js';
+import {U} from '/utils/templateUtils.js';
+import {Dialog} from '/utils/dialogs.js';
+import * as EnvironmentBridge from '/node-bridges/EnvironmentBridge.js';
+import * as FileBridge from '/node-bridges/FileBridge.js';
+
+import addMultipleSelect from '/vendor/multiple-select/dist/multiple-select-es.js';
+addMultipleSelect(jQuery);
+
 const uiLanguage = browser.i18n.getUILanguage();
-const {Dialog} = dialogImport;
 const dialogs = new Dialog({locale: uiLanguage});
-const {U} = templateUtils;
 
 window.addEventListener('resize', function () {
     browser.storage.local.set({
@@ -19,7 +23,6 @@ window.addEventListener('resize', function () {
     });
 });
 
-$.noConflict();
 (async () => {
 const {updateContextMenus} = browser.extension.getBackgroundPage();
 const platform = browser.runtime.PlatformOs;

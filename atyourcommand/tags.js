@@ -5,7 +5,7 @@ Note that img.src and a.href include base URI
  @todo Do more thorough review of all other tags
  @todo Include SVG elements
 */
-window.Tags = [
+export default [
     ['frames', ['frame', 'frameset', ['iframe', {prop: 'src'}], ['noframes', {hidden: 'feature-present'}]]],
     ['navigation', ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'header', 'hgroup', 'nav']],
     ['block', ['article', 'aside', 'blockquote', 'body', 'center', 'details', 'dialog', 'div', 'fieldset', 'footer', 'listing', 'main', 'marquee', 'p', 'plaintext', 'pre', 'section', 'summary', 'xmp']],

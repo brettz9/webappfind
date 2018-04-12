@@ -11,24 +11,17 @@
 	<link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon" />
 
 	<!--
-	TODO: Use ES6 modules once Firefox enables by default
+	Waiting to convert to ES6 Modules (also need to change npm
+	script copy routines)
+	- On jQuery Roadmap: https://github.com/jquery/jquery/wiki/Roadmap
+	- https://github.com/slevithan/xregexp/pull/234
+	- https://github.com/GoogleChrome/dialog-polyfill/issues/164
 	-->
 	<script src="/vendor/jquery/dist/jquery.js"></script>
-	<script src="/vendor/multiple-select/dist/multiple-select-umd.js"></script>
-	<script src="/vendor/jamilih/dist/jml.js"></script>
-
-	<script src="ExpandableInputs.js"></script>
-	<script src="tags.js"></script>
-	<script src="/utils/i18n.js"></script>
-	<script src="/node-bridges/EnvironmentBridge.js"></script>
-	<script src="/node-bridges/FileBridge.js"></script>
 	<script src="/vendor/xregexp/xregexp-all.js"></script>
-
-	<script src="/utils/templateUtils.js"></script>
     <script src="/vendor/dialog-polyfill/dialog-polyfill.js"></script>
-    <script src="/utils/dialogs.js"></script>
-	<script src="/lib/execute.js"></script>
-	<script defer="" src="one-off.js"></script>
+
+	<script type="module" src="one-off.js"></script>
 </head>
 <body>
 </body>

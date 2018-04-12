@@ -1,5 +1,16 @@
 /* eslint-env webextensions, browser */
-/* globals _ */
+
+// import {_} from '/utils/i18n.js';
+// Todo: Replace this with the line above once
+//        https://bugzilla.mozilla.org/show_bug.cgi?id=1451545
+//        may be implemented
+const _ = function _ (...args) {
+    try {
+        return browser.i18n.getMessage(...args);
+    } catch (err) {
+        return `(Non-internationalized string--FIXME!) ${args.join(', ')}`;
+    }
+};
 
 const portEvl = browser.runtime.connect({name: 'webappfind-eval-content-script'});
 

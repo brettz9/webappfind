@@ -1,8 +1,5 @@
 /* eslint-env webextensions */
 
-var ProfileBridge = (() => { // eslint-disable-line no-var, no-unused-vars
-'use strict';
-
 const {getNodeJSON} = browser.extension.getBackgroundPage();
 
 /*
@@ -29,9 +26,8 @@ async function getProfiles () {
 function manageProfiles () {
     return getNodeJSON('manageProfiles');
 }
-return {
+export {
     createProfile,
     getProfiles,
     manageProfiles
 };
-})();

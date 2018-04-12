@@ -1,8 +1,5 @@
 /* eslint-env webextensions */
 
-var ExecBridge = (() => { // eslint-disable-line no-var, no-unused-vars
-'use strict';
-
 const {getNodeJSON} = browser.extension.getBackgroundPage();
 
 /**
@@ -18,8 +15,7 @@ function execFile (aFile, args = [], options) {
     return getNodeJSON('execFile', aFile, args, options);
 }
 
-return {
+export {
     cmd,
     execFile
 };
-})();

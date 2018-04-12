@@ -1,7 +1,4 @@
 /* eslint-env webextensions */
-var BrowserHistory = (async () => { // eslint-disable-line no-var, no-unused-vars
-'use strict';
-
 async function autocompleteURLHistory ({listID, value: userVal}) {
     const historyItems = await browser.history.search({
         text: userVal,
@@ -23,7 +20,6 @@ async function autocompleteURLHistory ({listID, value: userVal}) {
     };
 };
 
-return {
+export {
     autocompleteURLHistory
 };
-})();

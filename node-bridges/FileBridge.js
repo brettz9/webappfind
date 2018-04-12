@@ -1,8 +1,5 @@
 /* eslint-env webextensions */
 
-var FileBridge = (() => { // eslint-disable-line no-var, no-unused-vars
-'use strict';
-
 const {getNodeJSON} = browser.extension.getBackgroundPage();
 
 function l (msg) {
@@ -94,11 +91,10 @@ function picker ({dirPath, selectFolder, defaultExtension, filterMap = [], local
 }
 const filePick = picker, dirPick = picker;
 
-return {
+export {
     autocompletePaths,
     reveal,
     picker,
     filePick,
     dirPick
 };
-})();

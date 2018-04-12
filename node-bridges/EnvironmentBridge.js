@@ -1,8 +1,5 @@
 /* eslint-env webextensions */
-/* globals _ */
-
-var EnvironmentBridge = (() => { // eslint-disable-line no-var, no-unused-vars
-'use strict';
+import {_} from '/utils/i18n.js';
 
 const {getNodeJSON} = browser.extension.getBackgroundPage();
 
@@ -56,7 +53,7 @@ async function init () {
 }
 init(); // Get things started
 
-return {
+export {
     getHardPaths,
     getHardPath,
     getBrowserExecutableAndDir,
@@ -64,4 +61,3 @@ return {
     getTempPaths,
     getExePaths
 };
-})();

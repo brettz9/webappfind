@@ -1,9 +1,6 @@
-/* globals jml, templateUtils, dialogPolyfill */
-// import jml from '../node_modules/jamilih/dist/jml-es6.js';
-// import {$e, U} from './templateUtils.js';
-var dialogImport; // eslint-disable-line no-var, no-unused-vars
-(() => {
-const {$e, U} = templateUtils;
+/* globals dialogPolyfill */
+import jml from '/vendor/jamilih/dist/jml-es.js';
+import {$e, U} from './templateUtils.js';
 
 const defaultLocale = 'en';
 const localeStrings = {
@@ -161,8 +158,6 @@ class Dialog {
 
 const dialogs = new Dialog();
 
-// export {
-dialogImport = { // eslint-disable-line no-var, no-unused-vars
+export {
     Dialog, dialogs
 };
-})();

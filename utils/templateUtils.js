@@ -1,5 +1,3 @@
-var templateUtils; // eslint-disable-line no-var, no-unused-vars
-(() => {
 const nbsp = '\u00a0';
 const upArrow = '\u2191';
 const downArrow = '\u2193';
@@ -54,11 +52,9 @@ const initialCaps = (s) => {
 
 const DOM = {removeChildren, removeIfExists, filterChildElements, initialCaps};
 
-// export {
-templateUtils = {
+export {
     U,
     $, $$,
     $e, $$e,
     DOM
 };
-})();

@@ -1,6 +1,4 @@
 /* eslint-env webextensions */
-var TemplateFileBridge = (() => { // eslint-disable-line no-var, no-unused-vars
-'use strict';
 
 const {getNodeJSON} = browser.extension.getBackgroundPage();
 
@@ -20,10 +18,9 @@ function deleteTemplate (data) {
     return getNodeJSON('deleteTemplate', data);
 }
 
-return {
+export {
     getTemplate,
     getTemplates,
     saveTemplate,
     deleteTemplate
 };
-})();

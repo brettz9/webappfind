@@ -8,22 +8,13 @@
     <link rel="stylesheet" href="executable.css" />
     <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon" />
     <!--
-    TODO: Use ES6 modules once Firefox enables by default
+    Waiting to convert to ES6 Modules (also need to change npm
+    script copy routines)
+    - https://github.com/GoogleChrome/dialog-polyfill/issues/164
     -->
-    <script src="/vendor/jamilih/dist/jml.js"></script>
-    <script src="/vendor/form-serialize/index.js"></script>
-    <script src="/utils/i18n.js"></script>
-    <script src="/node-bridges/EnvironmentBridge.js"></script>
-    <script src="/node-bridges/TemplateFileBridge.js"></script>
-    <script src="/node-bridges/FileBridge.js"></script>
-    <script src="/node-bridges/ExecBridge.js"></script>
-    <script src="/node-bridges/ProfileBridge.js"></script>
-    <script src="BrowserHistory.js"></script>
-    <script src="ExecutableBuilder.js"></script>
-    <script src="/utils/templateUtils.js"></script>
     <script src="/vendor/dialog-polyfill/dialog-polyfill.js"></script>
-    <script src="/utils/dialogs.js"></script>
-    <script defer="" src="executable.js"></script>
+
+    <script type="module" src="executable.js"></script>
 </head>
 <body></body>
 </html>

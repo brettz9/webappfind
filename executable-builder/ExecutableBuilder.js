@@ -1,8 +1,5 @@
 /* eslint-env webextensions */
-/* globals EnvironmentBridge */
-
-var ExecutableBuilder = (() => { // eslint-disable-line no-var, no-unused-vars
-'use strict';
+import * as EnvironmentBridge from '/node-bridges/EnvironmentBridge.js';
 
 function l (msg) {
     console.log(msg);
@@ -206,8 +203,7 @@ function saveExecutables (data) {
         l(sed);
     });
 };
-return {
+export {
     openOrCreateICO,
     saveExecutables
 };
-})();
