@@ -25,7 +25,7 @@ window.addEventListener('resize', function () {
 });
 
 (async () => {
-const {updateContextMenus} = browser.extension.getBackgroundPage();
+const {updateContextMenus, tabData} = browser.extension.getBackgroundPage();
 const platform = browser.runtime.PlatformOs;
 
 const dynamicCMItems = {}, dynamicCMItems2 = {};
@@ -101,44 +101,54 @@ try {
 // msgObj: Passed JSON object
 // sender: https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/runtime/MessageSender
 // sendResponse: One time callback
-browser.runtime.onMessage.addListener(async (msgObj, sender, sendResponse) => {
-    const {itemType} = msgObj;
-    console.log('msgObj', msgObj);
-    // Has now received arguments, so we can inject...
-    // We might `executeScript` to check for
-    //  `window.getSelection()` (see append-to-clipboard add-on)
-    //  to get raw HTML of a selection (but unfortunately not a clicked
-    //  element without a selection)
-    const [executables, temps] = await Promise.all([
-        EnvironmentBridge.getExePaths(),
-        EnvironmentBridge.getTempPaths(),
-        loadStylesheets([
-            '/vendor/dialog-polyfill/dialog-polyfill.css',
-            '/vendor/bootstrap/dist/css/bootstrap.css',
-            '/vendor/multiple-select/multiple-select.css',
-            'one-off.css'
-        ])
-    ]);
-    const options = { // any JSON-serializable key/values
-        itemType,
-        executables,
-        temps,
-        eiLocale: uiLanguage,
-        eiLabels: [
-            'argsNum', 'urlNum', 'fileNum'
-        ].reduce((locale, key) => {
-            locale[key] = _('expandable_inputs_' + key);
-            return locale;
-        }, {})
-    };
-    try {
-        init(options);
-    } catch (err) { // Get stack trace which Firefox isn't otherwise giving
-        console.log('err', err);
-        throw err;
-    }
+/* browser.runtime.onMessage.addListener(async (msgObj, sender, sendResponse) => {
     sendResponse({});
-});
+}); */
+const msgObj = tabData;
+const {itemType} = msgObj;
+console.log('msgObj', msgObj);
+// Has now received arguments, so we can inject...
+// We might `executeScript` to check for
+//  `window.getSelection()` (see append-to-clipboard add-on)
+//  to get raw HTML of a selection (but unfortunately not a clicked
+//  element without a selection)
+const [executables, temps] = await Promise.all([
+    EnvironmentBridge.getExePaths(),
+    EnvironmentBridge.getTempPaths(),
+    loadStylesheets([
+        '/vendor/dialog-polyfill/dialog-polyfill.css',
+        '/vendor/bootstrap/dist/css/bootstrap.css',
+        '/vendor/multiple-select/multiple-select.css',
+        'one-off.css'
+    ])
+]);
+const options = { // any JSON-serializable key/values
+    itemType,
+    executables,
+    temps,
+    eiLocale: uiLanguage,
+    eiLabels: [
+        'argsNum', 'urlNum', 'fileNum'
+    ].reduce((locale, key) => {
+        locale[key] = _('expandable_inputs_' + key);
+        return locale;
+    }, {})
+};
+
+// ADD INITIAL CONTENT ONCE DATA AVAILABLE
+document.title = _('atyourcommand_doc_title');
+
+// Todo: Why are we not seeing this?
+jml('div', {id: 'loading'}, [
+    _('loading')
+], $('body'));
+
+try {
+    init(options);
+} catch (err) { // Get stack trace which Firefox isn't otherwise giving
+    console.log('err', err);
+    throw err;
+}
 
 // TEMPLATE UTILITIES
 
@@ -317,13 +327,6 @@ async function filePick (data) {
     });
     fileOrDirResult({selector, ...args});
 }
-// ADD INITIAL CONTENT ONCE DATA AVAILABLE
-document.title = _('atyourcommand_doc_title');
-
-// Todo: Why are we not seeing this?
-jml('div', {id: 'loading'}, [
-    _('loading')
-], $('body'));
 
 function init ({itemType, executables, temps, eiLocale, eiLabels: {argsNum, urlNum, fileNum}}) {
     const inputs = {
