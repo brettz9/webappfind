@@ -280,7 +280,7 @@
     },
 
     "atyourcommand_doc_title": {
-        "message": "One-off"
+        "message": "AtYourCommand One-Off"
     },
     "Substitutions_used": {
         "message": "Substitutions used"
@@ -544,5 +544,8 @@
     },
     "choose_file_to_reveal": {
         "message": "Please choose a file to reveal"
+    },
+    "executable_builder_title": {
+        "message": "Executable Builder"
     }
 }

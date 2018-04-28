@@ -13,6 +13,7 @@ import * as EnvironmentBridge from '/node-bridges/EnvironmentBridge.js';
 import * as ProfileBridge from '/node-bridges/ProfileBridge.js';
 import * as TemplateFileBridge from '/node-bridges/TemplateFileBridge.js';
 // import * as ExecBridge from '/node-bridges/ExecBridge.js';
+import loadStylesheets from '/vendor/load-stylesheets/dist/index-es.js';
 
 const uiLanguage = browser.i18n.getUILanguage();
 const dialogs = new Dialog({locale: uiLanguage});
@@ -1053,7 +1054,11 @@ function init () {
 // We could abstract this, but it's light enough for now to keep flexible
 const [paths, templates] = await Promise.all([ /*, profiles */
     EnvironmentBridge.getHardPaths(),
-    TemplateFileBridge.getTemplates()
+    TemplateFileBridge.getTemplates(),
+    loadStylesheets([
+        '/vendor/dialog-polyfill/dialog-polyfill.css',
+        'executable.css'
+    ])
     // TODO: Reenable for Windows at least when ready
     // , ProfileBridge.getProfiles()
 ]);
@@ -1061,6 +1066,9 @@ console.log('ttt', templates);
 
 // To send messages within add-on
 // browser.runtime.sendMessage(Object.assign(obj || {}, {type}));
+
+// Not visible but we'll add in case we later move to own window
+document.title = _('executable_builder_title');
 init();
 
 // Todo: Replace with equivalent to `Array.prototype.flatten` when decided:
