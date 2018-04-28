@@ -98,15 +98,14 @@ try {
     ({commands: oldStorage = {}} = await browser.storage.local.get('commands'));
 } catch (err) {}
 
-// msgObj: Passed JSON object
+// tabData: Passed JSON object
 // sender: https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/runtime/MessageSender
 // sendResponse: One time callback
-/* browser.runtime.onMessage.addListener(async (msgObj, sender, sendResponse) => {
+/* browser.runtime.onMessage.addListener(async (tabData, sender, sendResponse) => {
     sendResponse({});
 }); */
-const msgObj = tabData;
-const {itemType} = msgObj;
-console.log('msgObj', msgObj);
+const {itemType} = tabData;
+console.log('tabData', tabData);
 // Has now received arguments, so we can inject...
 // We might `executeScript` to check for
 //  `window.getSelection()` (see append-to-clipboard add-on)
@@ -126,6 +125,7 @@ const options = { // any JSON-serializable key/values
     itemType,
     executables,
     temps,
+    tabData,
     eiLocale: uiLanguage,
     eiLabels: [
         'argsNum', 'urlNum', 'fileNum'
@@ -328,7 +328,11 @@ async function filePick (data) {
     fileOrDirResult({selector, ...args});
 }
 
-function init ({itemType, executables, temps, eiLocale, eiLabels: {argsNum, urlNum, fileNum}}) {
+function init ({
+    itemType, executables, temps, tabData,
+    eiLocale,
+    eiLabels: {argsNum, urlNum, fileNum}
+}) {
     const inputs = {
         args: new ExpandableInputs({
             locale: eiLocale,
@@ -460,18 +464,30 @@ function init ({itemType, executables, temps, eiLocale, eiLabels: {argsNum, urlN
                     ]],
                     ['b', [_('Sequences')]],
                     ['dl', [
-                        'eval', 'contentType', 'pageURL', 'pageTitle',
-                        'pageHTML', 'bodyText',
-                        'selectedHTML', 'selectedText',
-                        'linkPageURLAsNativePath', 'linkPageTitle',
-                        'linkBodyText', 'linkPageHTML',
-                        'imageDataURL', 'imageDataBinary'
-                    ].reduce((children, seq) => {
-                        // Todo: Replace with `flatMap` when decided: https://github.com/tc39/proposal-flatMap/pull/56
-                        children.push(['dt', [seq]]);
-                        children.push(['dd']);
-                        return children;
-                    }, [])]
+                        ...[
+                            'contentType', 'pageURL', 'pageTitle',
+                            'pageHTML', 'bodyText',
+                            'selectedHTML', 'selectedText'
+                        ].reduce((children, seq) => {
+                            // Todo: Replace with `flatMap` when decided: https://github.com/tc39/proposal-flatMap/pull/56
+                            children.push(['dt', [seq]]);
+                            children.push(['dd', {
+                                style: 'width: 400px; border: 1px solid black; height: 50px; overflow: auto;'
+                            }, [String(tabData.pageData[seq])]]);
+                            return children;
+                        }, []),
+                        ...[
+                            'eval',
+                            'linkPageURLAsNativePath', 'linkPageTitle',
+                            'linkBodyText', 'linkPageHTML',
+                            'imageDataURL', 'imageDataBinary'
+                        ].reduce((children, seq) => {
+                            // Todo: Replace with `flatMap` when decided: https://github.com/tc39/proposal-flatMap/pull/56
+                            children.push(['dt', [seq]]);
+                            children.push(['dd']);
+                            return children;
+                        }, [])
+                    ]]
                 ]]
             ]],
             ['form', {$on: {
