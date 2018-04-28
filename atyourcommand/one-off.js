@@ -10,6 +10,7 @@ import {U} from '/utils/templateUtils.js';
 import {Dialog} from '/utils/dialogs.js';
 import * as EnvironmentBridge from '/node-bridges/EnvironmentBridge.js';
 import * as FileBridge from '/node-bridges/FileBridge.js';
+import loadStylesheets from '/vendor/load-stylesheets/dist/index-es.js';
 
 import addMultipleSelect from '/vendor/multiple-select/dist/multiple-select-es.js';
 addMultipleSelect(jQuery);
@@ -110,7 +111,13 @@ browser.runtime.onMessage.addListener(async (msgObj, sender, sendResponse) => {
     //  element without a selection)
     const [executables, temps] = await Promise.all([
         EnvironmentBridge.getExePaths(),
-        EnvironmentBridge.getTempPaths()
+        EnvironmentBridge.getTempPaths(),
+        loadStylesheets([
+            '/vendor/dialog-polyfill/dialog-polyfill.css',
+            '/vendor/bootstrap/dist/css/bootstrap.css',
+            '/vendor/multiple-select/multiple-select.css',
+            'one-off.css'
+        ])
     ]);
     const options = { // any JSON-serializable key/values
         itemType,

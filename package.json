@@ -1,7 +1,5 @@
 {
   "name": "webappfind",
-  "title": "webappfind",
-  "id": "jid0-szJdB0Ri3FdiZ7BdwTP8QQCffWs@jetpack",
   "version": "3.0.0",
   "author": "Brett Zamir",
   "contributors": [],
@@ -46,6 +44,7 @@
     "copy-polyfill": "node ./copy-polyfill",
     "copy-jquery": "cp node_modules/jquery/dist/jquery.js vendor/jquery/dist/jquery.js",
     "copy-form-serialize": "cp node_modules/form-serialize/src/index.js vendor/form-serialize/src/index.js",
+    "copy-load-stylesheets": "cp node_modules/load-stylesheets/dist/index-es.js vendor/load-stylesheets/dist/index-es.js",
     "copy-multiple-select": "cp node_modules/multiple-select/multiple-select.css vendor/multiple-select/multiple-select.css && cp node_modules/multiple-select/dist/multiple-select-es.js vendor/multiple-select/dist/multiple-select-es.js",
     "copy-jamilih": "cp node_modules/jamilih/dist/jml-es.js vendor/jamilih/dist/jml-es.js",
     "copy-bootstrap": "cp node_modules/bootstrap/dist/css/bootstrap.css vendor/bootstrap/dist/css/bootstrap.css",
@@ -108,6 +107,7 @@
     "form-serialize": "https://github.com/brettz9/form-serialize#browser-deserialize-rollup",
     "jamilih": "^0.32.0",
     "jquery": "^3.3.1",
+    "load-stylesheets": "^0.4.0",
     "mocha": "^5.0.5",
     "multiple-select": "https://github.com/brettz9/multiple-select#es6",
     "webextension-polyfill": "^0.2.1",
