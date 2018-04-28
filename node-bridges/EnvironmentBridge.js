@@ -22,7 +22,6 @@ async function getBrowserExecutable () {
 }
 async function getTempPaths () {
     return {
-        type: 'temps',
         paths: [
             [_('System_temp'), await getHardPath('TmpD')]
         ]
@@ -31,7 +30,6 @@ async function getTempPaths () {
 async function getExePaths () {
     const [paths, firefoxExecutablePath] = await initPromise;
     return {
-        type: 'executables',
         paths: [
             [_('Firefox'), firefoxExecutablePath],
             [_('Command_prompt'), paths.cmdExe]

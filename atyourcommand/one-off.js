@@ -211,8 +211,8 @@ function addOptions (type) {
 
 function handleOptions (typeDataMap) {
     Object.entries(typeDataMap).forEach(([type, data]) => {
-        optionData[data.type] = data;
-        addOptions(data.type);
+        optionData[type] = data;
+        addOptions(type);
     });
 }
 
