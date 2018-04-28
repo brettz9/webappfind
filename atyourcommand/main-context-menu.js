@@ -21,6 +21,20 @@ const getPageData = window.getPageData = function getPageData ({
     // Todo: retrieve "linkPageTitle", "linkBodyText", and "linkPageHTML"
     // Todo: Allow passing in to get custom properties?
     const selection = window.getSelection();
+    const hasSelection = selection.rangeCount;
+    let selectedHTML, selectedText, nodeName;
+    if (hasSelection) {
+        const range = selection.getRangeAt(0);
+        const container = document.createElement('div');
+        const contents = range.cloneContents();
+        container.append(contents);
+        selectedHTML = container.innerHTML;
+        selectedText = container.textContent;
+        nodeName = (
+            container.firstElementChild && container.firstElementChild.nodeName.toLowerCase()
+        );
+    }
+
     const msg = {
         // Todo: ensure all of the following are documented
         // Other non-element magic items?
@@ -44,12 +58,9 @@ const getPageData = window.getPageData = function getPageData ({
         //             themselves) but desktop apps may need
 
         // Todo: add to these magic items, depending also on whether there is a context or not
-        selectedHTML: selection && selection.outerHTML,
-        selectedText: selection && selection.textContent,
-        nodeName: selection && (
-            selection.nodeName ||
-            (selection.firstElementChild && selection.firstElementChild.nodeName.toLowerCase())
-        ),
+        selectedHTML,
+        selectedText,
+        nodeName,
         // Todo: Change to require user to specify these (since associatable with specific tags)
         pageTitle: document.title, // hidden
         pageHTML: document.documentElement.outerHTML, // Treat like hidden to avoid need to select anything
