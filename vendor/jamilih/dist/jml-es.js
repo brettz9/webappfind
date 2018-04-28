@@ -176,10 +176,22 @@ var ATTR_MAP = {
 var BOOL_ATTS = ['checked', 'defaultChecked', 'defaultSelected', 'disabled', 'indeterminate', 'open', // Dialog elements
 'readOnly', 'selected'];
 var ATTR_DOM = BOOL_ATTS.concat([// From JsonML
-'async', 'autofocus', 'defaultValue', 'defer', 'formnovalidate', 'hidden', 'ismap', 'multiple', 'novalidate', 'pattern', 'required', 'spellcheck', 'value', 'willvalidate']);
+'accessKey', // HTMLElement
+'async', 'autocapitalize', // HTMLElement
+'autofocus', 'contentEditable', // HTMLElement through ElementContentEditable
+'defaultValue', 'defer', 'draggable', // HTMLElement
+'formnovalidate', 'hidden', // HTMLElement
+'innerText', // HTMLElement
+'inputMode', // HTMLElement through ElementContentEditable
+'ismap', 'multiple', 'novalidate', 'pattern', 'required', 'spellcheck', // HTMLElement
+'translate', // HTMLElement
+'value', 'willvalidate']);
 // Todo: Add more to this as useful for templating
-//   to avoid setting with nullish value
-var NULLABLES = ['lang', 'max', 'min'];
+//   to avoid setting through nullish value
+var NULLABLES = ['dir', // HTMLElement
+'lang', // HTMLElement
+'max', 'min', 'title' // HTMLElement
+];
 
 /**
 * Retrieve the (lower-cased) HTML name of a node
@@ -305,11 +317,13 @@ function _getType(item) {
         if (Array.isArray(item)) {
             return 'array';
         }
-        if (item.nodeType === 1) {
-            return 'element';
-        }
-        if (item.nodeType === 11) {
-            return 'fragment';
+        if ('nodeType' in item) {
+            if (item.nodeType === 1) {
+                return 'element';
+            }
+            if (item.nodeType === 11) {
+                return 'fragment';
+            }
         }
         return 'object';
     }
@@ -1167,7 +1181,7 @@ jml.toJML = function (dom, config) {
         }
         */
 
-        var type = node.nodeType;
+        var type = 'nodeType' in node ? node.nodeType : null;
         namespaces = Object.assign({}, namespaces);
 
         var xmlChars = /([\u0009\u000A\u000D\u0020-\uD7FF\uE000-\uFFFD]|[\uD800-\uDBFF][\uDC00-\uDFFF])*$/; // eslint-disable-line no-control-regex

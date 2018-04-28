@@ -87,8 +87,7 @@ async function buttonClick (data) {
     }
 }
 
-const
-    optionData = {};
+const optionData = {};
 let currentName = '',
     createNewCommand = true,
     changed = false,
@@ -104,6 +103,7 @@ try {
 // sendResponse: One time callback
 browser.runtime.onMessage.addListener(async (msgObj, sender, sendResponse) => {
     const {itemType} = msgObj;
+    console.log('msgObj', msgObj);
     // Has now received arguments, so we can inject...
     // We might `executeScript` to check for
     //  `window.getSelection()` (see append-to-clipboard add-on)
@@ -449,14 +449,12 @@ function init ({itemType, executables, temps, eiLocale, eiLabels: {argsNum, urlN
                 ['div', {id: 'substitutions-used'}, [
                     _('currently_available_sequences'),
                     ['br'], ['br'],
-                    /*
                     ['dl', [
-                        ['dt', ['save_temp_']], ['dd'],
+                        ['dt', ['save_temp']], ['dd'],
                         ['dt', ['ucencode_']], ['dd'],
                         ['dt', ['uencode_']], ['dd'],
-                        ['dt', ['escquotes_']], ['dd'],
+                        ['dt', ['escquotes_']], ['dd']
                     ]],
-                    */
                     ['b', [_('Sequences')]],
                     ['dl', [
                         'eval', 'contentType', 'pageURL', 'pageTitle',
@@ -499,6 +497,11 @@ function init ({itemType, executables, temps, eiLocale, eiLabels: {argsNum, urlN
                             }
                             return atts;
                         })()]
+                    ]],
+                    ['div', [
+                        _('command_preview'),
+                        U.nbsp,
+                        ['input', {id: 'command-preview', readonly: 'readonly', value: '(Preview here)'}]
                     ]],
                     ['br'],
                     ['label', [

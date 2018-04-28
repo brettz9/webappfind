@@ -295,7 +295,7 @@
         "message": "Substitutions explained"
     },
     "Substitution_sequences_allow": {
-        "message": "Substitution sequences allow dynamic insertion of web content into a command line. They all begin and end with the delimiters \"<\" and \">\", respectively. If you need these in raw form, add a backslash before the character (a single backslash before it will be stripped). If you need these delimiters anywhere within a resulting URL, you should be using %3C and %3E, respectively, anyways."
+        "message": "Substitution sequences allow dynamic insertion of web content into a command line. It is very important for you to properly escape the variable content that will be passed into them, as arbitrary command line execution could be dangerous. All substitution sequences must begin and end with the delimiters \"<\" and \">\", respectively. If you need these in raw form, add a backslash before the character (a single backslash before it will be stripped). If you need these delimiters anywhere within a resulting URL, you should be using %3C and %3E, respectively, anyways."
     },
     "prefixes_can_be_applied": {
         "message": "A prefix or prefixes can be applied before any sequence."
@@ -424,6 +424,9 @@
     },
     "Command_name": {
         "message": "Command name:"
+    },
+    "command_preview": {
+        "message": "Command preview:"
     },
     "Save": {
         "message": "Save"
