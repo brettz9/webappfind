@@ -1,5 +1,6 @@
 /* eslint-env browser */
 // Todo: Make as own module dependency
+// Todo: Add $ and $$ to Jamilih
 import jml from '/vendor/jamilih/dist/jml-es.js';
 
 /**

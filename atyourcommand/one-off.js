@@ -6,7 +6,7 @@ import ExpandableInputs from './ExpandableInputs.js';
 import execute from '/lib/execute.js';
 import jml from '/vendor/jamilih/dist/jml-es.js';
 import {_} from '/utils/i18n.js';
-import {U} from '/utils/templateUtils.js';
+import {U, $, $$} from '/utils/templateUtils.js';
 import {Dialog} from '/utils/dialogs.js';
 import * as EnvironmentBridge from '/node-bridges/EnvironmentBridge.js';
 import * as FileBridge from '/node-bridges/FileBridge.js';
@@ -139,19 +139,6 @@ browser.runtime.onMessage.addListener(async (msgObj, sender, sendResponse) => {
     }
     sendResponse({});
 });
-
-// GENERIC UTILITIES
-/*
-function l (msg) {
-    console.log(msg);
-}
-*/
-function $ (sel) {
-    return document.querySelector(sel);
-}
-function $$ (sel) {
-    return [...document.querySelectorAll(sel)];
-}
 
 // TEMPLATE UTILITIES
 

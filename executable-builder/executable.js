@@ -3,6 +3,7 @@
 import jml from '/vendor/jamilih/dist/jml-es.js';
 import {_} from '/utils/i18n.js';
 import {Dialog} from '../utils/dialogs.js';
+import {$, $$} from '/utils/templateUtils.js';
 import {
     serialize as formSerialize, deserialize as formDeserialize
 } from '/vendor/form-serialize/src/index.js';
@@ -69,12 +70,6 @@ const nbsp3 = ` ${nbsp} `;
 
 let pathInputCtr = 0, fileExtIDCtr = 0, winOpenCtr = 0;
 
-function $ (sel) {
-    return document.querySelector(sel);
-}
-function $$ (sel) {
-    return [...document.querySelectorAll(sel)];
-}
 function templateExistsInMenu (val) {
     return [...$('[name=templates]').options].some((option) => {
         return option.text === val;
