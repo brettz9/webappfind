@@ -46,7 +46,10 @@ const getPageData = window.getPageData = function getPageData ({
         // Todo: add to these magic items, depending also on whether there is a context or not
         selectedHTML: selection && selection.outerHTML,
         selectedText: selection && selection.textContent,
-        nodeName: selection && (selection.nodeName || (selection.firstElementChild && selection.firstElementChild.nodeName.toLowerCase())),
+        nodeName: selection && (
+            selection.nodeName ||
+            (selection.firstElementChild && selection.firstElementChild.nodeName.toLowerCase())
+        ),
         // Todo: Change to require user to specify these (since associatable with specific tags)
         pageTitle: document.title, // hidden
         pageHTML: document.documentElement.outerHTML, // Treat like hidden to avoid need to select anything
