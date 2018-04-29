@@ -465,26 +465,31 @@ function init ({
                     ['b', [_('Sequences')]],
                     ['dl', [
                         ...[
+                            // Todo: While useful to show `eval` result here,
+                            //   this would need to occur as the string was
+                            //   typed (and thus potentially dangerous)
+                            // 'eval',
+                            /*
+                            // These may be better as user-`eval` given latency
+                            //   in retrieving
+                            'linkPageURLAsNativePath', 'linkPageTitle',
+                            'linkBodyText', 'linkPageHTML',
+                            'imageDataURL', 'imageDataBinary'
+                            */
                             'contentType', 'pageURL', 'pageTitle',
                             'pageHTML', 'bodyText',
-                            'selectedHTML', 'selectedText'
+                            'selectedHTML', 'selectedText',
+                            // Supplied by webextensions API
+                            'favIconUrl',
+                            'linkText', 'linkUrl',
+                            'frameUrl', 'srcUrl', 'mediaType',
+                            'modifiers'
                         ].reduce((children, seq) => {
                             // Todo: Replace with `flatMap` when decided: https://github.com/tc39/proposal-flatMap/pull/56
                             children.push(['dt', [seq]]);
                             children.push(['dd', {
                                 style: 'width: 400px; border: 1px solid black; height: 50px; overflow: auto;'
-                            }, [String(tabData.pageData[seq])]]);
-                            return children;
-                        }, []),
-                        ...[
-                            'eval',
-                            'linkPageURLAsNativePath', 'linkPageTitle',
-                            'linkBodyText', 'linkPageHTML',
-                            'imageDataURL', 'imageDataBinary'
-                        ].reduce((children, seq) => {
-                            // Todo: Replace with `flatMap` when decided: https://github.com/tc39/proposal-flatMap/pull/56
-                            children.push(['dt', [seq]]);
-                            children.push(['dd']);
+                            }, [String(tabData[seq])]]);
                             return children;
                         }, [])
                     ]]
