@@ -106,8 +106,9 @@ console.log('tabData', tabData);
 //  `window.getSelection()` (see append-to-clipboard add-on)
 //  to get raw HTML of a selection (but unfortunately not a clicked
 //  element without a selection)
+
 const [
-    {commands: initialStorage = {}},
+    {commands: initialStorage},
     executables,
     temps
 ] = await Promise.all([
@@ -123,6 +124,10 @@ const [
     ])
 ]);
 let oldStorage = initialStorage;
+if (!initialStorage) {
+    await browser.storage.local.set({commands: {}});
+    oldStorage = {};
+}
 
 const options = { // any JSON-serializable key/values
     itemType,
@@ -800,7 +805,7 @@ function init ({
             }
             const data = {
                 name,
-                save: true,
+                // save: true,
                 inputs,
                 detail: {
                     executablePath: $('#executablePath').value,
@@ -819,6 +824,7 @@ function init ({
             if (cl.contains('execute')) {
                 data.execute = true;
             }
+            console.log('data', data);
             buttonClick(data);
         }
     });
