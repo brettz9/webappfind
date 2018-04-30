@@ -26,7 +26,7 @@ window.addEventListener('resize', function () {
 
 (async () => {
 const {updateContextMenus, tabData} = browser.extension.getBackgroundPage();
-const platform = browser.runtime.PlatformOs;
+// const platform = browser.runtime.PlatformOs;
 
 const dynamicCMItems = {}, dynamicCMItems2 = {};
 
