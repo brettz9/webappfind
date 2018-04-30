@@ -365,13 +365,10 @@ function init ({
     };
     $('#loading').remove();
     jml('div', [
-        ['div', (() => {
-            const atts = {id: 'names'};
-            if (itemType === 'one-off') {
-                atts.hidden = true;
-            }
-            return atts;
-        })(), [
+        ['div', {
+            id: 'names',
+            hidden: itemType === 'one-off'
+        }, [
             ['select', {id: 'selectNames', size: 39, $on: {
                 async click ({target: {value: name}}) {
                     if (changed) {
@@ -390,18 +387,18 @@ function init ({
                 }
             }}]
         ]],
-        ['div', (() => {
-            const atts = {id: 'main', $on: {
+        ['div', {
+            id: 'main',
+            class: itemType === 'one-off' ? 'closed' : 'open',
+            $on: {
                 change ({target: {id}}) {
                     changed = true;
                     if (id === 'command-name') {
                         nameChanged = true;
                     }
                 }
-            }};
-            atts.className = itemType === 'one-off' ? 'closed' : 'open';
-            return atts;
-        })(), [
+            }
+        }, [
             ['button', {id: 'showNames', $on: {
                 click () {
                     $('#names').hidden = !$('#names').hidden;
@@ -514,13 +511,11 @@ function init ({
                 ['div', {id: 'command-name-section'}, [
                     ['label', {title: _('if_present_command_saved')}, [
                         _('Command_name') + ' ',
-                        ['input', (() => {
-                            const atts = {id: 'command-name', size: '35'};
-                            if (itemType === 'commands') {
-                                atts.autofocus = 'autofocus';
-                            }
-                            return atts;
-                        })()]
+                        ['input', {
+                            id: 'command-name',
+                            size: '35',
+                            autofocus: itemType === 'commands'
+                        }]
                     ]],
                     ['div', [
                         _('command_preview'),
