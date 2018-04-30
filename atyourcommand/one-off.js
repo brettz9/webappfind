@@ -93,11 +93,6 @@ let currentName = '',
     changed = false,
     nameChanged = false;
 
-let oldStorage;
-try {
-    ({commands: oldStorage = {}} = await browser.storage.local.get('commands'));
-} catch (err) {}
-
 // tabData: Passed JSON object
 // sender: https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/runtime/MessageSender
 // sendResponse: One time callback
@@ -111,7 +106,13 @@ console.log('tabData', tabData);
 //  `window.getSelection()` (see append-to-clipboard add-on)
 //  to get raw HTML of a selection (but unfortunately not a clicked
 //  element without a selection)
-const [executables, temps] = await Promise.all([
+const [
+    {commands: initialStorage = {}},
+    executables,
+    temps
+] = await Promise.all([
+    browser.storage.local.get('commands'),
+
     EnvironmentBridge.getExePaths(),
     EnvironmentBridge.getTempPaths(),
     loadStylesheets([
@@ -121,6 +122,8 @@ const [executables, temps] = await Promise.all([
         'one-off.css'
     ])
 ]);
+let oldStorage = initialStorage;
+
 const options = { // any JSON-serializable key/values
     itemType,
     executables,
@@ -169,6 +172,7 @@ function rebuildCommandList () {
 * @param {array} [values] Array of values corresponding to text
 * @param {string} [ns] Namespace to add to locale string
 */
+/*
 function buildOptions (optTexts, values, ns) {
     return optTexts.map((optText, i) => {
         const value = values[i] || optText;
@@ -177,6 +181,7 @@ function buildOptions (optTexts, values, ns) {
         ]];
     });
 }
+*/
 
 // BEHAVIORAL UTILITIES
 function setMultipleSelectOfValue (sel, vals) {
@@ -305,9 +310,11 @@ function finished () {
         }, 2000);
     }
 }
+/*
 function setOS (os) {
     setSelectOfValue('#export-os-type', os);
 }
+*/
 function getSuffixForOS () {
     const type = $('#export-os-type').value,
         osMap = {
@@ -647,7 +654,9 @@ function init ({
                     // ['br'],
                     ['button', {'class': 'passData execute'}, [_('Execute_on_current_page')]],
                     ['button', {id: 'cancel'}, [_('Cancel')]]
-                ]],
+                ]]
+                /*
+                Todo:
                 ['div', {'class': 'export'}, [
                     ['label', [
                         _('os_format_for_batch_export'),
@@ -666,11 +675,12 @@ function init ({
                     ['br'],
                     ['button', {'class': 'batch_export'}, [_('Export_to_batch')]]
                 ]]
+                */
             ]]
         ]]
     ], $('body'));
 
-    setOS(platform);
+    // setOS(platform);
 
     // ADD EVENTS
 

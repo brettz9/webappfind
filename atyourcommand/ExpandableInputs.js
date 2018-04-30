@@ -86,7 +86,7 @@ function ExpandableInputs (cfg) {
     );
 
     // State variables
-    this.fileType = cfg.inputType === 'file';
+    this.fileType = 'inputType' in cfg && cfg.inputType === 'file';
     this.resetCount();
 }
 
