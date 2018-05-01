@@ -805,7 +805,7 @@ function init ({
             }
             const data = {
                 name,
-                // save: true,
+                save: cl.contains('save'),
                 inputs,
                 detail: {
                     executablePath: $('#executablePath').value,
