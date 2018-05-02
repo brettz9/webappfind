@@ -21,9 +21,19 @@ To develop with source, install with npm:
 
 # Immediate to-dos
 
-1. **Display of commands** in context menu or with list of commands
-    in edit mode (with the list of commands pre-opened) or in
-    new command mode (with the list pre-closed)
+1. Fix **retention of multiple-select** of commands
+1. **Display dynamic commands** in context menu
+
+1. Finish behavior providing **string substitution** of current page contents,
+    URL, etc. (see todos in `execute.js`), **preview and execution**,
+    including for one-off as well as saved commands
+    1. Fix **overflow** display once settled on command preview
+
+1. **Hide currently unimplemented features** such as context current value
+    detection and add instead as to-dos.
+1. Submit to **AMO/Chrome Web Store**
+
+# Higher priority to-dos (longer)
 
 1. **Add separate multiple selects**
     1. Pull-down to choose main selector
@@ -51,16 +61,31 @@ To develop with source, install with npm:
         cookies/localStorage/indexedDB/sessionStorage/applicationCache,
         ideally also optional privileged write/listen access as well!)
     1. Might even expose for any site or all sites
-    1. Make context to be WebAppFind (e.g., filetypes.json detection or
-        based on file extension within file:// link)?
+    1. Make context to be WebAppFind (e.g., `filetypes.json` detection or
+        based on file extension within `file://` link)?
     1. Allow right-clicking on a link to populate form with default
-        WebAppFind type/context file:// execute to be done with specific
+        WebAppFind type/context `file://` execute to be done with specific
         Windows
         "[verbs](http://msdn.microsoft.com/en-us/library/bb165967.aspx)"
         (i.e., Open, Edit, Print, Play, Preview or custom) in place of a
         specific executable!
-1. Finish behavior providing **string substitution** of current page contents,
-    URL, etc. (see todos in main.js under "buttonClick" "execute" event)
+1. Option to **make command or executable batch** (with idea in README
+    to reuse with OpenWith..., e.g., using WebAppFind).
+    1. **Exporting as batch files**
+      (also in conjunction with
+      [Executable Builder](https://github.com/brettz9/executable-builder/))
+      which could allow for convenient reuse of the content when attaching
+      the batch script to a "Open with..." handler. Use approach like
+      <http://stackoverflow.com/a/5215844/271577>
+1. **Document README** as well as instructions within the dialog for
+  implemented use cases as needed
+  1. Document how restricted contexts are not only used for restricting
+    context, but also will be associated with a particular retrieval method
+    (e.g., `img` will be available only on images and will supply `img.src`
+    to the app (the property instead of attribute) unless another generic
+    type of variable substitution such as obtaining the node as HTML
+    or the node's textContent is provided).
+1. **string substitution**
     1. Support defaults (including empty ones) and document
     1. Ensure user can just invoke a command without sending anything
     1. Allow textarea dialog prompt for content to supply to web app or
@@ -89,28 +114,6 @@ To develop with source, install with npm:
         usable for OpenWith or SendTo batch files (as in WebAppfind)
     1. Ability to convert selected path into file:// URL before passing on
         within arguments
-1. Option to **make command or executable batch** (with idea in README
-    to reuse with OpenWith..., e.g., using WebAppFind).
-    1. **Exporting as batch files**
-      (also in conjunction with
-      [Executable Builder](https://github.com/brettz9/executable-builder/))
-      which could allow for convenient reuse of the content when attaching
-      the batch script to a "Open with..." handler. Use approach like
-      <http://stackoverflow.com/a/5215844/271577>
-1. **Hide currently unimplemented features** such as context current value
-    detection and add instead as to-dos.
-1. **Document README** as well as instructions within the dialog for
-    implemented use cases as needed
-    1. Document how restricted contexts are not only used for restricting
-      context, but also will be associated with a particular retrieval method
-      (e.g., `img` will be available only on images and will supply `img.src`
-      to the app (the property instead of attribute) unless another generic
-      type of variable substitution such as obtaining the node as HTML
-      or the node's textContent is provided).
-1. Submit to **AMO/Chrome Web Store**
-
-# Higher priority to-dos (longer)
-
 1. **File picker** from Ajax and local Node.js (using Miller columns browser?);
     see commented out code.
 1. **Grab contents as text or HTML in custom manner** (allowing for
