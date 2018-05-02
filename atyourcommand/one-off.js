@@ -26,7 +26,6 @@ window.addEventListener('resize', function () {
 
 async function getUnpackedCommands () {
     const {commands} = await browser.storage.local.get('commands');
-    console.log('commands', commands || '{}');
     return JSON.parse(commands || '{}');
 }
 
@@ -44,14 +43,12 @@ const dynamicCMItems = {}, dynamicCMItems2 = {};
 async function save (name, data) {
     const commands = await getUnpackedCommands();
     commands[name] = data;
-    console.log('commands2', commands);
     await packCommands(commands);
     updateContextMenus();
 }
 async function remove (name) {
     const commands = await getUnpackedCommands();
     delete commands[name];
-    console.log('commands3', commands);
     await packCommands(commands);
     if (dynamicCMItems[name]) {
         dynamicCMItems[name].destroy();
@@ -93,7 +90,7 @@ async function buttonClick (data) {
     }
     if (data.execute) {
         await execute(name);
-        finished();
+        await finished();
     }
     if (close) {
         window.close();
@@ -318,10 +315,10 @@ function fileOrDirResult ({path, selector}) {
     }
 }
 
-function finished () {
+async function finished () {
     $('#processExecuted').style.display = 'block';
     if (!$('#keepOpen').checked) {
-        buttonClick({id: 'cancel'});
+        await buttonClick({id: 'cancel'});
     } else {
         setTimeout(() => {
             $('#processExecuted').style.display = 'none';
@@ -757,7 +754,7 @@ function init ({
                 dialogs.alert(_('choose_file_to_reveal'));
             }
         } else if (target.id === 'cancel') {
-            buttonClick({close: true});
+            await buttonClick({close: true});
         } else if (cl.contains('batch_export')) {
             const commandText = 'todo: serialize the form into a batch file here';
             const uri = 'data:,' + encodeURIComponent(commandText);
@@ -776,7 +773,7 @@ function init ({
                 } catch (cancelled) {
                     return;
                 }
-                buttonClick({name, remove: true, inputs});
+                await buttonClick({name, remove: true, inputs});
                 return;
             }
             if (cl.contains('save')) {
@@ -805,7 +802,7 @@ function init ({
                     }
                     // Proceed with rename, so first delete old value
                     //    (todo: could ensure first added)
-                    buttonClick({
+                    await buttonClick({
                         name: $('#command-name').defaultValue,
                         remove: true,
                         inputs,
@@ -838,7 +835,7 @@ function init ({
                 data.execute = true;
             }
             console.log('data', data);
-            buttonClick(data);
+            await buttonClick(data);
         }
     });
 
