@@ -21,7 +21,6 @@ To develop with source, install with npm:
 
 # Immediate to-dos
 
-1. Fix **retention of multiple-select** of commands
 1. **Display dynamic commands** in context menu
 
 1. Finish behavior providing **string substitution** of current page contents,

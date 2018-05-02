@@ -202,10 +202,9 @@ function buildOptions (optTexts, values, ns) {
 function setMultipleSelectOfValue (sel, vals) {
     const names = typeof sel === 'string' ? $(sel) : sel;
     [...names.options].forEach((option) => {
-        if (vals.includes(option.value)) {
-            option.selected = true;
-        }
+        option.selected = vals.includes(option.value);
     });
+    jQuery('#restrict-contexts').multipleSelect('refresh');
 }
 
 function setSelectOfValue (sel, val) {
@@ -265,7 +264,10 @@ function populateEmptyForm (inputs) {
 
     $('#executables').selectedIndex = 0;
     $('#executablePath').value = '';
-    $('#restrict-contexts').selectedIndex = 0;
+
+    jQuery('#restrict-contexts').multipleSelect('checkAll');
+    // jQuery('#restrict-contexts').multipleSelect('refresh');
+
     $('#own-context').value = '';
 
     ['args', 'urls', 'files'].forEach((inputType) => {
@@ -869,6 +871,7 @@ function init ({
 
     // INITIAL BEHAVIORS
 
+    jQuery('#restrict-contexts').multipleSelect('checkAll');
     rebuildCommandList();
 
     // Todo: For prefs when prev. values stored, call multiple times and
