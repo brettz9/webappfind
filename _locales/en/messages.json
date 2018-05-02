@@ -368,7 +368,7 @@
     },
 
     "prefix_save_temp": {
-        "message": "Added to indicate that the targeted contents should first be saved to a temporary file. This can be used for copying a whole file (or URLs too even if sending a PUT back to the server for the original location). Can be followed by whitespace and \"overwrite=\" and \"yes\", \"no\", or \"prompt\" to indicate what to do when a file in the location already exists. Can be followed by whitespace and \"continue=\" and \"yes\" or \"no\" for whether to continue execution when a file is found in the location and \"overwrite\" is \"no\" or \"prompt\" with a resulting \"no\" answer by the user. Can be followed by %N where \"N\" is the number of the directory argument below."
+        "message": "Added to indicate that the targeted contents should first be saved to a temporary file. This can be used for copying a whole file (or URLs too). Can be followed by whitespace and \"overwrite=\" and \"yes\", \"no\", or \"prompt\" to indicate what to do when a file in the location already exists. Can be followed by whitespace and \"continue=\" and \"yes\" or \"no\" for whether to continue execution when a file is found in the location and \"overwrite\" is \"no\" or \"prompt\" with a resulting \"no\" answer by the user. Can be followed by %N where \"N\" is the number of the directory argument below."
     },
     "prefix_ucencode_": {
         "message": "Encode the content for safe inclusion within a URI component (the portion beginning with \"?\")"
