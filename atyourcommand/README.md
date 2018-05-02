@@ -35,6 +35,7 @@ To develop with source, install with npm:
 
 # Higher priority to-dos (longer)
 
+1. Review **to-dos in code**
 1. **Add separate multiple selects**
     1. Pull-down to choose main selector
     1. Non-hidden nodes (to be tied to self); also allows text box
