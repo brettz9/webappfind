@@ -266,7 +266,6 @@ function populateEmptyForm (inputs) {
     $('#executablePath').value = '';
 
     jQuery('#restrict-contexts').multipleSelect('checkAll');
-    // jQuery('#restrict-contexts').multipleSelect('refresh');
 
     $('#own-context').value = '';
 
