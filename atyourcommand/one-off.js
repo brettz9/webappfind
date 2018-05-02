@@ -31,13 +31,15 @@ const {updateContextMenus, tabData} = browser.extension.getBackgroundPage();
 const dynamicCMItems = {}, dynamicCMItems2 = {};
 
 async function save (name, data) {
-    await browser.storage.local.set({
-        [name]: data
-    });
+    const {commands} = await browser.storage.local.get('commands');
+    commands[name] = data;
+    await browser.storage.local.set({commands});
     updateContextMenus();
 }
 async function remove (name) {
-    await browser.storage.local.remove([name]);
+    const {commands} = await browser.storage.local.get('commands');
+    delete commands[name];
+    await browser.storage.local.set({commands});
     if (dynamicCMItems[name]) {
         dynamicCMItems[name].destroy();
     }
@@ -66,16 +68,14 @@ function newStorage ({name, commands, inputs}) {
 
 async function buttonClick (data) {
     const {name, keepForm, close} = data;
-    let commands;
-    try {
-        ({commands} = await browser.storage.local.get('commands'));
-    } catch (err) {}
     if (data.remove) {
-        remove(name);
+        await remove(name);
+        const {commands} = await browser.storage.local.get('commands');
         removeStorage({commands, keepForm, inputs: data.inputs});
     }
     if (data.save) {
-        save(name, data.detail);
+        await save(name, data.detail);
+        const {commands} = await browser.storage.local.get('commands');
         newStorage({name, commands, inputs: data.inputs});
     }
     if (data.execute) {
@@ -727,7 +727,7 @@ function init ({
         } else if (cl.contains('ei-files-picker') || cl.contains('ei-exe-picker')) {
             sel = dataset.ei_sel;
             // Use .select() on input type=file picker?
-            filePick({
+            await filePick({
                 dirPath: $(sel).value,
                 selector: sel,
                 defaultExtension: dataset.ei_defaultExtension || undefined,
