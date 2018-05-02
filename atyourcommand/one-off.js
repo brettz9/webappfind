@@ -24,6 +24,17 @@ window.addEventListener('resize', function () {
     });
 });
 
+async function getUnpackedCommands () {
+    const {commands} = await browser.storage.local.get('commands');
+    console.log('commands', commands || '{}');
+    return JSON.parse(commands || '{}');
+}
+
+async function packCommands (commands) {
+    commands = JSON.stringify(commands);
+    await browser.storage.local.set({commands});
+}
+
 (async () => {
 const {updateContextMenus, tabData} = browser.extension.getBackgroundPage();
 // const platform = browser.runtime.PlatformOs;
@@ -31,15 +42,17 @@ const {updateContextMenus, tabData} = browser.extension.getBackgroundPage();
 const dynamicCMItems = {}, dynamicCMItems2 = {};
 
 async function save (name, data) {
-    const {commands} = await browser.storage.local.get('commands');
+    const commands = await getUnpackedCommands();
     commands[name] = data;
-    await browser.storage.local.set({commands});
+    console.log('commands2', commands);
+    await packCommands(commands);
     updateContextMenus();
 }
 async function remove (name) {
-    const {commands} = await browser.storage.local.get('commands');
+    const commands = await getUnpackedCommands();
     delete commands[name];
-    await browser.storage.local.set({commands});
+    console.log('commands3', commands);
+    await packCommands(commands);
     if (dynamicCMItems[name]) {
         dynamicCMItems[name].destroy();
     }
@@ -70,12 +83,12 @@ async function buttonClick (data) {
     const {name, keepForm, close} = data;
     if (data.remove) {
         await remove(name);
-        const {commands} = await browser.storage.local.get('commands');
+        const commands = await getUnpackedCommands();
         removeStorage({commands, keepForm, inputs: data.inputs});
     }
     if (data.save) {
         await save(name, data.detail);
-        const {commands} = await browser.storage.local.get('commands');
+        const commands = await getUnpackedCommands();
         newStorage({name, commands, inputs: data.inputs});
     }
     if (data.execute) {
@@ -108,11 +121,11 @@ console.log('tabData', tabData);
 //  element without a selection)
 
 const [
-    {commands: initialStorage},
+    initialStorage,
     executables,
     temps
 ] = await Promise.all([
-    browser.storage.local.get('commands'),
+    getUnpackedCommands(),
 
     EnvironmentBridge.getExePaths(),
     EnvironmentBridge.getTempPaths(),
@@ -125,7 +138,7 @@ const [
 ]);
 let oldStorage = initialStorage;
 if (!initialStorage) {
-    await browser.storage.local.set({commands: {}});
+    await packCommands({});
     oldStorage = {};
 }
 
