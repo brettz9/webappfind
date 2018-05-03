@@ -38,25 +38,17 @@ async function packCommands (commands) {
 const {updateContextMenus, tabData} = browser.extension.getBackgroundPage();
 // const platform = browser.runtime.PlatformOs;
 
-const dynamicCMItems = {}, dynamicCMItems2 = {};
-
 async function save (name, data) {
     const commands = await getUnpackedCommands();
     commands[name] = data;
     await packCommands(commands);
-    updateContextMenus();
+    await updateContextMenus();
 }
 async function remove (name) {
     const commands = await getUnpackedCommands();
     delete commands[name];
     await packCommands(commands);
-    if (dynamicCMItems[name]) {
-        dynamicCMItems[name].destroy();
-    }
-    if (dynamicCMItems2[name]) {
-        dynamicCMItems2[name].destroy();
-    }
-    updateContextMenus();
+    await updateContextMenus();
 }
 
 function removeStorage ({commands, keepForm, inputs}) {
