@@ -21,8 +21,6 @@ To develop with source, install with npm:
 
 # Immediate to-dos
 
-1. **Display dynamic commands** in context menu
-
 1. Finish behavior providing **string substitution** of current page contents,
     URL, etc. (see todos in `execute.js`), **preview and execution**,
     including for one-off as well as saved commands
