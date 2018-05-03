@@ -28,6 +28,7 @@ To develop with source, install with npm:
 
 1. **Hide currently unimplemented features** such as context current value
     detection and add instead as to-dos.
+1. **Test in Chrome**
 1. Submit to **AMO/Chrome Web Store**
 
 # Higher priority to-dos (longer)
