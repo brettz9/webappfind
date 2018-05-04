@@ -21,21 +21,17 @@ To develop with source, install with npm:
 
 # Immediate to-dos
 
-1. Finish behavior providing **string substitution** of current page contents,
-    URL, etc. (see todos in `execute.js`), **preview and execution**,
-    including for one-off as well as saved commands
-    1. For **setSelectorContext**, pass in argument indicating allowing
-         text selection without needing any element
-    1. Fix **overflow** display once settled on command preview
-
-1. **Hide currently unimplemented features** such as context current value
-    detection and add instead as to-dos.
+1. Execution/Preview
+    1. Fix **overflow** display for command preview (put in textarea with
+        wrap?)
 1. **Test in Chrome**
 1. Submit to **AMO/Chrome Web Store**
 
 # Higher priority to-dos (longer)
 
 1. Review **to-dos in code**
+1. We could allow selectors to check for any children,
+    **not only first child**
 1. **Add separate multiple selects**
     1. Pull-down to choose main selector
     1. Non-hidden nodes (to be tied to self); also allows text box

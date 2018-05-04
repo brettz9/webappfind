@@ -498,6 +498,9 @@
     "Specify_your_own_context": {
         "message": "Specify your own context"
     },
+    "Show_if_any_text_highlighted": {
+        "message": "Show if any text highlighted"
+    },
     "Images": {
         "message": "Images"
     },

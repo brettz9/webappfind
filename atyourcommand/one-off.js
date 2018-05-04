@@ -242,6 +242,7 @@ function resetChanges () {
     nameChanged = false;
 }
 
+// Todo: Set these as defaults and reset (for better modularity)
 function populateEmptyForm (inputs) {
     // Unlike populateFormWithStorage, we will always need to set the name
     $('#selectNames').selectedIndex = 0;
@@ -261,6 +262,7 @@ function populateEmptyForm (inputs) {
     jQuery('#restrict-contexts').multipleSelect('checkAll');
 
     $('#own-context').value = '';
+    $('#text-only').checked = false;
 
     ['args', 'urls', 'files'].forEach((inputType) => {
         inputs[inputType].setTextValues();
@@ -285,12 +287,13 @@ function populateFormWithStorage (name, inputs) {
     //   input, etc.) and just invoke its destroy() or create() methods
     //   here, rather than adding specific details in every place needed.
     const oldStorageForName = oldStorage[currentName];
-    const {executablePath, restrictContexts, ownContext} = oldStorageForName;
+    const {executablePath, restrictContexts, ownContext, textOnly} = oldStorageForName;
     setSelectOfValue('#executables', executablePath);
     $('#executablePath').value = executablePath;
 
     setMultipleSelectOfValue('#restrict-contexts', restrictContexts);
     $('#own-context').value = ownContext;
+    $('#text-only').checked = textOnly;
 
     ['args', 'urls', 'files'].forEach((inputType) => {
         inputs[inputType].setTextValues(oldStorageForName[inputType]);
@@ -356,6 +359,7 @@ function init ({
             args: inputs.args.getTextValues(),
             files: inputs.files.getTextValues(),
             urls: inputs.urls.getTextValues(),
+            textOnly: $('#text-only').checked,
             // Todo: Uncomment if we get directory selection working
             //    (e.g., Ajax+Node.js local file browser)
             // dirs: inputs.files.getValues('directory'),
@@ -615,6 +619,11 @@ function init ({
                                 return ['option', atts, [tagInfo]];
                             })];
                         })]
+                    ]],
+                    ' ' + _('or') + ' ',
+                    ['label', [
+                        _('Show_if_any_text_highlighted'),
+                        ['input', {id: 'text-only', type: 'checkbox'}]
                     ]],
                     ' ' + _('or') + ' ',
                     ['label', [
