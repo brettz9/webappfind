@@ -24,7 +24,8 @@ To develop with source, install with npm:
 1. Finish behavior providing **string substitution** of current page contents,
     URL, etc. (see todos in `execute.js`), **preview and execution**,
     including for one-off as well as saved commands
-    1. Avoid running execute **only from memory**
+    1. For **setSelectorContext**, pass in argument indicating allowing
+         text selection without needing any element
     1. Fix **overflow** display once settled on command preview
 
 1. **Hide currently unimplemented features** such as context current value
