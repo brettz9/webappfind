@@ -590,5 +590,8 @@
     },
     "executable_builder_title": {
         "message": "Executable Builder"
+    },
+    "Preview_here": {
+        "message": "(Preview here)"
     }
 }

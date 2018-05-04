@@ -21,9 +21,6 @@ To develop with source, install with npm:
 
 # Immediate to-dos
 
-1. Execution/Preview
-    1. Fix **overflow** display for command preview (put in textarea with
-        wrap?)
 1. **Test in Chrome**
 1. Submit to **AMO/Chrome Web Store**
 

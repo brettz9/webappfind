@@ -375,7 +375,7 @@ function init ({
             table: 'executableTable',
             namespace: 'args',
             label: argsNum,
-            inputSize: 60,
+            inputSize: 50,
             // Might perhaps make this optional to save space, but this
             //  triggers creation of a textarea so args could be more
             //  readable (since to auto-escape newlines as needed)
@@ -587,7 +587,9 @@ function init ({
                     ['div', [
                         _('command_preview'),
                         U.nbsp,
-                        ['input', {id: 'command-preview', readonly: 'readonly', value: '(Preview here)'}]
+                        ['textarea', {id: 'command-preview', readonly: 'readonly'}, [
+                            _('Preview_here')
+                        ]]
                     ]],
                     ['br'],
                     ['label', [
@@ -701,24 +703,6 @@ function init ({
                     ['br'],
                     ['table', {id: 'fileArguments'}],
                     ['table', {id: 'URLArguments'}]
-                ]],
-                ['br'],
-                ['div', {'class': 'execution'}, [
-                    ['label', [
-                        ['input', {type: 'checkbox', id: 'keepOpen'}],
-                        ' ',
-                        _('keep_dialog_open')
-                    ]],
-                    ['br'],
-                    ['button', {'class': 'passData save'}, [_('Save')]],
-                    ['button', {
-                        id: 'delete',
-                        class: 'passData delete',
-                        hidden: true
-                    }, [_('Delete')]],
-                    // ['br'],
-                    ['button', {'class': 'passData execute'}, [_('Execute_on_current_page')]],
-                    ['button', {id: 'cancel'}, [_('Cancel')]]
                 ]]
                 /*
                 Todo:
@@ -742,6 +726,24 @@ function init ({
                 ]]
                 */
             ]]
+        ]],
+        ['br'],
+        ['div', {'class': 'execution'}, [
+            ['label', [
+                ['input', {type: 'checkbox', id: 'keepOpen'}],
+                ' ',
+                _('keep_dialog_open')
+            ]],
+            ['br'],
+            ['button', {'class': 'passData save'}, [_('Save')]],
+            ['button', {
+                id: 'delete',
+                class: 'passData delete',
+                hidden: true
+            }, [_('Delete')]],
+            // ['br'],
+            ['button', {'class': 'passData execute'}, [_('Execute_on_current_page')]],
+            ['button', {id: 'cancel'}, [_('Cancel')]]
         ]]
     ], $('body'));
 

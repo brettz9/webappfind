@@ -1,6 +1,9 @@
+html, body {
+	max-height: 90vh;
+}
 #main {
 	overflow: auto;
-	height: 694px;
+	height: 90vh;
 }
 #main.closed {
 	float: left;
@@ -29,7 +32,8 @@
 #substitutions-explanation-container, #substitutions-used-container,
 #fileArguments, #URLArguments {
 	float: left;
-	width: 49.0%;
+	width: 46.0%;
+	padding: 0;
 }
 #fileArguments {
 	margin-right: 0.5%;
@@ -97,4 +101,7 @@ select widget except for the first item, "select all" */
 }
 .submit {
 	text-align: center;
+}
+#command-preview {
+	word-wrap: break-word;
 }
