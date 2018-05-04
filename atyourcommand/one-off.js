@@ -81,7 +81,7 @@ async function buttonClick (data) {
         newStorage({name, commands, inputs: data.inputs});
     }
     if (data.execute) {
-        await execute(name);
+        await execute(name, tabData);
         await finished();
     }
     if (close) {
