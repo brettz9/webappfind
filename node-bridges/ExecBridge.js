@@ -1,6 +1,6 @@
 /* eslint-env webextensions */
 
-const {getNodeJSON} = browser.extension.getBackgroundPage();
+let {getNodeJSON} = browser.extension.getBackgroundPage();
 
 /**
 * Call the command line with the supplied arguments
@@ -8,10 +8,16 @@ const {getNodeJSON} = browser.extension.getBackgroundPage();
 * @example {args: ['-P', '-no-remote']}
 */
 function cmd (args) {
+    if (!getNodeJSON) {
+        ({getNodeJSON} = browser.extension.getBackgroundPage());
+    }
     return getNodeJSON('cmd', args);
 }
 
 function execFile (aFile, args = [], options) {
+    if (!getNodeJSON) {
+        ({getNodeJSON} = browser.extension.getBackgroundPage());
+    }
     return getNodeJSON('execFile', aFile, args, options);
 }
 

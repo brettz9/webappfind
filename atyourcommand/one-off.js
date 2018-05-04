@@ -424,8 +424,10 @@ function init ({
             class: itemType === 'one-off' ? 'closed' : 'open',
             $custom: {
                 async $setPreview () {
-                    const args = await getCommandArgs(getDetail(), tabData);
-                    $('#command-preview').value = args.join(' ');
+                    const detail = getDetail();
+                    const {executablePath} = detail;
+                    const args = await getCommandArgs(detail, tabData);
+                    $('#command-preview').value = executablePath + ' ' + args.join(' ');
                 }
             },
             $on: {
@@ -454,7 +456,7 @@ function init ({
             }}, [
                 _(itemType === 'one-off' ? 'gt' : 'lt')
             ]],
-            ['div', {id: 'processExecuted', style: 'display:none;'}, [
+            ['div', {id: 'processExecuted', style: 'display:none; float: right;'}, [
                 _('Process_executed')
             ]],
             ['br'],
