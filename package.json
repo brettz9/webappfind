@@ -44,11 +44,11 @@
     "copy-polyfill": "node ./copy-polyfill",
     "copy-jquery": "cp node_modules/jquery/dist/jquery.js vendor/jquery/dist/jquery.js",
     "copy-form-serialize": "cp node_modules/form-serialize/src/index.js vendor/form-serialize/src/index.js",
+    "copy-js-string-escape": "cp node_modules/js-string-escape/dist/index-es.js vendor/js-string-escape/dist/index-es.js",
     "copy-load-stylesheets": "cp node_modules/load-stylesheets/dist/index-es.js vendor/load-stylesheets/dist/index-es.js",
     "copy-multiple-select": "cp node_modules/multiple-select/multiple-select.css vendor/multiple-select/multiple-select.css && cp node_modules/multiple-select/dist/multiple-select-es.js vendor/multiple-select/dist/multiple-select-es.js",
     "copy-jamilih": "cp node_modules/jamilih/dist/jml-es.js vendor/jamilih/dist/jml-es.js",
     "copy-bootstrap": "cp node_modules/bootstrap/dist/css/bootstrap.css vendor/bootstrap/dist/css/bootstrap.css",
-    "copy-xregexp": "cp node_modules/xregexp/xregexp-all.js vendor/xregexp/xregexp-all.js",
     "eslint": "eslint .",
     "lint": "npm run eslint && npm run copy-polyfill && npm run webext-lint",
     "run": "npm run eslint && npm run copy-polyfill && npm run webext-run",
@@ -107,10 +107,10 @@
     "form-serialize": "https://github.com/brettz9/form-serialize#browser-deserialize-rollup",
     "jamilih": "^0.33.1",
     "jquery": "^3.3.1",
+    "js-string-escape": "https://github.com/brettz9/js-string-escape#rollup",
     "load-stylesheets": "^0.4.0",
     "mocha": "^5.1.1",
     "multiple-select": "https://github.com/brettz9/multiple-select#es6",
-    "webextension-polyfill": "^0.2.1",
-    "xregexp": "^4.1.1"
+    "webextension-polyfill": "^0.2.1"
   }
 }

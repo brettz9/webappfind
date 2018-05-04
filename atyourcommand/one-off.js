@@ -438,6 +438,7 @@ function init ({
                 ['div', {id: 'substitutions-explanation'}, [
                     _('Substitution_sequences_allow'),
                     ['br'], ['br'],
+                    /*
                     _('prefixes_can_be_applied'),
                     ['dl', [
                         'save_temp', 'ucencode_', 'uencode_', 'escquotes_'
@@ -447,17 +448,35 @@ function init ({
                         children.push(['dd', [_('prefix_' + prefix)]]);
                         return children;
                     }, [])],
+                    */
                     ['b', [_('Sequences')]],
                     ['dl', [
-                        'eval', 'contentType', 'pageURL',
-                        'pageTitle', 'pageHTML', 'bodyText',
+                        // 'eval',
+                        'contentType', 'pageURL', 'pageTitle',
+                        'pageHTML', 'bodyText',
                         'selectedHTML', 'selectedText',
+                        /* ,
                         'linkPageURLAsNativePath', 'linkPageTitle',
                         'linkBodyText', 'linkPageHTML',
-                        'imageDataURL', 'imageDataBinary'
+                        'imageDataURL', 'imageDataBinary' */
+                        'favIconUrl',
+                        'linkText', 'linkUrl',
+                        'frameUrl', 'srcUrl', 'mediaType',
+                        'modifiers'
                     ].reduce((children, seq) => {
                         // Todo: Replace with `flatMap` when decided: https://github.com/tc39/proposal-flatMap/pull/56
                         children.push(['dt', [seq]]);
+                        children.push(['dd', [_('seq_' + seq)]]);
+                        return children;
+                    }, [])],
+                    ['dl', [
+                        'filenum',
+                        'urlnum'
+                    ].reduce((children, seq) => {
+                        // Todo: Replace with `flatMap` when decided: https://github.com/tc39/proposal-flatMap/pull/56
+                        children.push(['dt', [
+                            _('seqname_' + seq)
+                        ]]);
                         children.push(['dd', [_('seq_' + seq)]]);
                         return children;
                     }, [])]
@@ -466,6 +485,7 @@ function init ({
             ['div', {id: 'substitutions-used-container'}, [
                 ['h3', [_('Substitutions_used')]],
                 ['div', {id: 'substitutions-used'}, [
+                    /*
                     _('currently_available_sequences'),
                     ['br'], ['br'],
                     ['dl', [
@@ -474,6 +494,7 @@ function init ({
                         ['dt', ['uencode_']], ['dd'],
                         ['dt', ['escquotes_']], ['dd']
                     ]],
+                    */
                     ['b', [_('Sequences')]],
                     ['dl', [
                         ...[

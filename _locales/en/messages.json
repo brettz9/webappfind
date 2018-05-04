@@ -295,6 +295,9 @@
         "message": "Substitutions explained"
     },
     "Substitution_sequences_allow": {
+        "message": "Substitution sequences allow dynamic insertion of web content into a command line. All substitution sequences must begin and end with the delimiters \"<\" and \">\", respectively. If you need these in raw form, escape \"<\" as \"&lt;\" (and \"&\" as \"&amp;\"). All other text will be passed without modification to the command line."
+    },
+    "Substitution_sequences_allow_old": {
         "message": "Substitution sequences allow dynamic insertion of web content into a command line. It is very important for you to properly escape the variable content that will be passed into them, as arbitrary command line execution could be dangerous. All substitution sequences must begin and end with the delimiters \"<\" and \">\", respectively. If you need these in raw form, add a backslash before the character (a single backslash before it will be stripped). If you need these delimiters anywhere within a resulting URL, you should be using %3C and %3E, respectively, anyways."
     },
     "prefixes_can_be_applied": {
@@ -344,6 +347,40 @@
         "message": "The selected image content as a binary string"
     },
 
+    "seq_favIconUrl": {
+        "message": "Favicon URL of the page"
+    },
+    "seq_linkText": {
+        "message": "Text of the link"
+    },
+    "seq_linkUrl": {
+        "message": "URL of the link"
+    },
+    "seq_frameUrl": {
+        "message": "URL of the frame"
+    },
+    "seq_srcUrl": {
+        "message": "URL src value"
+    },
+    "seq_mediaType": {
+        "message": "Media type"
+    },
+    "seq_modifiers": {
+        "message": "Key command modifiers (as a pipe-separated string)"
+    },
+    "seq_filenum": {
+        "message": "Add a hard-coded file by index"
+    },
+    "seq_urlnum": {
+        "message": "Add a hard-coded URL by index"
+    },
+    "seqname_filenum": {
+        "message": "file<1, 2, etc.>"
+    },
+    "seqname_urlnum": {
+        "message": "url<1, 2, etc.>"
+    },
+
 
     "Sequences": {
         "message": "Sequences:"
@@ -368,7 +405,7 @@
     },
 
     "prefix_save_temp": {
-        "message": "Added to indicate that the targeted contents should first be saved to a temporary file. This can be used for copying a whole file (or URLs too). Can be followed by whitespace and \"overwrite=\" and \"yes\", \"no\", or \"prompt\" to indicate what to do when a file in the location already exists. Can be followed by whitespace and \"continue=\" and \"yes\" or \"no\" for whether to continue execution when a file is found in the location and \"overwrite\" is \"no\" or \"prompt\" with a resulting \"no\" answer by the user. Can be followed by %N where \"N\" is the number of the directory argument below."
+        "message": "Added to indicate that the targeted contents should first be saved to a temporary file. This can be used for copying a whole file (or URLs too). Can be followed by whitespace and \"overwrite=\" and \"yes\", \"no\", or \"prompt\" to indicate what to do when a file in the location already exists (default is \"prompt\"). Can be followed by whitespace and \"continue=\" and \"yes\" or \"no\" for whether to continue execution when a file is found in the location and \"overwrite\" is \"no\" or \"prompt\" with a resulting \"no\" answer by the user (default is \"no\"). Can be followed by %N where \"N\" is the number of the directory argument below."
     },
     "prefix_ucencode_": {
         "message": "Encode the content for safe inclusion within a URI component (the portion beginning with \"?\")"
