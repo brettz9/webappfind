@@ -19,16 +19,12 @@ To develop with source, install with npm:
 
 `npm install .`
 
-# Immediate to-dos
-
-1. Submit to **AMO**
-
-# Higher priority to-dos (longer)
+# Higher priority to-dos (mostly longer)
 
 1. Review **to-dos in code**
-1. **Get working in Chrome; add to Chrome Web Store**
 1. We could allow selectors to check for any children,
     **not only first child**
+1. **Get working in Chrome; add to Chrome Web Store**
 1. **Add separate multiple selects**
     1. Pull-down to choose main selector
     1. Non-hidden nodes (to be tied to self); also allows text box
