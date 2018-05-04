@@ -3,7 +3,7 @@
 
 import Tags from './Tags.js';
 import ExpandableInputs from './ExpandableInputs.js';
-import execute from '/lib/execute.js';
+import {execute, getCommandArgs} from '/lib/execute.js';
 import jml from '/vendor/jamilih/dist/jml-es.js';
 import {_} from '/utils/i18n.js';
 import {U, $, $$} from '/utils/templateUtils.js';
@@ -69,19 +69,19 @@ function newStorage ({name, commands, inputs}) {
 }
 
 async function buttonClick (data) {
-    const {name, keepForm, close} = data;
+    const {name, keepForm, close, detail} = data;
     if (data.remove) {
         await remove(name);
         const commands = await getUnpackedCommands();
         removeStorage({commands, keepForm, inputs: data.inputs});
     }
     if (data.save) {
-        await save(name, data.detail);
+        await save(name, detail);
         const commands = await getUnpackedCommands();
         newStorage({name, commands, inputs: data.inputs});
     }
     if (data.execute) {
-        await execute(name, tabData);
+        await execute(detail, tabData);
         await finished();
     }
     if (close) {
@@ -256,6 +256,7 @@ function populateEmptyForm (inputs) {
 
     $('#executables').selectedIndex = 0;
     $('#executablePath').value = '';
+    $('#command-preview').value = '';
 
     jQuery('#restrict-contexts').multipleSelect('checkAll');
 
@@ -299,6 +300,7 @@ function populateFormWithStorage (name, inputs) {
     // inputs.files.setValues('directory', oldStorageForName.dirs);
     // Todo: make a way for the select to be populated through the ExpandableInputs API
     addOptions('temps');
+    $('#main').$setPreview();
     resetChanges();
 }
 
@@ -348,6 +350,21 @@ function init ({
     eiLocale,
     eiLabels: {argsNum, urlNum, fileNum}
 }) {
+    function getDetail () {
+        return {
+            executablePath: $('#executablePath').value,
+            args: inputs.args.getTextValues(),
+            files: inputs.files.getTextValues(),
+            urls: inputs.urls.getTextValues(),
+            // Todo: Uncomment if we get directory selection working
+            //    (e.g., Ajax+Node.js local file browser)
+            // dirs: inputs.files.getValues('directory'),
+            restrictContexts: [...$('#restrict-contexts').selectedOptions].map(({value}) => {
+                return value;
+            }),
+            ownContext: $('#own-context').value
+        };
+    }
     const inputs = {
         args: new ExpandableInputs({
             locale: eiLocale,
@@ -405,12 +422,20 @@ function init ({
         ['div', {
             id: 'main',
             class: itemType === 'one-off' ? 'closed' : 'open',
+            $custom: {
+                async $setPreview () {
+                    const args = await getCommandArgs(getDetail(), tabData);
+                    $('#command-preview').value = args.join(' ');
+                }
+            },
             $on: {
-                change ({target: {id}}) {
+                async change ({target: {id}}) {
                     changed = true;
                     if (id === 'command-name') {
                         nameChanged = true;
+                        return;
                     }
+                    await this.$setPreview();
                 }
             }
         }, [
@@ -831,19 +856,7 @@ function init ({
                 name,
                 save: cl.contains('save'),
                 inputs,
-                detail: {
-                    executablePath: $('#executablePath').value,
-                    args: inputs.args.getTextValues(),
-                    files: inputs.files.getTextValues(),
-                    urls: inputs.urls.getTextValues(),
-                    // Todo: Uncomment if we get directory selection working
-                    //    (e.g., Ajax+Node.js local file browser)
-                    // dirs: inputs.files.getValues('directory'),
-                    restrictContexts: [...$('#restrict-contexts').selectedOptions].map(({value}) => {
-                        return value;
-                    }),
-                    ownContext: $('#own-context').value
-                }
+                detail: getDetail()
             };
             if (cl.contains('execute')) {
                 data.execute = true;
