@@ -21,12 +21,12 @@ To develop with source, install with npm:
 
 # Immediate to-dos
 
-1. **Test in Chrome**
-1. Submit to **AMO/Chrome Web Store**
+1. Submit to **AMO**
 
 # Higher priority to-dos (longer)
 
 1. Review **to-dos in code**
+1. **Get working in Chrome; add to Chrome Web Store**
 1. We could allow selectors to check for any children,
     **not only first child**
 1. **Add separate multiple selects**
