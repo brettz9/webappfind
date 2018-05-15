@@ -201,6 +201,8 @@ To develop with source, install with npm:
         **protocol handlers**)
     1. **Content-type handler** processor (web request?) set to process as
         they arrive
+        1. <https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/webRequest/onBeforeRequest>
+        1. Use **Dynamic content scripts** as a kind of add-on mechanism (and to modify content)? <https://github.com/bfred-it/webext-dynamic-content-scripts/blob/master/readme.md>
     1. Work to utilize **content type or file extension** and supply to web app
         1. Implement content type through own listener or by registering
             browser+add-on with the OS somehow as an app?

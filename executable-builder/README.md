@@ -252,6 +252,8 @@ can cover the entire range of functionality available in the UI.
     a new separate icon) and whether can add as feature, including for the
     sake of this add-on
 1. *Deprecate executables* in WebAppFind when batch approach done.
+1. See <https://stackoverflow.com/questions/21082752/ftype-assoc-priority-and-adding-to-openwithlist-from-the-command-line>
+    re: OpenWith file association
 1. Attempt, implement and document *editor associations* (which apparently
     cannot be set through the normal Windows UI as with "Open With") such
     as allowing a web app to read batch files:

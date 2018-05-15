@@ -12,6 +12,7 @@ const _ = function _ (...args) {
     }
 };
 
+// Todo: Ask for permissions at run-time? <https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Request_the_right_permissions>
 const portEvl = browser.runtime.connect({name: 'webappfind-eval-content-script'});
 
 const orig = (/^file:/).test(location.href) ? '*' : location.origin;
