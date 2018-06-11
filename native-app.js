@@ -136,6 +136,10 @@ end getFile
     console.log('appleScript', appleScript);
     const appPath = path.resolve('../output.app'); // Defaults needs absolute path
     execFile('osacompile', ['-o', appPath, '-e', appleScript]).then(() => {
+        if (!('id' in argv)) {
+            console.log('Completed but without `CFBundleIdentifier`');
+            return;
+        }
         execFile('defaults', [
             'write', `${appPath}/Contents/Info`,
             'CFBundleIdentifier', argv.id
