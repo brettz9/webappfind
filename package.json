@@ -89,7 +89,7 @@
     "minimist": "^1.2.0",
     "mkdirp": "^0.5.1",
     "uuid": "^3.2.1",
-    "ws": "^5.1.1"
+    "ws": "^5.2.0"
   },
   "optionalDependencies": {
     "regedit": "3.0.0"
@@ -100,16 +100,16 @@
     "dialog-polyfill": "^0.4.9",
     "eslint": "4.19.1",
     "eslint-config-standard": "11.0.0",
-    "eslint-plugin-import": "2.11.0",
+    "eslint-plugin-import": "2.12.0",
     "eslint-plugin-node": "6.0.1",
-    "eslint-plugin-promise": "3.7.0",
+    "eslint-plugin-promise": "3.8.0",
     "eslint-plugin-standard": "3.1.0",
     "form-serialize": "https://github.com/brettz9/form-serialize#browser-deserialize-rollup",
     "jamilih": "^0.33.1",
     "jquery": "^3.3.1",
     "js-string-escape": "https://github.com/brettz9/js-string-escape#rollup",
-    "load-stylesheets": "^0.4.0",
-    "mocha": "^5.1.1",
+    "load-stylesheets": "^0.5.0",
+    "mocha": "^5.2.0",
     "multiple-select": "https://github.com/brettz9/multiple-select#es6",
     "webextension-polyfill": "^0.2.1"
   }
