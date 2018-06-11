@@ -101,7 +101,7 @@ on getFile (argv)
     (
         argv.fileSelectType
             ? `" of type {"${escapeAppleScriptQuoted(argv.fileSelectType)}"}`
-            : ''
+            : '"'
     ) + `
         on error -- cancelled
             return
