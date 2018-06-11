@@ -134,7 +134,15 @@ end getFile
     //        see https://apple.stackexchange.com/questions/9866/programmatically-script-atically-changing-the-default-open-with-setting/9954#9954
     // Todo optionally add to dock and/or execute the result;
     console.log('appleScript', appleScript);
-    execFile('osacompile', ['-o', '../output.app', '-e', appleScript]);
+    const appPath = path.resolve('../output.app'); // Defaults needs absolute path
+    execFile('osacompile', ['-o', appPath, '-e', appleScript]).then(() => {
+        execFile('defaults', [
+            'write', `${appPath}/Contents/Info`,
+            'CFBundleIdentifier', argv.id
+        ]).then(() => {
+            console.log('Added ' + appPath + ' and associated `CFBundleIdentifier`.');
+        });
+    });
     return;
 }
 }

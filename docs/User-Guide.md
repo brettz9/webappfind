@@ -112,6 +112,7 @@ dialog otherwise).
 ### Arguments
 
 - **method** - Required. Must be set to "build-openwith-exec".
+- **id** - Value for `CFBundleIdentifier`, uniquely identifying app to the OS.
 - **file** - Optional hard-baking of a file. If this argument is not included,
     the generated script will check for the presence of an argument to the
     script to serve as the file to pass to the web application. If no argument
