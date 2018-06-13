@@ -145,7 +145,9 @@ end getFile
             'CFBundleIdentifier', argv.id
         ]).then(() => {
             console.log('Added ' + appPath + ' and associated `CFBundleIdentifier`.');
+            // chmod ugo+r `${appPath}/Contents/Info.plist` ?
         });
+        // defaults read com.apple.LaunchServices/com.apple.launchservices.secure.plist LSHandlers
     });
     return;
 }
