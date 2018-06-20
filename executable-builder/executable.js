@@ -107,6 +107,58 @@ function createFileExtensionControls () {
     1. Support drag-and-drop of files to this dialog (to supply document path or
         URL if it is a URL)
     */
+
+    /*
+
+1. Add `CFBundleDocumentTypes`
+    a. See also!!!!! https://stackoverflow.com/questions/21937978/what-are-utimportedtypedeclarations-and-utexportedtypedeclarations-used-for-on-i
+2. Make Mac App known: /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister
+https://ss64.com/osx/lsregister.html
+
+For reading Mac association of MIME to file type,
+
+defaults read /System/Library/CoreServices/CoreTypes.bundle/Contents/Info.plist
+
+MIMETypeToExtensionMap =     {
+        "application/andrew-inset" =         (
+            ez
+        );
+        ...
+
+// For building `kMDItemContentTypeTree` (hierarchy of content types, e.g., jsoncshcmea->json->text)?
+// optionally specifies extension and/or mime type
+
+// https://stackoverflow.com/questions/21937978/what-are-utimportedtypedeclarations-and-utexportedtypedeclarations-used-for-on-i
+UTImportedTypeDeclarations  OR
+
+UTExportedTypeDeclarations =     (
+...
+{
+           UTTypeConformsTo =             (
+               "public.text",
+               "public.item",
+               "public.calendar-event"
+           );
+           UTTypeDescription = "VCS File";
+           UTTypeIconFiles =             (
+               "calendar_20x20.png",
+               "calendar_20x20@2x.png",
+               "calendar_145x145.png",
+               "calendar_145x145@2x.png"
+           );
+           UTTypeIdentifier = "com.apple.ical.vcs";
+           UTTypeTagSpecification =             {
+               "public.filename-extension" =                 (
+                   vcs,
+                   vcal
+               );
+               "public.mime-type" =                 (
+                   "text/x-vcalendar"
+               );
+           };
+       },
+
+    */
     const fileExtensionID = ++fileExtIDCtr;
     return ['div', {id: 'fileExtensionInfoHolder' + fileExtensionID}, [
         ['label', [
@@ -411,12 +463,9 @@ function createTemplatedForm () {
             ]]
         ]],
         */
-        /*
-        // Todo: We might reenable this if we implement a
-        //   Ajax+Node-based file picker (could even use
-        //   Miller columns, etc.)
-        // TODO: Put this into a radio stack of three options (with 2
-        //          hidden at a time)
+        // TODO: Put this into a radio stack of 2-3 options (with the
+        //          others hidden at a time); (3 options total if reenabling
+        //          hard-coded URL)
         ['fieldset', [
             ['legend', [_('file_type_association')]],
             ['div', {id: 'fileExtensionHolder'}, [
@@ -437,13 +486,19 @@ function createTemplatedForm () {
                 list: 'desktopFilePathDatalist', autocomplete: 'off',
                 size: 70, value: ''
             }],
+            /*
+            // Todo: We might reenable this if we implement a
+            //   Ajax+Node-based file picker (could even use
+            //   Miller columns, etc.)
             ' ',
             ['button', {id: 'desktopFilePick'}, [
                 _('browse_file')
             ]],
+            */
             createRevealButton('[name=desktopFilePath]'),
-            ['datalist', {id: 'desktopFilePathDatalist'}],
-            ['br'],
+            ['datalist', {id: 'desktopFilePathDatalist'}]
+            /*
+            , ['br'],
             ` ${_('or').toUpperCase()} `,
             ['label', [
                 // Esp. if implementing PUT, can send back to
@@ -457,8 +512,9 @@ function createTemplatedForm () {
                 }],
                 ['datalist', {id: 'documentURLDatalist'}]
             ]]
+            */
         ]],
-        */
+        // */
         /*
         // TODO: Reenable when ready
         ['div', [
@@ -683,9 +739,8 @@ function deleteTemplateResponse ({fileName}) {
 function getTemplateResponse (content) {
     const json = JSON.parse(content);
     [
-        ['executable_name', 'ExecutableInfo']
-        // TODO: Reenable when ready
-        // , ['file_extension_associate_open_with', 'FileExtensionInfo']
+        ['executable_name', 'ExecutableInfo'],
+        ['file_extension_associate_open_with', 'FileExtensionInfo']
     ].forEach(([name, baseName]) => {
         const jsonLength = json[name].length;
         const formLength = $$(`[name="${name}[]"]`).length; // $('#dynamic')[name + '[]'] only got one item
@@ -695,7 +750,7 @@ function getTemplateResponse (content) {
         }
         const sel = '.' + (jsonLength > formLength ? 'add' : 'remove') + baseName;
         while (diff) {
-            document.querySelector(sel).click();
+            $(sel).click();
             diff--;
         }
     });
