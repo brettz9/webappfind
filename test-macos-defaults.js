@@ -39,7 +39,21 @@ LSHandlerRoleShell
 
 Also has `LSHandlerPreferredVersions` (which may have its own `LSHandlerRoleAll` at least, e.g., set to `-`)
 */
-async function getLaunchServiceHandlers ({contentTag, contentType}) {
+async function getLaunchServiceHandlers ({contentTag, contentType, type = 'extension'}) {
+    switch (type) {
+    default: {
+        if (type) { // Allow user to specify their own manually
+            break;
+        }
+    } // Fallthrough
+    case 'extension':
+        type = 'public.filename-extension';
+        break;
+    case 'mime': {
+        type = 'public.mime-type';
+        break;
+    }
+    }
     const LSHandlers = await mod.read('com.apple.LaunchServices/com.apple.launchservices.secure', 'LSHandlers');
     // console.log('LSHandlers', LSHandlers);
     if (contentType) {
@@ -51,12 +65,15 @@ async function getLaunchServiceHandlers ({contentTag, contentType}) {
             return result;
         }
     }
+    if (type === 'public.mime-type') { // For MIME type, we allow `contentType` as parameter since it really is one
+        contentTag = contentType;
+    }
     if (!contentTag) {
         throw new Error('`getLaunchServiceHandlers()` is missing a `contentTag` or `contentType` argument');
     }
     return LSHandlers.find(({LSHandlerContentTag, LSHandlerContentTagClass}) => {
         return LSHandlerContentTag &&
-            LSHandlerContentTagClass === 'public.filename-extension' &&
+            LSHandlerContentTagClass === type &&
             contentTag === LSHandlerContentTag;
     });
 }
@@ -67,4 +84,6 @@ console.log('handlersCSS', handlersCSS.LSHandlerRoleAll);
 
 const handlersByTag = await getLaunchServiceHandlers({contentTag: 'sqlite'});
 console.log('handlersByTag', handlersByTag.LSHandlerRoleAll);
+
+// const handlersCSSMimeType = await getLaunchServiceHandlers({contentTag: 'text/css', type: 'mime'}); // https://superuser.com/questions/421792/how-to-associate-mime-type-with-a-handler-in-os-x
 })();
