@@ -7,6 +7,11 @@ const {
     execFile, readFile, writeFile, mkdirp, readdir, unlink, stat
 } = require('./polyfills/promise-wrappers');
 
+// const {MacOSDefaults} = require('macos-defaults');
+// const mod = new MacOSDefaults();
+// mod.read();
+// mod.write();
+
 const argv = require('minimist')(process.argv.slice(2));
 const {method} = argv;
 
