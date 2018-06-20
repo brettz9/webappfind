@@ -110,10 +110,24 @@ function createFileExtensionControls () {
 
     /*
 
-1. Add `CFBundleDocumentTypes`
-    a. See also!!!!! https://stackoverflow.com/questions/21937978/what-are-utimportedtypedeclarations-and-utexportedtypedeclarations-used-for-on-i
-2. Make Mac App known: /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister
+1. Add `CFBundleDocumentTypes` (content types and/or extensions)
+2. Could add `UTExportedTypeDeclarations`/`UTImportedTypeDeclarations` for using or making known
+    a. `UTExportedTypeDeclarations`
+        1. Declaring so others might use our type (and they might invoke our app with some data)
+    b. `UTImportedTypeDeclarations`
+        1. Let third-party apps know about our support of their types (e.g., to show in their "Open in")
+            1. We could provide WebAppFind sites with an API to receive a list of these apps and their info
+    c. Regular file open/edit communication apparently can just occur via LaunchServices (and `UTImportedTypeDeclarations` discovery?)
+    d. For other inter-app communication, however (besides file
+        opening/saving/executing, like copy-paste, drag-and-drop, app services like
+        dictionary look-up, and others (workspace/subprocesses/remote messaging)
+        etc.), see https://developer.apple.com/library/archive/referencelibrary/GettingStarted/GS_InterapplicationCommunication/_index.html
+    e. Resources
+        1. https://stackoverflow.com/questions/21937978/what-are-utimportedtypedeclarations-and-utexportedtypedeclarations-used-for-on-i
+        2. https://developer.apple.com/library/archive/documentation/FileManagement/Conceptual/understanding_utis/understand_utis_declare/understand_utis_declare.html
+3. Make Mac App known: /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister
 https://ss64.com/osx/lsregister.html
+4. Register with Launch Services for defaults
 
 For reading Mac association of MIME to file type,
 
@@ -129,7 +143,20 @@ MIMETypeToExtensionMap =     {
 // optionally specifies extension and/or mime type
 
 // https://stackoverflow.com/questions/21937978/what-are-utimportedtypedeclarations-and-utexportedtypedeclarations-used-for-on-i
-UTImportedTypeDeclarations  OR
+UTImportedTypeDeclarations
+    UTTypeConformsTo =         (
+            "public.xml",
+            "public.audiovisual-content",
+            "public.3d-content"
+        );
+        UTTypeDescription = "Digital Asset Exchange (DAE)";
+        UTTypeIdentifier = "org.khronos.collada.digital-asset-exchange";
+        UTTypeTagSpecification =         {
+            "public.filename-extension" =             (
+                dae
+            );
+        };
+    }
 
 UTExportedTypeDeclarations =     (
 ...
