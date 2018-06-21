@@ -258,7 +258,7 @@ UTExportedTypeDeclarations =     (
 */
 function createPathInput () {
     const i = ++pathInputCtr;
-    return ['div', {id: 'pathBoxHolder' + i}, [
+    return ['div', {id: 'executablePathHolder' + i}, [
         ['label', [
             _('executable_name'),
             ['input', {
@@ -319,15 +319,15 @@ function createPathInput () {
         ],
         */
         ['br'],
-        ['label', {for: 'pathBox' + i}, [
+        ['label', {for: 'executablePath' + i}, [
             _('executable_save_directory')
         ]],
         ['input', {
             type: 'text',
-            id: 'pathBox' + i,
-            name: 'pathBox[]',
+            id: 'executablePath' + i,
+            name: 'executablePath[]',
             list: 'datalist', autocomplete: 'off',
-            required: 'true', size: 100, value: '', dataset: {pathBoxInput: i},
+            required: 'true', size: 100, value: '', dataset: {executablePathInput: i},
             class: 'dirPath'
         }],
         /*
@@ -339,7 +339,7 @@ function createPathInput () {
         ]],
         ` ${_('or')} `,
         */
-        ['select', {dataset: {pathBoxSelect: 'pathBox' + i}}, [
+        ['select', {dataset: {executablePathSelect: 'executablePath' + i}}, [
             ['option', {value: ''}, [_('or_choose_location')]],
             ['option', {value: getHardPath('Executable')}, [
                 _('executable_within_profile_folder')
@@ -355,7 +355,7 @@ function createPathInput () {
             ['option', {value: getHardPath('ProfD')}, [_('Profile_folder')]],
             ['option', {value: getHardPath('ProgF')}, [_('Programs')]]
         ]],
-        createRevealButton('#pathBox' + i),
+        createRevealButton('#executablePath' + i),
         ['button', {
             class: 'addExecutableInfo',
             dataset: {pathInputID: i, type: 'add'}
@@ -410,7 +410,7 @@ function createAssociatedDesktopFileControls () {
         ['select', {
             id: 'associateDesktopFilePathSelect' + associatedDesktopFileID,
             dataset: {
-                pathBoxSelect: 'associateDesktopFilePath' + associatedDesktopFileID
+                executablePathSelect: 'associateDesktopFilePath' + associatedDesktopFileID
             }
         }, [
             ['option', {value: ''}, [_('choose_location')]],
@@ -882,12 +882,12 @@ function saveTemplateResult ({templateName}) {
 
 function init () {
     window.addEventListener('input', async function ({target}) {
-        const {name, value, nextElementSibling, dataset: {pathBoxInput}} = target;
+        const {name, value, nextElementSibling, dataset: {executablePathInput}} = target;
 
         if (!value) {
             return;
         }
-        if (pathBoxInput) {
+        if (executablePathInput) {
             if ([...nextElementSibling.classList].includes('pinAppHolder')) {
                 nextElementSibling.remove();
             }
@@ -900,7 +900,7 @@ function init () {
                             _('pin_app_task_bar'),
                             ['input', {
                                 class: 'pinApp',
-                                dataset: {i: pathBoxInput},
+                                dataset: {i: executablePathInput},
                                 type: 'checkbox'
                             }]
                         ]]
@@ -980,8 +980,8 @@ function init () {
             parentNode, value, nodeName,
             dataset: {
                 type, dirPick, pathInputID, groupID, group, sel,
-                pathBoxSelect = (
-                    parentNode && parentNode.dataset && parentNode.dataset.pathBoxSelect
+                executablePathSelect = (
+                    parentNode && parentNode.dataset && parentNode.dataset.executablePathSelect
                 )
             }
         } = target;
@@ -990,12 +990,12 @@ function init () {
             // Value can be blank (if user just wishes to browse)
             const result = await FileBridge.dirPick({
                 locale: uiLanguage,
-                dirPath: $('#pathBox' + dirPick).value,
+                dirPath: $('#executablePath' + dirPick).value,
                 selectFolder: dirPick
             });
-            dirPickResult({...result, selector: '#pathBox' + dirPick});
+            dirPickResult({...result, selector: '#executablePath' + dirPick});
         } else if (pathInputID) {
-            const holderID = 'pathBoxHolder' + pathInputID;
+            const holderID = 'executablePathHolder' + pathInputID;
             const parentHolderSel = '#pathHolder';
             switch (type) {
             case 'add': {
@@ -1015,11 +1015,11 @@ function init () {
                 break;
             }
             }
-        } else if (pathBoxSelect) {
+        } else if (executablePathSelect) {
             if (!value) {
                 return;
             }
-            $('#' + pathBoxSelect).value = value;
+            $('#' + executablePathSelect).value = value;
             // We need the input event to go off so as to display the checkbox if this is the task bar
             const keyEv = new KeyboardEvent('input', {
                 bubbles: true,
@@ -1032,7 +1032,7 @@ function init () {
                 keyCode: 13 // Sets deprecated code
                 // charCode: 0
             });
-            $('#' + pathBoxSelect).dispatchEvent(keyEv);
+            $('#' + executablePathSelect).dispatchEvent(keyEv);
         } else if (groupID) {
             let holder, parentHolderSel, method;
             switch (group) {

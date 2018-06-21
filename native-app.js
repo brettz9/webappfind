@@ -145,7 +145,11 @@ end getFile
     //        see https://apple.stackexchange.com/questions/9866/programmatically-script-atically-changing-the-default-open-with-setting/9954#9954
     // Todo optionally add to dock and/or execute the result;
     console.log('appleScript', appleScript);
-    const appPath = path.resolve('../output.app'); // Defaults needs absolute path
+    const executableName = ((argv.executableName && argv.executableName.replace(/.app$/, '')) || 'output') + '.app';
+    const appPath = path.resolve( // Defaults needs absolute path
+        'executablePath' in argv ? argv.executablePath : '../',
+        executableName
+    );
     return execFile('osacompile', ['-o', appPath, '-e', appleScript]).then(() => {
         if (!('id' in argv)) {
             console.log('Completed but without `CFBundleIdentifier`');

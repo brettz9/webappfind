@@ -175,6 +175,7 @@ function buildSED (userSED) { // eslint-disable-line no-unused-vars
 
 async function saveExecutables (data) {
     console.log('data', data);
+    const {executableName, executablePath} = data;
     const opts = {
         // Todo: Could expose to UI
         // fileSelectMessage
@@ -185,9 +186,9 @@ async function saveExecutables (data) {
         // - args (support JSON and validate/auto-format within a `textarea`)
         // - id (make optional but default to using name?)
 
-        // Todo (high priority): Allow psasing into AppleScript
-        // executableName, pathBox
-
+        // Todo (high priority): Fix so these are not arrays
+        executableName,
+        executablePath
         // Todo (high priority): Utilize for default file associations
         // fileExtensionAssociateOpenWith, makeDefaultHandlerForExtension
         // fileContentTypeAssociate, makeDefaultHandlerForContentType
@@ -213,7 +214,7 @@ async function saveExecutables (data) {
         "execName1",
         "execName2"
       ],
-      "pathBox": [
+      "executablePath": [
         "/execDirectory1",
         "/execDirectory2"
       ],
@@ -246,7 +247,7 @@ async function saveExecutables (data) {
       "urlBox": "http://web-app-uri.com"
     }
     */
-    // const {templateName, executableName, pathBox} = data;
+    // const {templateName, executableName, executablePath} = data;
     // return;
     /*
     let sed,
@@ -257,7 +258,7 @@ async function saveExecutables (data) {
     executableName.forEach(async function (exeName, i) {
         const baseName = exeName.replace(/\.exe$/, ''),
             batName = baseName + '.bat',
-            dirPath = pathBox[i].replace(/\\$/, '') + '\\';
+            dirPath = executablePath[i].replace(/\\$/, '') + '\\';
         exeName = baseName + '.exe';
 
         // Todo: only create batch if there isn't one there already
