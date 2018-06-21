@@ -181,8 +181,8 @@ async function saveExecutables (data) {
         // fileSelectType
 
         // Todo (high priority): Expose to UI
-        // - binary (adapt existing)
-        // - args (support JSON)
+        // - binary (factor out of `mode`)
+        // - args (support JSON and validate/auto-format within a `textarea`)
         // - id (make optional but default to using name?)
     };
     const notFalseys = [
