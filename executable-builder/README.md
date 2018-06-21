@@ -82,7 +82,7 @@ See the [User Guide](./docs/User-Guide.md)
 
 Similar to the AppleScript creation commands in the
 [User Guide](./docs/User-Guide.md) (where relevant), except that `method`
-should be `client` (instead of `build-openwith-exec`).
+should be `client` (instead of `build-openwith-executable`).
 
 ```
 node native-app.js --method=client --file="path/to/my/file" --mode=view --binary=true --site=http://example.com --args="--a=1 --b=2"

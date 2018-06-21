@@ -1,5 +1,6 @@
 /* eslint-env webextensions */
 import * as EnvironmentBridge from '/node-bridges/EnvironmentBridge.js';
+import {buildOpenWithExecutable} from '/node-bridges/ExecBridge.js';
 
 function l (msg) { // eslint-disable-line no-unused-vars
     console.log(msg);
@@ -174,6 +175,26 @@ function buildSED (userSED) { // eslint-disable-line no-unused-vars
 
 async function saveExecutables (data) {
     console.log('data', data);
+    const opts = {
+        // Todo: Expose to UI
+        // fileSelectMessage
+        // fileSelectType
+        // args
+        // binary (adapt existing)
+        // id
+    };
+    const notFalseys = [
+        ['desktopFilePath', 'file'],
+        ['mode'],
+        ['urlBox', 'site']
+    ];
+    notFalseys.forEach(([notFalsey, opt = notFalsey]) => {
+        if (data[notFalsey]) {
+            opts[opt] = data[notFalsey];
+        }
+    });
+    console.log('buildOpenWithExecutable', buildOpenWithExecutable);
+    // await buildOpenWithExecutable(opts);
     /*
     {
       "templateName": "someTemplateName",

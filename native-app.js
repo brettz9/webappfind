@@ -74,12 +74,17 @@ case 'client': {
         ws.close();
     });
     return;
-} case 'build-openwith-exec': {
+} case 'build-openwith-executable': {
+    buildOpenWithExecutable(argv);
+    return;
+}
+}
+
+function buildOpenWithExecutable (argv) {
     // Todo: Convert this to JavaScript? using `osacompile -l JavaScript`; see:
     // 1) https://developer.telerik.com/featured/javascript-os-x-automation-example/
     // 2) https://www.safaribooksonline.com/library/view/applescript-in-a/1565928415/re154.html
 
-    // Todo: Allow calling this functionality from within the add-on
     // -- Command line usage example: open ./webappfind-as.app --args /Users/brett/myFile.txt (doesn't work in all contexts apparently)
     const appleScript = `
 -- Command line usage example: osascript ./webappfind-as.app /Users/brett/myFile.txt
@@ -140,12 +145,12 @@ end getFile
     // Todo optionally add to dock and/or execute the result;
     console.log('appleScript', appleScript);
     const appPath = path.resolve('../output.app'); // Defaults needs absolute path
-    execFile('osacompile', ['-o', appPath, '-e', appleScript]).then(() => {
+    return execFile('osacompile', ['-o', appPath, '-e', appleScript]).then(() => {
         if (!('id' in argv)) {
             console.log('Completed but without `CFBundleIdentifier`');
             return;
         }
-        execFile('defaults', [
+        return execFile('defaults', [
             'write', `${appPath}/Contents/Info`,
             'CFBundleIdentifier', argv.id
         ]).then(() => {
@@ -154,8 +159,6 @@ end getFile
         });
         // defaults read com.apple.LaunchServices/com.apple.launchservices.secure.plist LSHandlers
     });
-    return;
-}
 }
 
 /*
@@ -227,6 +230,8 @@ const nodeJSONMethods = {
     //         should be moved there with a lower-level
     //         FileBridge/EnvironmentBridge dependency
     execFile,
+    buildOpenWithExecutable,
+
     cmd ({args}) {
         return execFile(cmdExe, args);
     },
