@@ -182,7 +182,7 @@ async function saveExecutables (data) {
 
         // Todo (high priority): Expose to UI
         // - binary (adapt existing)
-        // - args (choose a format)
+        // - args (support JSON)
         // - id (make optional but default to using name?)
     };
     const notFalseys = [

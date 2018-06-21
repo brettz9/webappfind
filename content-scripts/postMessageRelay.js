@@ -44,12 +44,18 @@ window.addEventListener('message', function ({origin, data}) {
 
 function webappfindStart (result) {
     // l(JSON.stringify(result));
-    const {pathID, content, site, mode, args, binary, error} = result;
+    const {pathID, content, site, mode, binary} = result;
+    let {args, error} = result;
     /* if (site !== location.href) { // Not matching with about:newtab, but not needed
         console.log('Mismatch for ' + site + ' and ' + location.href);
         return;
     } */
     l('made it past site check', site);
+    try {
+        args = JSON.parse(args);
+    } catch (err) {
+        error = err;
+    }
 
     const message = {
         webappfind: {

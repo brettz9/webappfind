@@ -125,6 +125,7 @@ on getFile (argv)
             `--method=client --file=" & ` +
             ('file' in argv ? `"\\"${escapeBashDoubleQuoted(argv.file)}\\""` : `quoted form of filePath`) +
             ' & ' +
+            // Todo: Allow `args` to be passed in at run-time if not baked in (though won't work with normal file opening)
             (['mode', 'site', 'args', 'binary'].reduce((s, param) => {
                 if (!(param in argv)) {
                     return s;
