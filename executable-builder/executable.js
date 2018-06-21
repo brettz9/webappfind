@@ -125,9 +125,22 @@ function createFileExtensionControls () {
     e. Resources
         1. https://stackoverflow.com/questions/21937978/what-are-utimportedtypedeclarations-and-utexportedtypedeclarations-used-for-on-i
         2. https://developer.apple.com/library/archive/documentation/FileManagement/Conceptual/understanding_utis/understand_utis_declare/understand_utis_declare.html
-3. Make Mac App known: /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister
-https://ss64.com/osx/lsregister.html
-4. Register with Launch Services for defaults
+3. Make Mac App known:
+    a. https://ss64.com/osx/lsregister.html
+    b. /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister
+4. If file-specific, accept file as argument, and use `xattr`
+    a. https://ss64.com/osx/xattr.html
+    b. `com.apple.LaunchServices.OpenWith`: https://superuser.com/a/1254271/156958
+    c. `ls -la@` can get the info
+5. Register with Launch Services for defaults
+    a. Ensure not already present:
+        1. defaults read com.apple.LaunchServices/com.apple.launchservices.secure.plist LSHandlers
+    b. defaults write com.apple.LaunchServices/com.apple.launchservices.secure.plist LSHandlers -array-add ......
+    c. While extension setting is clear, unclear on preferred MIME type setting means: https://apple.stackexchange.com/questions/328325/preferred-way-to-set-default-application-by-content-mime-type-from-the-command-l
+6. killall Finder
+7. If not providing mdls tool, inform users of how to use
+    `mdls` per https://apple.stackexchange.com/a/9883/206073
+8. Apparently no application-agnostic way to map MIME to extension: https://apple.stackexchange.com/questions/328330/map-mime-type-to-extension-application-agnostically-via-command-line
 
 For reading Mac association of MIME to file type,
 
