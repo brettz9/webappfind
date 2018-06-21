@@ -177,39 +177,35 @@ async function saveExecutables (data) {
     console.log('data', data);
     const {executableName, executablePath} = data;
     const opts = {
+        // Todo: Avoid pink required validation error showing for exec name/path when added
         // Todo (high priority): Expose to UI
-        // - `binary` (factor out of `mode`)
+        // - `id` (make optional but default to using reverse DNS of site + name?)
         // - `args` (support JSON and validate/auto-format within a `textarea`)
-        // - `id` (make optional but default to using name?)
+        // - `binary` (factor out of `mode`)
 
-        // Todo (high priority): Fix so these are not arrays
         executableName,
         executablePath
     };
     const notFalseys = [
         ['desktopFilePath', 'file'],
         ['mode'],
-        ['urlBox', 'site']
+        ['site']
     ];
     notFalseys.forEach(([notFalsey, opt = notFalsey]) => {
         if (data[notFalsey]) {
             opts[opt] = data[notFalsey];
         }
     });
+
+    console.log('opts', opts);
     console.log('buildOpenWithExecutable', buildOpenWithExecutable);
     // await buildOpenWithExecutable(opts);
     /*
     {
       "templateName": "someTemplateName",
       "description": "A template description",
-      "executableName": [
-        "execName1",
-        "execName2"
-      ],
-      "executablePath": [
-        "/execDirectory1",
-        "/execDirectory2"
-      ],
+      "executableName": "execName",
+      "executablePath": "/Users/brett/Documents",
       "fileExtensionAssociateOpenWith": [
         "ext1",
         "ext2",
@@ -221,9 +217,9 @@ async function saveExecutables (data) {
         "on"
       ],
       "fileContentTypeAssociate": [
-        "text/ex1",
-        "text/ex2",
-        "text/ex3"
+        "text/contentType1",
+        "text/contentType2",
+        "text/contentType3"
       ],
       "makeDefaultHandlerForContentType": [
         "on",
@@ -236,7 +232,7 @@ async function saveExecutables (data) {
         "/associatedDesktopFile2.js"
       ],
       "mode": "edit",
-      "urlBox": "http://web-app-uri.com"
+      "site": "http://pp.com"
     }
     */
     // const {templateName, executableName, executablePath} = data;

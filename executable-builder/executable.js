@@ -262,7 +262,7 @@ function createPathInput () {
         ['label', [
             _('executable_name'),
             ['input', {
-                name: 'executableName[]',
+                name: 'executableName', // name: 'executableName[]',
                 required: 'true',
                 class: 'executableName'
             }]
@@ -325,7 +325,7 @@ function createPathInput () {
         ['input', {
             type: 'text',
             id: 'executablePath' + i,
-            name: 'executablePath[]',
+            name: 'executablePath', // name: 'executablePath[]',
             list: 'datalist', autocomplete: 'off',
             required: 'true', size: 100, value: '', dataset: {executablePathInput: i},
             class: 'dirPath'
@@ -355,7 +355,9 @@ function createPathInput () {
             ['option', {value: getHardPath('ProfD')}, [_('Profile_folder')]],
             ['option', {value: getHardPath('ProgF')}, [_('Programs')]]
         ]],
-        createRevealButton('#executablePath' + i),
+        createRevealButton('#executablePath' + i)
+        /*
+        // Not sure why I was trying to allow multiple `executablePath`/`executableName`
         ['button', {
             class: 'addExecutableInfo',
             dataset: {pathInputID: i, type: 'add'}
@@ -369,6 +371,7 @@ function createPathInput () {
             _('minus')
         ]],
         ['hr']
+        */
     ]];
 }
 
@@ -715,7 +718,7 @@ function createTemplatedForm () {
             _('hard_coded_web_app_URI'),
             ' ',
             ['input', {
-                type: 'url', name: 'urlBox',
+                type: 'url', name: 'site',
                 list: 'urlDatalist', autocomplete: 'off',
                 size: 100, value: ''
             }],
@@ -843,7 +846,7 @@ function deleteTemplateResponse ({fileName}) {
 function getTemplateResponse (content) {
     const json = JSON.parse(content);
     [
-        ['executable_name', 'ExecutableInfo'],
+        // ['executable_name', 'ExecutableInfo'],
         ['fileExtensionAssociateOpenWith', 'FileExtensionInfo'],
         ['associateDesktopFilePath', 'AssociatedFileInfo']
     ].forEach(([name, baseName]) => {
@@ -919,7 +922,7 @@ function init () {
         case 'customMode': {
             target.value = target.value.replace(/[^a-z]/, '');
             break;
-        } case 'urlBox': case 'documentURLBox': {
+        } case 'site': case 'documentURLBox': {
             /*
             if (value.length < 9) { // http://.
                 return;
