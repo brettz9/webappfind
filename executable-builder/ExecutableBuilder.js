@@ -184,6 +184,14 @@ async function saveExecutables (data) {
         // - binary (factor out of `mode`)
         // - args (support JSON and validate/auto-format within a `textarea`)
         // - id (make optional but default to using name?)
+
+        // Todo (high priority): Allow psasing into AppleScript
+        // executableName, pathBox
+
+        // Todo (high priority): Utilize for default file associations
+        // fileExtensionAssociateOpenWith, makeDefaultHandlerForExtension
+        // fileContentTypeAssociate, makeDefaultHandlerForContentType
+        // associateDesktopFilePath
     };
     const notFalseys = [
         ['desktopFilePath', 'file'],
