@@ -176,46 +176,46 @@ async function saveExecutables (data) {
     console.log('data', data);
     /*
     {
-      "templateName": "abc",
-      "description": "abcabc",
-      "executable_name": [
-        "aaa",
-        "ccc"
+      "templateName": "someTemplateName",
+      "description": "A template description",
+      "executableName": [
+        "execName1",
+        "execName2"
       ],
       "pathBox": [
-        "bbb",
-        "ddd"
+        "/execDirectory1",
+        "/execDirectory2"
       ],
-      "file_extension_associate_open_with": [
-        "eee",
-        "ggg",
-        "iii"
+      "fileExtensionAssociateOpenWith": [
+        "ext1",
+        "ext2",
+        "ext3"
       ],
-      "make_default_handler_for_extension": [
+      "makeDefaultHandlerForExtension": [
         "on",
         "",
         "on"
       ],
-      "file_content_type_associate": [
-        "fff",
-        "hhh",
-        "jjj"
+      "fileContentTypeAssociate": [
+        "text/ex1",
+        "text/ex2",
+        "text/ex3"
       ],
-      "make_default_handler_for_content_type": [
+      "makeDefaultHandlerForContentType": [
         "on",
         "",
         "on"
       ],
-      "desktopFilePath": "kkkk",
+      "desktopFilePath": "/hard-coded/desktop/file.js",
       "associateDesktopFilePath": [
-        "llll",
-        "mmm"
+        "/associatedDesktopFile1.js",
+        "/associatedDesktopFile2.js"
       ],
       "mode": "edit",
-      "urlBox": "http://nn.com"
+      "urlBox": "http://web-app-uri.com"
     }
     */
-    // const {templateName, executableNames, dirPaths} = data;
+    // const {templateName, executableName, pathBox} = data;
     // return;
     /*
     let sed,
@@ -223,10 +223,10 @@ async function saveExecutables (data) {
     */
     /*
     // Todo: Renable for Windows (and adapt)
-    executableNames.forEach(async function (exeName, i) {
+    executableName.forEach(async function (exeName, i) {
         const baseName = exeName.replace(/\.exe$/, ''),
             batName = baseName + '.bat',
-            dirPath = dirPaths[i].replace(/\\$/, '') + '\\';
+            dirPath = pathBox[i].replace(/\\$/, '') + '\\';
         exeName = baseName + '.exe';
 
         // Todo: only create batch if there isn't one there already

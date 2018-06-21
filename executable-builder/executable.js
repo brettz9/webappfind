@@ -204,7 +204,7 @@ UTExportedTypeDeclarations =     (
         ['label', [
             _('file_extension_associate_open_with'),
             ['input', {
-                name: 'file_extension_associate_open_with[]',
+                name: 'fileExtensionAssociateOpenWith[]',
                 size: 10,
                 class: 'fileExtension'
             }]
@@ -214,14 +214,14 @@ UTExportedTypeDeclarations =     (
             _('make_default_handler_for_extension'),
             ['input', {
                 type: 'checkbox',
-                name: 'make_default_handler_for_extension[]'
+                name: 'makeDefaultHandlerForExtension[]'
             }]
         ]],
         ['br'],
         ['label', [
             _('file_content_type_associate'),
             ['input', {
-                name: 'file_content_type_associate[]',
+                name: 'fileContentTypeAssociate[]',
                 size: 10,
                 class: 'fileExtension'
             }]
@@ -231,7 +231,7 @@ UTExportedTypeDeclarations =     (
             _('make_default_handler_for_content_type'),
             ['input', {
                 type: 'checkbox',
-                name: 'make_default_handler_for_content_type[]'
+                name: 'makeDefaultHandlerForContentType[]'
             }]
         ]],
         ['button', {
@@ -262,7 +262,7 @@ function createPathInput () {
         ['label', [
             _('executable_name'),
             ['input', {
-                name: 'executable_name[]',
+                name: 'executableName[]',
                 required: 'true',
                 class: 'executableName'
             }]
@@ -844,7 +844,7 @@ function getTemplateResponse (content) {
     const json = JSON.parse(content);
     [
         ['executable_name', 'ExecutableInfo'],
-        ['file_extension_associate_open_with', 'FileExtensionInfo'],
+        ['fileExtensionAssociateOpenWith', 'FileExtensionInfo'],
         ['associateDesktopFilePath', 'AssociatedFileInfo']
     ].forEach(([name, baseName]) => {
         const jsonLength = json[name].length;
@@ -860,7 +860,7 @@ function getTemplateResponse (content) {
         }
     });
     // json['executable_name'].length
-    // json['file_extension_associate_open_with'].length
+    // json['fileExtensionAssociateOpenWith'].length
     console.log('json', json);
     formDeserialize($('#dynamic'), json);
 }
