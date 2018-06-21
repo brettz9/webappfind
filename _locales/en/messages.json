@@ -28,10 +28,13 @@
         "message": "File extension to associate with this executable (for \"Open With\u2026\"): "
     },
     "file_content_type_associate": {
-        "message": "File content type to associate for this executable: "
+        "message": "File content type to associate for this executable (for \"Open With\u2026\"): "
     },
     "make_default_handler_for_extension": {
         "message": "Make the default execution handler for files with this extension?"
+    },
+    "make_default_handler_for_content_type": {
+        "message": "Make the default execution handler for files with this content type"
     },
 
     "executable_name": {
@@ -188,7 +191,7 @@
         "message": "File/type association"
     },
     "hard_coded_desktop_file": {
-        "message": "Hard-coded desktop file:"
+        "message": "Hard-coded desktop file (that this executable will exclusively open):"
     },
     "Documents": {
         "message": "Documents"
@@ -201,6 +204,9 @@
     },
     "open_hard_coded_url_only": {
         "message": "Open a hard-coded URL only?"
+    },
+    "specific_files_for_opening": {
+        "message": "Specific files to always open with the executable"
     },
     "dont_open_url": {
         "message": "Don't open any URL"

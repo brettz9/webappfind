@@ -211,6 +211,14 @@ UTExportedTypeDeclarations =     (
         ]],
         ['br'],
         ['label', [
+            _('make_default_handler_for_extension'),
+            ['input', {
+                type: 'checkbox',
+                name: 'make_default_handler_for_extension[]'
+            }]
+        ]],
+        ['br'],
+        ['label', [
             _('file_content_type_associate'),
             ['input', {
                 name: 'file_content_type_associate[]',
@@ -220,11 +228,10 @@ UTExportedTypeDeclarations =     (
         ]],
         ['br'],
         ['label', [
-            _('make_default_handler_for_extension'),
+            _('make_default_handler_for_content_type'),
             ['input', {
                 type: 'checkbox',
-                name: 'make_default_handler_for_extension[]',
-                class: 'defaultFileExtension'
+                name: 'make_default_handler_for_content_type[]'
             }]
         ]],
         ['button', {
@@ -554,6 +561,10 @@ function createTemplatedForm () {
             ]]
             */
         ]],
+        ['fieldset', [
+            ['legend', [_('specific_files_for_opening')]]
+        ]],
+        ['br'],
         // */
         /*
         // TODO: Reenable when ready
