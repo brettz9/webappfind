@@ -861,7 +861,7 @@ function saveTemplateResult ({templateName}) {
 }
 
 function init () {
-    window.addEventListener('input', function ({target}) {
+    window.addEventListener('input', async function ({target}) {
         const {name, value, nextElementSibling, dataset: {pathBoxInput}} = target;
 
         if (!value) {
@@ -887,11 +887,12 @@ function init () {
                     ]
                 ));
             }
-            FileBridge.autocompletePaths({
+            const response = await FileBridge.autocompletePaths({
                 value,
                 listID: target.getAttribute('list'),
                 dirOnly: true
-            }).then(autocompletePathsResponse);
+            });
+            autocompletePathsResponse(response);
             return;
         }
         switch (name) {
@@ -904,16 +905,18 @@ function init () {
                 return;
             }
             */
-            BrowserHistory.autocompleteURLHistory({
+            const response = await BrowserHistory.autocompleteURLHistory({
                 value,
                 listID: target.getAttribute('list')
-            }).then(autocompleteURLHistoryResponse);
+            });
+            autocompleteURLHistoryResponse(response);
             break;
         } case 'desktopFilePath': case 'iconPath': {
-            FileBridge.autocompletePaths({
+            const response = await FileBridge.autocompletePaths({
                 value,
                 listID: target.getAttribute('list')
-            }).then(autocompletePathsResponse);
+            });
+            autocompletePathsResponse(response);
             break;
         }
         }
@@ -939,7 +942,8 @@ function init () {
                 return;
             }
             // $('#templateName').value = fileName;
-            TemplateFileBridge.getTemplate({fileName}).then(getTemplateResponse);
+            const response = await TemplateFileBridge.getTemplate({fileName});
+            getTemplateResponse(response);
             break;
         }
         }
@@ -957,21 +961,24 @@ function init () {
         function reduceToValue (sel) {
             return $$(sel).map((i) => i.value);
         }
-        const {parentNode, value, nodeName, dataset: {
-            type, dirPick, pathInputID, groupID, group, sel
-        }} = target;
-        const pathBoxSelect = target.dataset.pathBoxSelect ||
-            (parentNode && parentNode.dataset && parentNode.dataset.pathBoxSelect);
+        const {
+            parentNode, value, nodeName,
+            dataset: {
+                type, dirPick, pathInputID, groupID, group, sel,
+                pathBoxSelect = (
+                    parentNode && parentNode.dataset && parentNode.dataset.pathBoxSelect
+                )
+            }
+        } = target;
 
         if (dirPick) {
             // Value can be blank (if user just wishes to browse)
-            FileBridge.dirPick({
+            const result = await FileBridge.dirPick({
                 locale: uiLanguage,
                 dirPath: $('#pathBox' + dirPick).value,
                 selectFolder: dirPick
-            }).then((result) => {
-                return {...result, selector: '#pathBox' + dirPick};
-            }).then(dirPickResult);
+            });
+            dirPickResult({...result, selector: '#pathBox' + dirPick});
         } else if (pathInputID) {
             const holderID = 'pathBoxHolder' + pathInputID;
             const parentHolderSel = '#pathHolder';
@@ -1070,7 +1077,7 @@ function init () {
                 }
             }
             switch (id) {
-            case 'deleteTemplate':
+            case 'deleteTemplate': {
                 let fileName;
                 try {
                     fileName = $('[name=templates]').selectedOptions[0].value;
@@ -1083,35 +1090,36 @@ function init () {
                     // console.log(cancelled);
                     return;
                 }
-                TemplateFileBridge.deleteTemplate({fileName}).then(deleteTemplateResponse);
+                const response = await TemplateFileBridge.deleteTemplate({fileName});
+                deleteTemplateResponse(response);
                 break;
-            case 'desktopFilePathSelect': case 'iconPathSelect':
+            } case 'desktopFilePathSelect': case 'iconPathSelect': {
                 if (!value) {
                     return;
                 }
                 $('#' + id.replace(/Select$/, '')).value = value;
                 break;
-            case 'desktopFilePick': case 'iconPick': {
+            } case 'desktopFilePick': case 'iconPick': {
                 // Value can be blank (if user just wishes to browse)
                 const selector = '#' + id.replace(/Pick$/, 'Path');
-                FileBridge.filePick({
+                const result = await FileBridge.filePick({
                     locale: uiLanguage,
                     dirPath: $(selector).value,
                     defaultExtension: 'ico' // Todo: Fix for desktopFilePick
-                }).then((result) => {
-                    return {...result, selector};
-                }).then(filePickResult);
+                });
+                filePickResult({...result, selector});
                 break;
-            } case 'openOrCreateICO':
-                ExecutableBuilder.openOrCreateICO().then(openOrCreateICOResponse);
+            } case 'openOrCreateICO': {
+                const response = await ExecutableBuilder.openOrCreateICO();
+                openOrCreateICOResponse(response);
                 break;
-            case 'profileNameSelect':
+            } case 'profileNameSelect': {
                 $('[name=profileName]').value = value;
                 break;
-            case 'manageProfiles':
+            } case 'manageProfiles': {
                 ProfileBridge.manageProfiles();
                 break;
-            case 'createExecutable':
+            } case 'createExecutable': {
                 // Todo: Auto-name executable and auto-add path by default
                 if (!$('.executableName').value) {
                     dialogs.alert(_('must_add_one_executable_name'));
@@ -1121,7 +1129,7 @@ function init () {
                     dialogs.alert(_('must_add_executable_path'));
                     return;
                 }
-            case 'runCommands': // eslint-disable-line no-fallthrough
+            } case 'runCommands': { // eslint-disable-line no-fallthrough
                 const templateName = $('[name=templateName]').value || null;
                 if ($('#rememberTemplateChanges').checked &&
                     templateName !== null
@@ -1132,10 +1140,11 @@ function init () {
                         formSerialize($('#dynamic'), {empty: true, hash: true})
                     );
                     console.log('ser-content', content);
-                    TemplateFileBridge.saveTemplate({
+                    const response = await TemplateFileBridge.saveTemplate({
                         templateName,
                         content
-                    }).then(saveTemplateResult);
+                    });
+                    saveTemplateResult(response);
                 }
 
                 // TODO: We may be able to avoid most of this just using the
@@ -1181,6 +1190,7 @@ function init () {
                     dialogs.alert('Command run!');
                 */
                 break;
+            }
             }
         }
     });
