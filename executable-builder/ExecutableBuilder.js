@@ -176,12 +176,14 @@ function buildSED (userSED) { // eslint-disable-line no-unused-vars
 async function saveExecutables (data) {
     console.log('data', data);
     const opts = {
-        // Todo: Expose to UI
+        // Todo: Could expose to UI
         // fileSelectMessage
         // fileSelectType
-        // args
-        // binary (adapt existing)
-        // id
+
+        // Todo (high priority): Expose to UI
+        // - binary (adapt existing)
+        // - args (choose a format)
+        // - id (make optional but default to using name?)
     };
     const notFalseys = [
         ['desktopFilePath', 'file'],

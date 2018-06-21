@@ -44,7 +44,7 @@ window.addEventListener('message', function ({origin, data}) {
 
 function webappfindStart (result) {
     // l(JSON.stringify(result));
-    const {pathID, content, site, mode, error} = result;
+    const {pathID, content, site, mode, args, binary, error} = result;
     /* if (site !== location.href) { // Not matching with about:newtab, but not needed
         console.log('Mismatch for ' + site + ' and ' + location.href);
         return;
@@ -55,6 +55,8 @@ function webappfindStart (result) {
         webappfind: {
             type: 'view',
             pathID: mode === 'edit' ? pathID : null,
+            args,
+            binary,
             content,
             error: !!error
         }
