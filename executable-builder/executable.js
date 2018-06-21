@@ -402,21 +402,40 @@ function modifierKeypress (e) {
 function createAssociatedDesktopFileControls () {
     const associatedDesktopFileID = ++fileExtIDCtr;
     return ['div', {id: 'associatedDesktopFileInfoHolder' + associatedDesktopFileID}, [
-        ['label', {for: 'desktopFilePath'}, [
+        ['label', {for: 'associateDesktopFilePath' + associatedDesktopFileID}, [
             _('associate_desktop_file'),
             ' '
         ]],
 
-        ['select', {id: 'associateDesktopFilePathSelect' + associatedDesktopFileID, dataset: {pathBoxSelect: 'associateDesktopFilePath' + associatedDesktopFileID}}, [
+        ['select', {
+            id: 'associateDesktopFilePathSelect' + associatedDesktopFileID,
+            dataset: {
+                pathBoxSelect: 'associateDesktopFilePath' + associatedDesktopFileID
+            }
+        }, [
             ['option', {value: ''}, [_('choose_location')]],
             ['option', {value: getHardPath('Docs')}, [_('Documents')]],
             ['option', {value: getHardPath('Desk')}, [_('Desktop')]]
         ]],
         ['input', {
-            type: 'text', id: 'associateDesktopFilePath' + associatedDesktopFileID, name: 'associateDesktopFilePath',
-            list: 'associateDesktopFilePathDatalist', autocomplete: 'off',
+            type: 'text',
+            id: 'associateDesktopFilePath' + associatedDesktopFileID,
+            name: 'associateDesktopFilePath' + associatedDesktopFileID,
+            list: 'associateDesktopFilePathDatalist',
+            autocomplete: 'off',
             size: 70, value: ''
         }],
+        /*
+        // Todo: We might reenable this if we implement a
+        //   Ajax+Node-based file picker (could even use
+        //   Miller columns, etc.)
+        ' ',
+        ['button', {id: 'associateDesktopFilePick'}, [
+            _('browse_file')
+        ]],
+        */
+        createRevealButton('[name=associateDesktopFilePath' + associatedDesktopFileID + ']'),
+        ['datalist', {id: 'associateDesktopFilePathDatalist'}],
         ['button', {
             class: 'addFileExtensionInfo',
             dataset: {groupID: associatedDesktopFileID, type: 'add', group: 'associatedDesktopFile'}
@@ -911,7 +930,12 @@ function init () {
             });
             autocompleteURLHistoryResponse(response);
             break;
-        } case 'desktopFilePath': case 'iconPath': {
+        } default: {
+            if (!name.startsWith('associateDesktopFilePath')) {
+                break;
+            }
+        } // Fallthrough
+        case 'desktopFilePath': case 'iconPath': {
             const response = await FileBridge.autocompletePaths({
                 value,
                 listID: target.getAttribute('list')
@@ -1069,11 +1093,17 @@ function init () {
             let {id} = target;
             if (nodeName.toLowerCase() === 'option') {
                 switch (parentNode.id) {
-                case 'iconPathSelect': case 'profileNameSelect': case 'desktopFilePathSelect':
+                default:
+                    if (!parentNode.id.startsWith('associateDesktopFilePath')) {
+                        break;
+                    }
+                // Fallthrough
+                case 'iconPathSelect':
+                case 'profileNameSelect':
+                case 'associateDesktopFilePath':
+                case 'desktopFilePathSelect':
                     ({id} = parentNode);
                     break;
-                default:
-                    return;
                 }
             }
             switch (id) {
@@ -1093,7 +1123,17 @@ function init () {
                 const response = await TemplateFileBridge.deleteTemplate({fileName});
                 deleteTemplateResponse(response);
                 break;
-            } case 'desktopFilePathSelect': case 'iconPathSelect': {
+            }
+            default: {
+                if (!id.startsWith('associateDesktopFilePath') &&
+                    !id.startsWith('associateDesktopFilePick')
+                ) {
+                    break;
+                }
+            }
+            // Fallthrough
+            case 'desktopFilePathSelect':
+            case 'iconPathSelect': {
                 if (!value) {
                     return;
                 }
