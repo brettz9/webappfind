@@ -420,7 +420,7 @@ function createAssociatedDesktopFileControls () {
         ['input', {
             type: 'text',
             id: 'associateDesktopFilePath' + associatedDesktopFileID,
-            name: 'associateDesktopFilePath' + associatedDesktopFileID,
+            name: 'associateDesktopFilePath[]',
             list: 'associateDesktopFilePathDatalist',
             autocomplete: 'off',
             size: 70, value: ''
@@ -437,13 +437,13 @@ function createAssociatedDesktopFileControls () {
         createRevealButton('[name=associateDesktopFilePath' + associatedDesktopFileID + ']'),
         ['datalist', {id: 'associateDesktopFilePathDatalist'}],
         ['button', {
-            class: 'addFileExtensionInfo',
+            class: 'addAssociatedFileInfo',
             dataset: {groupID: associatedDesktopFileID, type: 'add', group: 'associatedDesktopFile'}
         }, [
             _('plus')
         ]],
         ['button', {
-            class: 'removeFileExtensionInfo',
+            class: 'removeAssociatedFileInfo',
             dataset: {groupID: associatedDesktopFileID, type: 'remove', group: 'associatedDesktopFile'}
         }, [
             _('minus')
@@ -844,7 +844,8 @@ function getTemplateResponse (content) {
     const json = JSON.parse(content);
     [
         ['executable_name', 'ExecutableInfo'],
-        ['file_extension_associate_open_with', 'FileExtensionInfo']
+        ['file_extension_associate_open_with', 'FileExtensionInfo'],
+        ['associateDesktopFilePath', 'AssociatedFileInfo']
     ].forEach(([name, baseName]) => {
         const jsonLength = json[name].length;
         const formLength = $$(`[name="${name}[]"]`).length; // $('#dynamic')[name + '[]'] only got one item
