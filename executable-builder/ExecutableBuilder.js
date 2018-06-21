@@ -177,22 +177,14 @@ async function saveExecutables (data) {
     console.log('data', data);
     const {executableName, executablePath} = data;
     const opts = {
-        // Todo: Could expose to UI
-        // fileSelectMessage
-        // fileSelectType
-
         // Todo (high priority): Expose to UI
-        // - binary (factor out of `mode`)
-        // - args (support JSON and validate/auto-format within a `textarea`)
-        // - id (make optional but default to using name?)
+        // - `binary` (factor out of `mode`)
+        // - `args` (support JSON and validate/auto-format within a `textarea`)
+        // - `id` (make optional but default to using name?)
 
         // Todo (high priority): Fix so these are not arrays
         executableName,
         executablePath
-        // Todo (high priority): Utilize for default file associations
-        // fileExtensionAssociateOpenWith, makeDefaultHandlerForExtension
-        // fileContentTypeAssociate, makeDefaultHandlerForContentType
-        // associateDesktopFilePath
     };
     const notFalseys = [
         ['desktopFilePath', 'file'],

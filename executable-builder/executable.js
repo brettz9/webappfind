@@ -1176,10 +1176,23 @@ function init () {
                     });
                     saveTemplateResult(response);
                 }
+                // Todo: Could expose to UI and pass in the following (if user
+                //   actually wants an executable that prompts for a file rather
+                //   than expecting a file argument)
+                // - `fileSelectMessage`
+                // - `fileSelectType`
                 await ExecutableBuilder.saveExecutables(formSerialized);
+
                 // $('.fileExtension').value // defaultFileExtension
+
                 // Todo: File association bridge file and handle response
                 // FileAssociationBridge.associateFileExtension(...);
+
+                // Todo (high priority): Utilize for default file associations
+                // fileExtensionAssociateOpenWith, makeDefaultHandlerForExtension
+                // fileContentTypeAssociate, makeDefaultHandlerForContentType
+                // associateDesktopFilePath
+
                 /*
                     await ExecBridge.cmd({args: []});
                     dialogs.alert('Command run!');
