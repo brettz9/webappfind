@@ -206,7 +206,7 @@
         "message": "Open a hard-coded URL only?"
     },
     "specific_files_for_opening": {
-        "message": "Specific files to always open with the executable"
+        "message": "Specific files to be set to be opened by default with the executable"
     },
     "associate_desktop_file": {
         "message": "Desktop file to associate by default with this executable"
