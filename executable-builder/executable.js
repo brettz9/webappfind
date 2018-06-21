@@ -976,16 +976,6 @@ function init () {
 
     // Todo: Support keypress
     window.addEventListener('click', async function ({target}) {
-        function toCheckedValue (prev, pinApp) {
-            prev[pinApp.dataset.i] = pinApp.checked;
-            return prev;
-        }
-        function reduceToCheckedValue (sel) {
-            return $$(sel).reduce(toCheckedValue, {});
-        }
-        function reduceToValue (sel) {
-            return $$(sel).map((i) => i.value);
-        }
         const {
             parentNode, value, nodeName,
             dataset: {
@@ -1170,65 +1160,60 @@ function init () {
                     dialogs.alert(_('must_add_executable_path'));
                     return;
                 }
-            } case 'runCommands': { // eslint-disable-line no-fallthrough
+            } // Fallthrough
+            case 'runCommands': {
                 const templateName = $('[name=templateName]').value || null;
+                const formSerialized = formSerialize($('#dynamic'), {empty: true, hash: true});
                 if ($('#rememberTemplateChanges').checked &&
                     templateName !== null
                 ) {
                     // Save the file, over-writing any existing file
-                    console.log('ffff', formSerialize($('#dynamic'), {empty: true, hash: true}));
-                    const content = JSON.stringify(
-                        formSerialize($('#dynamic'), {empty: true, hash: true})
-                    );
-                    console.log('ser-content', content);
+                    const content = JSON.stringify(formSerialized);
+                    console.log('serialized-content', content);
                     const response = await TemplateFileBridge.saveTemplate({
                         templateName,
                         content
                     });
                     saveTemplateResult(response);
                 }
-
-                // TODO: We may be able to avoid most of this just using the
-                //          results of `formSerialize` above
-                const executableNames = reduceToValue('.executableName');
-                const dirPaths = reduceToValue('.dirPath');
-                const preserveShortcuts = reduceToValue('.preserveShortcut');
-                const convertToExes = reduceToValue('.convertToExe');
-
-                const pinApps = reduceToCheckedValue('.pinApp');
-                const sedPreserves = reduceToCheckedValue('.sedPreserve');
-                const batchPreserves = reduceToCheckedValue('.batchPreserve');
-
-                const options = {
-                    executableNames,
-                    dirPaths,
-                    preserveShortcuts,
-                    convertToExes,
-                    pinApps,
-                    sedPreserves,
-                    batchPreserves,
-                    templateName,
-                    description: $('[name=description]').value || '',
-                    profileName: $('[name=profileName]').value || null,
-                    iconPath: $('[name=iconPath]').value || null,
-                    windowStyle: $('[name=windowStyleSelect]').value || null,
-                    hotKey: $('[name=hotKey]').value || null,
-                    webappurl: $('[name=urlBox]').value || null,
-                    webappmode: $('[name=mode]').value || null,
-                    webappcustommode: $('[name=customMode]').value || null,
-                    webappdoc: $('[name=desktopFilePath]').value ||
-                                            $('[name=documentURLBox]').value ||
-                                                null
-                };
-
-                ExecutableBuilder.saveExecutables(options);
-
+                await ExecutableBuilder.saveExecutables(formSerialized);
                 // $('.fileExtension').value // defaultFileExtension
                 // Todo: File association bridge file and handle response
                 // FileAssociationBridge.associateFileExtension(...);
                 /*
                     await ExecBridge.cmd({args: []});
                     dialogs.alert('Command run!');
+                */
+
+                /*
+                // Todo: Reenable for Windows (we may be able to avoid
+                //    most or all of this just using the results of
+                //    `formSerialize` above
+                function reduceToCheckedValue (sel) {
+                    return $$(sel).reduce(toCheckedValue, {});
+                }
+                function reduceToValue (sel) {
+                    return $$(sel).map((i) => i.value);
+                }
+                const preserveShortcuts = reduceToValue('.preserveShortcut');
+                const convertToExes = reduceToValue('.convertToExe');
+                const pinApps = reduceToCheckedValue('.pinApp');
+                const sedPreserves = reduceToCheckedValue('.sedPreserve');
+                const batchPreserves = reduceToCheckedValue('.batchPreserve');
+                const options = {
+                    preserveShortcuts,
+                    convertToExes,
+                    pinApps,
+                    sedPreserves,
+                    batchPreserves,
+                    profileName: $('[name=profileName]').value || null,
+                    iconPath: $('[name=iconPath]').value || null,
+                    windowStyle: $('[name=windowStyleSelect]').value || null,
+                    hotKey: $('[name=hotKey]').value || null,
+                    webappcustommode: $('[name=customMode]').value || null,
+                    $('[name=documentURLBox]').value || null,
+                };
+                console.log('options', options);
                 */
                 break;
             }

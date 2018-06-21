@@ -1,7 +1,7 @@
 /* eslint-env webextensions */
 import * as EnvironmentBridge from '/node-bridges/EnvironmentBridge.js';
 
-function l (msg) {
+function l (msg) { // eslint-disable-line no-unused-vars
     console.log(msg);
 }
 
@@ -23,7 +23,7 @@ function stripQuotes (str) {
 // Todo: Option to preserve shortcut, SED, and, if converting to exe, the batch file
 // Todo: Otherwise i18nize, complete, and test (and i18nize
 //          fileSelectMessage passed to native-app.js?)
-async function createBatchForShortcutCreation (data) {
+async function createBatchForShortcutCreation (data) { // eslint-disable-line no-unused-vars
     if (!data.shortcutPath) {
         throw new Error('A shortcut path must be supplied to createBatchForShortcutCreation()');
     }
@@ -74,7 +74,7 @@ async function createBatchForShortcutCreation (data) {
     return batch;
 }
 
-function buildSED (userSED) {
+function buildSED (userSED) { // eslint-disable-line no-unused-vars
     // Possible values from http://www.mdgx.com/INF_web/cdfinfo.htm
     const defaultSED = [
         {Version: { // Does order within a section matter (or between sections)?
@@ -172,12 +172,57 @@ function buildSED (userSED) {
     return serializeSED(defaultSED);
 }
 
-function saveExecutables (data) {
-    const {templateName, executableNames, dirPaths} = data;
+async function saveExecutables (data) {
+    console.log('data', data);
+    /*
+    {
+      "templateName": "abc",
+      "description": "abcabc",
+      "executable_name": [
+        "aaa",
+        "ccc"
+      ],
+      "pathBox": [
+        "bbb",
+        "ddd"
+      ],
+      "file_extension_associate_open_with": [
+        "eee",
+        "ggg",
+        "iii"
+      ],
+      "make_default_handler_for_extension": [
+        "on",
+        "",
+        "on"
+      ],
+      "file_content_type_associate": [
+        "fff",
+        "hhh",
+        "jjj"
+      ],
+      "make_default_handler_for_content_type": [
+        "on",
+        "",
+        "on"
+      ],
+      "desktopFilePath": "kkkk",
+      "associateDesktopFilePath": [
+        "llll",
+        "mmm"
+      ],
+      "mode": "edit",
+      "urlBox": "http://nn.com"
+    }
+    */
+    // const {templateName, executableNames, dirPaths} = data;
+    // return;
     /*
     let sed,
         {description, preserveShortcuts, convertToExes, pinApps, sedPreserves, batchPreserves} = data;
     */
+    /*
+    // Todo: Renable for Windows (and adapt)
     executableNames.forEach(async function (exeName, i) {
         const baseName = exeName.replace(/\.exe$/, ''),
             batName = baseName + '.bat',
@@ -202,6 +247,7 @@ function saveExecutables (data) {
         ]);
         l(sed);
     });
+    */
 };
 export {
     openOrCreateICO,
