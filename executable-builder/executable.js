@@ -211,9 +211,9 @@ UTExportedTypeDeclarations =     (
         ]],
         ['br'],
         ['label', [
-            _('file_type_associate'),
+            _('file_content_type_associate'),
             ['input', {
-                name: 'file_type_associate[]',
+                name: 'file_content_type_associate[]',
                 size: 10,
                 class: 'fileExtension'
             }]

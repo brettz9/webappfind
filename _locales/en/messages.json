@@ -27,8 +27,8 @@
     "file_extension_associate_open_with": {
         "message": "File extension to associate with this executable (for \"Open With\u2026\"): "
     },
-    "file_type_associate": {
-        "message": "File type to associate for this executable (or between it and any supplied extension): "
+    "file_content_type_associate": {
+        "message": "File content type to associate for this executable: "
     },
     "make_default_handler_for_extension": {
         "message": "Make the default execution handler for files with this extension?"
