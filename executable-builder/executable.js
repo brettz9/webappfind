@@ -1,4 +1,4 @@
-/* eslint-env webextensions */
+/* eslint-env webextensions, browser */
 
 import jml from '/vendor/jamilih/dist/jml-es.js';
 import {_} from '/utils/i18n.js';
@@ -339,7 +339,7 @@ function createPathInput () {
         ]],
         ` ${_('or')} `,
         */
-        ['select', {dataset: {pathBoxSelect: i}}, [
+        ['select', {dataset: {pathBoxSelect: 'pathBox' + i}}, [
             ['option', {value: ''}, [_('or_choose_location')]],
             ['option', {value: getHardPath('Executable')}, [
                 _('executable_within_profile_folder')
@@ -407,7 +407,7 @@ function createAssociatedDesktopFileControls () {
             ' '
         ]],
 
-        ['select', {id: 'associateDesktopFilePathSelect' + associatedDesktopFileID}, [
+        ['select', {id: 'associateDesktopFilePathSelect' + associatedDesktopFileID, dataset: {pathBoxSelect: 'associateDesktopFilePath' + associatedDesktopFileID}}, [
             ['option', {value: ''}, [_('choose_location')]],
             ['option', {value: getHardPath('Docs')}, [_('Documents')]],
             ['option', {value: getHardPath('Desk')}, [_('Desktop')]]
@@ -997,11 +997,20 @@ function init () {
             if (!value) {
                 return;
             }
-            $('#pathBox' + pathBoxSelect).value = value;
+            $('#' + pathBoxSelect).value = value;
             // We need the input event to go off so as to display the checkbox if this is the task bar
-            const keyEv = document.createEvent('KeyboardEvent');
-            keyEv.initKeyEvent('input', true, true, document.defaultView, false, false, false, false, 13, 0);
-            $('#pathBox' + pathBoxSelect).dispatchEvent(keyEv);
+            const keyEv = new KeyboardEvent('input', {
+                bubbles: true,
+                cancelable: true,
+                key: 'Enter',
+                // ctrlKey: false,
+                // altKey: false,
+                // shiftKey: false,
+                // metaKey: false,
+                keyCode: 13 // Sets deprecated code
+                // charCode: 0
+            });
+            $('#' + pathBoxSelect).dispatchEvent(keyEv);
         } else if (groupID) {
             let holder, parentHolderSel, method;
             switch (group) {
