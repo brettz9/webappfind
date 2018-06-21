@@ -236,13 +236,13 @@ UTExportedTypeDeclarations =     (
         ]],
         ['button', {
             class: 'addFileExtensionInfo',
-            dataset: {fileExtensionID, type: 'add'}
+            dataset: {groupID: fileExtensionID, type: 'add', group: 'fileExtension'}
         }, [
             _('plus')
         ]],
         ['button', {
             class: 'removeFileExtensionInfo',
-            dataset: {fileExtensionID, type: 'remove'}
+            dataset: {groupID: fileExtensionID, type: 'remove', group: 'fileExtension'}
         }, [
             _('minus')
         ]],
@@ -399,7 +399,38 @@ function modifierKeypress (e) {
     e.preventDefault();
 }
 */
+function createAssociatedDesktopFileControls () {
+    const associatedDesktopFileID = ++fileExtIDCtr;
+    return ['div', {id: 'associatedDesktopFileInfoHolder' + associatedDesktopFileID}, [
+        ['label', {for: 'desktopFilePath'}, [
+            _('associate_desktop_file'),
+            ' '
+        ]],
 
+        ['select', {id: 'associateDesktopFilePathSelect' + associatedDesktopFileID}, [
+            ['option', {value: ''}, [_('choose_location')]],
+            ['option', {value: getHardPath('Docs')}, [_('Documents')]],
+            ['option', {value: getHardPath('Desk')}, [_('Desktop')]]
+        ]],
+        ['input', {
+            type: 'text', id: 'associateDesktopFilePath' + associatedDesktopFileID, name: 'associateDesktopFilePath',
+            list: 'associateDesktopFilePathDatalist', autocomplete: 'off',
+            size: 70, value: ''
+        }],
+        ['button', {
+            class: 'addFileExtensionInfo',
+            dataset: {groupID: associatedDesktopFileID, type: 'add', group: 'associatedDesktopFile'}
+        }, [
+            _('plus')
+        ]],
+        ['button', {
+            class: 'removeFileExtensionInfo',
+            dataset: {groupID: associatedDesktopFileID, type: 'remove', group: 'associatedDesktopFile'}
+        }, [
+            _('minus')
+        ]]
+    ]];
+}
 function createTemplatedForm () {
     return ['form', {id: 'dynamic', $on: {submit (e) {
         e.preventDefault();
@@ -562,7 +593,10 @@ function createTemplatedForm () {
             */
         ]],
         ['fieldset', [
-            ['legend', [_('specific_files_for_opening')]]
+            ['legend', [_('specific_files_for_opening')]],
+            ['div', {id: 'associatedDesktopFileHolder'}, [
+                createAssociatedDesktopFileControls()
+            ]]
         ]],
         ['br'],
         // */
@@ -924,7 +958,7 @@ function init () {
             return $$(sel).map((i) => i.value);
         }
         const {parentNode, value, nodeName, dataset: {
-            type, dirPick, pathInputID, fileExtensionID, sel
+            type, dirPick, pathInputID, groupID, group, sel
         }} = target;
         const pathBoxSelect = target.dataset.pathBoxSelect ||
             (parentNode && parentNode.dataset && parentNode.dataset.pathBoxSelect);
@@ -968,15 +1002,29 @@ function init () {
             const keyEv = document.createEvent('KeyboardEvent');
             keyEv.initKeyEvent('input', true, true, document.defaultView, false, false, false, false, 13, 0);
             $('#pathBox' + pathBoxSelect).dispatchEvent(keyEv);
-        } else if (fileExtensionID) {
-            const holderID = 'fileExtensionInfoHolder' + fileExtensionID;
-            const parentHolderSel = '#fileExtensionHolder';
+        } else if (groupID) {
+            let holder, parentHolderSel, method;
+            switch (group) {
+            case 'fileExtension': {
+                holder = 'fileExtensionInfoHolder';
+                parentHolderSel = '#fileExtensionHolder';
+                method = createFileExtensionControls;
+                break;
+            }
+            case 'associatedDesktopFile': {
+                holder = 'associatedDesktopFileInfoHolder';
+                parentHolderSel = '#associatedDesktopFileHolder';
+                method = createAssociatedDesktopFileControls;
+                break;
+            }
+            }
+            const holderID = holder + groupID;
             switch (type) {
             case 'add': {
-                const input = jml(...createFileExtensionControls());
-                const nextSibling = $('#' + holderID).nextElementSibling;
-                if (nextSibling) {
-                    nextSibling.before(input);
+                const input = jml(...method());
+                const {nextElementSibling} = $('#' + holderID);
+                if (nextElementSibling) {
+                    nextElementSibling.before(input);
                 } else {
                     $(parentHolderSel).appendChild(input);
                 }

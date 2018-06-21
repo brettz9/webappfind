@@ -208,6 +208,9 @@
     "specific_files_for_opening": {
         "message": "Specific files to always open with the executable"
     },
+    "associate_desktop_file": {
+        "message": "Desktop file to associate by default with this executable"
+    },
     "dont_open_url": {
         "message": "Don't open any URL"
     },
