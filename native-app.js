@@ -100,6 +100,11 @@ on run argv -- For direct command line (see example above)
 end run
 
 on getFile (argv)
+    try -- This block is just to trigger the option to approve a third party app
+        set n to item 2 of argv
+        return
+    on error
+    end try
     try
         set input to item 1 of argv -- Not needed in Automator AS, but needed in normal AS
         get POSIX path of (input as text)
@@ -265,6 +270,13 @@ end getFile
         }).then((contentTypeAddResults) => {
             addLog('contentTypeAddResults', contentTypeAddResults);
             return execFile('killall', ['Finder']);
+        }).then(() => {
+            // We need the next two lame steps unless and until we can get ourselves trusted
+            // return execFile('osascript', [appPath, 'dummy', 'nullCall']);
+            return execFile('open', [appPath, '--args', 'dummy', 'nullCall']);
+        }).then(() => {
+            return execFile('open', ['x-apple.systempreferences:com.apple.preference.security']);
+            // or: return execFile('open', ['/System/Library/PreferencePanes/Security.prefPane/']);
         }).then(() => {
             const msg = 'Added ' + appPath + ' and associated `CFBundleIdentifier`' +
                 (CFBundleDocumentTypesValue ? 'and `CFBundleDocumentTypesValue`' : '') + '.';
