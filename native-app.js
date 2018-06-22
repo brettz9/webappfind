@@ -9,7 +9,7 @@ const {
 
 const {MacOSDefaults} = require('macos-defaults');
 
-const argv = require('minimist')(process.argv.slice(2));
+const argv = require('minimist')(process.argv.slice(2), {boolean: true});
 const {method} = argv;
 
 // Todo: We could i18nize this, but the command line allows for overriding anyways
@@ -129,7 +129,7 @@ on getFile (argv)
                 }
                 const paramValue = argv[param];
                 if (param === 'binary' && paramValue) { // Boolean
-                    return `${s} -binary`;
+                    return `${s} --binary`;
                 }
                 return `${s} --${param}=\\"${escapeBashDoubleQuoted(paramValue)}\\"`;
             }, '"') || ' "') + `"
