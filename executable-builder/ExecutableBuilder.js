@@ -177,7 +177,6 @@ async function saveExecutables (data) {
     console.log('data', data);
     const {executableName, executablePath} = data;
     const opts = {
-        // Todo (high priority): Avoid pink required validation error showing for exec name/path when added
         executableName,
         executablePath
     };
