@@ -40,6 +40,12 @@
     "executable_name": {
         "message": "Executable name: "
     },
+    "executable_id": {
+        "message": "Executable ID: "
+    },
+    "executable_id_tooltip": {
+        "message": "Used as a `CFBundleIdentifier` in your application's `Info.plist`"
+    },
     "preserve_shortcut": {
         "message": "Preserve shortcut after execution: "
     },
@@ -226,14 +232,11 @@
     "view_mode": {
         "message": "View"
     },
-    "binary_view_mode": {
-        "message": "Binary view"
+    "binary": {
+        "message": "Binary"
     },
     "edit_mode": {
         "message": "Edit"
-    },
-    "binary_edit_mode": {
-        "message": "Binary edit"
     },
     "custom_mode": {
         "message": "Custom mode:"

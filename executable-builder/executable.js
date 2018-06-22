@@ -267,6 +267,18 @@ function createPathInput () {
                 class: 'executableName'
             }]
         ]],
+        nbsp3,
+        ['label', {title: _('executable_id_tooltip')}, [
+            _('executable_id'),
+            ['input', {
+                name: 'executableID', // name: 'executableID[]',
+                class: 'executableID',
+                placeholder: (
+                    // dot, hyphen, upper/lower case allowed
+                    reverseDNS || 'com.my-domain'
+                ) + '.my-App-ID'
+            }]
+        ]],
         /*
         // TODO: Reenable for Windows at least when ready
         nbsp3,
@@ -685,10 +697,13 @@ function createTemplatedForm () {
             ' ',
             ['select', {name: 'mode'}, [
                 ['option', {value: 'view'}, [_('view_mode')]],
-                ['option', {value: 'binaryview'}, [_('binary_view_mode')]],
-                ['option', {value: 'edit'}, [_('edit_mode')]],
-                ['option', {value: 'binaryedit'}, [_('binary_edit_mode')]]
+                ['option', {value: 'edit'}, [_('edit_mode')]]
             ]]
+        ]],
+        nbsp3,
+        ['label', [
+            _('binary'),
+            ['input', {type: 'checkbox', name: 'binary'}]
         ]],
         /*
         // TODO: Reenable for Windows at least when ready
@@ -1279,21 +1294,29 @@ console.log('ttt', templates);
 
 // Not visible but we'll add in case we later move to own window
 document.title = _('executable_builder_title');
-init();
 
-// Todo: Replace with equivalent to `Array.prototype.flatten` when decided:
-//    https://github.com/tc39/proposal-flatMap/pull/56
-function flatten (arr) {
-    return [].concat(...arr);
+let reverseDNS;
+try {
+    const [result] = await browser.tabs.executeScript({
+        code: `
+    ({
+        metas: [...document.querySelectorAll('meta[name="webappfind"]')].map((m) => m.content),
+        hostname: location.hostname
+    })
+    `,
+        runAt: 'document_end'
+    });
+    const {metas, hostname} = result;
+    // Todo: Use metas
+    console.log('metas', metas, 'hostname', hostname);
+    reverseDNS = hostname.split('.').reverse().join('.');
+    console.log('reverseDNS', reverseDNS);
+} catch (err) {
+    console.log('err', err);
+    // Might have been opened on tab like empty tab to which we don't have (or need) access
 }
 
-// Todo: Use
-/* const metas = */ flatten(await browser.tabs.executeScript({
-    allFrames: true,
-    code: `
-[...document.querySelectorAll('meta[name="webappfind"]')].map((m) => m.content)
-`,
-    runAt: 'document_end'
-}));
+init();
+
 // console.log('metas-browser-action', metas);
 })();

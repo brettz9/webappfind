@@ -26,7 +26,7 @@
 
     "permissions": [
 
-        "nativeMessaging", "<all_urls>",
+        "nativeMessaging", "<all_urls>", "http://*/*", "https://*/*",
 
         "contextMenus", "activeTab", "tabs", "webNavigation", "history",
 

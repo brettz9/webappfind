@@ -179,17 +179,16 @@ async function saveExecutables (data) {
     const opts = {
         // Todo: Avoid pink required validation error showing for exec name/path when added
         // Todo (high priority): Expose to UI
-        // - `id` (make optional but default to using reverse DNS of site + name?)
         // - `args` (support JSON and validate/auto-format within a `textarea`)
-        // - `binary` (factor out of `mode`)
-
         executableName,
         executablePath
     };
     const notFalseys = [
         ['desktopFilePath', 'file'],
+        ['executableID', 'id'],
         ['mode'],
-        ['site']
+        ['site'],
+        ['binary']
     ];
     notFalseys.forEach(([notFalsey, opt = notFalsey]) => {
         if (data[notFalsey]) {

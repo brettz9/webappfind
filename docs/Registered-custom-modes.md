@@ -3,7 +3,7 @@ I have patterned the following after
 policing of the status might be done--maybe some form of rough consensus.
 
 Note that the custom modes are supplied optionally in addition to the
-fundamental modes ("view", "edit", "binaryview" "binaryedit") and,
+fundamental modes ("view", "edit") and,
 unlike the fundamental modes, custom modes do not trigger any
 WebAppFind-specific behavior; they are intended, however, to trigger
 different behaviors within a web application, however. An example of

@@ -157,6 +157,7 @@ end getFile
         }
         return execFile('defaults', [
             'write', `${appPath}/Contents/Info`,
+            // For others, see https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
             'CFBundleIdentifier', argv.id
         ]).then(() => {
             console.log('Added ' + appPath + ' and associated `CFBundleIdentifier`.');

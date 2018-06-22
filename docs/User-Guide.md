@@ -120,13 +120,18 @@ dialog otherwise).
     dialog.
 - **mode** - Optional mode for invoking the web app on your contents, either
     "view" (readonly) or "edit" (read and write). Default is "view".
-    If this is for a program needing to open a file in binary mode, such as
-    images, sound files, or videos, use "binaryview" or "binaryedit" instead.
+- **binary** - Optional to indicate a program needing to open a file in
+    binary mode, such as images, sound files, or videos.
+    <!--
+    Todo: Re-enable when restoring filetypes.json
     The `filetypes.json` file can be used to force "binary" or not for
     the respective view or edit mode.
-- **site** - Optional baking in of a specific site to invoke with the
-    designated file's contents. Will check for local `filetypes.json`
-    otherwise.
+    -->
+- **site** - Baking in of a specific site to invoke with the
+    designated file's contents. Currently required. <!--
+    Todo: Re-enable following when restoring filetypes.json (and mention `site` only optional)
+    Will check for local `filetypes.json`
+    otherwise. -->
 - **args** - Optional. Any arguments to pass to the web applications
     `onmessage` listener data object (under `args`).
 - **fileSelectMessage** - When the generated script does not have a baked-in
@@ -150,11 +155,13 @@ optionally with
 See "Executable builder functionality" "Arguments" section for how these
 optional methods will be used.
 
+<!--
+Todo: Re-enable when restoring filetypes.json
 ## `filetypes.json`
 
 For an explanation of the `filetypes.json` format (e.g., if you wish to tweak
 it as a user), see the [Developer-Guide](./Developer-Guide.md).
-
+-->
 ## Tools and Comparisons
 
 For tips for using with other tools and comparison to other similar tools,

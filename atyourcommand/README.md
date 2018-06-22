@@ -170,7 +170,7 @@ To develop with source, install with npm:
     command line help flag commands**, if structured enough.) Also
     allow **joining of commands**. This could actually work with WebAppFind,
     e.g., to make flags prefixed with webappfind- along with its own modes
-    (e.g., view, edit, binaryedit) or custom modes--see next todo.
+    (e.g., view, edit) or custom modes--see next todo.
 1. Option to **associate with file/create shortcut** (Executable Builder).
 1. Make **desktop app demo** (e.g., Notepad++ plugin? though ideally also a
     database app to demonstrate how data that is typically otherwise "locked

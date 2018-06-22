@@ -73,9 +73,9 @@ simply be able to run commands manually from the command line.
 * `-webappdoc <path>` - Indicates the path of the file which will be made
     available to the web application (with the privileges designated by
     `-webappmode`)
-* `-webappmode <mode>` Indicates the fundamental mode under which the file
-    will be opened up to the web app (i.e., "-webappmode view",
-    "-webappmode binaryview", "-webappmode edit", or "-webappmode binaryedit").
+* `-mode <mode>` Indicates the fundamental mode under which the file
+    will be opened up to the web app (i.e., "-mode view",
+    "-mode view", "-mode edit", or "-mode edit -binary").
 * `-webappcustommode <custom mode>` - Indicates a mode that supplements
     the fundamental mode (e.g., "source" added to the fundamental mode,
     "view" in order to specify that the document is being opened so as to
@@ -169,8 +169,7 @@ Review this documentation section for reimplementation, and move
 to own documentation section when done.
 ----
 POSSIBLE TODOS TO INCORPORATE BELOW
-1. Add meta-data so "view" requests can become "viewbinary" or "edit" become
-    "editbinary".
+1. Add meta-data so "view" or "edit" requests can become "binary"
 1. Provide meta-data in `filetypes.json` to cause the web app to be passed
     awareness of the desire by the user to be prompted for the selection of
     specific *custom* mode, along with an optional default custom mode and
@@ -227,7 +226,7 @@ The following steps may currently be altered by user preference.
             (only existing
             [whitelisted protocols or "web+" ones are allowed](http://www.whatwg.org/specs/web-apps/current-work/multipage/timers.html#dom-navigator-registerprotocolhandler))
         1. The protocol must then be followed by the (lower-case) fundamental
-            mode (currently "view", "binaryview", "edit", "binaryedit", or
+            mode (currently "view", "edit", or
             "register") and optionally by a custom mode (e.g., "source") which
             indicates an extensible mode which is focused on one type of
             viewing, editing, etc. (e.g., looking at the source code of an
@@ -248,8 +247,8 @@ The following steps may currently be altered by user preference.
             of modes and/or be a portal to those modes) and these steps would
             stop. Otherwise, continue.
         1. that object will be checked to see whether the requested open mode
-            is also present (i.e., "view", "binaryview", "edit", or
-            "binaryedit" optionally followed by a supplied extensible custom
+            is also present (i.e., "view" or "edit", optionally followed by a
+            supplied extensible custom
             mode such as "source" to view or edit source only).
             1. If the open mode key is present, its value will be used as the
                 site to open. (Currently, %s found in the URL will be
@@ -377,7 +376,7 @@ or on the desktop.
             1. Use server's `filetypes.json` also if present
         1. Allow command line args to be piped into a string to be supplied
             to the web app (including result of another webappfind
-            invocation?); if "edit" or "binaryedit" mode is given, allow
+            invocation?); if "edit" mode is given, allow
             command line instructions to be invoked with the result posted
             back from the web app as a parameter.
         1. Mention how profile selection logic would probably ideally
@@ -475,8 +474,8 @@ or on the desktop.
             See, however, [bug 391286](https://bugzilla.mozilla.org/show_bug.cgi?id=391286)
             for current lack of arbitrary MIME support in Firefox.
     1. See "Possible future mode additions" section below for possible
-        additions to fundamental (functional) modes beyond just "view",
-        "binaryview", "edit", and "binaryedit".
+        additions to fundamental (functional) modes beyond just "view"
+        and "edit"
     1. Possible changes to parameters passed to registered protocol
         handlers and/or default handlers (if any, as may only be passed
         through `postMessage` or some other means)
@@ -532,7 +531,7 @@ TODO: Add these below
     them?
 ----
 
-Besides "view", "binaryview", "edit", "binaryedit", "register", the
+Besides "view", "edit", "register", the
 following modes might be added in future versions (or made to correspond
 with WebDav commands?):
 
