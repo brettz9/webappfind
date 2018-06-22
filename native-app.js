@@ -16,7 +16,7 @@ const {method} = argv;
 const fileSelectMessageDefault = 'Please select a file:';
 
 function escapeBashDoubleQuoted (s) {
-    return s.replace(/[$`"\\*@]/g, '\\$&').replace(/"/g, '\\"'); // Extra escaping of double-quote
+    return s.replace(/[$`"\\*@]/g, '\\$&').replace(/"/g, '\\\\"'); // Extra escaping of double-quote
 }
 function escapeAppleScriptQuoted (s) {
     return s.replace(/[\\"]/g, '\\$&');
@@ -227,7 +227,7 @@ end getFile
                 : null
         ]).then(() => {
             const msg = 'Added ' + appPath + ' and associated `CFBundleIdentifier`' +
-                (CFBundleDocumentTypesValue ? '`CFBundleDocumentTypesValue`' : '') + '.';
+                (CFBundleDocumentTypesValue ? 'and `CFBundleDocumentTypesValue`' : '') + '.';
             if (argv.log) {
                 console.log(msg);
             }
