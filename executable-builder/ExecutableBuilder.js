@@ -202,9 +202,21 @@ async function saveExecutables (data) {
         }
     });
 
+    const arrs = [
+        ['fileExtensionAssociateOpenWith', 'extensions'],
+        ['fileContentTypeAssociate', 'contentTypes']
+    ];
+    // Todo: Could add UI to allow defining extensions/contentTypes as empty
+    arrs.forEach(([arrProp, opt]) => {
+        if (data[arrProp].length) {
+            opts[opt] = data[arrProp];
+        }
+    });
+
     console.log('opts', opts);
     console.log('buildOpenWithExecutable', buildOpenWithExecutable);
-    // await buildOpenWithExecutable(opts);
+    await buildOpenWithExecutable(opts);
+    console.log('completed executable building');
     /*
     {
       "templateName": "someTemplateName",

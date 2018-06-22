@@ -7,10 +7,7 @@ const {
     execFile, readFile, writeFile, mkdirp, readdir, unlink, stat
 } = require('./polyfills/promise-wrappers');
 
-// const {MacOSDefaults} = require('macos-defaults');
-// const mod = new MacOSDefaults();
-// mod.read();
-// mod.write();
+const {MacOSDefaults} = require('macos-defaults');
 
 const argv = require('minimist')(process.argv.slice(2));
 const {method} = argv;
@@ -19,7 +16,7 @@ const {method} = argv;
 const fileSelectMessageDefault = 'Please select a file:';
 
 function escapeBashDoubleQuoted (s) {
-    return s.replace(/[$`"\\*@]/g, '\\$&');
+    return s.replace(/[$`"\\*@]/g, '\\$&').replace(/"/g, '\\"'); // Extra escaping of double-quote
 }
 function escapeAppleScriptQuoted (s) {
     return s.replace(/[\\"]/g, '\\$&');
@@ -75,7 +72,7 @@ case 'client': {
     });
     return;
 } case 'build-openwith-executable': {
-    buildOpenWithExecutable(argv);
+    buildOpenWithExecutable(Object.assign({log: true}, argv));
     return;
 }
 }
@@ -131,6 +128,9 @@ on getFile (argv)
                     return s;
                 }
                 const paramValue = argv[param];
+                if (param === 'binary' && paramValue) { // Boolean
+                    return `${s} -binary`;
+                }
                 return `${s} --${param}=\\"${escapeBashDoubleQuoted(paramValue)}\\"`;
             }, '"') || ' "') + `"
     end tell
@@ -144,7 +144,9 @@ end getFile
     // Todo: optionally associate to file type
     //        see https://apple.stackexchange.com/questions/9866/programmatically-script-atically-changing-the-default-open-with-setting/9954#9954
     // Todo optionally add to dock and/or execute the result;
-    console.log('appleScript', appleScript);
+    if (argv.log) {
+        console.log('appleScript', appleScript);
+    }
     const executableName = ((argv.executableName && argv.executableName.replace(/.app$/, '')) || 'output') + '.app';
     const appPath = path.resolve( // Defaults needs absolute path
         'executablePath' in argv ? argv.executablePath : '../',
@@ -152,15 +154,84 @@ end getFile
     );
     return execFile('osacompile', ['-o', appPath, '-e', appleScript]).then(() => {
         if (!('id' in argv)) {
-            console.log('Completed but without `CFBundleIdentifier`');
-            return;
+            const msg = 'Completed but without `CFBundleIdentifier`';
+            if (argv.log) {
+                console.log(msg);
+            }
+            return msg;
         }
-        return execFile('defaults', [
-            'write', `${appPath}/Contents/Info`,
-            // For others, see https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-            'CFBundleIdentifier', argv.id
+        const hasExtensions = 'extensions' in argv;
+        const hasContentType = 'contentTypes' in argv;
+        let CFBundleDocumentTypesValue;
+        if (hasExtensions || hasContentType) {
+            let role = 'Viewer';
+            if ('mode' in argv) {
+                switch (argv.mode) {
+                default: {
+                    throw new TypeError('Unrecognized mode');
+                }
+                // Descriptions at https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
+                case 'view':
+                    role = 'Viewer';
+                    break;
+                case 'edit':
+                    role = 'Editor';
+                    break;
+                case 'shell': // "The app provides runtime services for other processes—for example, a Java applet viewer."
+                    role = 'Shell';
+                    break;
+                case 'none':
+                    role = 'None';
+                    break;
+                }
+            }
+            // Todo (high priority): Switch to `LSItemContentTypes`
+            // Todo: Support recommended `CFBundleTypeIconFile`; see https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html#//apple_ref/doc/uid/TP40009249-SW9
+            // Deprecated: CFBundleTypeExtensions, CFBundleTypeMIMETypes, CFBundleTypeOSTypes
+            // Also need `NSExportableTypes
+            // LSHandlerRank; Values in order of precedence: Owner, Default, Alternate, None; // see https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
+            CFBundleDocumentTypesValue = [{
+                // Do we want these defaults or allow override to be empty?
+                CFBundleTypeRole: role, // Editor, Viewer, Shell, or None
+                CFBundleTypeExtensions: ['*'],
+                CFBundleTypeName: argv.executableName, // Todo: Give chance to provide alternative
+                CFBundleTypeOSTypes: ['****']
+            }];
+            if (hasExtensions) {
+                CFBundleDocumentTypesValue[0].CFBundleTypeExtensions = argv.extensions;
+            }
+            if (hasContentType) {
+                if (!argv.contentTypes) {
+                    // delete CFBundleDocumentTypesValue[0].CFBundleTypeMIMETypes;
+                    delete CFBundleDocumentTypesValue[0].CFBundleTypeOSTypes;
+                }
+                // CFBundleDocumentTypesValue[0].CFBundleTypeMIMETypes = argv.contentTypes;
+                CFBundleDocumentTypesValue[0].CFBundleTypeOSTypes = argv.contentTypes;
+            }
+        }
+
+        const mod = new MacOSDefaults();
+        return Promise.all([
+            mod.write({
+                domain: `${appPath}/Contents/Info`,
+                // For others, see https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
+                key: 'CFBundleIdentifier',
+                value: argv.id
+            }),
+            CFBundleDocumentTypesValue
+                ? mod.write({
+                    domain: `${appPath}/Contents/Info`,
+                    key: 'CFBundleDocumentTypes',
+                    value: ['array', CFBundleDocumentTypesValue]
+                })
+                : null
         ]).then(() => {
-            console.log('Added ' + appPath + ' and associated `CFBundleIdentifier`.');
+            const msg = 'Added ' + appPath + ' and associated `CFBundleIdentifier`' +
+                (CFBundleDocumentTypesValue ? '`CFBundleDocumentTypesValue`' : '') + '.';
+            if (argv.log) {
+                console.log(msg);
+            }
+            return msg;
             // chmod ugo+r `${appPath}/Contents/Info.plist` ?
         });
         // defaults read com.apple.LaunchServices/com.apple.launchservices.secure.plist LSHandlers

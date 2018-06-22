@@ -1241,8 +1241,8 @@ function init () {
                 // FileAssociationBridge.associateFileExtension(...);
 
                 // Todo (high priority): Utilize for default file associations
-                // fileExtensionAssociateOpenWith, makeDefaultHandlerForExtension
-                // fileContentTypeAssociate, makeDefaultHandlerForContentType
+                // (fileExtensionAssociateOpenWith), makeDefaultHandlerForExtension
+                // (fileContentTypeAssociate), makeDefaultHandlerForContentType
                 // associateDesktopFilePath
 
                 /*
