@@ -67,6 +67,7 @@ function webappfindStart (result) {
             error: !!error
         }
     };
+    console.log('sending', JSON.stringify(message));
 
     // Todo: make option to enable but indicate this is a major
     //    privacy leak! (at least until such time as a null
