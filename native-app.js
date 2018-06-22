@@ -608,9 +608,12 @@ function processMessage (msgObj) {
             const options = binary ? null : 'utf8';
             // let content = await readFile(file, options);
             return readFile(file, options).then((content) => {
+                /*
+                // We don't need this as `content` as Buffer has `toJSON`
                 if (binary) {
                     content = content.buffer;
                 }
+                */
                 return content;
             }).then(process).catch((error) => {
                 return {method, error};
