@@ -202,6 +202,13 @@ async function saveExecutables (data) {
         }
     });
 
+    opts.extensionsDefaults = data.fileExtensionAssociateOpenWith.filter((extension, i) => {
+        return data.makeDefaultHandlerForExtension[i];
+    });
+    opts.contentTypesDefaults = data.fileContentTypeAssociate.filter((extension, i) => {
+        return data.makeDefaultHandlerForContentType[i];
+    });
+
     const arrs = [
         ['fileExtensionAssociateOpenWith', 'extensions'],
         ['fileContentTypeAssociate', 'contentTypes']
@@ -217,6 +224,7 @@ async function saveExecutables (data) {
     console.log('buildOpenWithExecutable', buildOpenWithExecutable);
     const result = await buildOpenWithExecutable(opts);
     console.log('completed executable building', result);
+    // Todo: Use `associateDesktopFilePath` + i with xattr for default for particular files (see to-do in executable.js)
     /*
     {
       "templateName": "someTemplateName",

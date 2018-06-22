@@ -6,6 +6,10 @@ const uuid = require('uuid/v4');
 const {
     execFile, readFile, writeFile, mkdirp, readdir, unlink, stat
 } = require('./polyfills/promise-wrappers');
+const {
+    addContentTypeHandlerIfNotExisting,
+    addExtensionHandlerIfNotExisting
+} = require('./launchServiceHandlers');
 
 const {MacOSDefaults} = require('macos-defaults');
 
@@ -144,9 +148,15 @@ end getFile
     // Todo: optionally associate to file type
     //        see https://apple.stackexchange.com/questions/9866/programmatically-script-atically-changing-the-default-open-with-setting/9954#9954
     // Todo optionally add to dock and/or execute the result;
-    if (argv.log) {
-        console.log('appleScript', appleScript);
+    const resp = [];
+    function addLog (str, obj) {
+        if (argv.log) {
+            console.log(str, obj);
+        }
+        resp.push([str, obj]);
     }
+    addLog('appleScript', appleScript);
+
     const executableName = ((argv.executableName && argv.executableName.replace(/.app$/, '')) || 'output') + '.app';
     const appPath = path.resolve( // Defaults needs absolute path
         'executablePath' in argv ? argv.executablePath : '../',
@@ -155,9 +165,7 @@ end getFile
     return execFile('osacompile', ['-o', appPath, '-e', appleScript]).then(() => {
         if (!('id' in argv)) {
             const msg = 'Completed but without `CFBundleIdentifier`';
-            if (argv.log) {
-                console.log(msg);
-            }
+            addLog(msg);
             return msg;
         }
         const hasExtensions = 'extensions' in argv;
@@ -231,14 +239,37 @@ end getFile
                 ['-v', appPath]
             );
         }).then(() => {
+            if (!argv.extensionsDefaults) {
+                return;
+            }
+            return Promise.all(argv.extensionsDefaults.map((extension) => {
+                return addExtensionHandlerIfNotExisting({
+                    extension,
+                    mode: argv.mode,
+                    appID: argv.id
+                });
+            }));
+        }).then((extensionAddResults) => {
+            addLog('extensionAddResults', extensionAddResults);
+
+            if (!argv.contentTypesDefaults) {
+                return;
+            }
+            return Promise.all(argv.contentTypesDefaults.map((contentType) => {
+                return addContentTypeHandlerIfNotExisting({
+                    contentType,
+                    mode: argv.mode,
+                    appID: argv.id
+                });
+            }));
+        }).then((contentTypeAddResults) => {
+            addLog('contentTypeAddResults', contentTypeAddResults);
             return execFile('killall', ['Finder']);
         }).then(() => {
             const msg = 'Added ' + appPath + ' and associated `CFBundleIdentifier`' +
                 (CFBundleDocumentTypesValue ? 'and `CFBundleDocumentTypesValue`' : '') + '.';
-            if (argv.log) {
-                console.log(msg);
-            }
-            return msg;
+            addLog(msg);
+            return resp;
             // chmod ugo+r `${appPath}/Contents/Info.plist` ?
         });
         // defaults read com.apple.LaunchServices/com.apple.launchservices.secure.plist LSHandlers

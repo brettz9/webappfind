@@ -273,6 +273,7 @@ function createPathInput () {
             ['input', {
                 name: 'executableID', // name: 'executableID[]',
                 class: 'executableID',
+                pattern: '[a-zA-Z.-]+', // The following in one place allows for digits and another does not https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html#//apple_ref/doc/uid/TP40009249-SW9
                 placeholder: (
                     // dot, hyphen, upper/lower case allowed
                     reverseDNS || 'com.my-domain'
@@ -626,6 +627,13 @@ function createTemplatedForm () {
             ]]
             */
         ]],
+        /*
+        // Todo: Should be able to enable this by running `xattr`, but
+        //   we have to figure out how to get hex for our app and `com.apple.LaunchServices.OpenWith`
+        // a. https://eclecticlight.co/2017/12/20/xattr-com-apple-launchservices-openwith-sets-a-custom-app-to-open-a-file/
+        // b. https://ss64.com/osx/xattr.html
+        // c. `com.apple.LaunchServices.OpenWith`: https://superuser.com/a/1254271/156958
+        // d. `ls -la@` can get the info
         ['fieldset', [
             ['legend', [_('specific_files_for_opening')]],
             ['div', {id: 'associatedDesktopFileHolder'}, [
@@ -633,6 +641,7 @@ function createTemplatedForm () {
             ]]
         ]],
         ['br'],
+        */
         // */
         /*
         // TODO: Reenable when ready
@@ -896,8 +905,8 @@ function getTemplateResponse (content) {
     const json = JSON.parse(content);
     [
         // ['executable_name', 'ExecutableInfo'],
-        ['fileExtensionAssociateOpenWith', 'FileExtensionInfo'],
-        ['associateDesktopFilePath', 'AssociatedFileInfo']
+        ['fileExtensionAssociateOpenWith', 'FileExtensionInfo']
+        // ['associateDesktopFilePath', 'AssociatedFileInfo']
     ].forEach(([name, baseName]) => {
         const jsonLength = json[name].length;
         const formLength = $$(`[name="${name}[]"]`).length; // $('#dynamic')[name + '[]'] only got one item
@@ -1244,7 +1253,6 @@ function init () {
                 // Todo (high priority): Utilize for default file associations
                 // (fileExtensionAssociateOpenWith), makeDefaultHandlerForExtension
                 // (fileContentTypeAssociate), makeDefaultHandlerForContentType
-                // associateDesktopFilePath
 
                 /*
                     await ExecBridge.cmd({args: []});
