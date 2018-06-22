@@ -226,6 +226,13 @@ end getFile
                 })
                 : null
         ]).then(() => {
+            return execFile(
+                '/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister',
+                ['-v', appPath]
+            );
+        }).then(() => {
+            return execFile('killall', ['Finder']);
+        }).then(() => {
             const msg = 'Added ' + appPath + ' and associated `CFBundleIdentifier`' +
                 (CFBundleDocumentTypesValue ? 'and `CFBundleDocumentTypesValue`' : '') + '.';
             if (argv.log) {

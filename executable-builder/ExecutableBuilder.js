@@ -215,8 +215,8 @@ async function saveExecutables (data) {
 
     console.log('opts', opts);
     console.log('buildOpenWithExecutable', buildOpenWithExecutable);
-    await buildOpenWithExecutable(opts);
-    console.log('completed executable building');
+    const result = await buildOpenWithExecutable(opts);
+    console.log('completed executable building', result);
     /*
     {
       "templateName": "someTemplateName",

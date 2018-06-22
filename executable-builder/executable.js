@@ -1234,6 +1234,7 @@ function init () {
                 // - `fileSelectMessage`
                 // - `fileSelectType`
                 await ExecutableBuilder.saveExecutables(formSerialized);
+                console.log('resuming after executable save');
 
                 // $('.fileExtension').value // defaultFileExtension
 
