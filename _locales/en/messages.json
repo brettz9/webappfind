@@ -247,6 +247,12 @@
     "hard_coded_web_app_URI": {
         "message": "Hard-coded web app URI:"
     },
+    "arguments_json": {
+        "message": "Arguments to be baked into the executable which will be passed to the app as JSON"
+    },
+    "arguments_json_description": {
+        "message": "Usable for opening preferences like desired theme"
+    },
     "behavior_upon_URL_open": {
         "message": "Behavior upon opening of web app/URL:"
     },

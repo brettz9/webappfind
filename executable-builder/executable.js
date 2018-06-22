@@ -739,6 +739,40 @@ function createTemplatedForm () {
             }],
             ['datalist', {id: 'urlDatalist'}]
         ]],
+        ['label', [
+            ['div', [
+                _('arguments_json')
+            ]],
+            ['div', {id: 'argumentsJSONDescription'}, [
+                _('arguments_json_description')
+            ]],
+            ['textarea', {
+                id: 'args',
+                name: 'args',
+                $custom: {
+                    $validate ({format}) {
+                        try {
+                            const parsed = JSON.parse(this.value);
+                            if (format) {
+                                this.value = JSON.stringify(parsed, null, 2);
+                            }
+                            // Remove any error state
+                            this.setCustomValidity('');
+                        } catch (err) {
+                            this.setCustomValidity(err);
+                        }
+                    }
+                },
+                $on: {
+                    input () {
+                        this.$validate({format: false});
+                    },
+                    change () {
+                        this.$validate({format: true});
+                    }
+                }
+            }]
+        ]],
         ['br'],
         ['br'],
         /*

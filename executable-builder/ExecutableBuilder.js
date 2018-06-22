@@ -177,18 +177,25 @@ async function saveExecutables (data) {
     console.log('data', data);
     const {executableName, executablePath} = data;
     const opts = {
-        // Todo: Avoid pink required validation error showing for exec name/path when added
-        // Todo (high priority): Expose to UI
-        // - `args` (support JSON and validate/auto-format within a `textarea`)
+        // Todo (high priority): Avoid pink required validation error showing for exec name/path when added
         executableName,
         executablePath
     };
+    if (data.args) {
+        try {
+            const parsed = JSON.parse(data.args);
+            data.args = JSON.stringify(parsed); // Remove formatting for efficiency
+        } catch (err) {
+            delete data.args;
+        }
+    }
     const notFalseys = [
         ['desktopFilePath', 'file'],
         ['executableID', 'id'],
         ['mode'],
         ['site'],
-        ['binary']
+        ['binary'],
+        ['args']
     ];
     notFalseys.forEach(([notFalsey, opt = notFalsey]) => {
         if (data[notFalsey]) {
