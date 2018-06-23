@@ -286,6 +286,12 @@
     "run_commands_save_template": {
         "message": "Run commands and save template"
     },
+    "prepopulate_site_recommended": {
+        "message": "(Prepopulate with settings recommended by site)"
+    },
+    "unnamed": {
+        "message": "(Unnamed)"
+    },
 
     "Create_a_one_off_command": {
         "message": "Create a one-off command"

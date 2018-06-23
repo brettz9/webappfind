@@ -273,7 +273,7 @@ function createPathInput () {
             ['input', {
                 name: 'executableID', // name: 'executableID[]',
                 class: 'executableID',
-                pattern: '[a-zA-Z.-]+', // The following in one place allows for digits and another does not https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html#//apple_ref/doc/uid/TP40009249-SW9
+                pattern: '[a-zA-Z.\\d-]+', // The following in one place allows for digits and another does not https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html#//apple_ref/doc/uid/TP40009249-SW9
                 placeholder: (
                     // dot, hyphen, upper/lower case allowed
                     reverseDNS || 'com.my-domain'
@@ -901,14 +901,13 @@ function deleteTemplateResponse ({fileName}) {
     // dialogs.alert(message);
 }
 
-function getTemplateResponse (content) {
-    const json = JSON.parse(content);
+function populateFormFromJSON (json) {
     [
         // ['executable_name', 'ExecutableInfo'],
         ['fileExtensionAssociateOpenWith', 'FileExtensionInfo']
         // ['associateDesktopFilePath', 'AssociatedFileInfo']
     ].forEach(([name, baseName]) => {
-        const jsonLength = json[name].length;
+        const jsonLength = name in json ? json[name].length : 0;
         const formLength = $$(`[name="${name}[]"]`).length; // $('#dynamic')[name + '[]'] only got one item
         let diff = Math.abs(jsonLength - formLength);
         if (!diff) {
@@ -923,7 +922,9 @@ function getTemplateResponse (content) {
     // json['executable_name'].length
     // json['fileExtensionAssociateOpenWith'].length
     console.log('json', json);
-    formDeserialize($('#dynamic'), json);
+    const form = $('#dynamic');
+    form.reset();
+    formDeserialize(form, json);
 }
 
 function fileOrDirResult ({path, selector}) {
@@ -1009,7 +1010,16 @@ function init () {
     });
 
     window.addEventListener('change', async function ({target}) {
-        const {name, value: fileName} = target;
+        const {name, value, id} = target;
+        if (id === 'siteRecommended') {
+            if (!value) {
+                populateFormFromJSON({});
+                return;
+            }
+            populateFormFromJSON(metas[value]);
+            return;
+        }
+        const fileName = value;
         switch (name) {
         case 'templateName': {
             if ($('#rememberTemplateChanges').checked &&
@@ -1025,11 +1035,13 @@ function init () {
             break;
         } case 'templates': {
             if (!fileName) {
+                populateFormFromJSON({});
                 return;
             }
             // $('#templateName').value = fileName;
             const response = await TemplateFileBridge.getTemplate({fileName});
-            getTemplateResponse(response);
+            const json = JSON.parse(response);
+            populateFormFromJSON(json);
             break;
         }
         }
@@ -1250,6 +1262,8 @@ function init () {
                 await ExecutableBuilder.saveExecutables(formSerialized);
                 console.log('resuming after executable save');
 
+                // metas
+
                 // $('.fileExtension').value // defaultFileExtension
 
                 // Todo: File association bridge file and handle response
@@ -1299,7 +1313,91 @@ function init () {
             }
         }
     });
+    const hasMetas = metas && metas.length;
+    if (hasMetas) {
+        const aliases = {
+            file: 'desktopFilePath',
+            id: 'executableID',
+            extensions: 'fileExtensionAssociateOpenWith',
+            contentTypes: 'fileContentTypeAssociate',
+            defaultExtensions: 'makeDefaultHandlerForExtension',
+            defaultContentTypes: 'makeDefaultHandlerForContentType'
+        };
+
+        const props = [
+            ...Object.keys(aliases),
+            'executableName',
+            'executablePath',
+            'mode',
+            'site',
+            'binary',
+            'args'
+        ];
+
+        metas = metas.map((meta) => {
+            const validated = {};
+            const usp = new URLSearchParams(meta);
+            [...usp].forEach(([prop, val]) => {
+                if (!props.includes(prop)) {
+                    console.warn('Discarding unrecognized property: ', prop);
+                    return;
+                }
+                switch (prop) {
+                case 'args': {
+                    let parsed;
+                    try {
+                        // Format before adding to form
+                        parsed = JSON.parse(val);
+                    } catch (err) {
+                        console.warn('Discarding `args`; must be valid JSON');
+                        return;
+                    }
+                    val = JSON.stringify(parsed, null, 2);
+                    break;
+                } case 'extensions': case 'contentTypes': {
+                    // Per https://tools.ietf.org/html/rfc2045#section-5.1 ,
+                    //   white space is disallowed in `x-token` and `token`
+                    //   (`ietf-token` doesn't specify it clearly), so we
+                    //   use it as our separator
+                    val = val.split(/ /);
+                    break;
+                } case 'defaultExtensions': case 'defaultContentTypes': {
+                    val = val.split(/ /);
+                    const correspProp = prop === 'defaultExtensions'
+                        ? 'extensions'
+                        : 'contentTypes';
+                    let cmpArr = usp.get(correspProp);
+                    if (!cmpArr) {
+                        console.warn(prop + ' should be accompanied by ' + correspProp);
+                        return;
+                    }
+                    cmpArr = cmpArr.split(/ /);
+                    val = cmpArr.map((item) => {
+                        return val.includes(item) ? 'on' : '';
+                    });
+                    break;
+                }
+                }
+                prop = aliases.hasOwnProperty(prop) ? aliases[prop] : prop;
+                validated[prop] = val;
+            });
+            return validated;
+        });
+        console.log('metas2', metas);
+    }
     jml('div', [
+        (hasMetas
+            ? ['div', [
+                ['select', {id: 'siteRecommended'}, [
+                    ['option', {value: ''}, [_('prepopulate_site_recommended')]],
+                    ...metas.map(({executableName}, i) => {
+                        return ['option', {value: i}, [executableName || _('unnamed')]];
+                    })
+                ]],
+                ` ${_('or').toUpperCase()} `
+            ]]
+            : ''
+        ),
         ['select', {name: 'templates'}, [
             ['option', {value: ''}, [_('choose_template')]],
             ...templates.map((template) => {
@@ -1343,7 +1441,7 @@ console.log('ttt', templates);
 // Not visible but we'll add in case we later move to own window
 document.title = _('executable_builder_title');
 
-let reverseDNS;
+let reverseDNS, metas, hostname;
 try {
     const [result] = await browser.tabs.executeScript({
         code: `
@@ -1354,7 +1452,7 @@ try {
     `,
         runAt: 'document_end'
     });
-    const {metas, hostname} = result;
+    ({metas, hostname} = result);
     // Todo: Use metas
     console.log('metas', metas, 'hostname', hostname);
     reverseDNS = hostname.split('.').reverse().join('.');
