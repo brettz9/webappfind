@@ -1237,6 +1237,11 @@ function init () {
                     });
                     saveTemplateResult(response);
                 }
+                // Todo: Allow addition (for viewers) to Mac
+                //    Services menu (see source of a service workflow
+                //    as created by Automator, modify file, and add
+                //    to `~/Library/Services`)
+
                 // Todo: Could expose to UI and pass in the following (if user
                 //   actually wants an executable that prompts for a file rather
                 //   than expecting a file argument)
