@@ -86,6 +86,19 @@ function buildOpenWithExecutable (argv) {
     // 1) https://developer.telerik.com/featured/javascript-os-x-automation-example/
     // 2) https://www.safaribooksonline.com/library/view/applescript-in-a/1565928415/re154.html
 
+    function addOtherArgs () {
+        return (['mode', 'site', 'args', 'binary'].reduce((s, param) => {
+            if (!(param in argv)) {
+                return s;
+            }
+            const paramValue = argv[param];
+            if (param === 'binary' && paramValue) { // Boolean
+                return `${s} --binary`;
+            }
+            return `${s} --${param}=\\"${escapeBashDoubleQuoted(paramValue)}\\"`;
+        }, '"') || ' "');
+    }
+
     // -- Command line usage example: open ./webappfind-as.app --args /Users/brett/myFile.txt (doesn't work in all contexts apparently)
     const appleScript = `
 -- Command line usage example: osascript ./webappfind-as.app /Users/brett/myFile.txt
@@ -105,7 +118,26 @@ on getFile (argv)
         return
     on error
     end try
-    try
+    ` +
+
+    ('string' in argv
+        ? `try
+        set input to item 1 of argv
+    on error
+        set input to ""
+    end try
+    tell application "Finder"
+        do shell script "/usr/local/bin/node ${__filename} ` +
+            `--method=client --string=" & ` +
+            (argv.string === true || argv.string === 'true'
+                ? `quoted form of input`
+                : `"\\"${escapeBashDoubleQuoted(argv.string)}\\""`) +
+            ' & ' +
+            addOtherArgs() + `"
+    end tell
+    `
+        // A normal `file` not `string`
+        : `try
         set input to item 1 of argv -- Not needed in Automator AS, but needed in normal AS
         get POSIX path of (input as text)
     on error
@@ -132,18 +164,9 @@ on getFile (argv)
             ('file' in argv ? `"\\"${escapeBashDoubleQuoted(argv.file)}\\""` : `quoted form of filePath`) +
             ' & ' +
             // Todo: Allow `args` to be passed in at run-time if not baked in (though won't work with normal file opening)
-            (['mode', 'site', 'args', 'binary'].reduce((s, param) => {
-                if (!(param in argv)) {
-                    return s;
-                }
-                const paramValue = argv[param];
-                if (param === 'binary' && paramValue) { // Boolean
-                    return `${s} --binary`;
-                }
-                return `${s} --${param}=\\"${escapeBashDoubleQuoted(paramValue)}\\"`;
-            }, '"') || ' "') + `"
+            addOtherArgs() + `"
     end tell
-
+`) + `
     return input
 end getFile
 `;
@@ -640,7 +663,9 @@ function processMessage (msgObj) {
             }
         });
         */
-        return process();
+        return Promise.resolve(process(
+            'string' in msgObj ? msgObj.string : undefined
+        ));
     }
     }
 }

@@ -214,6 +214,7 @@ async function saveExecutables (data) {
         ['fileContentTypeAssociate', 'contentTypes']
     ];
     // Todo: Could add UI to allow defining extensions/contentTypes as empty
+    // Todo: Add UI to allow passing in `string` in place of `file`/file associations
     arrs.forEach(([arrProp, opt]) => {
         if (data[arrProp].length) {
             opts[opt] = data[arrProp];
