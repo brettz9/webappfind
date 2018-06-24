@@ -100,6 +100,16 @@ function buildOpenWithExecutable (argv) {
     }
 
     // -- Command line usage example: open ./webappfind-as.app --args /Users/brett/myFile.txt (doesn't work in all contexts apparently)
+    /*
+    // To build a Services menu, one can use the `string` argument
+    //   here and then invoke the built script via:
+    // Unfortunately, there seems to be no easy way to create our own Services Menu
+    //   via command line (the source is plain XML but the fields are not all clear)
+    for f in "$@"
+    do
+        osascript /Users/brett/output.app "$f"
+    done
+    */
     const appleScript = `
 -- Command line usage example: osascript ./webappfind-as.app /Users/brett/myFile.txt
 --   Could pass in other flags at end too, but not usable with "open with"
