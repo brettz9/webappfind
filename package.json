@@ -86,7 +86,7 @@
   "dependencies": {
     "chrome-native-messaging": "0.2.0",
     "ini": "^1.3.5",
-    "macos-defaults": "https://github.com/brettz9/macOS-defaults#class",
+    "macos-defaults": "https://github.com/brettz9/macOS-defaults",
     "mdls": "https://github.com/brettz9/node-mdls#null-and-filespaces",
     "minimist": "^1.2.0",
     "mkdirp": "^0.5.1",
