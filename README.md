@@ -2,9 +2,19 @@
 
 **NOTE: While this extension has now been minimally reimplemented from version 2.0.0,
 it is now Mac-only instead of Windows-only (what I happen to be developing on), and
-much of the old functionality has not yet been restored. There have also been changes
+a good deal of the functionality (especially using a `filetypes.json` file) has
+not yet been restored. There have also been changes
 in the API. Note too that the guides and info below are in the process of being
-transitioned, so there may be some inaccurate relics.**
+transitioned, so there may be some inaccurate relics. Moreover, the AtYourCommand
+features have not been well-tested, and as they call the command line, use at
+your own risk! Note too that AsYouWish is bundled, which is also potentially
+dangerous if you grant permission to sites asking it; I hope to test more
+completely and separate out AsYouWish, but it is exciting that it is not only
+working, but the functionality for both AtYourCommand and ExecutableBuilder, which
+had not been implemented previously, are now working. Executable Builder lets
+websites silently advertise their support for certain file names and the extension can
+import that info into a template for building an executable that can open local
+files by default (or at least advertise support with "Open With...").**
 
 <!--
 TODO: Ensure this README and doc files actually reflects the implementation once complete.
