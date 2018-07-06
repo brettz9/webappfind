@@ -1,5 +1,6 @@
 html, body {
     padding: 20px;
+    background-color: white;
 }
 textarea {
     width: 100%;

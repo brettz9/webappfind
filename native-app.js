@@ -17,14 +17,16 @@ const argv = require('minimist')(process.argv.slice(2), {boolean: true});
 const {method} = argv;
 
 // Todo: We could i18nize this, but the command line allows for overriding anyways
-const fileSelectMessageDefault = 'Please select a file:';
+// const fileSelectMessageDefault = 'Please select a file:';
 
 function escapeBashDoubleQuoted (s) {
     return s.replace(/[$`"\\*@]/g, '\\$&').replace(/"/g, '\\\\"'); // Extra escaping of double-quote
 }
+/*
 function escapeAppleScriptQuoted (s) {
     return s.replace(/[\\"]/g, '\\$&');
 }
+*/
 
 (() => {
 switch (method) { // We're reusing this executable to accept messages for setting up a client
@@ -151,6 +153,9 @@ on getFile (argv)
         set input to item 1 of argv -- Not needed in Automator AS, but needed in normal AS
         get POSIX path of (input as text)
     on error
+        ` +
+        'return' + // Todo: For now, we return on error, but we should allow option to get file picker as in working code below; we could also display a dialog here for instructions as user may be puzzled on how to use
+        /*
         try
             set input to choose file with prompt "` +
     escapeAppleScriptQuoted(
@@ -164,6 +169,8 @@ on getFile (argv)
         on error -- cancelled
             return
         end try
+        */
+        `
     end try
     tell application "Finder"
         -- todo: Could prompt for, and allow input for, multiple files or folder
@@ -175,6 +182,15 @@ on getFile (argv)
             ' & ' +
             // Todo: Allow `args` to be passed in at run-time if not baked in (though won't work with normal file opening)
             addOtherArgs() + `"
+
+        set appName to "Firefox"
+        tell application "System Events"
+            if not (exists process appName) then
+                tell application appName to activate
+            else
+                set frontmost of process appName to true
+            end if
+        end tell
     end tell
 `) + `
     return input
