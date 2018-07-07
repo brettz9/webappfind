@@ -7,8 +7,8 @@ const {
     execFile, readFile, writeFile, mkdirp, readdir, unlink, stat
 } = require('./polyfills/promise-wrappers');
 const {
-    addContentTypeHandlerIfNotExisting,
-    addExtensionHandlerIfNotExisting
+    addOrReplaceExtensionHandler,
+    addOrReplaceContentTypeHandler
 } = require('./launchServiceHandlers');
 
 const {MacOSDefaults} = require('macos-defaults');
@@ -22,11 +22,9 @@ const {method} = argv;
 function escapeBashDoubleQuoted (s) {
     return s.replace(/[$`"\\*@]/g, '\\$&').replace(/"/g, '\\\\"'); // Extra escaping of double-quote
 }
-/*
 function escapeAppleScriptQuoted (s) {
     return s.replace(/[\\"]/g, '\\$&');
 }
-*/
 
 (() => {
 switch (method) { // We're reusing this executable to accept messages for setting up a client
@@ -112,6 +110,7 @@ function buildOpenWithExecutable (argv) {
         osascript /Users/brett/output.app "$f"
     done
     */
+    const executableName = ((argv.executableName && argv.executableName.replace(/.app$/, '')) || 'output') + '.app';
     const appleScript = `
 -- Command line usage example: osascript ./webappfind-as.app /Users/brett/myFile.txt
 --   Could pass in other flags at end too, but not usable with "open with"
@@ -127,6 +126,7 @@ end run
 on getFile (argv)
     try -- This block is just to trigger the option to approve a third party app
         set n to item 2 of argv
+        -- display dialog "Please approve this application in System Preferences" -- isn't working
         return
     on error
     end try
@@ -154,7 +154,9 @@ on getFile (argv)
         get POSIX path of (input as text)
     on error
         ` +
-        'return' + // Todo: For now, we return on error, but we should allow option to get file picker as in working code below; we could also display a dialog here for instructions as user may be puzzled on how to use
+        `tell application "${escapeAppleScriptQuoted(executableName)}" to activate
+        display dialog "Try opening the file now."
+        return` + // Todo: For now, we return on error, but we should allow option to get file picker as in working code below; we could also display a dialog here for instructions as user may be puzzled on how to use
         /*
         try
             set input to choose file with prompt "` +
@@ -211,7 +213,6 @@ end getFile
     }
     addLog('appleScript', appleScript);
 
-    const executableName = ((argv.executableName && argv.executableName.replace(/.app$/, '')) || 'output') + '.app';
     const appPath = path.resolve( // Defaults needs absolute path
         'executablePath' in argv ? argv.executablePath : '../',
         executableName
@@ -296,8 +297,9 @@ end getFile
             if (!argv.extensionsDefaults) {
                 return;
             }
+            // Todo: Allow UI for user to use safer `addExtensionHandlerIfNotExisting` if desired
             return Promise.all(argv.extensionsDefaults.map((extension) => {
-                return addExtensionHandlerIfNotExisting({
+                return addOrReplaceExtensionHandler({
                     extension,
                     mode: argv.mode,
                     appID: argv.id
@@ -309,8 +311,9 @@ end getFile
             if (!argv.contentTypesDefaults) {
                 return;
             }
+            // Todo: Allow UI for user to use safer `addExtensionHandlerIfNotExisting` if desired
             return Promise.all(argv.contentTypesDefaults.map((contentType) => {
-                return addContentTypeHandlerIfNotExisting({
+                return addOrReplaceContentTypeHandler({
                     contentType,
                     mode: argv.mode,
                     appID: argv.id
