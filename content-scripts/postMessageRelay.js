@@ -26,15 +26,15 @@ window.addEventListener('message', function ({origin, data}) {
         return;
     }
     const {type, pathID, content} = data.webappfind;
-    if (!pathID) { // User may be attempting edit with view-only access
-        console.log('No path ID provided');
-        return;
-    }
     switch (type) {
     case 'read':
         port.postMessage({type: 'read', pathID});
         break;
     case 'save':
+        if (!pathID) { // User may be attempting edit with view-only access
+            console.log('No path ID provided');
+            return;
+        }
         // l(content.length);
         l({type: 'save', pathID, len: content.length});
         port.postMessage({type: 'save', pathID, content});
@@ -75,7 +75,7 @@ function webappfindStart (result) {
     // This should work but
     //   [tabs.create](https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/tabs/create)
     //   does not work with the `file:` protocol
-    if (0 && site.match(/^file:/)) {
+    if (site.match(/^file:/)) {
         l('file protocol');
         // Todo: We could (and should) set this message to the
         //    relevant URL if `file:` support is added
