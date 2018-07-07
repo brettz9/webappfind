@@ -155,7 +155,7 @@ on getFile (argv)
     on error
         ` +
         `tell application "${escapeAppleScriptQuoted(executableName)}" to activate
-        display dialog "Try opening the file now."
+        -- display dialog "Try opening the file now." -- any alerts can go in Firefox instead
         return` + // Todo: For now, we return on error, but we should allow option to get file picker as in working code below; we could also display a dialog here for instructions as user may be puzzled on how to use
         /*
         try
@@ -218,6 +218,7 @@ end getFile
         'executablePath' in argv ? argv.executablePath : '../',
         executableName
     );
+    let CFBundleDocumentTypesValue;
     return execFile('osacompile', ['-o', appPath, '-e', appleScript]).then(() => {
         if (!('id' in argv)) {
             const msg = 'Completed but without `CFBundleIdentifier`';
@@ -226,7 +227,6 @@ end getFile
         }
         const hasExtensions = 'extensions' in argv;
         const hasContentType = 'contentTypes' in argv;
-        let CFBundleDocumentTypesValue;
         if (hasExtensions || hasContentType) {
             let role = 'Viewer';
             if ('mode' in argv) {
@@ -289,59 +289,65 @@ end getFile
                     value: ['array', CFBundleDocumentTypesValue]
                 })
                 : null
-        ]).then(() => {
-            return execFile(
-                lsregisterPath,
-                ['-v', appPath]
-            );
-        }).then(() => {
-            if (!argv.extensionsDefaults) {
-                return;
-            }
-            // Todo: Allow UI for user to use safer `addExtensionHandlerIfNotExisting` if desired
-            return Promise.all(argv.extensionsDefaults.map((extension) => {
-                return addOrReplaceExtensionHandler({
-                    extension,
-                    mode: argv.mode,
-                    appID: argv.id
-                });
-            }));
-        }).then((extensionAddResults) => {
-            addLog('extensionAddResults', extensionAddResults);
+        ]);
+    }).then(() => {
+        return execFile(
+            lsregisterPath,
+            ['-v', appPath]
+        );
+    }).then(() => {
+        if (!argv.extensionsDefaults) {
+            return;
+        }
+        // Todo: Allow UI for user to use safer `addExtensionHandlerIfNotExisting` if desired
+        return Promise.all(argv.extensionsDefaults.map((extension) => {
+            return addOrReplaceExtensionHandler({
+                extension,
+                mode: argv.mode,
+                appID: argv.id
+            });
+        }));
+    }).then((extensionAddResults) => {
+        addLog('extensionAddResults', extensionAddResults);
 
-            if (!argv.contentTypesDefaults) {
-                return;
-            }
-            // Todo: Allow UI for user to use safer `addExtensionHandlerIfNotExisting` if desired
-            return Promise.all(argv.contentTypesDefaults.map((contentType) => {
-                return addOrReplaceContentTypeHandler({
-                    contentType,
-                    mode: argv.mode,
-                    appID: argv.id
-                });
-            }));
-        }).then((contentTypeAddResults) => {
-            addLog('contentTypeAddResults', contentTypeAddResults);
-        }).then(() => {
-            return execFile('pkill', ['-f', '/usr/libexec/lsd']);
-        }).then(() => {
-            return execFile('killall', ['Finder']);
-        }).then(() => {
-            // We need the next two lame steps unless and until we can get ourselves trusted
-            // return execFile('osascript', [appPath, 'dummy', 'nullCall']);
-            return execFile('open', [appPath, '--args', 'dummy', 'nullCall']);
-        }).then(() => {
-            return execFile('open', ['x-apple.systempreferences:com.apple.preference.security']);
-            // or: return execFile('open', ['/System/Library/PreferencePanes/Security.prefPane/']);
-        }).then(() => {
-            const msg = 'Added ' + appPath + ' and associated `CFBundleIdentifier`' +
-                (CFBundleDocumentTypesValue ? 'and `CFBundleDocumentTypesValue`' : '') + '.';
-            addLog(msg);
-            return resp;
-            // chmod ugo+r `${appPath}/Contents/Info.plist` ?
-        });
-        // defaults read com.apple.LaunchServices/com.apple.launchservices.secure.plist LSHandlers
+        if (!argv.contentTypesDefaults) {
+            return;
+        }
+        // Todo: Allow UI for user to use safer `addExtensionHandlerIfNotExisting` if desired
+        return Promise.all(argv.contentTypesDefaults.map((contentType) => {
+            return addOrReplaceContentTypeHandler({
+                contentType,
+                mode: argv.mode,
+                appID: argv.id
+            });
+        }));
+    }).then((contentTypeAddResults) => {
+        addLog('contentTypeAddResults', contentTypeAddResults);
+    }).then(() => {
+        return execFile('pkill', ['-f', '/usr/libexec/lsd']);
+    }).then(() => {
+        return execFile('killall', ['Finder']);
+    }).then(() => {
+        return execFile('xattr', ['-d', 'com.apple.quarantine', appPath]);
+    }).then(() => {
+        // return execFile('osascript', [appPath, 'dummy', 'nullCall']);
+        // User will otherwise get warning when trying to open
+        return execFile('open', [appPath, '--args', 'dummy', 'nullCall']);
+    /*
+    // This is not actually needed with the `xattr` command
+    }).then(() => {
+        // We need the next lame step to get ourselves trusted
+        return execFile('open', ['x-apple.systempreferences:com.apple.preference.security']);
+        // or: return execFile('open', ['/System/Library/PreferencePanes/Security.prefPane/']);
+    */
+    }).then(() => {
+        const msg = 'Added ' + appPath + ' and associated `CFBundleIdentifier`' +
+            (CFBundleDocumentTypesValue ? 'and `CFBundleDocumentTypesValue`' : '') + '.';
+        addLog(msg);
+        return resp;
+        // chmod ugo+r `${appPath}/Contents/Info.plist` ?
     });
+    // defaults read com.apple.LaunchServices/com.apple.launchservices.secure.plist LSHandlers
 }
 
 /*
