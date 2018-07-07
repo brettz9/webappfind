@@ -213,6 +213,7 @@ end getFile
     }
     addLog('appleScript', appleScript);
 
+    const lsregisterPath = '/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister';
     const appPath = path.resolve( // Defaults needs absolute path
         'executablePath' in argv ? argv.executablePath : '../',
         executableName
@@ -290,7 +291,7 @@ end getFile
                 : null
         ]).then(() => {
             return execFile(
-                '/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister',
+                lsregisterPath,
                 ['-v', appPath]
             );
         }).then(() => {
@@ -321,6 +322,9 @@ end getFile
             }));
         }).then((contentTypeAddResults) => {
             addLog('contentTypeAddResults', contentTypeAddResults);
+        }).then(() => {
+            return execFile('pkill', ['-f', '/usr/libexec/lsd']);
+        }).then(() => {
             return execFile('killall', ['Finder']);
         }).then(() => {
             // We need the next two lame steps unless and until we can get ourselves trusted
