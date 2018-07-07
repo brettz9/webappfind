@@ -6,11 +6,11 @@ function cloneJSON (json) {
     return JSON.parse(JSON.stringify(json));
 }
 
-function addLaunchServiceHandler (serviceHandler) {
+function addLaunchServiceHandlers (serviceHandlers) {
     return mod.write({
         domain: 'com.apple.LaunchServices/com.apple.launchservices.secure.plist',
         key: 'LSHandlers',
-        value: ['array-add', [serviceHandler]]
+        value: ['array-add', serviceHandlers]
     });
 }
 
@@ -56,7 +56,7 @@ function addContentTypeHandlerIfNotExisting ({contentType, mode, appID}) {
             LSHandlerContentType: contentType
         };
         addRolesForMode({mode, params, appID});
-        return addLaunchServiceHandler(params).then(() => {
+        return addLaunchServiceHandlers([params]).then(() => {
             return {added: true, params};
         });
     });
@@ -72,7 +72,7 @@ function addExtensionHandlerIfNotExisting ({extension, mode, appID}) {
             LSHandlerContentTagClass: 'public.filename-extension'
         };
         addRolesForMode({mode, params, appID});
-        return addLaunchServiceHandler(params).then(() => {
+        return addLaunchServiceHandlers([params]).then(() => {
             return {added: true, params};
         });
     });
@@ -154,7 +154,7 @@ function addOrReplaceExtensionHandler ({extension, mode, appID}) {
         addRolesForMode({mode, params, appID});
         if (!handler) {
             // Use less risky approach of `array-add`
-            return addLaunchServiceHandler(params).then(() => {
+            return addLaunchServiceHandlers([params]).then(() => {
                 return {added: true, replaced: false, params, allHandlers};
             });
         }
@@ -180,7 +180,7 @@ function addOrReplaceContentTypeHandler ({contentType, mode, appID}) {
         addRolesForMode({mode, params, appID});
         if (!handler) {
             // Use less risky approach of `array-add`
-            return addLaunchServiceHandler(params).then(() => {
+            return addLaunchServiceHandlers([params]).then(() => {
                 return {added: true, replaced: false, params, allHandlers};
             });
         }
@@ -196,7 +196,7 @@ function addOrReplaceContentTypeHandler ({contentType, mode, appID}) {
 
 exports.addContentTypeHandlerIfNotExisting = addContentTypeHandlerIfNotExisting;
 exports.addExtensionHandlerIfNotExisting = addExtensionHandlerIfNotExisting;
-exports.addLaunchServiceHandler = addLaunchServiceHandler;
+exports.addLaunchServiceHandlers = addLaunchServiceHandlers;
 exports.setLaunchServiceHandlers = setLaunchServiceHandlers;
 exports.getLaunchServiceHandlers = getLaunchServiceHandlers;
 exports.addOrReplaceExtensionHandler = addOrReplaceExtensionHandler;

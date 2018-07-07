@@ -17,7 +17,7 @@ const argv = require('minimist')(process.argv.slice(2), {boolean: true});
 const {method} = argv;
 
 // Todo: We could i18nize this, but the command line allows for overriding anyways
-// const fileSelectMessageDefault = 'Please select a file:';
+const fileSelectMessageDefault = 'Please select a file:';
 
 function escapeBashDoubleQuoted (s) {
     return s.replace(/[$`"\\*@]/g, '\\$&').replace(/"/g, '\\\\"'); // Extra escaping of double-quote
@@ -124,12 +124,9 @@ on run argv -- For direct command line (see example above)
 end run
 
 on getFile (argv)
-    try -- This block is just to trigger the option to approve a third party app
-        set n to item 2 of argv
-        -- display dialog "Please approve this application in System Preferences" -- isn't working
+    if (argv is current application) then -- This block is just to trigger the option to approve a third party app
         return
-    on error
-    end try
+    end if
     ` +
 
     ('string' in argv
@@ -154,11 +151,15 @@ on getFile (argv)
         get POSIX path of (input as text)
     on error
         ` +
-        `tell application "${escapeAppleScriptQuoted(executableName)}" to activate
+        /*
+        // Works to return silently (or uncomment to give an alert); was useful when not
+        //   using droplet and needed user to handle disabling of security warnings
+        //   (opening  system preferences pane as also commented out below)
+        -- `tell application "${escapeAppleScriptQuoted(executableName)}" to activate
         -- display dialog "Try opening the file now." -- any alerts can go in Firefox instead
         return` + // Todo: For now, we return on error, but we should allow option to get file picker as in working code below; we could also display a dialog here for instructions as user may be puzzled on how to use
-        /*
-        try
+        */
+        `try
             set input to choose file with prompt "` +
     escapeAppleScriptQuoted(
         'fileSelectMessage' in argv ? argv.fileSelectMessage : fileSelectMessageDefault
@@ -171,8 +172,6 @@ on getFile (argv)
         on error -- cancelled
             return
         end try
-        */
-        `
     end try
     tell application "Finder"
         -- todo: Could prompt for, and allow input for, multiple files or folder
@@ -330,9 +329,9 @@ end getFile
     }).then(() => {
         return execFile('xattr', ['-d', 'com.apple.quarantine', appPath]);
     }).then(() => {
-        // return execFile('osascript', [appPath, 'dummy', 'nullCall']);
+        // return execFile('osascript', [appPath + '/Contents/Resources/Scripts/main.scpt', 'dummy', 'nullCall']);
         // User will otherwise get warning when trying to open
-        return execFile('open', [appPath, '--args', 'dummy', 'nullCall']);
+        return execFile('open', [appPath, '--args', 'dummy']); // Doesn't seem to work with multiple arguments, and osascript doesn't avoid warning
     /*
     // This is not actually needed with the `xattr` command
     }).then(() => {
