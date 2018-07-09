@@ -31,12 +31,12 @@ function addRolesForMode ({mode, params, appID}) {
     case 'edit':
         roles.push('LSHandlerRoleViewer', 'LSHandlerRoleEditor');
         break;
+    case 'shell':
+        roles.push('LSHandlerRoleShell');
+        break;
     // Todo: Add these options to UI
     case 'editOnly': // Should this just be `LSHandlerRoleAll`?
         roles.push('LSHandlerRoleEditor');
-        break;
-    case 'shell':
-        roles.push('LSHandlerRoleShell');
         break;
     case 'all':
         roles.push('LSHandlerRoleAll');

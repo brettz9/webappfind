@@ -706,7 +706,8 @@ function createTemplatedForm () {
             ' ',
             ['select', {name: 'mode'}, [
                 ['option', {value: 'view'}, [_('view_mode')]],
-                ['option', {value: 'edit'}, [_('edit_mode')]]
+                ['option', {value: 'edit'}, [_('edit_mode')]],
+                ['option', {value: 'shell'}, [_('shell_mode')]]
             ]]
         ]],
         nbsp3,

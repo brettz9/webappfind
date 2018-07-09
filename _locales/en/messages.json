@@ -238,6 +238,9 @@
     "edit_mode": {
         "message": "Edit"
     },
+    "shell_mode": {
+        "message": "Shell"
+    },
     "custom_mode": {
         "message": "Custom mode:"
     },
