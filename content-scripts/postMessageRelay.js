@@ -9,7 +9,7 @@ function l (...msgs) {
     console.log(...msgs);
 }
 
-function sameOriginAndType (data) {
+function sameOriginAndHasType (data) {
     return origin === location.origin && // Security
         data && data.webappfind && data.webappfind.type; // === type;
 }
@@ -22,10 +22,11 @@ window.addEventListener('unload', () => {
 //  e.g., within our SVG-edit extension which is loaded by the main page
 //  doing a script tag injection)
 window.addEventListener('message', function ({origin, data}) {
-    if (!sameOriginAndType(data)) {
+    if (!sameOriginAndHasType(data)) {
         return;
     }
     const {type, pathID, content} = data.webappfind;
+    // console.log('type', type, origin, data);
     switch (type) {
     case 'read':
         port.postMessage({type: 'read', pathID});
@@ -85,7 +86,7 @@ function webappfindStart (result) {
             l('file protocol err: ' + e);
         }
     } else {
-        l('pathID', pathID, 'contentlen', content.length);
+        l('pathID', pathID, 'contentlen', content.length, 'location.origin', location.origin);
         window.postMessage(message, location.origin);
     }
 }
