@@ -96,6 +96,15 @@ simply be able to run commands manually from the command line.
 1. When done, remove generated AppleScript app(s) from repo
 1. Ensure working in Chrome as well as Firefox (Edge, Safari, etc.)
 
+1. Core enhancements
+    1. Allow file or directory permissions to have static file server
+        permissions be granted (with localhost:port info sent to webapp).
+        Could then, e.g., have wiki edit HTML but also conveniently
+        serve it (and in a targeted fashion)
+    1. Support directory type permissions, with a permission to iterate
+        directories and get and/or edit contents.
+        (Later offer ability to persist these permissions.)
+
 1. From Node WebSockets -> add-on, we need to open website and `postMessage`
     into it and be able to handle opposite direction, including for writing
     file contents back to disk, but also for *AtYourCommand* functionality)
@@ -150,10 +159,9 @@ simply be able to run commands manually from the command line.
     HTML head meta-data for flagging availability of file registrations
     and possibly allow user directed use of this information to register
     1. Set `protocol_handlers: [{protocol: "ext+waf", name: "WebAppFind", uriTemplate: "https://...%s"}]`; e.g., for site to register itself for a type
-1. Complete [executable builder](https://github.com/brettz9/executable-builder)
-    and [atyourcommand](https://github.com/brettz9/atyourcommand) but for
-    webextensions.
-    1. Option to auto-add as file association and to dock
+1. [executable builder](https://github.com/brettz9/executable-builder)
+    and [atyourcommand](https://github.com/brettz9/atyourcommand)
+    1. Option to auto-add to dock
     1. Reimplement to support Windows in new webappfind version (as batch
         scripts as possible); convert to shortcut tied to `cmd.exe` for sake
         of getting an icon
