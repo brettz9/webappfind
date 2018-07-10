@@ -25,11 +25,14 @@ window.addEventListener('message', function ({origin, data}) {
     if (!sameOriginAndHasType(data)) {
         return;
     }
-    const {type, pathID, content} = data.webappfind;
+    const {type, pathID, content, id} = data.webappfind;
     // console.log('type', type, origin, data);
     switch (type) {
     case 'read':
-        port.postMessage({type: 'read', pathID});
+        port.postMessage({type, pathID, id});
+        break;
+    case 'readdir':
+        port.postMessage({type, pathID, id});
         break;
     case 'save':
         if (!pathID) { // User may be attempting edit with view-only access
@@ -37,8 +40,8 @@ window.addEventListener('message', function ({origin, data}) {
             return;
         }
         // l(content.length);
-        l({type: 'save', pathID, len: content.length});
-        port.postMessage({type: 'save', pathID, content});
+        l({type, pathID, len: content.length});
+        port.postMessage({type, pathID, content, id});
         break;
     }
 });
@@ -93,6 +96,16 @@ function webappfindStart (result) {
 
 port.onMessage.addListener(function ({type, result, pathID, error}) {
     switch (type) {
+    case 'readdir':
+        window.postMessage({
+            webappfind: {
+                type: 'filesAndDirs',
+                pathID,
+                result,
+                error: !!error
+            }
+        }, location.origin);
+        break;
     case 'saveEnd':
         window.postMessage({
             webappfind: {

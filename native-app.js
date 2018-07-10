@@ -419,6 +419,7 @@ const nodeJSONMethods = {
     //         FileBridge/EnvironmentBridge dependency
     execFile,
     buildOpenWithExecutable,
+    readdir,
 
     cmd ({args}) {
         return execFile(cmdExe, args);
@@ -623,11 +624,11 @@ function messageHandler (msg, push, done) {
 }
 
 function processMessage (msgObj) {
-    function process (content) {
+    function processContent (content) {
         Object.assign(msgObj, {content, pathID: uuid()});
         return msgObj;
     }
-    const {i, method, args, file, binary, content, tabID, pathID, nodeJSON} = msgObj;
+    const {i, method, args, file, binary, content, tabID, pathID, allowHidden, nodeJSON} = msgObj;
     if (nodeJSON) {
         return nodeJSONMethods[method](...args).catch((error) => {
             return {i, method, error, nodeJSON: true};
@@ -645,7 +646,8 @@ function processMessage (msgObj) {
         const {string, tabID} = msgObj;
         let result;
         try {
-            result = eval(string); // eslint-disable-line no-eval
+            // Indirect global eval (any use case for allowing scoped eval?)
+            result = (1, eval)(string); // eslint-disable-line no-eval
             if (typeof result === 'function') {
                 result = result();
             }
@@ -673,6 +675,16 @@ function processMessage (msgObj) {
             return {saveEnd: true, tabID, pathID};
         });
     }
+    case 'readdir':
+        // Todo: Restrict/validate pathID (allowing empty)
+        return readdir(pathID).then((result) => {
+            if (!allowHidden) {
+                result = result.filter((fd) => !fd.match(/^\./)); // !fd.startsWith('.'));
+            }
+            return {method, pathID, result};
+        }).catch((error) => {
+            return {method, pathID, error};
+        });
     case 'read':
     case 'webappfind':
     case 'client': {
@@ -688,7 +700,7 @@ function processMessage (msgObj) {
                 }
                 */
                 return content;
-            }).then(process).catch((error) => {
+            }).then(processContent).catch((error) => {
                 return {method, error};
             });
         }
@@ -701,7 +713,7 @@ function processMessage (msgObj) {
             }
         });
         */
-        return Promise.resolve(process(
+        return Promise.resolve(processContent(
             'string' in msgObj ? msgObj.string : undefined
         ));
     }
