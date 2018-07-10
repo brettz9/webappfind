@@ -100,7 +100,10 @@ simply be able to run commands manually from the command line.
     1. Allow file or directory permissions to have static file server
         permissions be granted (with localhost:port info sent to webapp).
         Could then, e.g., have wiki edit HTML but also conveniently
-        serve it (and in a targeted fashion)
+        serve it (and in a targeted fashion); also have option, for
+        single files, to just open the file itself, along with the directory
+        (for JS, CSS, etc.) on the static server (even if permission to
+        write only given to single file)
     1. Support directory type permissions, with a permission to iterate
         directories and get and/or edit contents.
         (Later offer ability to persist these permissions.)
