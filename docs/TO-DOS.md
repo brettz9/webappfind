@@ -103,7 +103,9 @@ simply be able to run commands manually from the command line.
         serve it (and in a targeted fashion); also have option, for
         single files, to just open the file itself, along with the directory
         (for JS, CSS, etc.) on the static server (even if permission to
-        write only given to single file)
+        write only given to single file); with default set, one could
+        have all local HTML auto-open into a server environment, bypassing
+        Chrome, etc. restrictions!
     1. Support directory type permissions, with a permission to iterate
         directories and get and/or edit contents.
         (Later offer ability to persist these permissions.)
