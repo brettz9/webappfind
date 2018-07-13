@@ -91,7 +91,7 @@ See [Developer-Guide](./docs/Developer-Guide.md). <!-- Includes information on t
 
 ### Design rationale
 
-See [DESIGN][./docs/DESIGN.md]
+See [DESIGN](./docs/DESIGN.md).
 
 ### Contributing to WebAppFind
 
