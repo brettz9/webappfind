@@ -13,7 +13,6 @@ module.exports = {
         'filetypes.json',
         'package.json',
         'native-app.js',
-        'copy-polyfill.js',
         'src/**',
         'ignore/**',
         'bin/**',
