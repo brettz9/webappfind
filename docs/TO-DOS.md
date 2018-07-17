@@ -96,6 +96,8 @@ simply be able to run commands manually from the command line.
 1. When done, remove generated AppleScript app(s) from repo
 1. Ensure working in Chrome as well as Firefox (Edge, Safari, etc.)
 
+1. Enhancement/Fix: Limit or paginate possible choices from site's `meta`
+    of suggested extensions/MIME handling
 1. Core enhancements
     1. Allow file or directory permissions to have static file server
         permissions be granted (with localhost:port info sent to webapp).
