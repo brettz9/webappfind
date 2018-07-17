@@ -39,7 +39,7 @@
     "pkg-installer-all": "npm run build-pkg-installer-all && npm run run-pkg-install-all",
     "webext-lint": "web-ext lint",
     "webext-run": "web-ext run --browser-console",
-    "webext-build": "web-ext build",
+    "webext-build": "web-ext build --overwrite-dest",
     "copy-dialog-polyfill": "cp node_modules/dialog-polyfill/dialog-polyfill.js vendor/dialog-polyfill/dialog-polyfill.js && cp node_modules/dialog-polyfill/dialog-polyfill.css vendor/dialog-polyfill/dialog-polyfill.css",
     "copy-polyfill": "cp node_modules/webextension-polyfill/dist/browser-polyfill.js polyfills/browser-polyfill.js",
     "copy-jquery": "cp node_modules/jquery/dist/jquery.js vendor/jquery/dist/jquery.js",
