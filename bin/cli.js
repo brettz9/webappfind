@@ -81,7 +81,7 @@ function pkgNativeApps () {
                 '-o', `bin/native-app`
             ];
             // console.log(args.join(' '));
-            return execFile('pkg', args);
+            return execFile('pkg', args.concat('--debug'));
         })
     ).then(() => {
         console.log('Completing building native-apps');
@@ -108,7 +108,7 @@ function pkgInstaller () {
                 pkgFile,
                 '-o', `bin/installer`
             ];
-            return execFile('pkg', args);
+            return execFile('pkg', args.concat('--debug'));
         })
     ).then(() => {
         console.log('Completed installer build!');

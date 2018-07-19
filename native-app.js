@@ -217,8 +217,11 @@ end getFile
         'executablePath' in argv ? argv.executablePath : '../',
         executableName
     );
+    addLog('appPath', appPath);
     let CFBundleDocumentTypesValue;
+    addLog('execFile', execFile.toString());
     return execFile('osacompile', ['-o', appPath, '-e', appleScript]).then(() => {
+        addLog('Finished osacompile');
         if (!('id' in argv)) {
             const msg = 'Completed but without `CFBundleIdentifier`';
             addLog(msg);
@@ -290,11 +293,13 @@ end getFile
                 : null
         ]);
     }).then(() => {
+        addLog('Finished extensions/content types');
         return execFile(
             lsregisterPath,
             ['-v', appPath]
         );
     }).then(() => {
+        addLog('Finished lsregister');
         if (!argv.extensionsDefaults) {
             return;
         }
@@ -345,6 +350,9 @@ end getFile
         addLog(msg);
         return resp;
         // chmod ugo+r `${appPath}/Contents/Info.plist` ?
+    }).catch((err) => {
+        err.log = resp;
+        throw err;
     });
     // defaults read com.apple.LaunchServices/com.apple.launchservices.secure.plist LSHandlers
 }
@@ -629,10 +637,13 @@ function processMessage (msgObj) {
     }
     const {i, method, args, file, binary, content, tabID, pathID, nodeJSON} = msgObj;
     if (nodeJSON) {
-        return nodeJSONMethods[method](...args).catch((error) => {
-            return {i, method, error, nodeJSON: true};
-        }).then((result) => {
+        return nodeJSONMethods[method](...args).then((result) => {
             return {i, method, result, nodeJSON: true};
+        }).catch((error) => {
+            return {i, method, error: {
+                message: error.toString(),
+                log: error.log
+            }, nodeJSON: true};
         });
     }
     switch (method) {

@@ -216,6 +216,7 @@ async function saveExecutables (data) {
     // Todo: Could add UI to allow defining extensions/contentTypes as empty
     // Todo: Add UI to allow passing in `string` in place of `file`/file associations
     arrs.forEach(([arrProp, opt]) => {
+        data[arrProp] = data[arrProp].filter((item) => item);
         if (data[arrProp].length) {
             opts[opt] = data[arrProp];
         }
@@ -223,8 +224,12 @@ async function saveExecutables (data) {
 
     console.log('opts', opts);
     console.log('buildOpenWithExecutable', buildOpenWithExecutable);
-    const result = await buildOpenWithExecutable(opts);
-    console.log('completed executable building', result);
+    try {
+        const result = await buildOpenWithExecutable(opts);
+        console.log('completed executable building', result);
+    } catch (err) {
+        console.log('err', err);
+    }
     // Todo: Use `associateDesktopFilePath` + i with xattr for default for particular files (see to-do in executable.js)
     /*
     {
