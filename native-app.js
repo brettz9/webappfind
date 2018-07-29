@@ -3,9 +3,11 @@ const ini = require('ini');
 const nativeMessage = require('chrome-native-messaging');
 const WebSocket = require('ws');
 const uuid = require('uuid/v4');
+// We have a special pkg-related promises file as pkg will overwrite these
+//   methods, causing conflicts (and too early to use Node 10.0 Promise-based `fs`)
 const {
-    execFile, readFile, writeFile, mkdirp, readdir, unlink, stat
-} = require('./polyfills/promise-wrappers');
+    execFileProm, readFileProm, writeFileProm, mkdirpProm, readdirProm, unlinkProm, statProm
+} = require('./polyfills/promise-wrappers-pkg');
 const {
     addOrReplaceExtensionHandler,
     addOrReplaceContentTypeHandler
@@ -52,7 +54,7 @@ case 'urlshortcut':
 </dict>
 </plist>
 `;
-    writeFile(path, template).then(() => {
+    writeFileProm(path, template).then(() => {
         console.log(`Wrote file to ${path} for URL: ${url}`);
     }).catch((err) => {
         if (err.code === 'EEXIST') {
@@ -219,8 +221,8 @@ end getFile
     );
     addLog('appPath', appPath);
     let CFBundleDocumentTypesValue;
-    addLog('execFile', execFile.toString());
-    return execFile('osacompile', ['-o', appPath, '-e', appleScript]).then(() => {
+    addLog('execFile', execFileProm.toString());
+    return execFileProm('osacompile', ['-o', appPath, '-e', appleScript]).then(() => {
         addLog('Finished osacompile');
         if (!('id' in argv)) {
             const msg = 'Completed but without `CFBundleIdentifier`';
@@ -294,7 +296,7 @@ end getFile
         ]);
     }).then(() => {
         addLog('Finished extensions/content types');
-        return execFile(
+        return execFileProm(
             lsregisterPath,
             ['-v', appPath]
         );
@@ -328,21 +330,21 @@ end getFile
     }).then((contentTypeAddResults) => {
         addLog('contentTypeAddResults', contentTypeAddResults);
     }).then(() => {
-        return execFile('pkill', ['-f', '/usr/libexec/lsd']);
+        return execFileProm('pkill', ['-f', '/usr/libexec/lsd']);
     }).then(() => {
-        return execFile('killall', ['Finder']);
+        return execFileProm('killall', ['Finder']);
     }).then(() => {
-        return execFile('xattr', ['-d', 'com.apple.quarantine', appPath]);
+        return execFileProm('xattr', ['-d', 'com.apple.quarantine', appPath]);
     }).then(() => {
-        // return execFile('osascript', [appPath + '/Contents/Resources/Scripts/main.scpt', 'dummy', 'nullCall']);
+        // return execFileProm('osascript', [appPath + '/Contents/Resources/Scripts/main.scpt', 'dummy', 'nullCall']);
         // User will otherwise get warning when trying to open
-        return execFile('open', [appPath, '--args', 'dummy']); // Doesn't seem to work with multiple arguments, and osascript doesn't avoid warning
+        return execFileProm('open', [appPath, '--args', 'dummy']); // Doesn't seem to work with multiple arguments, and osascript doesn't avoid warning
     /*
     // This is not actually needed with the `xattr` command
     }).then(() => {
         // We need the next lame step to get ourselves trusted
-        return execFile('open', ['x-apple.systempreferences:com.apple.preference.security']);
-        // or: return execFile('open', ['/System/Library/PreferencePanes/Security.prefPane/']);
+        return execFileProm('open', ['x-apple.systempreferences:com.apple.preference.security']);
+        // or: return execFileProm('open', ['/System/Library/PreferencePanes/Security.prefPane/']);
     */
     }).then(() => {
         const msg = 'Added ' + appPath + ' and associated `CFBundleIdentifier`' +
@@ -425,34 +427,34 @@ const nodeJSONMethods = {
     //         TemplateFileBridge is for executable builder templates, and it
     //         should be moved there with a lower-level
     //         FileBridge/EnvironmentBridge dependency
-    execFile,
+    execFileProm,
     buildOpenWithExecutable,
 
     cmd ({args}) {
-        return execFile(cmdExe, args);
+        return execFileProm(cmdExe, args);
     },
     reveal ({fileName}) {
         if (isWin) {
-            return execFile('Explorer', ['/select', fileName]);
+            return execFileProm('Explorer', ['/select', fileName]);
         }
         if (isMac) {
-            return execFile('open', ['-R', fileName]);
+            return execFileProm('open', ['-R', fileName]);
         }
         // Todo: Check this (and other areas) working for Linux
-        return execFile('nautilus', fileName); // Ubuntu
+        return execFileProm('nautilus', fileName); // Ubuntu
     },
 
     // Todo: Move to own /node-bridges/ file after exposing readdir, etc.
     autocompletePaths ({value: userVal, dirOnly, listID}) {
         let dir = userVal;
-        return readdir(userVal).catch((err) => {
+        return readdirProm(userVal).catch((err) => {
             if (err.code === 'ENOTDIR') { // Exists as file, not directory
                 return dirOnly ? [] : [userVal];
             }
             if (err.code === 'ENOENT') { // File doesn't exist
                 const base = path.basename(userVal);
                 dir = path.dirname(userVal);
-                return readdir(dir).then((files) => { // May throw
+                return readdirProm(dir).then((files) => { // May throw
                     return files.filter((fileInDir) => {
                         // return fileInDir.startsWith(base); // Works for case-sensitive
                         return (new RegExp(regexEscape(base), 'i')).test(fileInDir);
@@ -472,7 +474,7 @@ const nodeJSONMethods = {
             return Promise.all(
                 optValues.map((optValue) => {
                     try {
-                        return stat(optValue).then((stats) => {
+                        return statProm(optValue).then((stats) => {
                             return [stats.isDirectory(), optValue];
                         });
                     } catch (err) {
@@ -511,7 +513,7 @@ const nodeJSONMethods = {
     _makeProfileSubDirectory (dir) {
         const profD = directories.ProfD,
             pDir = path.join(profD, dir);
-        return mkdirp(pDir).catch((err) => {
+        return mkdirpProm(pDir).catch((err) => {
             if (err.code !== 'EEXIST') {
                 throw err;
             }
@@ -531,7 +533,7 @@ const nodeJSONMethods = {
     },
     execBrowser ({args}) {
         return this.getBrowserExecutableAndDir().then(([file]) => {
-            return execFile(file, args);
+            return execFileProm(file, args);
         });
     },
     createProfile ({name}) {
@@ -560,7 +562,7 @@ const nodeJSONMethods = {
         return this.execBrowser({args});
     },
     getProfileInfo () {
-        return readFile(profilesINI, 'utf8').then((contents) => {
+        return readFileProm(profilesINI, 'utf8').then((contents) => {
             return {profiles: ini.parse(contents)};
         });
     },
@@ -575,10 +577,10 @@ const nodeJSONMethods = {
         lastTemplate = lastTemplate ? path.join(profD, 'executable-creator', lastTemplate + '.json') : null;
 
         return this._makeECDir().then((ec) => {
-            return writeFile(template, content);
+            return writeFileProm(template, content);
         }).then(() => {
             if (lastTemplate) { // Currently not in use
-                return writeFile(lastTemplate);
+                return writeFileProm(lastTemplate);
             }
         }).then(() => {
             return {
@@ -590,7 +592,7 @@ const nodeJSONMethods = {
     deleteTemplate ({fileName}) {
         return this._makeECDir().then((ec) => {
             const template = path.join(ec, fileName + '.json');
-            return unlink(template).catch((err) => {
+            return unlinkProm(template).catch((err) => {
                 if (err.code === 'ENOENT') { // File doesn't exist
                     return {message: 'File file (' + template + ') + does not exist'};
                 }
@@ -603,11 +605,11 @@ const nodeJSONMethods = {
     getTemplate ({fileName}) {
         const profD = directories.ProfD,
             template = path.join(profD, 'executable-creator', fileName + '.json');
-        return readFile(template, 'utf8');
+        return readFileProm(template, 'utf8');
     },
     getTemplates () {
         return this._makeECDir().then((ec) => {
-            return readdir(ec);
+            return readdirProm(ec);
         }).then((files) => {
             return files
                 .filter((f) => f.match(/\.json$/))
@@ -635,8 +637,10 @@ function processMessage (msgObj) {
         Object.assign(msgObj, {content, pathID: uuid()});
         return msgObj;
     }
-    const {i, method, args, file, binary, content, tabID, pathID, nodeJSON} = msgObj;
+    const {i, args, file, binary, content, tabID, pathID, nodeJSON} = msgObj;
+    let {method} = msgObj;
     if (nodeJSON) {
+        method = method === 'execFile' ? 'execFileProm' : method;
         return nodeJSONMethods[method](...args).then((result) => {
             return {i, method, result, nodeJSON: true};
         }).catch((error) => {
@@ -673,7 +677,7 @@ function processMessage (msgObj) {
         return Promise.resolve({nodeEval: true, i, tabID, result});
     }
     case 'save': {
-        return writeFile(file, content).catch((error) => {
+        return writeFileProm(file, content).catch((error) => {
             /*
             if (error.code === 'EEXIST') {
                 return;
@@ -690,8 +694,8 @@ function processMessage (msgObj) {
         if ('file' in msgObj) { // Site may still wish args passed to it
             // Todo: Document this and `binary` as command line
             const options = binary ? null : 'utf8';
-            // let content = await readFile(file, options);
-            return readFile(file, options).then((content) => {
+            // let content = await readFileProm(file, options);
+            return readFileProm(file, options).then((content) => {
                 /*
                 // We don't need this as `content` as Buffer has `toJSON`
                 if (binary) {
