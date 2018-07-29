@@ -19,7 +19,7 @@ const readFileProm = (path, options) => {
     return new Promise((resolve, reject) => {
         fs.readFile(
             path,
-            options,
+            options || {}, // Default to empty object for pkg: https://github.com/zeit/pkg/issues/483
             (err, data) => {
                 if (err) {
                     reject(err);
@@ -48,13 +48,17 @@ const writeFileProm = (path, data) => {
 
 const readdirProm = (path, options) => {
     return new Promise((resolve, reject) => {
-        fs.readdir(path, options, (err, files) => {
-            if (err) {
-                reject(err);
-                return;
+        fs.readdir(
+            path,
+            options || {}, // Default to empty object for pkg: https://github.com/zeit/pkg/issues/483
+            (err, files) => {
+                if (err) {
+                    reject(err);
+                    return;
+                }
+                resolve(files);
             }
-            resolve(files);
-        });
+        );
     });
 };
 
@@ -145,17 +149,22 @@ if (isWin) {
 
 const execFileProm = (file, args, options) =>
     new Promise((resolve, reject) => {
-        execFile(file, args, options, (error, stdout, stderr) => {
-            if (error) {
-                const err = new Error('Exec error' + error);
-                err.error = error;
-                err.stdout = stdout;
-                err.stderr = stderr;
-                reject(err);
-                return;
+        execFile(
+            file,
+            args,
+            options || {}, // Default to empty object for pkg: https://github.com/zeit/pkg/issues/483
+            (error, stdout, stderr) => {
+                if (error) {
+                    const err = new Error('Exec error: ' + error);
+                    err.error = error;
+                    err.stdout = stdout;
+                    err.stderr = stderr;
+                    reject(err);
+                    return;
+                }
+                resolve([stdout, stderr]);
             }
-            resolve([stdout, stderr]);
-        });
+        );
     });
 
 exports.mkdirpProm = mkdirpProm;

@@ -238,6 +238,8 @@ To develop with source, install with npm:
 
 # Higher priority to-dos (shorter)
 
+1. Add whitelist and blacklist for properties to send to app/web-app (for
+    privacy/security, may not wish to send response headers, etc.)
 1. Have a mechanism to **return from a WebAppFind-opened web app**
     back to the page which was the source of its content (e.g., in case one
     accidentally didn't grab enough text or whatever)

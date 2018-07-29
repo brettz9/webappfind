@@ -208,7 +208,11 @@ end getFile
     const resp = [];
     function addLog (str, obj) {
         if (argv.log) {
-            console.log(str, obj);
+            if (obj === undefined) {
+                console.log(str);
+            } else {
+                console.log(str, obj);
+            }
         }
         resp.push([str, obj]);
     }
@@ -221,7 +225,7 @@ end getFile
     );
     addLog('appPath', appPath);
     let CFBundleDocumentTypesValue;
-    addLog('execFile', execFileProm.toString());
+    addLog('execFile1', execFileProm.toString());
     return execFileProm('osacompile', ['-o', appPath, '-e', appleScript]).then(() => {
         addLog('Finished osacompile');
         if (!('id' in argv)) {
@@ -335,6 +339,11 @@ end getFile
         return execFileProm('killall', ['Finder']);
     }).then(() => {
         return execFileProm('xattr', ['-d', 'com.apple.quarantine', appPath]);
+    }).catch((err) => {
+        if (!err.toString().includes('No such xattr')) {
+            throw err;
+        }
+        addLog('Non-fatal xattr -d com.apple.quarantine error');
     }).then(() => {
         // return execFileProm('osascript', [appPath + '/Contents/Resources/Scripts/main.scpt', 'dummy', 'nullCall']);
         // User will otherwise get warning when trying to open

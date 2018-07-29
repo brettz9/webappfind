@@ -68,6 +68,7 @@ function getAllTargets () {
 function pkgNativeApps () {
     const pkgFile = 'native-app.js';
     let targets = process.argv[3] || '';
+    const buildInfoIntoName = !!process.argv[4];
     targets = targets === 'all' ? getAllTargets() : targets.split(',');
     return Promise.all(
         targets.map((target) => {
@@ -75,7 +76,7 @@ function pkgNativeApps () {
             const args = target ? [
                 pkgFile,
                 '--targets', target,
-                '-o', `bin/${target}-native-app`
+                '-o', buildInfoIntoName ? `bin/${target}-native-app` : `bin/native-app`
             ] : [
                 pkgFile,
                 '-o', `bin/native-app`
@@ -97,13 +98,14 @@ function pkgInstaller () {
     // `targets` includes "host" for own machine; empty string follows defaults of
     //    native machine Node/architecture with Linux/Mac/Windows
     let targets = process.argv[3] || '';
+    const buildInfoIntoName = !!process.argv[4];
     targets = targets === 'all' ? getAllTargets() : targets.split(',');
     return Promise.all(
         targets.map((target) => {
             const args = target ? [
                 pkgFile,
                 '--targets', target,
-                '-o', `bin/${target}-installer`
+                '-o', buildInfoIntoName ? `bin/${target}-installer` : `bin/installer`
             ] : [
                 pkgFile,
                 '-o', `bin/installer`
