@@ -1,6 +1,7 @@
 ## 3.0.0
 
-- Switch to WebExtensions/Chrome
+- Switch to WebExtensions/Chrome, now Mac-only instead of Windows-only; also
+    `filetype.json` behavior has not been reimplemented (at least not yet)
 
 ## 2.0.0
 
