@@ -1,3 +1,7 @@
+## 3.0.1
+
+- Fix path resolution
+
 ## 3.0.0
 
 - Switch to WebExtensions/Chrome, now Mac-only instead of Windows-only; also

@@ -138,7 +138,7 @@ on getFile (argv)
         set input to ""
     end try
     tell application "Finder"
-        do shell script "/usr/local/bin/node ${__filename} ` +
+        do shell script "\\"${process.execPath}\\" ` +
             `--method=client --string=" & ` +
             (argv.string === true || argv.string === 'true'
                 ? `quoted form of input`
@@ -179,7 +179,7 @@ on getFile (argv)
         -- todo: Could prompt for, and allow input for, multiple files or folder
         set filePath to POSIX path of (input as text) -- cast to posix file object and get path
         -- display dialog filePath -- For debugging
-        do shell script "/usr/local/bin/node ${__filename} ` +
+        do shell script "\\"${process.execPath}\\" ` +
             `--method=client --file=" & ` +
             ('file' in argv ? `"\\"${escapeBashDoubleQuoted(argv.file)}\\""` : `quoted form of filePath`) +
             ' & ' +

@@ -2,7 +2,7 @@
     "manifest_version": 2,
 
     "name": "webappfind",
-    "version": "3.0.0",
+    "version": "3.0.1",
     "author": "Brett Zamir",
     "homepage_url": "https://github.com/brettz9/webappfind",
     "description": "__MSG_addon_description__",
