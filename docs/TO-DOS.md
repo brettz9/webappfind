@@ -111,7 +111,22 @@ simply be able to run commands manually from the command line.
     1. Support directory type permissions, with a permission to iterate
         directories and get and/or edit contents.
         (Later offer ability to persist these permissions.)
-
+        1. Directories (implement as service--pass in directory to grant permission; could use for Git repos cloning into web app)
+            0. Iterate directory and push within?
+            1. File access per whole directory (and subdirectory) (with or without full path; only relative for security/privacy?)
+                1. Allows for local wikis!!!!! (Allow right-click on link to go to page, or to go directly if in view mode)
+            1. Directory file iteration
+            1. Updates from system if file gets deleted or moved
+            1. Allow persistent permissions; key to page and/or origin (directory and/or file)?
+            1. Offer interface to revoke directory (or file) permissions
+            1. Implement shared third-party storage? (or just do as proposal?)
+            1. Create/Move/Rename/Delete files
+            1. Allow file or directory permissions to have static file server permissions
+                be granted (with localhost:port info sent to webapp); e.g., to allow
+                editing of HTML and also ability to preview; add simple localhost
+                server which adds iframe for a file and then listens for clicks to
+                pass on path to other server (WAF listens for localhost granted UUID
+                (?) and then passes current file info to regular data file opener)
 1. From Node WebSockets -> add-on, we need to open website and `postMessage`
     into it and be able to handle opposite direction, including for writing
     file contents back to disk, but also for *AtYourCommand* functionality)

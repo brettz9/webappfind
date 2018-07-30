@@ -112,6 +112,8 @@ can cover the entire range of functionality available in the UI.
 
 # To-dos for new Executable Builder (in WebAppFind)
 
+1. For content-type, give option to *add further meta-data to export*
+    (if exposing)/import (needed if using third party)
 1. IMPORTANT: See `execute.js`, `executableResponses.js`, etc. for *other
     todos already under-way*
 1. *Remove/adapt to-dos from other add-ons*
