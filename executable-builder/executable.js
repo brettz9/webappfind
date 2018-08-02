@@ -1254,7 +1254,7 @@ function init () {
                 //    Services menu (see source of a service workflow
                 //    as created by Automator, modify file, and add
                 //    to `~/Library/Services`)
-
+                // Todo: Give alerts, e.g., if trying to set defaults and no ID
                 // Todo: Could expose to UI and pass in the following (if user
                 //   actually wants an executable that prompts for a file rather
                 //   than expecting a file argument)
