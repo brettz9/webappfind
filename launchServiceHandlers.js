@@ -48,7 +48,7 @@ function addRolesForMode ({mode, params, appID}) {
 }
 
 function addContentTypeHandlerIfNotExisting ({contentType, mode, appID}) {
-    return getLaunchServiceHandlers({contentType}).then(({foundHandler: handler}) => {
+    return getLaunchServiceHandlers({contentType, type: 'mime'}).then(({foundHandler: handler}) => {
         if (handler) {
             return {added: false, handler};
         }
@@ -126,7 +126,7 @@ function getLaunchServiceHandlers ({contentTag, contentType, type = 'extension'}
             contentTag = contentType;
         }
         if (!contentTag) {
-            throw new Error('`getLaunchServiceHandlers()` is missing a `contentTag` or `contentType` argument');
+            throw new Error('`getLaunchServiceHandlers()` is missing a `contentTag` or `contentType` argument: content-type: ' + contentType + '; type: ' + type);
         }
         const foundIndex = LSHandlers.findIndex(({LSHandlerContentTag, LSHandlerContentTagClass}) => {
             return LSHandlerContentTag &&
@@ -169,7 +169,7 @@ function addOrReplaceExtensionHandler ({extension, mode, appID}) {
 }
 
 function addOrReplaceContentTypeHandler ({contentType, mode, appID}) {
-    return getLaunchServiceHandlers({contentType}).then(({
+    return getLaunchServiceHandlers({contentType, type: 'mime'}).then(({
         foundIndex: index,
         foundHandler: handler,
         allHandlers

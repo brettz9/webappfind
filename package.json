@@ -15,7 +15,7 @@
   },
   "bin": {
     "webappfind": "./src/installer.js",
-    "wafcli": "./bin/cli.js"
+    "wafcli": "./bin/wafcli"
   },
   "scripts": {
     "test": "mocha",
