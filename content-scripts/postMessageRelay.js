@@ -86,7 +86,7 @@ function webappfindStart (result) {
             l('file protocol err: ' + e);
         }
     } else {
-        l('pathID', pathID, 'contentlen', content.length, 'location.origin', location.origin);
+        l('pathID', pathID, 'contentlen', content.length || (content.data && content.data.length), 'location.origin', location.origin);
         window.postMessage(message, location.origin);
     }
 }
