@@ -1,3 +1,10 @@
+## 3.0.2
+
+- Rename JS binary so can work as is without install (by adding to PATH)
+- Fix: MIME type registration (and improved logging)
+- Log binary data length
+- Remove `yarn.lock`
+
 ## 3.0.1
 
 - Fix path resolution
