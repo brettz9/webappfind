@@ -646,8 +646,8 @@ function processMessage (msgObj) {
         Object.assign(msgObj, {content, pathID: uuid()});
         return msgObj;
     }
-    const {i, args, file, binary, content, tabID, pathID, nodeJSON} = msgObj;
-    let {method} = msgObj;
+    const {i, args, file, binary, tabID, pathID, nodeJSON, length} = msgObj;
+    let {method, content} = msgObj;
     if (nodeJSON) {
         method = method === 'execFile' ? 'execFileProm' : method;
         return nodeJSONMethods[method](...args).then((result) => {
@@ -686,6 +686,12 @@ function processMessage (msgObj) {
         return Promise.resolve({nodeEval: true, i, tabID, result});
     }
     case 'save': {
+        if (binary) {
+            if (!('length' in content)) {
+                content.length = length;
+                content = Buffer.from(content);
+            }
+        }
         return writeFileProm(file, content).catch((error) => {
             /*
             if (error.code === 'EEXIST') {

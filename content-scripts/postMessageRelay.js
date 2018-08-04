@@ -37,7 +37,7 @@ window.addEventListener('message', function ({origin, data}) {
             return;
         }
         // l(content.length);
-        l({type: 'save', pathID, len: content.length});
+        l('saving... pathID:', pathID, 'length: ', content.length);
         port.postMessage({type: 'save', pathID, content});
         break;
     }
