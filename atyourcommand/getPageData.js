@@ -21,7 +21,7 @@ window.getPageData = function getPageData ({
     // Todo: retrieve "linkPageTitle", "linkBodyText", and "linkPageHTML"
     // Todo: Allow passing in to get custom properties?
     const selection = window.getSelection();
-    const hasSelection = selection.rangeCount;
+    const hasSelection = selection && selection.rangeCount;
     let selectedHTML, selectedText, nodeName;
     if (hasSelection) {
         const range = selection.getRangeAt(0);
@@ -67,7 +67,7 @@ window.getPageData = function getPageData ({
         bodyText: document.body.textContent // Treat like hidden to avoid need to select anything
     };
     customProperties.forEach((customProperty) => {
-        msg[customProperty] = selection[customProperty];
+        msg[customProperty] = window[customProperty];
     });
     return msg; // We need privs on the dialogs we open
 };

@@ -493,7 +493,7 @@ function init ({
                         'favIconUrl',
                         'linkText', 'linkUrl',
                         'frameUrl', 'srcUrl', 'mediaType',
-                        'modifiers'
+                        'modifiers', 'details'
                     ].reduce((children, seq) => {
                         // Todo: Replace with `flatMap` when decided: https://github.com/tc39/proposal-flatMap/pull/56
                         children.push(['dt', [seq]]);
@@ -547,7 +547,7 @@ function init ({
                             'favIconUrl',
                             'linkText', 'linkUrl',
                             'frameUrl', 'srcUrl', 'mediaType',
-                            'modifiers'
+                            'modifiers', 'details'
                         ].reduce((children, seq) => {
                             // Todo: Replace with `flatMap` when decided: https://github.com/tc39/proposal-flatMap/pull/56
                             children.push(['dt', [seq]]);

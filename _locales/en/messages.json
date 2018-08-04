@@ -395,6 +395,9 @@
     "seq_modifiers": {
         "message": "Key command modifiers (as a pipe-separated string)"
     },
+    "seq_details": {
+        "message": "Details containing headers for the document"
+    },
     "seq_filenum": {
         "message": "Add a hard-coded file by index"
     },
