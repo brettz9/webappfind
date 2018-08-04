@@ -1,3 +1,9 @@
+## 3.0.3
+
+- Fix: Add `length` to binary saves (is getting lost in JSON parsing)
+- Fix logging
+- npm: Update devDep (ESLint)
+
 ## 3.0.2
 
 - Rename JS binary so can work as is without install (by adding to PATH)
