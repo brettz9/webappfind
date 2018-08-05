@@ -66,6 +66,7 @@ case 'urlshortcut':
 case 'execbuildopen':
 case 'webappfind':
 case 'client': {
+    // Todo: Replace with a direct call to the responsible "client" method?
     const ws = new WebSocket('ws://localhost:8080');
 
     ws.on('open', () => {
@@ -436,6 +437,22 @@ const nodeJSONMethods = {
     //         TemplateFileBridge is for executable builder templates, and it
     //         should be moved there with a lower-level
     //         FileBridge/EnvironmentBridge dependency
+    client (argv) { // UNTESTED and UNUSED but may wish to keep for AtYourCommand invoking WebAppFind
+        // Todo: Merge with other client call above?
+        return new Promise((resolve, reject) => {
+            const ws = new WebSocket('ws://localhost:8080');
+
+            ws.on('open', () => {
+                ws.send(JSON.stringify(argv)); // Strings or buffer
+            });
+
+            ws.on('message', (data) => {
+                // console.log('msg recd back by client: ' + data);
+                ws.close();
+                resolve(data);
+            });
+        });
+    },
     execFileProm,
     buildOpenWithExecutable,
 

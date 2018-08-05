@@ -21,6 +21,10 @@ function execFile (aFile, args = [], options) {
     return getNodeJSON('execFile', aFile, args, options);
 }
 
+function client (args) {
+    return getNodeJSON('client', args);
+}
+
 function buildOpenWithExecutable (args) {
     if (!getNodeJSON) {
         ({getNodeJSON} = browser.extension.getBackgroundPage());
@@ -31,5 +35,6 @@ function buildOpenWithExecutable (args) {
 export {
     cmd,
     execFile,
+    client,
     buildOpenWithExecutable
 };
