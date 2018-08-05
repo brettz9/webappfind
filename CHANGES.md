@@ -1,3 +1,14 @@
+## 3.0.4
+
+- Fix (AYC): Ensure selection exists; custom properties from window not
+    selection
+- Fix (AYC): Work on special case when executable is WebAppFind
+- Fix (AYC): Avoid string escaping (arguments processed without need for
+    quotes)
+- Fix (AYC): Add and show description for `details` (headers); currently
+    not working
+- Fix (AYC): Items interfering with `all_urls`?
+
 ## 3.0.3
 
 - Fix: Add `length` to binary saves (is getting lost in JSON parsing)
