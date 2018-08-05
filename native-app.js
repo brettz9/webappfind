@@ -15,7 +15,8 @@ const {
 
 const {MacOSDefaults} = require('macos-defaults');
 
-const argv = require('minimist')(process.argv.slice(2), {boolean: true});
+const minimist = require('minimist');
+const argv = minimist(process.argv.slice(2), {boolean: true});
 const {method} = argv;
 
 // Todo: We could i18nize this, but the command line allows for overriding anyways
@@ -437,7 +438,7 @@ const nodeJSONMethods = {
     //         TemplateFileBridge is for executable builder templates, and it
     //         should be moved there with a lower-level
     //         FileBridge/EnvironmentBridge dependency
-    client (argv) { // UNTESTED and UNUSED but may wish to keep for AtYourCommand invoking WebAppFind
+    client (argv) { // UNTESTED but may wish to keep for AtYourCommand invoking WebAppFind
         // Todo: Merge with other client call above?
         return new Promise((resolve, reject) => {
             const ws = new WebSocket('ws://localhost:8080');
@@ -453,7 +454,17 @@ const nodeJSONMethods = {
             });
         });
     },
-    execFileProm,
+    execFileProm (file, ...args) {
+        if (file === process.execPath) {
+            const argv = minimist(args[0], {boolean: true});
+            writeFileProm(
+                '/Users/brett/Desktop/log.txt',
+                file + '\n==|==\n' + JSON.stringify(argv) + '\n\n' + process.execPath
+            );
+            return this.client(argv);
+        }
+        return execFileProm(file, ...args);
+    },
     buildOpenWithExecutable,
 
     cmd ({args}) {

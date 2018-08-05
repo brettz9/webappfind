@@ -148,7 +148,7 @@ if (isWin) {
 }
 
 const execFileProm = (file, args, options) =>
-    new Promise((resolve, reject) => {
+    new Promise((resolve, reject) =>
         execFile(
             file,
             args,
@@ -164,8 +164,8 @@ const execFileProm = (file, args, options) =>
                 }
                 resolve([stdout, stderr]);
             }
-        );
-    });
+        )
+    );
 
 exports.mkdirpProm = mkdirpProm;
 exports.readFileProm = readFileProm;
