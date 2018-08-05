@@ -43,6 +43,7 @@ async function save (name, data) {
     commands[name] = data;
     await packCommands(commands);
     await updateContextMenus();
+    console.log('finished updating/saving');
 }
 async function remove (name) {
     const commands = await getUnpackedCommands();

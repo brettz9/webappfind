@@ -457,10 +457,12 @@ const nodeJSONMethods = {
     execFileProm (file, ...args) {
         if (file === process.execPath) {
             const argv = minimist(args[0], {boolean: true});
+            /*
             writeFileProm(
                 '/Users/brett/Desktop/log.txt',
                 file + '\n==|==\n' + JSON.stringify(argv) + '\n\n' + process.execPath
             );
+            */
             return this.client(argv);
         }
         return execFileProm(file, ...args);
