@@ -112,6 +112,14 @@ can cover the entire range of functionality available in the UI.
 
 # To-dos for new Executable Builder (in WebAppFind)
 
+1. Provide *button to remove apps from "Open with..."*
+    1. If deleting the application:
+        1. Remove the application
+        1. `/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister -kill -r -domain local -domain user`
+        1. `killall Finder`
+    1. If modifying an application:
+        1. Modify application package contents Info.plist `CFBundleTypeExtensions`
+        1. `killall Finder`
 1. For content-type, give option to *add further meta-data to export*
     (if exposing)/import (needed if using third party)
 1. Bake in code to *grab file meta-data* and send as arguments to web app
