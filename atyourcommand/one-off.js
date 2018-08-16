@@ -82,8 +82,8 @@ async function buttonClick (data) {
         newStorage({name, commands, inputs: data.inputs});
     }
     if (data.execute) {
-        await execute(detail, tabData);
-        await finished();
+        const result = await execute(detail, tabData);
+        await finished(result);
     }
     if (close) {
         window.close();
@@ -314,11 +314,12 @@ function fileOrDirResult ({path, selector}) {
     }
 }
 
-async function finished () {
+async function finished (result) {
     $('#processExecuted').style.display = 'block';
     if (!$('#keepOpen').checked) {
         await buttonClick({id: 'cancel'});
     } else {
+        $('#command-results').value = result[0];
         setTimeout(() => {
             $('#processExecuted').style.display = 'none';
         }, 2000);
@@ -554,7 +555,7 @@ function init ({
                             children.push(['dt', [seq]]);
                             children.push(['dd', {
                                 style: 'width: 400px; border: 1px solid black; height: 50px; overflow: auto;'
-                            }, [String(tabData[seq])]]);
+                            }, [String(tabData[seq] || '')]]);
                             return children;
                         }, [])
                     ]]
@@ -585,11 +586,18 @@ function init ({
                             autofocus: itemType === 'commands'
                         }]
                     ]],
-                    ['div', [
+                    ['div', {style: 'float: left; width: 49%'}, [
                         _('command_preview'),
                         U.nbsp,
                         ['textarea', {id: 'command-preview', readonly: 'readonly'}, [
                             _('Preview_here')
+                        ]]
+                    ]],
+                    ['div', {style: 'float: left; width: 49%'}, [
+                        _('command_result'),
+                        U.nbsp,
+                        ['textarea', {id: 'command-results', readonly: 'readonly'}, [
+                            _('Result_here')
                         ]]
                     ]],
                     ['br'],

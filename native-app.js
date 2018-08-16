@@ -438,32 +438,29 @@ const nodeJSONMethods = {
     //         TemplateFileBridge is for executable builder templates, and it
     //         should be moved there with a lower-level
     //         FileBridge/EnvironmentBridge dependency
-    client (argv) { // UNTESTED but may wish to keep for AtYourCommand invoking WebAppFind
-        // Todo: Merge with other client call above?
-        return new Promise((resolve, reject) => {
-            const ws = new WebSocket('ws://localhost:8080');
-
-            ws.on('open', () => {
-                ws.send(JSON.stringify(argv)); // Strings or buffer
-            });
-
-            ws.on('message', (data) => {
-                // console.log('msg recd back by client: ' + data);
-                ws.close();
-                resolve(data);
-            });
-        });
-    },
     execFileProm (file, ...args) {
         if (file === process.execPath) {
             const argv = minimist(args[0], {boolean: true});
-            /*
+            /**/
             writeFileProm(
                 '/Users/brett/Desktop/log.txt',
                 file + '\n==|==\n' + JSON.stringify(argv) + '\n\n' + process.execPath
             );
-            */
-            return this.client(argv);
+            /**/
+            // Todo: Merge with other client call above?
+            return new Promise((resolve, reject) => {
+                const ws = new WebSocket('ws://localhost:8080');
+
+                ws.on('open', () => {
+                    ws.send(JSON.stringify(argv)); // Strings or buffer
+                });
+
+                ws.on('message', (data) => {
+                    // console.log('msg recd back by client: ' + data);
+                    ws.close();
+                    resolve(data);
+                });
+            });
         }
         return execFileProm(file, ...args);
     },
@@ -562,6 +559,7 @@ const nodeJSONMethods = {
         return this._makeProfileSubDirectory('executables').then((Executable) => {
             return Object.assign({
                 cmdExe,
+                webappfind: process.execPath,
                 // Todo: Make browser-specific
                 browserIcon: path.join(__dirname, 'executable-builder', 'firefox32.ico'),
                 // The following was having problems at least for web-ext runner

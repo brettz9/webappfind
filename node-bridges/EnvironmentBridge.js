@@ -32,7 +32,8 @@ async function getExePaths () {
     return {
         paths: [
             [_('Firefox'), firefoxExecutablePath],
-            [_('Command_prompt'), paths.cmdExe]
+            [_('Command_prompt'), paths.cmdExe],
+            [_('WebAppFind'), paths.webappfind]
         ]
     };
 }

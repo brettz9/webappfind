@@ -22,7 +22,7 @@ function execFile (aFile, args = [], options) {
 }
 
 function client (args) {
-    return getNodeJSON('client', args);
+    return getNodeJSON('runWAFClient', args);
 }
 
 function buildOpenWithExecutable (args) {

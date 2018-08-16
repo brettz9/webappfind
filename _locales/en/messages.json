@@ -495,6 +495,12 @@
     "command_preview": {
         "message": "Command preview:"
     },
+    "command_result": {
+        "message": "Command result:"
+    },
+    "Result_here": {
+        "message": "(Result will go here)"
+    },
     "Save": {
         "message": "Save"
     },
@@ -614,6 +620,9 @@
     },
     "Command_prompt": {
         "message": "Command prompt"
+    },
+    "WebAppFind": {
+        "message": "WebAppFind"
     },
     "choose_file_to_reveal": {
         "message": "Please choose a file to reveal"
