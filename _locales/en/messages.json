@@ -235,6 +235,12 @@
     "binary": {
         "message": "Binary"
     },
+    "string": {
+        "message": "Accept string argument"
+    },
+    "filePicker": {
+        "message": "File picker (when no file argument)"
+    },
     "edit_mode": {
         "message": "Edit"
     },

@@ -193,8 +193,10 @@ async function saveExecutables (data) {
         ['executableID', 'id'],
         ['mode'],
         ['site'],
+        ['string'],
         ['binary'],
-        ['args']
+        ['args'],
+        ['filePicker']
     ];
     notFalseys.forEach(([notFalsey, opt = notFalsey]) => {
         if (data[notFalsey]) {

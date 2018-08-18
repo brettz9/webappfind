@@ -609,7 +609,7 @@ function createTemplatedForm () {
             ]],
             */
             createRevealButton('[name=desktopFilePath]'),
-            ['datalist', {id: 'desktopFilePathDatalist'}]
+            ['datalist', {id: 'desktopFilePathDatalist'}],
             /*
             , ['br'],
             ` ${_('or').toUpperCase()} `,
@@ -626,6 +626,12 @@ function createTemplatedForm () {
                 ['datalist', {id: 'documentURLDatalist'}]
             ]]
             */
+            ['br'],
+            ` ${_('or').toUpperCase()} `,
+            ['label', [
+                _('string'),
+                ['input', {type: 'checkbox', name: 'string'}]
+            ]]
         ]],
         /*
         // Todo: Should be able to enable this by running `xattr`, but
@@ -701,6 +707,11 @@ function createTemplatedForm () {
             ]]
         ]],
         */
+        ['label', [
+            _('filePicker'),
+            ['input', {type: 'checkbox', name: 'filePicker'}]
+        ]],
+        ['br'],
         ['label', [
             _('mode'),
             ' ',
@@ -1329,6 +1340,8 @@ function init () {
             ...Object.keys(aliases),
             'executableName',
             'executablePath',
+            'filePicker',
+            'string',
             'mode',
             'site',
             'binary',

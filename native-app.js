@@ -128,10 +128,10 @@ on run argv -- For direct command line (see example above)
 end run
 
 on getFile (argv)
-    if (argv is current application) then -- This block is just to trigger the option to approve a third party app
+    ` + ('filePicker' in argv || 'file' in argv ? '' : `if (argv is current application) then -- This block is just to trigger the option to approve a third party app
         return
     end if
-    ` +
+    `) +
 
     ('string' in argv
         ? `try
@@ -142,7 +142,7 @@ on getFile (argv)
     tell application "Finder"
         do shell script "\\"${process.execPath}\\" ` +
             `--method=client --string=" & ` +
-            (argv.string === true || argv.string === 'true'
+            (argv.string === true || argv.string === 'true' || argv.string === 'on'
                 ? `quoted form of input`
                 : `"\\"${escapeBashDoubleQuoted(argv.string)}\\""`) +
             ' & ' +
@@ -150,7 +150,7 @@ on getFile (argv)
     end tell
     `
         // A normal `file` not `string`
-        : `try
+        : ('file' in argv ? '' : `try
         set input to item 1 of argv -- Not needed in Automator AS, but needed in normal AS
         get POSIX path of (input as text)
     on error
@@ -176,10 +176,14 @@ on getFile (argv)
         on error -- cancelled
             return
         end try
-    end try
+    end try`) + `
     tell application "Finder"
-        -- todo: Could prompt for, and allow input for, multiple files or folder
-        set filePath to POSIX path of (input as text) -- cast to posix file object and get path
+        -- todo: Could prompt for, and allow input for, multiple files or folder` +
+        ('file' in argv
+            ? ''
+            : `
+        set filePath to POSIX path of (input as text) -- cast to posix file object and get path`
+        ) + `
         -- display dialog filePath -- For debugging
         do shell script "\\"${process.execPath}\\" ` +
             `--method=client --file=" & ` +
@@ -197,8 +201,12 @@ on getFile (argv)
             end if
         end tell
     end tell
-`) + `
-    return input
+`) + ('filePicker' in argv || 'file' in argv
+        ? `
+    return`
+        : `
+    return input`
+    ) + `
 end getFile
 `;
     // Todo: Ensure native-app.js path works if called in executable form (and invoke bash if not?)
