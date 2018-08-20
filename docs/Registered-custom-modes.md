@@ -1,3 +1,5 @@
+# Registered custom modes
+
 I have patterned the following after
 <http://wiki.whatwg.org/wiki/MetaExtensions>, although I'm not sure how
 policing of the status might be done--maybe some form of rough consensus.

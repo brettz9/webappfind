@@ -6,9 +6,9 @@ The following are under the Mozilla Public License 2.0 (see http://www.mozilla.o
 - `/executable-builder/firefox32.ico`
 - `/executable-builder/firefox32.png`
 
-All other content is under:
+All other content is under an MIT license:
 
-All other files are Copyright (C) 2013-2017 Brett Zamir
+All other files are Copyright (C) 2013-2018 Brett Zamir
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

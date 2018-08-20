@@ -1,3 +1,5 @@
+# Registered file types
+
 I have patterned the following after <http://wiki.whatwg.org/wiki/MetaExtensions>,
 although I'm not sure how policing of the status might be done–maybe some
 form of rough consensus.
@@ -16,4 +18,5 @@ convention).)
 | *Type lower-case ASCII-only name here, e.g., "brettzamirinventory"* | *Describe the expected file format (e.g., "brettzamirinventory" is a subset of JSON which has the following 3 boolean properties...")* | *Link to a repository readme, etc. which describes the file type in more detail* | *Suggested file extension (This does not need to be distinct--e.g., the "brettzamirinventory" type could still use the "json" extension)* | *"Proposal" "Ratified", "Unendorsed"* |
 
 # See also
-* [Registered custom modes](./Registered-custom-modes.md)
+
+- [Registered custom modes](./Registered-custom-modes.md)

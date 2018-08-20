@@ -1,7 +1,5 @@
 # atyourcommand
 
-***NOTE: This project is not yet functional.***
-
 A webextensions add-on (currently Firefox only) for opening arbitrary web
 content into the command line (which also enables opening arbitrary web
 content into other web apps via

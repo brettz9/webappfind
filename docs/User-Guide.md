@@ -109,6 +109,8 @@ Favorites, etc. so as to be able to drag files onto it for opening
 (or to just click it to open any hard-baked file or to get the file
 dialog otherwise).
 
+See [executable-builder/README.md](../executable-builder/README.md) for more.
+
 ### Arguments
 
 - **method** - Required. Must be set to "build-openwith-executable".
@@ -166,7 +168,3 @@ it as a user), see the [Developer-Guide](./Developer-Guide.md).
 
 For tips for using with other tools and comparison to other similar tools,
 see [Tools-and-Comparisons](./Tools-and-Comparisons.md)
-
-## Executable Builder
-
-See [executable-builder/README.md](../executable-builder/README.md)

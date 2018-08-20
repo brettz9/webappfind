@@ -1,6 +1,6 @@
-## For developers
+# For developers
 
-### Important security notes
+## Important security notes
 
 When developing a web app for use with WebAppFind, it is even more
 important to protect the privacy and security of your users since your
@@ -26,7 +26,7 @@ desktops and have the potential to even overwrite it.
     <https://en.wikipedia.org/wiki/Cross-site_request_forgery> for some
     of the concerns.
 
-### API: reading file contents
+## API: reading file contents
 
 The 'view' type of message (see the example below) will be sent to the web
 app when a desktop file has been opened in the "view" or "edit" mode. This
@@ -63,7 +63,7 @@ Only windows with the URI approved by the process detailed above
 will be able to successfully receive such messages (and only for
 files explicitly supplied (in that session)).
 
-### API: saving back to the originally supplied file path (for the "edit" mode only)
+## API: saving back to the originally supplied file path (for the "edit" mode only)
 
 A save will be performed by sending a 'save' to the add-on
 (see the code below).
@@ -166,13 +166,14 @@ a right-clicked directory into the browser's file browser (including
 if you have overlaid its default browser with
 [filebrowser-enhanced](https://github.com/brettz9/filebrowser-enhanced)).
 -->
-### Recognized file types and custom modes
+## Recognized file types and custom modes
 
 Although you are free to define your own file types and custom modes,
 in order to prevent future conflicts, it is recommended that you register
-your [file types](./doc/Registered-file-types.md) and
-[custom modes](./doc/Registered-custom-modes.md) (or at least namespace
-them well).
+your [file types](./docs/Registered-file-types.md),
+[arguments](./docs/Registered-arguments.md) and
+[custom modes](./docs/Registered-custom-modes.md)
+(or at least namespace them well).
 
 Even if `filetypes.json` is used with "register" on "defaultHandlers", it may
 be convenient to have a separate spec URL detailed for your file type,
