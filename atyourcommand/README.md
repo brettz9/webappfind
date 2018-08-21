@@ -1,17 +1,20 @@
 # atyourcommand
 
-A webextensions add-on (currently Firefox only) for opening arbitrary web
-content into the command line (which also enables opening arbitrary web
-content into other web apps via
-[WebAppFind](https://github.com/brettz9/webappfind)).
+A [webextensions](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions)
+add-on (currently Firefox only) for passing arbitrary web
+content discovered in the browser to the command line, including
+command line instructions which can open arbitrary web content
+into other web apps via
+[WebAppFind core](https://github.com/brettz9/webappfind)).
 
-A number of automatic substitutions are available (and documented within
-the dialog) such as obtaining the current URL, title,
-content as HTML or text, etc.
+A number of substitutions are available (and documented within
+the dialog) to the command line instructions you build, such as
+obtaining the current URL or title of the page, its content as
+HTML or text, etc.
 
 # Installation
 
-Install the bundled XPI file.
+Install the WebAppFind XPI file.
 
 To develop with source, install with npm:
 
