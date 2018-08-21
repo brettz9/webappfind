@@ -1,4 +1,4 @@
-## Design choices
+## WebAppFind Design choices
 
 ### Implementation notes
 

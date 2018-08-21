@@ -1,3 +1,5 @@
+# WebAppFind To-dos
+
 ## To-dos (Building)
 
 1. Have the OS-specific executable of `bin/native-app` be identified and
@@ -775,7 +777,7 @@ with WebDav commands?):
 
 ## To-dos (Related enhancements to other add-ons or refactoring to act as separate)
 
-1. File issue re: file size restriction ("Native application tried to send a message of 1126045 bytes, which exceeds the limit of 1048576 bytes.") 
+1. File issue re: file size restriction ("Native application tried to send a message of 1126045 bytes, which exceeds the limit of 1048576 bytes.")
 1. See [webappfind-demos-samples](https://github.com/brettz9/webappfind-demos-samples)
     for to-dos; update it for any API changes
 1. Integrate functionality into <https://github.com/brettz9/filebrowser-enhanced>
