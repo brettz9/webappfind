@@ -10,15 +10,9 @@ into other web apps via
 A number of substitutions are available (and documented within
 the dialog) to the command line instructions you build, such as
 obtaining the current URL or title of the page, its content as
-HTML or text, etc.
-
-# Installation
-
-Install the WebAppFind XPI file.
-
-To develop with source, install with npm:
-
-`npm install .`
+HTML or text, etc. (You can also see a summary of the available
+substitutions by looking at the properties beginning with `seq_`
+or `seqname_` in the [locales file](../_locales/en/messages.json).)
 
 # Higher priority to-dos (mostly longer)
 
@@ -347,8 +341,8 @@ To develop with source, install with npm:
 The main impetus for this project comes from my interest to act in the
 reverse direction from <https://github.com/brettz9/webappfind>, but some
 ideas were obtained from <https://addons.mozilla.org/en-US/firefox/addon/applauncher/>
-after I discovered it had some of the same ideas (but I wanted it restartless,
-with baked in WebAppFind support, etc.).
+after I discovered it had some of the same ideas (but I wanted it restartless
+and now in WebExtensions, with baked in WebAppFind support, etc.).
 
 I was also very much inspired by (and would ultimately hope to replicate) the
 powerful [ContextMenu Extensions](https://github.com/piroor/ctxextensions)
