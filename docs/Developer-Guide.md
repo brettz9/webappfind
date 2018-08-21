@@ -178,3 +178,8 @@ your [file types](./docs/Registered-file-types.md),
 Even if `filetypes.json` is used with "register" on "defaultHandlers", it may
 be convenient to have a separate spec URL detailed for your file type,
 including for cases where the file extension is used without `filetypes.json`.
+
+## To-dos for Docs
+
+1. Reference `webappfind.js` and `meta-webappfind.js` in webappfind-demos-samples
+    repo and document there.
