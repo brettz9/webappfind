@@ -13,13 +13,8 @@ is being opened, such as viewing source code, though it will likely be more
 specific than the basic (and required) `mode` (i.e., `view`, `edit`, or
 `shell`).
 
-Feel free to file a PR if you need additional operating system modes which we
-aren't yet handling. If you have a general interest custom mode (e.g., `source`
-for viewing source code (of say HTML) instead of its output), feel free to
-file a PR, modifying the [Registered-custom-modes](./docs/Registered-custom-modes.md).
-
 | Argument property |  Description | Link to specification and/or schema | Status (*"Proposal" "Ratified", "Unendorsed"*) |
-| ----------------- |  ----------- | ----------------------------------- | ------ |
+| ----------------- |  ----------- | ----------------------------------- | -------------------------- |
 | `locale` | A BCP 47 language code | | Proposal |
 | `stylesheets` | The path of CSS stylesheets to be applied to the content | | Proposal |
 | `theme` | The name of a theme (string) | | Proposal |

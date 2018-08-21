@@ -1,5 +1,15 @@
 # Registered custom modes
 
+`customModes` array part of [registered arguments](Registered-arguments.md).
+
+If you have a general interest custom mode (e.g., `source`
+for viewing source code (of say HTML) instead of its output), feel free to
+file a PR, modifying this page. And feel free to file a PR if you need
+additional operating system modes which we aren't yet handling.
+
+
+These may be separated out into their own command line argument in the future.
+
 I have patterned the following after
 <http://wiki.whatwg.org/wiki/MetaExtensions>, although I'm not sure how
 policing of the status might be done--maybe some form of rough consensus.
@@ -36,9 +46,10 @@ is viewing or editing) and even reusable across different file types (e.g.,
 types, JSON types, etc.).
 
 | Custom mode | Brief description | Link to specification | Type association | Status |
-| ------- |  ---------------- | --------------------- | -------- | ------ |
+| ----------- | ----------------- | --------------------- | ---------------- | ------ |
 | *Type lower-case ASCII name here, e.g., "brettzamiroutline"* | *Describe the expected behavior (e.g., "The custom mode 'brettzamiroutline' should trigger a view of HTML which colors section headings, makes them collapsible, ...")* | *Link to a repository readme, etc. which describes the mode in more detail* | *Known or required type associations--e.g., "brettzamiroutline" type is associated with a view of "html" files or other WYSIWYG human-readable document formats* | *"Proposal" "Ratified", "Unendorsed"* |
 | ***source*** | View any file type according to its source code rather than to a conventional rendering of the format (e.g., for HTML, it would show the tag mark-up instead of a WYSIWYG view). | | (Any file type which has a conventional presentation form distinct from its source code) | Ratified |
 
 # See also
-* [Registered file types](./Registered-file-types.md)
+
+- [Registered file types](./Registered-file-types.md)
