@@ -14,7 +14,7 @@ accepted (or at least not overridden in the future).
 convention).)
 
 | File type | Brief description | Link to specification and/or schema | Conventional extension | Status |
-| ------- |  ---------------- | --------------------- | -------- | ------ |
+| --------- | ----------------- | ----------------------------------- | ---------------------- | ------ |
 | *Type lower-case ASCII-only name here, e.g., "brettzamirinventory"* | *Describe the expected file format (e.g., "brettzamirinventory" is a subset of JSON which has the following 3 boolean properties...")* | *Link to a repository readme, etc. which describes the file type in more detail* | *Suggested file extension (This does not need to be distinct--e.g., the "brettzamirinventory" type could still use the "json" extension)* | *"Proposal" "Ratified", "Unendorsed"* |
 
 # See also

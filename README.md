@@ -121,7 +121,7 @@ See [Developer-Guide](./docs/Developer-Guide.md).<!-- Includes information on th
 
 - [Registered file types](./docs/Registered-file-types.md)
 - [Registered arguments](./docs/Registered-arguments.md)
-- [Registered custom modes](./docs/Registered-custom-modes.md)
+    - [Registered custom modes](./docs/Registered-custom-modes.md)
 
 ### Design rationale
 
