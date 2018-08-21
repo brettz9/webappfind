@@ -83,3 +83,8 @@ window.addEventListener('message', ({data: {webappfind: {i, result, type}}}) => 
     //   or `nodeEval`.
 });
 ```
+
+## To-dos
+
+1. Make library (along the lines of `webappfind.js` which allows for Promises
+    to get the response of a particular post).
