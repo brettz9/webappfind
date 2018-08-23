@@ -7,7 +7,9 @@
 ## Testing
 
 *Note: The "all" options—which are for installing for all users on the
-machine—[do not currently work](https://github.com/zeit/pkg/issues/136#issuecomment-308794640)*
+machine—[do not currently work](https://github.com/zeit/pkg/issues/136#issuecomment-308794640).
+Note also that if `pkg` is not used, the `node` on one's path will be used instead.
+For now, `pkg` should be used.*
 
 1. `npm run (pkg-)installer(-all)-(lint|run|addon)` - Shortcut options for
     the following two steps

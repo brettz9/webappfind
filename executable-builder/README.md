@@ -115,6 +115,17 @@ It is hoped that additional command line options will be added which
 can cover the entire range of functionality available in the UI.
 -->
 
+# Usage
+
+In order to provide suggested file extension and content type associations for
+discoverability by ExecutableBuilder, one's HTML must include
+`<meta name="webappfind">` elements in the head of the document. These elements
+must also include a `content` attribute with keys and values separated by equal
+signs and each pair separated by ampersands, as in URL query strings (minus the
+initial question mark). To properly escape content, one may use JavaScript's
+`encodeURIComponent()` or use the utility library provided with
+[webappfind-demos-samples](https://github.com/brettz9/webappfind-demos-samples).
+
 # To-dos for new Executable Builder (in WebAppFind)
 
 1. Provide *button to remove apps from "Open with..."*
