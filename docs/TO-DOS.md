@@ -4,12 +4,9 @@
 
 1. Have the OS-specific executable of `bin/native-app` be identified and
     bundled automatically
-1. Make install script which avoids `pkg` bundling by assuming user has Node
-    installed (much smaller download and less memory, esp. if needing to
-    build executables for opening files too)
 1. Overcome "Cannot find module 'regedit'" error when building on non-Windows
 
-## Command line API
+## To-dos (Command line API)
 
 Todo: Review this documentation section for reimplementation, and move
 to own documentation section when done. Review old [executable builder](https://github.com/brettz9/executable-builder) code also.
@@ -55,44 +52,9 @@ TODOS TO INCORPORATE AND ADD BELOW
 1. Support the "register" mode from command line?
 ----
 
-WebAppFind is triggered through command line
-arguments passed to a WebExtensions browser (or Chrome) and handled by
-the WebAppFind add-on.
-
-It is my goal to complete work on
-[Executable Builder](https://github.com/brettz9/executable-builder) to
-facilitate the building of executables (probably batch scripts tied to
-cmd.exe) with icon for task bar usage, etc., but currently one must
-either use (or build) the executables included in the repository or call
-the command line oneself.
-
-The following process is subject to change and may potentially even
-be scrapped altogether if another approach is found to be easier for
-streamlining cross-browser invocation, but currently this API is available
-if someone wishes to build their own executables using the API or to
-simply be able to run commands manually from the command line.
-
-* `-webappdoc <path>` - Indicates the path of the file which will be made
-    available to the web application (with the privileges designated by
-    `-webappmode`)
-* `-mode <mode>` Indicates the fundamental mode under which the file
-    will be opened up to the web app (i.e., "-mode view",
-    "-mode view", "-mode edit", or "-mode edit -binary").
-* `-webappcustommode <custom mode>` - Indicates a mode that supplements
-    the fundamental mode (e.g., "source" added to the fundamental mode,
-    "view" in order to specify that the document is being opened so as to
-    view the source code). Custom modes will immediately follow the mode
-    within the protocol. (Note that this API is expected to change)
-* `-remote "openurl(about:newtab)"` - This built-in Mozilla command line
-    API allows Firefox (unlike "-silent") to gain focus without additional
-    instructions to Windows. If the tab is determined to not be needed
-    (e.g., if the user has opted to allow desktop opening of the file when
-    no protocols are found), the add-on will simply auto-close the tab
-    that this parameter opens. <!-- To-do: make this cross-browser -->
-
 ## To-dos (Reimplementing preferences/basics)
 
-1. Update [Developer-Guide.ms](./Developer-Guide.md) and [DESIGN](./DESIGN.md)
+1. Update [Developer-Guide](./Developer-Guide.md) and [DESIGN](./DESIGN.md)
 1. See current code for other to-dos
 1. LOOK AT old-app folders for implementation aspects and to-dos to add here
 1. When done, remove generated AppleScript app(s) from repo

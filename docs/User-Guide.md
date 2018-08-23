@@ -157,6 +157,44 @@ optionally with
 See "Executable builder functionality" "Arguments" section for how these
 optional methods will be used.
 
+----
+TODO: Update this section and integrate
+
+WebAppFind is triggered through command line
+arguments passed to a WebExtensions browser (or Chrome) and handled by
+the WebAppFind add-on.
+
+It is my goal to complete work on
+[Executable Builder](https://github.com/brettz9/executable-builder) to
+facilitate the building of executables (probably batch scripts tied to
+cmd.exe) with icon for task bar usage, etc., but currently one must
+either use (or build) the executables included in the repository or call
+the command line oneself.
+
+The following process is subject to change and may potentially even
+be scrapped altogether if another approach is found to be easier for
+streamlining cross-browser invocation, but currently this API is available
+if someone wishes to build their own executables using the API or to
+simply be able to run commands manually from the command line.
+
+* `-webappdoc <path>` - Indicates the path of the file which will be made
+    available to the web application (with the privileges designated by
+    `-webappmode`)
+* `-mode <mode>` Indicates the fundamental mode under which the file
+    will be opened up to the web app (i.e., "-mode view",
+    "-mode view", "-mode edit", or "-mode edit -binary").
+* `-webappcustommode <custom mode>` - Indicates a mode that supplements
+    the fundamental mode (e.g., "source" added to the fundamental mode,
+    "view" in order to specify that the document is being opened so as to
+    view the source code). Custom modes will immediately follow the mode
+    within the protocol. (Note that this API is expected to change)
+* `-remote "openurl(about:newtab)"` - This built-in Mozilla command line
+    API allows Firefox (unlike "-silent") to gain focus without additional
+    instructions to Windows. If the tab is determined to not be needed
+    (e.g., if the user has opted to allow desktop opening of the file when
+    no protocols are found), the add-on will simply auto-close the tab
+    that this parameter opens. <!-- To-do: make this cross-browser -->
+
 <!--
 Todo: Re-enable when restoring filetypes.json
 ## `filetypes.json`
