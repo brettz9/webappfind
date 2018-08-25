@@ -117,8 +117,7 @@
     and possibly allow user directed use of this information to register
     1. Set `protocol_handlers: [{protocol: "ext+waf", name: "WebAppFind", uriTemplate: "https://...%s"}]`; e.g., for site to register itself for a type
 1. [executable builder](https://github.com/brettz9/executable-builder)
-    and [atyourcommand](https://github.com/brettz9/atyourcommand)
-    1. Option to auto-add to *dock*
+    and [AtYourCommand](https://github.com/brettz9/atyourcommand)
     1. *Installer script to run to facilitate setting up of OpenWith* per
         user choices (if Executable Builder is not installed, it could link
         to it, and if it is, it could bring user through steps).
