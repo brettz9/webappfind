@@ -8,41 +8,33 @@
 
 ## To-dos (Command line API)
 
-Todo: Review this documentation section for reimplementation, and move
-to own documentation section when done. Review old [executable builder](https://github.com/brettz9/executable-builder) code also.
-----
-TODOS TO INCORPORATE AND ADD BELOW
-1. Error checking and reporting as dialog (or new tab) unless preference to disable on
+1. Allow command line for temporary file or designated file saving
+    of string contents in WebAppFind as well (with dialog to approve
+    there as in [AtYourCommand](https://github.com/brettz9/atyourcommand)
+    if would cause an overwrite).
 1. Builder command to indicate:
-    1. target directory path/file name
-    1. icon path (or link to SVG-edit to make own)
-
-    1. open in full screen mode or reader mode (or `contextualIdentities`)
+    1. *icon path* (or *link to SVG-edit* to make own)
+    1. open in *full screen mode* or *reader mode* (or `contextualIdentities`)
     1. make shortcut
     1. additional batch commands
-    1. hard-coded string to pass for reading or eval
-    1. global hotkey to activate
-    1. ability to just open a URL without going through WebAppFind
-    1. Could allow creating templates (including name, description)
-1. Allow command line for temporary file or designated file saving
-    of string contents in webappfind as well (with dialog to approve
-    there as in [atyourcommand](https://github.com/brettz9/atyourcommand)
-    if would cause an overwrite).
+    1. global *hotkey* to activate
+    1. ability to *just open a URL* without going through WebAppFind
+    1. Could allow *creating templates* (including name, description)
 1. Window/tab targeting
-    1. Allow targeting of hidden window
-    1. make resulting tab pinned?
-    1. Option to give browser focus or open in background?
-    1. Option to avoid or allow new tabs for same URI/mode/filetype/path?
+    1. Allow targeting of *hidden window*
+    1. make resulting *tab pinned*?
+    1. Option to give browser *focus* or *open in background)*?
+    1. Option to avoid or allow *new tabs for same URI/mode/filetype/path*?
         (option to get the same tab or new tabs for them?); option to push
         to all open windows in different manner so can notify user of
         updates but not change focus, etc.
     1. Allow command line to specify (or let WebAppFind determine according
-        to some permutation of the file path) the exact window and possibly
+        to some permutation of the file path) the *exact window* and possibly
         Panorama group and/or pinned status into which the web app with
         desktop file will be opened (the web app could handle moving itself
         instead but only if the web app were AsYouWish-based and the user
         preferences supplied the file path). Alternatively, the executable
-        might have logic to determine the profile in a similarly automated
+        might have logic to *determine the profile* in a similarly automated
         (as opposed to hard-coded) manner. The advantage of either approach
         would be to allow the user a better web app grouping organization
         corresponding to the hierarchical organization they can find on
@@ -50,21 +42,27 @@ TODOS TO INCORPORATE AND ADD BELOW
 1. See below and also possibly the notes within the
     [Executable Builder](https://github.com/brettz9/executable-builder) code
 1. Support the "register" mode from command line?
-----
 
-## To-dos (Reimplementing preferences/basics)
+## To-dos (Reimplementing basics/preferences)
 
 1. Update [Developer-Guide](./Developer-Guide.md) and [DESIGN](./DESIGN.md)
-1. See current code for other to-dos
-1. LOOK AT old-app folders for implementation aspects and to-dos to add here
-1. When done, remove generated AppleScript app(s) from repo
-1. Ensure working in Chrome as well as Firefox (Edge, Safari, etc.)
-
-1. Enhancement/Fix: Limit or paginate possible choices from site's `meta`
+1. See *current code* for other to-dos
+1. LOOK AT *old-app folders* for implementation aspects and to-dos to add here
+1. Ensure working in *Chrome* as well as Firefox (Edge, Safari, etc.)
+1. Reimplement to support Windows in new WebAppFind version (as batch
+    scripts as possible); convert to shortcut tied to `cmd.exe` for sake
+    of getting an icon
+1. Enhancement/Fix: *Limit or paginate possible `meta` site choices*
     of suggested extensions/MIME handling
 1. Core enhancements
-    1. Allow file or directory permissions to have static file server
-        permissions be granted (with localhost:port info sent to webapp).
+    1. Piggyback on *HTML5 drag-and-drop* file capabilities (or create own) to
+        allow files dropped in this way to be saved back to disk and/or path
+        provided to the app; same with optionally allowing privileged file
+        picker per site.
+    1. Error checking and *reporting errors as dialog* (or new tab) unless
+        preference to disable on
+    1. Allow file or directory permissions to *grant static file server
+        permissions* be granted (with localhost:port info sent to webapp).
         Could then, e.g., have wiki edit HTML but also conveniently
         serve it (and in a targeted fashion); also have option, for
         single files, to just open the file itself, along with the directory
@@ -72,57 +70,30 @@ TODOS TO INCORPORATE AND ADD BELOW
         write only given to single file); with default set, one could
         have all local HTML auto-open into a server environment, bypassing
         Chrome, etc. restrictions!
-    1. Support directory type permissions, with a permission to iterate
-        directories and get and/or edit contents.
-        (Later offer ability to persist these permissions.)
-        1. Directories (implement as service--pass in directory to grant permission; could use for Git repos cloning into web app)
-            0. Iterate directory and push within?
-            1. File access per whole directory (and subdirectory) (with or without full path; only relative for security/privacy?)
-                1. Allows for local wikis!!!!! (Allow right-click on link to go to page, or to go directly if in view mode)
-            1. Directory file iteration
-            1. Updates from system if file gets deleted or moved
-            1. Allow persistent permissions; key to page and/or origin (directory and/or file)?
-            1. Offer interface to revoke directory (or file) permissions
-            1. Implement shared third-party storage? (or just do as proposal?)
-            1. Create/Move/Rename/Delete files
-            1. Allow file or directory permissions to have static file server permissions
-                be granted (with localhost:port info sent to webapp); e.g., to allow
-                editing of HTML and also ability to preview; add simple localhost
-                server which adds iframe for a file and then listens for clicks to
-                pass on path to other server (WAF listens for localhost granted UUID
-                (?) and then passes current file info to regular data file opener)
-1. From Node WebSockets -> add-on, we need to open website and `postMessage`
-    into it and be able to handle opposite direction, including for writing
-    file contents back to disk, but also for *AtYourCommand* functionality)
-1. Delete preferences from `old-app/old-preferences.json` after suitably
-    reimplemented
-    1. Set `options_ui: {page: "webappfind-options.html"}` and/or
-        `sidebar_action`?
+1. *Preferences*
+    1. *Delete preferences* from `old-app/old-preferences.json` after suitably
+        reimplemented
+        1. Set `options_ui: {page: "webappfind-options.html"}` and/or
+            `sidebar_action`?
     1. Currently preferences are global, whereas it may be desirable to allow
-        users to customize their preferences by type/protocol in addition to
+        users to *customize preferences by type/protocol* in addition to
         the current default global ones.
-1. Security improvements
-    1. Disable further save attempts with bad ID supplied in case a however
+1. *Security* improvements
+    1. *Disable further save attempts with bad ID* supplied in case a however
         previously approved site is attempting to guess at the paths of
         (if the user has enabled path transmission), or at the GUID
         representing, other non-approved files
-    1. Check upon each save attempt that the loaded protocol is still
-        registered as a handler (and remove usage notes above once
+    1. Check upon each save attempt that the *loaded protocol is still
+        registered* as a handler (and remove usage notes above once
         implemented).
-    1. Listen for unregistration of protocols to disable acting on future
+    1. Listen for *unregistration of protocols* to disable acting on future
         messages from them (only relevant for pages already loaded in this
         session).
-    1. Piggyback on HTML5 drag-and-drop file capabilities (or create own) to
-        allow files dropped in this way to be saved back to disk and/or path
-        provided to the app; same with optionally allowing privileged file
-        picker per site.
     1. Ensure some additional security/privacy for users desiring it by
-        restricting external access (using <https://developer.mozilla.org/en-US/docs/XPCOM_Interface_Reference/nsIContentPolicy>
-        and <https://developer.mozilla.org/en-US/docs/XPCOM_Interface_Reference/nsIPrincipal>
-        per <http://stackoverflow.com/questions/18369052/firefox-add-on-to-load-webpage-without-network-access>?)
+        *restricting external script access privileges* <http://stackoverflow.com/questions/18369052/firefox-add-on-to-load-webpage-without-network-access>?) (Now )
         See also http://en.wikipedia.org/wiki/Site-specific_browser regarding
         such sandboxing.
-    1. Option to enable `file:` protocol (though mention it is currently risky
+    1. *Option to enable `file:` protocol* (though mention it is currently risky
         in Firefox to use `postMessage` for security and privacy given its lack
         of scoping); report issue to Firefox if issue not already added (also
         for better means than '\*' for add-on communication?). However, this
@@ -140,22 +111,18 @@ TODOS TO INCORPORATE AND ADD BELOW
         parameters or perhaps modification of an element within the
         document), to allow a `file:` site to request permission to become
         usable as a protocol handler).
-1. Reimplement protocol registration functionality and create tests using
+1. Reimplement *protocol registration* functionality and create tests using
     `registerProtocolHandler` (also for JS/JSON/mytype); also consider
     HTML head meta-data for flagging availability of file registrations
     and possibly allow user directed use of this information to register
     1. Set `protocol_handlers: [{protocol: "ext+waf", name: "WebAppFind", uriTemplate: "https://...%s"}]`; e.g., for site to register itself for a type
 1. [executable builder](https://github.com/brettz9/executable-builder)
     and [atyourcommand](https://github.com/brettz9/atyourcommand)
-    1. Option to auto-add to dock
-    1. Reimplement to support Windows in new webappfind version (as batch
-        scripts as possible); convert to shortcut tied to `cmd.exe` for sake
-        of getting an icon
-    1. Installer script to run to facilitate setting up of OpenWith per
+    1. Option to auto-add to *dock*
+    1. *Installer script to run to facilitate setting up of OpenWith* per
         user choices (if Executable Builder is not installed, it could link
         to it, and if it is, it could bring user through steps).
-    1. Applescript-based executable builder also?
-    1. Examine `executable builder` for ideas and UI
+    1. *AppleScript-based executable builder* also?
 
 ## For developers
 ### API: file type finding
@@ -163,7 +130,6 @@ Review this documentation section for reimplementation, and move
 to own documentation section when done.
 ----
 POSSIBLE TODOS TO INCORPORATE BELOW
-1. Add meta-data so "view" or "edit" requests can become "binary"
 1. Provide meta-data in `filetypes.json` to cause the web app to be passed
     awareness of the desire by the user to be prompted for the selection of
     specific *custom* mode, along with an optional default custom mode and
@@ -603,6 +569,25 @@ with WebDav commands?):
     opening the file in that chosen mode).
 1. "any" mode - Allow a command-line mode to let the web app choose the mode.
 1. Support local or remote stream inputs
+1. Support *directory type permissions*, with a permission to *iterate
+    directories* and get and/or edit contents.
+    (Later offer ability to persist these permissions.)
+1. Directories (implement as service--pass in directory to grant permission; could use for Git repos cloning into web app)
+    0. Iterate directory and push within?
+    1. File access per whole directory (and subdirectory) (with or without full path; only relative for security/privacy?)
+        1. Allows for local wikis!!!!! (Allow right-click on link to go to page, or to go directly if in view mode)
+    1. Directory file iteration
+    1. Updates from system if file gets deleted or moved
+    1. Allow persistent permissions; key to page and/or origin (directory and/or file)?
+    1. Offer interface to revoke directory (or file) permissions
+    1. Implement shared third-party storage? (or just do as proposal?)
+    1. Create/Move/Rename/Delete files
+    1. Allow file or directory permissions to have static file server permissions
+        be granted (with localhost:port info sent to webapp); e.g., to allow
+        editing of HTML and also ability to preview; add simple localhost
+        server which adds iframe for a file and then listens for clicks to
+        pass on path to other server (WAF listens for localhost granted UUID
+        (?) and then passes current file info to regular data file opener)
 
 ## To-dos (Message posting)
 

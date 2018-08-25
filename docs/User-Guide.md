@@ -160,6 +160,8 @@ optional methods will be used.
 ----
 TODO: Update this section and integrate
 
+String (or if not passing anything and just want executable to open a URL)
+
 WebAppFind is triggered through command line
 arguments passed to a WebExtensions browser (or Chrome) and handled by
 the WebAppFind add-on.
