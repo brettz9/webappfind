@@ -146,6 +146,7 @@ initial question mark). To properly escape content, one may use JavaScript's
     this add-on
 1. As reimplement, *uncomment hidden docs* above
 1. Option to auto-add to *dock*
+1. *Avoid baking in arguments*--let them be passed in by command line
 
 1. *UI*
     1. *Split form into generic and specific sections* (so will allow building of

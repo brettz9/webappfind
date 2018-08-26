@@ -1,6 +1,18 @@
 ## WebAppFind Design choices
 
-### Implementation notes
+### Rationale for API design
+
+`postMessage` was chosen for having a familiar API and already
+designed for potentially untrusted collaboration sources. (See the
+README section "Comparison with similar WebAPI work" for other possibilities.)
+
+Before discovering the command line handling, I originally sought to
+have the executable create a temp file containing an ID and path
+and mode info while supplying that to the add-on via a URL which
+would in turn check the temp file (this approach might work for other
+browsers if they do not allow add-ons to check command line arguments).
+
+### Security notes
 
 A direct visit to the protocol (including through XSRF) should provide no
 side effects. However, it is possible that a malicious handler opened by
@@ -9,12 +21,19 @@ back data to overwrite the supplied file. This might be mitigated by a
 configurable option to require the user's consent upon each save and/or
 to inform the user of the proposed diffs before saving. But again this
 will only be possible upon user initiation, only for the specific file or
-files approved in a given session, and a site will only be usable as a
+files approved in a given session.
+
+<!--
+Add back if reimplementing filetypes.json:
+
+ and a site will only be usable as a
 handler if the `filetypes.json` packaged with the data file designates
 it as a default handler for the data file (and the user maintains the
 preference to use this information) or if they have previously approved
 a protocol site for the given type.
+-->
 
+<!--
 ### Rationale for `filetypes.json` design
 
 Although there may be some advantages to storing meta-data at the individual
@@ -34,10 +53,7 @@ systems. Other fields are keyed to type name (noting that
 these must all be lower-case ASCII letters since web protocols only
 allow these to work after the "web+").
 
-Although I would eventually like to allow the add-on to accept hard-coded
-URLs for the web apps (so that users or vendors could ensure that their
-"Open With" instruction went to a particular URL regardless of add-on
-settings) and while `filetypes.json` does provide for *default*-Handlers,
+While `filetypes.json` does provide for *default*-Handlers,
 `filetypes.json` deliberately avoids providing a mechanism for obligating
 the add-on to utilize a specific web app URL when opening files of a
 given type. This is by design as I believe the open nature of operating
@@ -69,9 +85,13 @@ pre-processing including JSON parsing; see also
 [atyourcommand](https://github.com/brettz9/atyourcommand)
 for more ideas about this.)
 
+-->
+
+### Custom modes design
+
 The allowance for custom modes in addition to fundamental modes
-helps the user avoid the need to swap handlers (or modify
-`filetypes.json`) whenever they wish to go directly to an app (or a
+helps the user avoid the need to swap handlers <!-- (or modify
+`filetypes.json`) --> whenever they wish to go directly to an app (or a
 part of an app) which brings the precise functionality they are
 seeking at the moment. It allows niche apps (such as HTML
 source viewers) to avoid registering themselves as handlers in a
@@ -81,19 +101,11 @@ viewer). Fundamental modes are limited to those which genuinely
 require a distinct mode of transmission or privileges (e.g., editing
 vs. viewing or normal vs. binary) whereas custom modes imply
 no difference at the file processing level; the information is only
-meaningful to web apps. (Hyphens or such would have been
+meaningful to apps.
+<!--
+If reimplementing protocol handlers:
+(Hyphens or such would have been
 useful for namespacing between the two types of modes, but
 the current HTML spec does not allow protocols to be registered
 with them present.)
-
-### Rationale for API design
-
-`postMessage` was chosen for having a familiar API and already
-designed for potentially untrusted collaboration sources. (See the
-README section "Comparison with similar WebAPI work" for other possibilities.)
-
-Before discovering the command line handling, I originally sought to
-have the executable create a temp file containing an ID and path
-and mode info while supplying that to the add-on via a URL which
-would in turn check the temp file (this approach might work for other
-browsers if they do not allow add-ons to check command line arguments).
+-->
