@@ -9,8 +9,8 @@ to have higher privileges than just writing back to the opened file, see
 
 Remember that besides being able to launch WebAppFind from the desktop,
 you can also launch from the command line, including from within the likes of
-desktop apps as well, such as [Notepad++](http://notepad-plus-plus.org/).
-(See also [atyourcommand](https://github.com/brettz9/atyourcommand) for
+desktop apps as well<!--, such as [Notepad++](http://notepad-plus-plus.org/) -->.
+(See also [AtYourCommand](../atyourcommand/README.md) for
 some desired todos regarding standardizing argument types.)
 
 <!--
@@ -34,9 +34,8 @@ that a handler was not found for the supplied file's extension.
 -->
 
 If you want to go in the other direction, from web documents to the desktop
-(or from arbitrary web documents to web apps), you might watch
-[AtYourCommand](https://github.com/brettz9/atyourcommand) which when
-it may be finished should help users to do this.
+(or from arbitrary web documents to web apps), you can use
+the AtYourCommand component of WebAppFind.
 
 ## Comparison to other standards, tools, and alternatives
 
@@ -79,23 +78,22 @@ relative to WebAppFind would appear to be:
     organization purposes.
 
 The `DeviceStorageAPI` appears to allow more privileges (like
-[AsYouWish](https://github.com/brettz9/asyouwish/), an add-on no longer
-compatible with current versions of Firefox) such as
-enumerating files in a directory, adding or deleting files, and listening
-for creation/deletion/modifications, whereas WebAppFind is currently
-focused on individual file reading and saving. However, WebAppFind
-may add other actions in the future, such as listening for file change
-events for version tracking or allowing for a web app to handle adding
-or deleting a file (in case it wishes to do related set-up/take-down work).
+our AsYouWish component, such as enumerating files in a directory,
+adding or deleting files, and listening for creation/deletion/modifications,
+whereas WebAppFind is currently focused on individual file reading and
+saving. However, WebAppFind may add other actions in the future, such as
+listening for file change events for version tracking or allowing for a
+web app to handle adding or deleting a file (in case it wishes to do
+related set-up/take-down work).
 
-Since WebAppFind executables pass along path information, WebAppFind
-were usable with the AsYouWish add-on (if the user so configured
-that privilege-escalating add-on) to have it conduct the other privileged
-activities of the `DeviceStorageAPI`, whether enumerating files in the file's
-directory, doing set-up or take-down work related to file creation or
-deletion, or such things as uploading the containing folder's contents
-(and especially if WebAppFind will be modified to allow for opening a hidden
-window, AsYouWish could be used for batch-like operations).
+Since WebAppFind executables pass along path information, the AsYouWish
+component of WebAppFind can work with WebAppFind core to have it conduct
+the other privileged activities of the `DeviceStorageAPI`, whether
+enumerating files in the file's directory, doing set-up or take-down work
+related to file creation or deletion, or such things as uploading the
+containing folder's contents (and especially if WebAppFind will be modified
+to allow for opening a hidden window, AsYouWish could be used for batch-like
+operations).
 
 Another possibility is remembering a file path, e.g., for an equivalent to
 Windows "Pin to Start" if you wish to create something like Windows 8's
@@ -106,15 +104,15 @@ to plug into your web app (which could mimic the desktop itself).
 
 ### Comparison with AsYouWish
 
-[AsYouWish](https://github.com/brettz9/asyouwish/) allowed a
-higher-than-normal privilege level to websites, but it differed in
-a number of areas:
+The AsYouWish component of this add-on allows a higher-than-normal
+privilege level to websites, but it differs in a number of areas:
 
 1. AsYouWish sites ask for permission, and once approved, can then
-    immediately do their work. WebAppFind currently allows sites to ask
+    immediately do their work. <!-- If reimplementing protocol handlers:
+    WebAppFind currently allows sites to ask
     for permission to register themselves as handlers, but their work
-    will only become relevant when the user opens a file via WebAppFind.
-2. AsYouWish allowed for a vast number of possible privileges (though
+    will only become relevant when the user opens a file via WebAppFind. -->
+2. AsYouWish allows for a vast number of possible privileges (though
     subject to user approval) including potentially arbitrary file reading
     and writing (as with some browser extensions), while WebAppFind is
     limited to file reading and writing (though it may expand to certain
@@ -123,8 +121,9 @@ a number of areas:
 
 ### Comparison with `postMessage` alone
 
-While `postMessage` alone can be used for more app-agnostic data sharing (unlike say `MessageChannel` or `WebSockets` which requires hard-coding the desired shared app),
-it does not work with desktop files.
+While `postMessage` alone can be used for more app-agnostic data sharing
+(unlike say `MessageChannel` or `WebSockets` which requires hard-coding
+the desired shared app), it does not work with desktop files.
 
 ### Comparison with other purely Node-based alternatives
 
@@ -134,10 +133,11 @@ it does not work with desktop files.
     [command](https://developer.mozilla.org/en-US/docs/Mozilla/Command_Line_Options)
     [line arguments](https://www.ghacks.net/2013/10/06/list-useful-google-chrome-command-line-switches/)
     into browser to open file with GET parameters or hash
-    1. This is limited by string length (and possible security problems if
-        the user passes along the URL).
-    1. Listening by GET parameters may conflict with parameters already used by applications
-        (`onmessage` may as well, but it is easier to namespace)
+    1. This is limited by string length (and possible security problems
+        (e.g., XSRF) if the user passes along the URL).
+    1. Listening by GET parameters may conflict with parameters already used
+        by applications (`onmessage` may as well, but it is more
+        straightforward (and expected) to namespace).
 
 1. Node opening file and passing command line arguments into browser to
     open file and posting contents to another Node server hosting the web app
@@ -145,11 +145,16 @@ it does not work with desktop files.
         receiving app would know the origin and might reject the contents
         accordingly).
     1. The receiving app (where one would most frequently be developing) cannot be
-        a purely client-side web application
+        a purely client-side web application which WebAppFind can in theory (if
+        browsers will support `file:` with `browser.tabs.create` and such).
 
 #### Advantages of our configuration
 
 1. Our code potentially supports various platforms and browsers out of the box.
 1. By using `pkg`, we can avoid forcing users to install Node.
+
+<!--
+If reimplementing `filetypes.json`:
 1. Our `filetypes.json` approach offers easy reusability among non-developers
     (or non-Node developers)
+-->
