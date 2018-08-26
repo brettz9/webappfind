@@ -9,9 +9,10 @@ format (e.g., a JSON type "brettzamirinventory" should be fine whereas
 one called "svg" would not), there should be no problem with it being
 accepted (or at least not overridden in the future).
 
-(Note that lower-case ASCII is required here in order to be used within
-`registerProtocolHandler()` (prefixed by WebAppFind's "web+local"
-convention).)
+(Note that it is strongly recommended that lower-case ASCII be used
+here in order to be usable within `registerProtocolHandler()` (prefixed
+by WebAppFind's "web+local" convention), in case this prior feature
+is reimplemented for 3.0.0.)
 
 | File type | Brief description | Link to specification and/or schema | Conventional extension | Status |
 | --------- | ----------------- | ----------------------------------- | ---------------------- | ------ |
