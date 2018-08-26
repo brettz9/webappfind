@@ -4,8 +4,8 @@
 
 When developing a web app for use with WebAppFind, it is even more
 important to protect the privacy and security of your users since your
-web app may inadvertently be exposing data they have saved on their
-desktops and have the potential to even overwrite it.
+web app may inadvertently be exposing data they have passed in from their
+desktops and have the potential to even overwrite their data.
 
 1. Please note the security comments within the API section comments for
     details on how to make communication with the add-on safely (via
@@ -18,7 +18,7 @@ desktops and have the potential to even overwrite it.
 1. There should be no side effects upon the opening of a link to your web app
     (and whether or not your app is opened as a URL, protocol, or
     protocol-opened-through-WebAppFind), so for example, you should not
-    automatically save file contents back to disk (at least without user
+    automatically save file contents back to disk (at least not without user
     approval). (An exception might be made in the future if AsYouWish is
     installed and the user wished to bookmark privileged but harmless or
     per-use-confirmed processes, e.g., to visit a link to package up some
@@ -26,20 +26,32 @@ desktops and have the potential to even overwrite it.
     <https://en.wikipedia.org/wiki/Cross-site_request_forgery> for some
     of the concerns.
 
-## API: reading file contents
+## API
+
+The API is detailed below. You may wish to use the utility `webappfind.js`
+within [webappfind-demos-samples](https://github.com/brettz9/webappfind-demos-samples)
+for a slightly easier-to-use API.
+
+See also [Executable Builder](../executable-builder/README.md) for that API.
+
+### API: reading file contents
 
 The 'view' type of message (see the example below) will be sent to the web
 app when a desktop file has been opened in the "view" or "edit" mode. This
 message delivers the file contents (whether in binary form or not) to the
 web app.
 
+<!--
+Add this back to comments when reenabling this preference:
+// ...or if the user has checked the option "Reveal selected file paths to scripts", it may look like this:
+// {type :'view', pathID: 'C:\\Users\\Brett\\someDataFile.txt', content: 'the loaded file contents will be here!'}
+-->
+
 ```js
 let pathID; // We might use an array to track multiple path IDs within the same app (once WebAppFind may be modified to support this capability!)
 window.addEventListener('message', function ({origin, data}) {
     // `data` might be set to something like:
     // {type: 'view', pathID: '{1e5c754e-95d3-4431-a08c-5364db753d97}', content: 'the loaded file contents will be here!'}
-    // ...or if the user has checked the option "Reveal selected file paths to scripts", it may look like this:
-    // {type :'view', pathID: 'C:\\Users\\Brett\\someDataFile.txt', content: 'the loaded file contents will be here!'}
 
     let type, pathID, content;
     try {
@@ -63,19 +75,19 @@ Only windows with the URI approved by the process detailed above
 will be able to successfully receive such messages (and only for
 files explicitly supplied (in that session)).
 
-## API: saving back to the originally supplied file path (for the "edit" mode only)
+### API: saving back to the originally supplied file path (for the "edit" mode only)
 
-A save will be performed by sending a 'save' to the add-on
+A save will be performed by sending a 'save' type message to the add-on
 (see the code below).
 
 A pathID will be needed when making a save of file contents back to
 the add-on (which will save back to disk). You can obtain this before
 making saves, by listening for the 'view' message (described
-under "API: reading file contents" above); the 2nd value of the first (array)
-argument (`previouslySavedPathIDFromViewEvent`) will contain this
-information.
+under "API: reading file contents" above); the `pathID` value of the
+`webappfind` object argument (`previouslySavedPathIDFromViewEvent`) will
+contain this information.
 
-This pathID is intended to allow for sites to handle multiple files in a
+This `pathID` is intended to allow for sites to handle multiple files in a
 single session (although WebAppFind currently will always open the file
 in a new tab as a new instance).
 
@@ -89,14 +101,16 @@ app would like to inform the user in some manner).
 // For your user's privacy, you should only post the
 //  file contents to this page itself (and this save
 //  will be picked up by the browser add-on), so do
-//  NOT change the second argument.
+//  NOT change the second argument of `location.origin`.
 // You should only call this when the user has indicated
 //  they wish to make a save such as if they have approved
 //  draft auto-saving or when manually clicking a save button.
 window.postMessage({
-    type: 'save',
-    pathID: previouslySavedPathIDFromViewEvent,
-    content: dataToSaveAsString
+    webappfind: {
+        type: 'save',
+        pathID: previouslySavedPathIDFromViewEvent,
+        content: dataToSaveAsString
+    }
 }, location.origin);
 ```
 
@@ -175,11 +189,10 @@ your [file types](./docs/Registered-file-types.md),
 [custom modes](./docs/Registered-custom-modes.md)
 (or at least namespace them well).
 
+<!--
+Todo: Uncomment if reimplementing `filetypes.json`:
+
 Even if `filetypes.json` is used with "register" on "defaultHandlers", it may
 be convenient to have a separate spec URL detailed for your file type,
 including for cases where the file extension is used without `filetypes.json`.
-
-## To-dos for Docs
-
-1. Reference `webappfind.js` and `meta-webappfind.js` in webappfind-demos-samples
-    repo and document there.
+-->
