@@ -132,13 +132,13 @@ See [executable-builder/README.md](../executable-builder/README.md) for more.
     the generated script will check for the presence of an argument to the
     script to serve as the file to pass to the web application. If no argument
     is passed to the *generated script*, its absence will trigger a file
-    dialog.
+    dialog. Any file will be opened according to the `mode`.
 - **string** - Hard-coded string to pass to app (in place of file); if `true`,
     `"true"`, or `"on"`, the string will be accepted as an argument at run-time
     rather than being baked in.
-- **mode** - Optional mode for invoking the web app on your contents, either
-    "view" (readonly), "edit" (read and write), "shell", or "none".
-    Default is "view".
+- **mode** - Optional (fundamental) mode for invoking the web app on your
+    contents, either "view" (readonly), "edit" (read and write), "shell", or
+    "none". Default is "view".
 - **binary** - Optional to indicate a program needing to open a file in
     binary mode, such as images, sound files, or videos.
     <!--
@@ -155,8 +155,12 @@ See [executable-builder/README.md](../executable-builder/README.md) for more.
 - **contentTypes** - Array used for `CFBundleTypeOSTypes`
 - **extensionsDefaults** - Array of `extension`s to pass to `addOrReplaceExtensionHandler`. See [launchServiceHandlers.js](../launchServiceHandlers.js).
 - **contentTypesDefaults** - Array of `contentType`s to pass to `addOrReplaceContentTypeHandler`. See [launchServiceHandlers.js](../launchServiceHandlers.js).
-- **args** - Optional. Any (JSON) arguments to pass to the web applications
-    `onmessage` listener data object (under `args`).
+- **args** - Optional JSON object. Any (JSON) arguments to pass to the
+    web applications `onmessage` listener data object (under `args`).
+    Any `customModes` property must be an array and is reserved per [Registered-custom-modes](./Registered-custom-modes.md); its string
+    items indicate modes supplementary to the fundamental `mode`
+    (e.g., "source" to indicate opening in a mode to view the source code
+    as opposed to just viewing the rendered output).
 - **log** - Whether to log to stdout.
 - **filePicker** - Whether to show a file picker
 - **fileSelectMessage** - When the generated script does not have a baked-in
@@ -196,29 +200,9 @@ cmd.exe) with icon for task bar usage, etc., but currently one must
 either use (or build) the executables included in the repository or call
 the command line oneself.
 
-The following process is subject to change and may potentially even
-be scrapped altogether if another approach is found to be easier for
-streamlining cross-browser invocation, but currently this API is available
-if someone wishes to build their own executables using the API or to
-simply be able to run commands manually from the command line.
-
-* `-webappdoc <path>` - Indicates the path of the file which will be made
-    available to the web application (with the privileges designated by
-    `-webappmode`)
-* `-mode <mode>` Indicates the fundamental mode under which the file
-    will be opened up to the web app (i.e., "-mode view",
-    "-mode view", "-mode edit", or "-mode edit -binary").
-* `-webappcustommode <custom mode>` - Indicates a mode that supplements
-    the fundamental mode (e.g., "source" added to the fundamental mode,
-    "view" in order to specify that the document is being opened so as to
-    view the source code). Custom modes will immediately follow the mode
-    within the protocol. (Note that this API is expected to change)
-* `-remote "openurl(about:newtab)"` - This built-in Mozilla command line
-    API allows Firefox (unlike "-silent") to gain focus without additional
-    instructions to Windows. If the tab is determined to not be needed
-    (e.g., if the user has opted to allow desktop opening of the file when
-    no protocols are found), the add-on will simply auto-close the tab
-    that this parameter opens. <!-- To-do: make this cross-browser -->
+This API is available if someone wishes to build their own executables
+using the API or to simply be able to run commands manually from the
+command line.
 
 <!--
 Todo: Re-enable when restoring filetypes.json

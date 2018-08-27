@@ -19,6 +19,12 @@
     1. Could allow *creating templates* (including name, description)
 1. Bake in code to *grab OS-level file meta-data* and send as arguments to web app
 1. ***Window/tab targeting***
+    1. Reimplement `-remote "openurl(about:newtab)"`, a built-in Mozilla
+    command line API allowing Firefox (unlike "-silent") to gain focus
+    without additional instructions to Windows. If the tab is determined
+    to not be needed (e.g., if the user has opted to allow desktop opening
+    of the file when no protocols are found), the add-on should simply
+    auto-close the tab that this parameter opens. <!-- To-do: make this cross-browser -->
     1. Support optional "hidden" flag (in conjunction with, or only
         from, AsYouWish?) to embed a *hidden DOM window script* (use for
         batch-script-like functionality)
