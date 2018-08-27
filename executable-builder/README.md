@@ -1,9 +1,5 @@
 # executable-builder
 
-***NOTE: This project is not yet functional!! (However, if you
-click the "Exec" icon in the add-on bar, the version in the master
-branch ought to allow the user-facing UI to be viewed.)***
-
 Executable Builder lets websites silently advertise their support for certain
 file names and the extension can import that info into a template for building
 an executable that can open local files by default (or at least advertise
