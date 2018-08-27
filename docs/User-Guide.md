@@ -229,8 +229,7 @@ it as a user), see the [Developer-Guide](./Developer-Guide.md).
 
 ## Directly interacting with WebAppFind
 
-Similar to the AppleScript creation commands in the
-[User Guide](./docs/User-Guide.md) (where relevant), except that `method`
+Similar to the AppleScript creation commands (where relevant), except that `method`
 should be `client` (instead of `build-openwith-executable`).
 
 ```
@@ -246,8 +245,6 @@ of `node native-app.js`.)
 In addition to using the graphical Executable Builder (the "Exec" button
 in the toolbar of the add-on), one may also build executables from the
 command line.
-
-See the [User Guide](./docs/User-Guide.md) for usage.
 
 ## Creating URL shortcuts
 

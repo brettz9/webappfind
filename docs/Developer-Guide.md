@@ -184,9 +184,9 @@ if you have overlaid its default browser with
 
 Although you are free to define your own file types and custom modes,
 in order to prevent future conflicts, it is recommended that you register
-your [file types](./docs/Registered-file-types.md),
-[arguments](./docs/Registered-arguments.md) and
-[custom modes](./docs/Registered-custom-modes.md)
+your [file types](./Registered-file-types.md),
+[arguments](./Registered-arguments.md) and
+[custom modes](./Registered-custom-modes.md)
 (or at least namespace them well).
 
 <!--
