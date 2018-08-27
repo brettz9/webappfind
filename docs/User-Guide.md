@@ -122,14 +122,20 @@ See [executable-builder/README.md](../executable-builder/README.md) for more.
 ### Arguments
 
 - **method** - Required. Must be set to "build-openwith-executable".
+- **executableName** - Name (used in "Open with...")
+- **executablePath** - Path for executable.
 - **id** - Value for `CFBundleIdentifier`, uniquely identifying app to the OS.
 - **file** - Optional hard-baking of a file. If this argument is not included,
     the generated script will check for the presence of an argument to the
     script to serve as the file to pass to the web application. If no argument
     is passed to the *generated script*, its absence will trigger a file
     dialog.
+- **string** - Hard-coded string to pass to app (in place of file); if `true`,
+    `"true"`, or `"on"`, the string will be accepted as an argument at run-time
+    rather than being baked in.
 - **mode** - Optional mode for invoking the web app on your contents, either
-    "view" (readonly) or "edit" (read and write). Default is "view".
+    "view" (readonly), "edit" (read and write), "shell", or "none".
+    Default is "view".
 - **binary** - Optional to indicate a program needing to open a file in
     binary mode, such as images, sound files, or videos.
     <!--
@@ -142,8 +148,14 @@ See [executable-builder/README.md](../executable-builder/README.md) for more.
     Todo: Re-enable following when restoring filetypes.json (and mention `site` only optional)
     Will check for local `filetypes.json`
     otherwise. -->
-- **args** - Optional. Any arguments to pass to the web applications
+- **extensions** - Array used for `CFBundleTypeExtensions`
+- **contentTypes** - Array used for `CFBundleTypeOSTypes`
+- **extensionsDefaults** - Array of `extension`s to pass to `addOrReplaceExtensionHandler`. See [launchServiceHandlers.js](../launchServiceHandlers.js).
+- **contentTypesDefaults** - Array of `contentType`s to pass to `addOrReplaceContentTypeHandler`. See [launchServiceHandlers.js](../launchServiceHandlers.js).
+- **args** - Optional. Any (JSON) arguments to pass to the web applications
     `onmessage` listener data object (under `args`).
+- **log** - Whether to log to stdout.
+- **filePicker** - Whether to show a file picker
 - **fileSelectMessage** - When the generated script does not have a baked-in
     file and no file argument is passed to it, this argument will determine
     the message shown in the resulting file dialog.
