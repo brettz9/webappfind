@@ -39,7 +39,8 @@ See also [Executable Builder](../executable-builder/README.md) for that API.
 The 'view' type of message (see the example below) will be sent to the web
 app when a desktop file has been opened in the "view" or "edit" mode. This
 message delivers the file contents (whether in binary form or not) to the
-web app.
+web app. (If `binary` is set to true, the `content` will contain an array
+that can be used for building a typed array.)
 
 <!--
 Add this back to comments when reenabling this preference:
