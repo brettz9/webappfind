@@ -317,7 +317,3 @@ initial question mark). To properly escape content, one may use JavaScript's
 A special thanks to [Imgen Tata](http://www.pdfbatch.com/) for
 fielding Windows questions (for the prior version of WebAppFind which
 supported Windows).
-
-# To-dos for this page
-
-- Reference meta-webappfind.js in webappfind-demos-samples
