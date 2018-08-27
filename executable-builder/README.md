@@ -1,17 +1,9 @@
 # executable-builder
 
-Executable Builder lets websites silently advertise their support for certain
-file names and the extension can import that info into a template for building
-an executable that can open local files by default (or at least advertise
-support with "Open With...").
-
 Executable Builder is a component of WebAppFind which provides
 the functionality to build, in a more customizable manner, executables which
 can pass a selected desktop file to a web application for viewing and
-optional editing. (The Mac will find the executable if the user right-clicks
-"Open with..." over a given desktop file or if the user opts to select the
-executable as the default application handling for particular files or files
-of a given file extension.)
+optional editing.
 <!--
 TODO: Add when `filetypes.json` reimplemented:
 
@@ -23,6 +15,12 @@ protocol handler for the file's type (with the type determined by the
 file's extension or, if present, a `filetypes.json` file in the same
 directory as the file).
 -->
+
+Executable Builder also lets websites silently advertise their support for
+handling certain file extensions and/or content types and the user
+can, at their discretion, import that info and even set the web app
+to open local files of that type by default (or just be available
+within "Open With...").
 
 For any WebAppFind executable, one may choose the level of privilege
 by which the web app may act on the supplied file (e.g., "view" or "edit").
@@ -73,48 +71,10 @@ the problem that all of these other executable projects are all
 now apparently defunct).
 -->
 
-# Command line usage
-
-## Building an AppleScript executable that can be used with "Open with..." to interact with WebAppFind
-
-See the [User Guide](./docs/User-Guide.md)
-
-## Directly interacting with WebAppFind
-
-Similar to the AppleScript creation commands in the
-[User Guide](./docs/User-Guide.md) (where relevant), except that `method`
-should be `client` (instead of `build-openwith-executable`).
-
-```
-node native-app.js --method=client --file="path/to/my/file" --mode=view --binary=true --site=http://example.com --args="--a=1 --b=2"
-```
-
-## Creating URL shortcuts
-
-This functionality is not quite WebAppFind-related, but provided as a convenience.
-
-```
-node native-app.js --method=urlshortcut --path=/path/to/create.webloc --url="http://example.com"
-```
-
-<!--
-NOTE: This is not currently working due to restrictions with
-[browserAction.openPopup](https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/browserAction/openPopup);
-it requires a user action to activate
-
-Once the add-on is installed, the following can be used in calls to
-browser in addition to browser's own flags.
-
-- `node native-app.js --method=execbuildopen` - Open the Executable Builder dialog.
-
-It is hoped that additional command line options will be added which
-can cover the entire range of functionality available in the UI.
--->
-
-# Usage
+## Usage
 
 In order to provide suggested file extension and content type associations for
-discoverability by ExecutableBuilder, one's HTML must include
+discoverability by Executable Builder, one's HTML must include
 `<meta name="webappfind">` elements in the head of the document. These elements
 must also include a `content` attribute with keys and values separated by equal
 signs and each pair separated by ampersands, as in URL query strings (minus the
@@ -122,7 +82,16 @@ initial question mark). To properly escape content, one may use JavaScript's
 `encodeURIComponent()` or use the utility library provided with
 [webappfind-demos-samples](https://github.com/brettz9/webappfind-demos-samples).
 
-# To-dos for new Executable Builder (in WebAppFind)
+When when one has a tab open in the browser with such HTML containing these
+`<meta>` tags, one may click the "Exec" Executable Builder toolbar button
+and then choose from the "Prepopulate with settings recommended by site"
+pull-down and choose the settings offered by the website (listed by
+executable name). **Upon using such a suggestion, be sure to review
+the settings before building an executable, as the site may be suggesting
+itself as a handler for files which you are not willing for it to
+handle.**
+
+## To-dos for new Executable Builder (in WebAppFind)
 
 1. Provide *button to remove apps from "Open with..."*
     1. If deleting the application:
@@ -134,7 +103,6 @@ initial question mark). To properly escape content, one may use JavaScript's
         1. `killall Finder`
 1. For content-type, give option to *add further meta-data to export*
     (if exposing)/import (needed if using third party)
-1. Bake in code to *grab file meta-data* and send as arguments to web app
 1. IMPORTANT: See `execute.js`, `executableResponses.js`, etc. for *other
     todos already under-way*
 1. *Remove/adapt to-dos from other add-ons*
@@ -143,48 +111,30 @@ initial question mark). To properly escape content, one may use JavaScript's
 1. As reimplement, *uncomment hidden docs* above
 1. Option to auto-add to *dock*
 1. *Avoid baking in arguments*--let them be passed in by command line
-
 1. *UI*
     1. *Split form into generic and specific sections* (so will allow building of
         executables regardless of *whether used for WebAppFind or not*);
         *dynamically reveal* sections based on 'Open with WebAppFind?'
         radio group selection, hard-coding or not, etc. (as simpler *Wizard*)
     1. Add *copy path to clipboard*
-    1. File picker from Ajax and local Node.js (using Miller columns browser?);
+    1. *File picker* from Ajax and local Node.js (using Miller columns browser?);
         see commented out code.
-1. Allow sites to advertise (in *`<meta>`*?) a number of file extensions
-    (of a certain total limited byte size and number?) which they
-    support, so that the following can be done:
-    1. Add our format to <https://wiki.whatwg.org/wiki/MetaExtensions>
-    1. Have option to change icon when files are available (requires
+    1. Have option to *change toolbar icon when files are available* (requires
         (pseudo) content-script)
-    1. Bake in a new command-line option to open into whatever the
-        current tab is opened to
-    1. Command line option to only return without error if the targeted
-        site has the `meta` elements (also ensure returning errors
-        for other problems).
-    1. Give warning if currently opened site doesn't advertise support
-        but trying to open in it
-    1. Option for trusted sites (as with storage or notifications in
-        Chrome?) that are present as a bookmark, with notification
-        permissions, etc., to auto-add their file types to "Open with...".
-    1. Pre-populate, in the browser action popup, a list of available
-        file associations with possible baked in meta-data that can
-        be tweaked by the user (e.g., edit could be changed to read-only
-        though read-only should probably not be changeable), using favicon if
-        no icon specified; ideally, this will show current state, e.g., if
-        already associated, if changed, etc.; if no file associations are
-        available, only show the option to create one's own executables
-        from scratch
-    1. Create desktop app (to communicate with native messaging app to use
-        `windows` add-on privilege to open a dialog, asking which web
-        app (that has previously advertised itself as supporting the
-        clicked on file type) the user wishes to open in). If none
-        yet exist, provide explanation (and link to, or even parse,
-        a wiki to which sites can add their info for discovery?)
+        1. show current state, e.g., if already associated, if changed, etc.
+1. Add our `<meta name=webappfind>` format to <https://wiki.whatwg.org/wiki/MetaExtensions>
+1. Allow *icon* for app (using site favicon if no icon specified)
+1. *Other similar openers*
+    1. Create *AppleScript to prompt for site*
+    1. Create *desktop app/AppleScript* (to communicate with native
+        messaging app to use `windows` add-on privilege to open a
+        dialog, *asking which web app (that has previously advertised
+        itself as supporting the clicked on file type)* the user wishes
+        to open in). If none yet exist, provide explanation (and link to,
+        or even parse, a wiki to which sites can add their info for discovery?)
         1. Option to disable recording of such data discovered at
             various sites
-1. Reimplement ability to *invoke from command line* (though native messaging)
+1. *Other command line uses*
     1. *Command line for ExecutableBuilder UI*: Until web apps support file
         writing to arbitrary locations (WebActivity or new addition to
         WebAppFind?), one can at least treat ExecutableBuilder as itself
@@ -203,44 +153,33 @@ initial question mark). To properly escape content, one may use JavaScript's
             autocomplete field (so that Executable Builder can easily add
             an add-on bar/toolbar button to go immediately to picking a
             file or URL)
-    1. Allow executable builder to *build executables to run itself!*
+    1. Allow executable builder to *build executables to run itself*
 1. *Profiles*
-    1. Profile building
-    1. Add AsYouWish (and ExecutableBuilder and WebAppFind) optionally
-        to profile folder (or global?) so apps can have
-        privileges from any profile! (Ought to be desirable to have easy
-        way to share back from one profile to another though in case
-        people start building independent executables and then decide
-        want to share again so as to allow independent executable)
+    1. *Profile building*
     1. In place of or in addition to profiles, consider *contextualIdentities*
     1. Profile - Request to *work offline*, use the *profile without asking*,
         *open if browser is not open*.
-    1. Conditional logic to *check if `-no-remote`* (preferred is open) and if
-        not, open a specific profile or vice versa? (?)
-    1. Try *installing WebAppFind and ExecutableBuilder extensions globally* so
-        each profile (or multiple profiles--e.g., one profile for each
-        WebAppFind method and/or different environments--e.g., multiple tabs
-        but only for HTML reading) can access it? (since
-        `--install-global-extension` is removed from Firefox now, should
-        apparently use this instead (cross-browser?):
-        <https://developer.mozilla.org/en-US/docs/Installing_extensions>)
+    1. Implement if WebExtensions ever returns to XUL capabilities
+        1. Conditional logic to *check if `-no-remote`* (preferred is open) and if
+            not, open a specific profile or vice versa? (?)
+        1. Add AsYouWish (and ExecutableBuilder and WebAppFind) optionally
+            to profile folder (or global?) so apps can have
+            *privileges from any profile*! (Ought to be desirable to have easy
+            way to share back from one profile to another though in case
+            people start building independent executables and then decide
+            want to share again so as to allow independent executable)
+        1. Try *installing WebAppFind and ExecutableBuilder extensions globally* so
+            each profile (or multiple profiles--e.g., one profile for each
+            WebAppFind method and/or different environments--e.g., multiple tabs
+            but only for HTML reading) can access it? (since
+            `--install-global-extension` is removed from Firefox now, should
+            apparently use this instead (cross-browser?):
+            <https://developer.mozilla.org/en-US/docs/Installing_extensions>)
 1. Include ability to embed configuration information if WebAppFind
     command line starts to support more configuration options (e.g., *full
-    screen mode, or stage of type-detection* algorithm to require or at
-    which to begin).
-1. Special *mode sources*
-    1. Ability to *pass in string* of HTML/JS to the add-on command line to
-        execute that instead of a specific file (so that an exe could include
-        the launching app and processing within one file)? (removing last?
-        advantage of exes beyond allowing file dropping/right-click usage
-        and own task bar icons? example: open a specific file, that gets sent
-        to a particular eval: protocol which listens for the content and then
-        passes it to a script that it dynamically loads
-    1. If WebAppFind implements `eval`-like behavior (see its todos for
-        more on this possibility), create batch files (also for Linux/Mac)
-        which *pass evalable JS files* (or embed JS strings) as a command line
-        argument which will be sent to browser for (privileged) evaluation along
-        with the optional WebAppFind files on which they are executed.
+    screen mode* algorithm to require or at which to begin<!--
+    or stage of type-detection if reimplementing `filetypes.json`
+    -->).
 1. *Features requiring extended privileges*
     1. Ability to *manage previously associated items* (including if added to
         `filebrowser-enhanced`) so that one knows which file types have
@@ -258,20 +197,22 @@ initial question mark). To properly escape content, one may use JavaScript's
         this file so as to be able to parse it for the URL; for Executable
         Builder, this would be HTML drag-and-drop, but could be AppleScript
         for direct
-1. [atyourcommand](https://github.com/brettz9/atyourcommand)
+1. [AtYourCommand](https://github.com/brettz9/atyourcommand)
     1. Support *direct integration of commands* into AtYourCommand
 1. *Demo* todos
-    1. Demo dog-fooding reading/editing our special file type once
+    1. Demo dog-fooding *reading/editing our special template file type* once
         separation-of-concerns/serialize to-do is complete (so it could be
         handled by other apps as with any other WebAppFind file) though
         would need AYW for privileges (as also could do with SVG icons
         when done)
-    1. Provide sample batch file or exe; including ones which supply arguments
+    1. Provide *sample batch file*; including ones which supply arguments
         based on the current directory's path; the path could determine the
         ultimate path of the to-be-created executable (or icon), a
         hard-coded desktop (or remote) file or web app URL to open
 
 # Windows to-dos
+
+(These to-dos are for whenever Windows functionality may be reimplemented.)
 
 1. Ask Mozilla re: *`-new-instance`* on Windows (if it is supposed to create
     a new separate icon) and whether can add as feature, including for the
@@ -312,7 +253,7 @@ initial question mark). To properly escape content, one may use JavaScript's
     and `-remote`; other bugs?) and feedback on general approach,
     security concerns, etc. esp. *if batch won't work for needs*
 
-# Appreciation
+## Appreciation
 
 A special thanks to [Imgen Tata](http://www.pdfbatch.com/) for
 fielding Windows questions (for the prior version of WebAppFind which

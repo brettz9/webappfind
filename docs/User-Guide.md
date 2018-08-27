@@ -212,6 +212,54 @@ Todo: Re-enable when restoring filetypes.json
 For an explanation of the `filetypes.json` format (e.g., if you wish to tweak
 it as a user), see the [Developer-Guide](./Developer-Guide.md).
 -->
+
+# Command line usage
+
+## Directly interacting with WebAppFind
+
+Similar to the AppleScript creation commands in the
+[User Guide](./docs/User-Guide.md) (where relevant), except that `method`
+should be `client` (instead of `build-openwith-executable`).
+
+```
+node native-app.js --method=client --file="path/to/my/file" --mode=view --binary=true --site=http://example.com --args='{"a":1, "b":2}'
+```
+
+(The executable installed by the installer may be referenced in place
+of `node native-app.js`.)
+
+
+## Building an AppleScript executable that can be used with "Open with..." to interact with WebAppFind
+
+In addition to using the graphical Executable Builder (the "Exec" button
+in the toolbar of the add-on), one may also build executables from the
+command line.
+
+See the [User Guide](./docs/User-Guide.md) for usage.
+
+## Creating URL shortcuts
+
+This functionality is not quite WebAppFind-related, but is provided
+as a convenience.
+
+```
+node native-app.js --method=urlshortcut --path=/path/to/create.webloc --url="http://example.com"
+```
+
+<!--
+NOTE: This is not currently working due to restrictions with
+[browserAction.openPopup](https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/browserAction/openPopup);
+it requires a user action to activate
+
+Once the add-on is installed, the following can be used in calls to
+browser in addition to browser's own flags.
+
+- `node native-app.js --method=execbuildopen` - Open the Executable Builder dialog.
+
+It is hoped that additional command line options will be added which
+can cover the entire range of functionality available in the UI.
+-->
+
 ## Tools and Comparisons
 
 For tips for using with other tools and comparison to other similar tools,

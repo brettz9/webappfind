@@ -17,6 +17,7 @@
     1. global *hotkey* to activate
     1. ability to *just open a URL* without going through WebAppFind
     1. Could allow *creating templates* (including name, description)
+1. Bake in code to *grab OS-level file meta-data* and send as arguments to web app
 1. ***Window/tab targeting***
     1. Support optional "hidden" flag (in conjunction with, or only
         from, AsYouWish?) to embed a *hidden DOM window script* (use for
@@ -45,6 +46,8 @@
         (option to get the same tab or new tabs for them?); option to push
         to all open windows in different manner so can notify user of
         updates but not change focus, etc.
+    1. Bake in a new command-line option to open into whatever the
+        *current tab* is opened to
     1. Allow command line to specify (or let WebAppFind determine according
         to some permutation of the file path) the *exact window* and possibly
         Panorama group and/or pinned status into which the web app with
@@ -88,6 +91,11 @@
         picker per site.
     1. Error checking and *reporting errors as dialog* (or new tab) unless
         preference to disable on
+    1. Command line option to only *return without error if the targeted
+        site has the `meta` elements* (also ensure returning errors
+        for other problems).
+    1. Give *warning if currently opened site doesn't advertise support*
+        but trying to open in it
     1. Allow file or directory permissions to *grant static file server
         permissions* be granted (with localhost:port info sent to webapp).
         Could then, e.g., have wiki edit HTML but also conveniently
@@ -105,6 +113,10 @@
     1. Currently preferences are global, whereas it may be desirable to allow
         users to *customize preferences by type/protocol* in addition to
         the current default global ones.
+    1. Option for *trusted sites* (as with storage or notifications in
+        Chrome?) that are present as a bookmark, with notification
+        permissions, etc., to *auto-add their file types to "Open with..."
+        and possibly defaults*.
 1. *Security* improvements
     1. *Disable further save attempts with bad ID* supplied in case a however
         previously approved site is attempting to guess at the paths of
