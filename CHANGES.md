@@ -1,3 +1,18 @@
+## ?
+
+- Fix (AYC): More accurate name: "Substitutions used" -> "Substitutions available"
+- Fix (AYC): Cancel button not closing window
+- Fix (AYC): Avoid `undefined` showing for `details`
+- Fix (WAF): Ensure executables with hard-coded files work
+- Docs: Overhaul to reflect current behavior
+- License: Update date and indicate clearly it is MIT-style
+- Enhancement (WAF/ExecutableBuilder): Allow `filePicker` argument to indicate
+    should open file picker when there are no arguments
+- Enhancement (ExecutableBuilder): Ability to build executable accepting
+    string argument
+- Enhancement (AYC): Provide WebAppFind executable in pull-down
+- Enhancement (AYC): Display command results
+
 ## 3.0.4
 
 - Fix (AYC): Ensure selection exists; custom properties from window not
