@@ -35,7 +35,7 @@ async function packCommands (commands) {
 }
 
 (async () => {
-const {updateContextMenus, tabData} = browser.extension.getBackgroundPage();
+const {updateContextMenus, tabData, closeAYC} = browser.extension.getBackgroundPage();
 // const platform = browser.runtime.PlatformOs;
 
 async function save (name, data) {
@@ -69,6 +69,7 @@ function newStorage ({name, commands, inputs}) {
     populateFormWithStorage(name, inputs);
 }
 
+const params = (new URL(window.location)).searchParams;
 async function buttonClick (data) {
     const {name, keepForm, close, detail} = data;
     if (data.remove) {
@@ -85,8 +86,8 @@ async function buttonClick (data) {
         const result = await execute(detail, tabData);
         await finished(result);
     }
-    if (close) {
-        window.close();
+    if (close) { // FF doesn't let us use `window.close`
+        closeAYC(params.get('ctr'));
     }
 }
 
@@ -516,7 +517,7 @@ function init ({
                 ]]
             ]],
             ['div', {id: 'substitutions-used-container'}, [
-                ['h3', [_('Substitutions_used')]],
+                ['h3', [_('Substitutions_available')]],
                 ['div', {id: 'substitutions-used'}, [
                     /*
                     _('currently_available_sequences'),

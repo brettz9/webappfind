@@ -315,8 +315,8 @@
     "atyourcommand_doc_title": {
         "message": "AtYourCommand One-Off"
     },
-    "Substitutions_used": {
-        "message": "Substitutions used"
+    "Substitutions_available": {
+        "message": "Substitutions available"
     },
     "currently_available_sequences": {
         "message": "The currently available sequences are as follows. Note that if you execute now, we will utilize the information displayed for the substitutions even if you change the selected text before closing this dialog. Items marked in red with an asterisk are currently being employed within your arguments in at least one place."

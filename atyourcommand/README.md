@@ -17,6 +17,7 @@ or `seqname_` in the [locales file](../_locales/en/messages.json).)
 # Higher priority to-dos (mostly longer)
 
 1. Review **to-dos in code**
+1. Add substitution that can eval encapsulated string
 1. We could allow selectors to check for any children,
     **not only first child**
 1. **Get working in Chrome; add to Chrome Web Store**
