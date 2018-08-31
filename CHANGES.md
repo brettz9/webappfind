@@ -1,8 +1,10 @@
-## ?
+## 3.1.0
 
 - Fix (AYC): More accurate name: "Substitutions used" -> "Substitutions available"
 - Fix (AYC): Cancel button not closing window
 - Fix (AYC): Avoid `undefined` showing for `details`
+- Fix (AYC): Keep open (ensure it closes unless checkbox clicked
+- Fix (AYC): Show delete button
 - Fix (WAF): Ensure executables with hard-coded files work
 - Docs: Overhaul to reflect current behavior
 - License: Update date and indicate clearly it is MIT-style

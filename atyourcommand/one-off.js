@@ -252,7 +252,7 @@ function populateEmptyForm (inputs) {
 
     createNewCommand = true;
     currentName = '';
-    $('#delete').style.display = 'none';
+    $('#delete').hidden = true;
 
     $('#command-name').value = '';
     $('#command-name').defaultValue = '';
@@ -280,7 +280,7 @@ function populateEmptyForm (inputs) {
 function populateFormWithStorage (name, inputs) {
     createNewCommand = false;
     currentName = name;
-    $('#delete').style.display = 'inline';
+    $('#delete').hidden = false;
 
     $('#command-name').value = name;
     $('#command-name').defaultValue = name;
@@ -318,7 +318,7 @@ function fileOrDirResult ({path, selector}) {
 async function finished (result) {
     $('#processExecuted').style.display = 'block';
     if (!$('#keepOpen').checked) {
-        await buttonClick({id: 'cancel'});
+        await buttonClick({close: true});
     } else {
         $('#command-results').value = result[0];
         setTimeout(() => {
