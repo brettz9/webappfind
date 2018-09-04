@@ -16,6 +16,8 @@ function l (str) {
 // STATIC VARS
 let ns = 0; // Used to prevent conflicts if the user does not supply their own namespace
 
+const nbsp = '\u00a0';
+
 const defaultLocaleStrings = {
     en: {
         browse: 'Browse\u2026',
@@ -205,7 +207,7 @@ ExpandableInputs.prototype.add = function () {
                 ['label', {
                     for: prefixedNS + 'input-' + this.id,
                     class: prefixedNS + 'number'
-                }, [this.getLabel(this.num), ['span', [' \u00a0']]]]
+                }, [this.getLabel(this.num), ['span', [' ' + nbsp]]]]
             ]],
             ['td', [
                 (this.fileType && this.selects
@@ -287,7 +289,7 @@ ExpandableInputs.prototype.add = function () {
                     : ''
                 )
             ]],
-            ['td', ['\u00a0']],
+            ['td', [nbsp]],
             ['td', [
                 ['button', {
                     class: prefixedNS + 'add',
