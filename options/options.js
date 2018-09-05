@@ -10,8 +10,9 @@ function _ (...args) {
 document.title = _('extensionName'); // If switch to tabs
 (async () => {
 jml('section', await Promise.all([
-    ['allowedSites', 'addRemove']
-].map(async ([preferenceKey, type]) => {
+    ['autoApproveWAFOpenedSites', 'checkbox', true],
+    ['allowedSites', 'addRemove', []]
+].map(async ([preferenceKey, type, defaultValue]) => {
     let config = {};
     try {
         ({[preferenceKey]: config = {}} = await browser.storage.local.get(preferenceKey));
@@ -79,14 +80,14 @@ jml('section', await Promise.all([
                             });
                         }
                     }
-                }, (config.optionValues || []).map((value) => {
+                }, (config.optionValues || defaultValue).map((value) => {
                     return ['option', [value]];
                 })]
             ]]
         ]];
     }
     case 'checkbox': {
-        const {enabled} = config;
+        const {enabled = defaultValue} = config;
         return ['label', [
             ['input', {
                 type: 'checkbox',

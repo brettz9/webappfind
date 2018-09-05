@@ -29,6 +29,12 @@
     "allowedSites_description": {
         "message": "Sites that have the privilege of using the potentially dangerous AsYouWish APIs; enable only with sites you fully trust!"
     },
+    "autoApproveWAFOpenedSites_title": {
+        "message": "Auto-approve WebAppFind opened sites"
+    },
+    "autoApproveWAFOpenedSites_description": {
+        "message": "Automatically approve sites opened from the WebAppFind command line or executables"
+    },
     "trust_site_addon_code": {
         "message": "Are you sure you trust this site to evaluate potentially dangerous add-on code?"
     },
