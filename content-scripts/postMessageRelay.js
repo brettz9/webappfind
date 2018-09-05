@@ -43,7 +43,7 @@ window.addEventListener('message', function ({origin, data}) {
     }
 });
 
-function webappfindStart (result) {
+async function webappfindStart (result) {
     // l(JSON.stringify(result));
     const {pathID, content, site, mode, binary} = result;
     let {args, error} = result;
@@ -56,6 +56,25 @@ function webappfindStart (result) {
         args = JSON.parse(args);
     } catch (err) {
         error = err;
+    }
+
+    // For option to auto-approve WebAppFind-invoked sites for AsYouWish
+    const {origin, pathname, search} = new URL(location);
+    const currentSite = origin + pathname + search;
+    let autoApproveWAFOpenedSites = false, allowedSites = [];
+    try {
+        ({
+            autoApproveWAFOpenedSites: {enabled: autoApproveWAFOpenedSites = false},
+            allowedSites: {optionValues: allowedSites = []}
+        } = await browser.storage.local.get());
+    } catch (err) {}
+
+    if (autoApproveWAFOpenedSites && !allowedSites.includes(currentSite)) {
+        allowedSites.push(currentSite);
+        await browser.storage.local.set({
+            allowedSites: {optionValues: allowedSites}
+        });
+        // Todo: Trigger AsYouWish injection
     }
 
     const message = {
@@ -76,7 +95,7 @@ function webappfindStart (result) {
     // This should work but
     //   [tabs.create](https://developer.mozilla.org/en-US/Add-ons/WebExtensions/API/tabs/create)
     //   does not work with the `file:` protocol
-    if (site.match(/^file:/)) {
+    if (0 && site.match(/^file:/)) {
         l('file protocol');
         // Todo: We could (and should) set this message to the
         //    relevant URL if `file:` support is added

@@ -24,13 +24,24 @@ portEvl.onMessage.addListener(function ({i, error, result, type}) {
     window.postMessage({webappfind: {i, result, error, type}}, orig);
 });
 
-// Todo: We ought to give some site-based permissions here
-window.addEventListener('message', ({data}) => {
+window.addEventListener('message', async ({data}) => {
     const {string, method} = data.webappfind;
+
+    const {origin, pathname, search} = new URL(location);
+    const currentSite = origin + pathname + search;
+    let allowedSites = [];
+    try {
+        ({
+            allowedSites: {optionValues: allowedSites = []}
+        } = await browser.storage.local.get());
+    } catch (err) {}
+
+    const avoidConfirm = allowedSites.includes(currentSite);
+
     i++;
     switch (method) {
     case 'addonEval': {
-        const ok = confirm(
+        const ok = avoidConfirm || confirm(
             _('trust_site_addon_code')
         );
         if (ok) {
@@ -38,7 +49,7 @@ window.addEventListener('message', ({data}) => {
         }
         break;
     } case 'nodeEval': {
-        const ok = confirm(
+        const ok = avoidConfirm || confirm(
             _('trust_site_node_code')
         );
         if (ok) {
@@ -49,6 +60,7 @@ window.addEventListener('message', ({data}) => {
     }
 });
 
+// For AsYouWish privileges permitted after load
 window.postMessage({webappfind: {
     evalReady: true
 }}, orig);
