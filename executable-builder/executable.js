@@ -1,9 +1,8 @@
 /* eslint-env webextensions, browser */
 
-import jml from '/vendor/jamilih/dist/jml-es.js';
+import {jml, $, $$} from '/vendor/jamilih/dist/jml-es.js';
 import {_} from '/utils/i18n.js';
 import {Dialog} from '../utils/dialogs.js';
-import {$, $$} from '/utils/templateUtils.js';
 import {
     serialize as formSerialize, deserialize as formDeserialize
 } from '/vendor/form-serialize/src/index.js';

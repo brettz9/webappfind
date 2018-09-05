@@ -1,6 +1,6 @@
 /* globals dialogPolyfill */
 // Todo: Make as own module dependency
-import jml from '/vendor/jamilih/dist/jml-es.js';
+import {jml} from '/vendor/jamilih/dist/jml-es.js';
 import {$e, U} from './templateUtils.js';
 
 const defaultLocale = 'en';

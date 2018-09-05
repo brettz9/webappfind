@@ -1,7 +1,6 @@
 /* eslint-env browser */
 // Todo: Make as own module dependency
-// Todo: Add $ and $$ to Jamilih
-import jml from '/vendor/jamilih/dist/jml-es.js';
+import {jml, $, $$} from '/vendor/jamilih/dist/jml-es.js';
 
 /**
 * @class ExpandableInputs
@@ -27,23 +26,6 @@ const defaultLocaleStrings = {
         reveal: '' // We use a background-image of a folder instead of text
     }
 };
-
-// UTILITIES
-
-/**
-* @static
-* @private
-*/
-function $ (sel) {
-    return document.querySelector(sel);
-}
-/**
-* @static
-* @private
-*/
-function $$ (sel) {
-    return document.querySelectorAll(sel);
-}
 
 /**
 *
@@ -114,7 +96,7 @@ ExpandableInputs.prototype.remove = function (id) {
     $(rowIDSel).remove();
     // Renumber to ensure inputs remain incrementing by one
     this.num = 1;
-    [...$$('.' + prefixedNS + 'number')].forEach((numHolder) => {
+    $$('.' + prefixedNS + 'number').forEach((numHolder) => {
         numHolder.firstChild.replaceWith(
             this.getLabel(this.num++)
         );
@@ -151,7 +133,7 @@ ExpandableInputs.prototype.addTableEvent = function () {
 
 ExpandableInputs.prototype.getValues = function (type) {
     const selector = '.' + this.getPrefixedNamespace() + type;
-    return [...$$(selector)].map(({type, checked, value}) => {
+    return $$(selector).map(({type, checked, value}) => {
         return type === 'checkbox' ? checked : value;
     });
 };
@@ -165,7 +147,7 @@ ExpandableInputs.prototype.setValues = function (type, storage) {
     const selector = '.' + prefixedNS + type;
     storage = storage || [];
     if ($$(selector).length !== storage.length) { // Don't remove if already the right number
-        [...$$('.' + prefixedNS + 'row')].forEach((row) => {
+        $$('.' + prefixedNS + 'row').forEach((row) => {
             row.remove();
         });
         this.resetCount();
@@ -178,7 +160,7 @@ ExpandableInputs.prototype.setValues = function (type, storage) {
         });
     }
 
-    [...$$(selector)].forEach((arg, i) => {
+    $$(selector).forEach((arg, i) => {
         const data = storage[i];
         if (arg.type === 'checkbox') {
             arg.checked = data || false;

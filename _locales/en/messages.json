@@ -1,5 +1,11 @@
 {
-    "addon_description": {
+    "extensionName": {
+      "message": "WebAppFind"
+    },
+    "extensionShortName": {
+      "message": "WebAppFind"
+    },
+    "extensionDescription": {
         "message": "Open desktop files into web apps"
     },
     "browser_action_title": {
@@ -16,6 +22,12 @@
     "enable_asyouwish": {
         "message": "Enable AsYouWish for this tab",
         "description": "Whether to enable the privileged AsYouWish API for this tab"
+    },
+    "allowedSites_title": {
+        "message": "AsYouWish allowed sites"
+    },
+    "allowedSites_description": {
+        "message": "Sites that have the privilege of using the potentially dangerous AsYouWish APIs; enable only with sites you fully trust!"
     },
     "trust_site_addon_code": {
         "message": "Are you sure you trust this site to evaluate potentially dangerous add-on code?"
@@ -638,5 +650,11 @@
     },
     "Preview_here": {
         "message": "(Preview here)"
+    },
+    "options_addRemove_add": {
+        "message": "Add"
+    },
+    "options_addRemove_remove": {
+        "message": "Remove"
     }
 }

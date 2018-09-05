@@ -1,11 +1,13 @@
 {
     "manifest_version": 2,
 
-    "name": "webappfind",
+    "name": "__MSG_extensionName__",
+    "short_name": "__MSG_extensionShortName__",
+    "description": "__MSG_extensionDescription__",
+
     "version": "3.1.0",
     "author": "Brett Zamir",
     "homepage_url": "https://github.com/brettz9/webappfind",
-    "description": "__MSG_addon_description__",
 
     "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self';",
     "optional_permissions": [
@@ -67,6 +69,13 @@
 
     "background": {
         "page": "/lib/background.html"
+    },
+
+    "options_ui": {
+      "page": "options/options.html",
+      "browser_style": true,
+      "chrome_style": true,
+      "open_in_tab": false
     },
 
     "applications": {
