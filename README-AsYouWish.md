@@ -88,3 +88,4 @@ window.addEventListener('message', ({data: {webappfind: {i, result, type}}}) => 
 
 1. Make library (along the lines of `webappfind.js` which allows for Promises
     to get the response of a particular post).
+1. Allow means for request privileges or indicate support
