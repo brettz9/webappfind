@@ -1,8 +1,6 @@
 /* eslint-env browser, webextensions */
-import {jml, $} from './jml.js';
+import {jml, $, nbsp} from './jml.js';
 import {DOM} from '../utils/templateUtils.js';
-
-const nbsp = '\u00a0';
 
 function _ (...args) {
     return browser.i18n.getMessage(...args);

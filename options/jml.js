@@ -1597,5 +1597,7 @@ jml.getXMLSerializer = function () {
     return XmlSerializer;
 };
 
+var nbsp = '\xA0'; // Very commonly needed in templates
+
 export default jml;
-export { jml, $, $$ };
+export { jml, $, $$, nbsp };
