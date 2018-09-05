@@ -1,6 +1,6 @@
 /* eslint-env webextensions, browser */
 
-import {jml, $, $$} from '/vendor/jamilih/dist/jml-es.js';
+import {jml, $, $$, nbsp} from '/vendor/jamilih/dist/jml-es.js';
 import {_} from '/utils/i18n.js';
 import {Dialog} from '../utils/dialogs.js';
 import {
@@ -64,7 +64,6 @@ function l (msg) {
 }
 */
 const os = browser.runtime.PlatformOs;
-const nbsp = '\u00a0';
 const nbsp3 = ` ${nbsp} `;
 
 let pathInputCtr = 0, fileExtIDCtr = 0, winOpenCtr = 0;

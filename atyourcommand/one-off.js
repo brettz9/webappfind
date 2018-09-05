@@ -4,9 +4,8 @@
 import Tags from './Tags.js';
 import ExpandableInputs from './ExpandableInputs.js';
 import {execute, getCommandArgs} from '/lib/execute.js';
-import {jml, $, $$} from '/vendor/jamilih/dist/jml-es.js';
+import {jml, $, $$, nbsp} from '/vendor/jamilih/dist/jml-es.js';
 import {_} from '/utils/i18n.js';
-import {U} from '/utils/templateUtils.js';
 import {Dialog} from '/utils/dialogs.js';
 import * as EnvironmentBridge from '/node-bridges/EnvironmentBridge.js';
 import * as FileBridge from '/node-bridges/FileBridge.js';
@@ -589,14 +588,14 @@ function init ({
                     ]],
                     ['div', {style: 'float: left; width: 49%'}, [
                         _('command_preview'),
-                        U.nbsp,
+                        nbsp,
                         ['textarea', {id: 'command-preview', readonly: 'readonly'}, [
                             _('Preview_here')
                         ]]
                     ]],
                     ['div', {style: 'float: left; width: 49%'}, [
                         _('command_result'),
-                        U.nbsp,
+                        nbsp,
                         ['textarea', {id: 'command-results', readonly: 'readonly'}, [
                             _('Result_here')
                         ]]
@@ -719,7 +718,7 @@ function init ({
                 ['div', {'class': 'export'}, [
                     ['label', [
                         _('os_format_for_batch_export'),
-                        U.nbsp.repeat(2),
+                        nbsp.repeat(2),
                         ['select', {id: 'export-os-type'}, buildOptions(
                             ['Linux', 'Mac', 'Windows'],
                             ['linux', 'mac', 'win']

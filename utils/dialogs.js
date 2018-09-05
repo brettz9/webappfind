@@ -1,7 +1,7 @@
 /* globals dialogPolyfill */
 // Todo: Make as own module dependency
-import {jml} from '/vendor/jamilih/dist/jml-es.js';
-import {$e, U} from './templateUtils.js';
+import {jml, nbsp} from '/vendor/jamilih/dist/jml-es.js';
+import {$e} from './templateUtils.js';
 
 const defaultLocale = 'en';
 const localeStrings = {
@@ -60,7 +60,7 @@ class Dialog {
                     }
                 }
             }, [this.localeStrings.submit]),
-            U.nbsp.repeat(2)
+            nbsp.repeat(2)
         );
         return dialog;
     }
@@ -125,7 +125,7 @@ class Dialog {
                 children: [
                     ['label', [
                         msg,
-                        U.nbsp.repeat(3),
+                        nbsp.repeat(3),
                         ['input']
                     ]]
                 ]
@@ -144,7 +144,7 @@ class Dialog {
                         dialog.close();
                         resolve();
                     }}}, [this.localeStrings.ok]],
-                    U.nbsp.repeat(2),
+                    nbsp.repeat(2),
                     ['button', {$on: {click () {
                         dialog.close();
                         reject(new Error('cancelled'));

@@ -1,6 +1,6 @@
 /* eslint-env browser */
 // Todo: Make as own module dependency
-import {jml, $, $$} from '/vendor/jamilih/dist/jml-es.js';
+import {jml, $, $$, nbsp} from '/vendor/jamilih/dist/jml-es.js';
 
 /**
 * @class ExpandableInputs
@@ -14,8 +14,6 @@ function l (str) {
 
 // STATIC VARS
 let ns = 0; // Used to prevent conflicts if the user does not supply their own namespace
-
-const nbsp = '\u00a0';
 
 const defaultLocaleStrings = {
     en: {
