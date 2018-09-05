@@ -1,3 +1,14 @@
+## 3.2.0
+
+- Fix: Further i18n (extension name)
+- Fix (AYC): Properly listen for (and supply) for `details` (headers)
+- Enhancement (AYW): Allow AsYouWish to persist permissions for
+    whitelisted sites; avoid need for confirmation in such cases; work on
+    auto-approved WAF->AYW sites (need to still trigger AsYouWish injection)
+- Enhancement (AYW): Add options toward adding allowed sites (still unused)
+- Linting (ESLint): Override new recommended and lint
+- npm: Update devDeps (and make use of updated Jamilih)
+
 ## 3.1.0
 
 - Fix (AYC): More accurate name: "Substitutions used" -> "Substitutions available"
