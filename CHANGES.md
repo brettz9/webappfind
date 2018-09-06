@@ -8,6 +8,7 @@
     auto-approved WAF->AYW sites (need to still trigger AsYouWish injection)
 - Enhancement (AYW): Add options toward adding allowed sites
 - Linting (ESLint): Override new recommended and lint
+- Refactoring: Better logging, strict mode
 - npm: Update devDeps (and make use of updated Jamilih)
 
 ## 3.1.0
