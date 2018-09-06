@@ -1,4 +1,4 @@
-## ?
+## 3.3.0
 
 - Enhancement (AYC): Expose `contextSelector` and `contextSelectorHTML`
 

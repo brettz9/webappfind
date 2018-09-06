@@ -5,7 +5,7 @@
     "short_name": "__MSG_extensionShortName__",
     "description": "__MSG_extensionDescription__",
 
-    "version": "3.2.0",
+    "version": "3.3.0",
     "author": "Brett Zamir",
     "homepage_url": "https://github.com/brettz9/webappfind",
 
