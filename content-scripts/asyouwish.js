@@ -1,6 +1,8 @@
 /* eslint-env webextensions, browser */
 
-var AsYouWish; // eslint-disable-line no-var, no-unused-vars
+'use strict';
+
+var AsYouWish = true; // eslint-disable-line no-var, no-unused-vars
 
 // import {_} from '/utils/i18n.js';
 // Todo: Replace this with the line above once
@@ -26,33 +28,58 @@ portEvl.onMessage.addListener(function ({i, error, result, type}) {
 
 window.addEventListener('message', async ({data}) => {
     const {string, method} = data.webappfind;
+    if (!method) { // Ignore `evalReady` or `result` messages
+        return;
+    }
 
     const {origin, pathname, search} = new URL(location);
     const currentSite = origin + pathname + search;
-    let allowedSites = [];
+    let autoApproveConfirmedSites = true, allowedSites = [];
     try {
         ({
-            allowedSites: {optionValues: allowedSites = []}
+            autoApproveConfirmedSites: {enabled: autoApproveConfirmedSites = true} = {},
+            allowedSites: {optionValues: allowedSites = []} = {}
         } = await browser.storage.local.get());
-    } catch (err) {}
+    } catch (err) {
+        console.log('errrrr', err.toString());
+    }
+    // console.log('allowedSites', JSON.stringify(allowedSites));
 
-    const avoidConfirm = allowedSites.includes(currentSite);
+    let avoidConfirm = allowedSites.includes(currentSite);
 
+    async function autoSaveConfirmed () {
+        if (avoidConfirm) { // Already saved
+            return;
+        }
+        // console.log('autoApproveConfirmedSites', autoApproveConfirmedSites, currentSite, JSON.stringify(allowedSites));
+        // Save site for future if autoconfirming option is on
+        if (autoApproveConfirmedSites && !allowedSites.includes(currentSite)) {
+            allowedSites.push(currentSite);
+            avoidConfirm = true;
+            await browser.storage.local.set({
+                allowedSites: {optionValues: allowedSites}
+            });
+        }
+    }
+
+    let ok;
     i++;
     switch (method) {
     case 'addonEval': {
-        const ok = avoidConfirm || confirm(
+        ok = avoidConfirm || confirm(
             _('trust_site_addon_code')
         );
         if (ok) {
+            await autoSaveConfirmed();
             portEvl.postMessage({string, i, method});
         }
         break;
     } case 'nodeEval': {
-        const ok = avoidConfirm || confirm(
+        ok = avoidConfirm || confirm(
             _('trust_site_node_code')
         );
         if (ok) {
+            await autoSaveConfirmed();
             portEvl.postMessage({string, i, method});
         }
         break;

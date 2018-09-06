@@ -18,7 +18,7 @@ async function buildOptionsPage () {
     DOM.removeChildren('body');
 
     jml('section', await Promise.all([
-        ['autoApproveWAFOpenedSites', 'checkbox', true],
+        ['autoApproveConfirmedSites', 'checkbox', true],
         ['allowedSites', 'addRemove', []]
     ].map(async ([preferenceKey, type, defaultValue]) => {
         let config = {};

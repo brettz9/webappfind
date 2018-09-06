@@ -58,25 +58,6 @@ async function webappfindStart (result) {
         error = err;
     }
 
-    // For option to auto-approve WebAppFind-invoked sites for AsYouWish
-    const {origin, pathname, search} = new URL(location);
-    const currentSite = origin + pathname + search;
-    let autoApproveWAFOpenedSites = false, allowedSites = [];
-    try {
-        ({
-            autoApproveWAFOpenedSites: {enabled: autoApproveWAFOpenedSites = false},
-            allowedSites: {optionValues: allowedSites = []}
-        } = await browser.storage.local.get());
-    } catch (err) {}
-
-    if (autoApproveWAFOpenedSites && !allowedSites.includes(currentSite)) {
-        allowedSites.push(currentSite);
-        await browser.storage.local.set({
-            allowedSites: {optionValues: allowedSites}
-        });
-        // Todo: Trigger AsYouWish injection
-    }
-
     const message = {
         webappfind: {
             type: 'view',
