@@ -1,3 +1,4 @@
+/* eslint-env webextensions */
 // For "click" events where "SelectorContext" was used, "node" will be
 //  the SelectorContext node; otherwise, it will be the actual node clicked
 'use strict';
@@ -9,11 +10,45 @@ self.on('context', function (node) {
 });
 */
 
+function getSelectorForElement (elem) {
+    let path;
+    while (elem) {
+        let subSelector = elem.localName;
+        if (!subSelector) {
+            break;
+        }
+        subSelector = subSelector.toLowerCase();
+
+        const parent = elem.parentElement;
+
+        if (parent) {
+            const sameTagSiblings = parent.children;
+            if (sameTagSiblings.length > 1) {
+                let nameCount = 0;
+                const index = [...sameTagSiblings].findIndex((child) => {
+                    if (elem.localName === child.localName) {
+                        nameCount++;
+                    }
+                    return child === elem;
+                }) + 1;
+                if (index > 1 && nameCount > 1) {
+                    subSelector += ':nth-child(' + index + ')';
+                }
+            }
+        }
+
+        path = subSelector + (path ? '>' + path : '');
+        elem = parent;
+    }
+    return path;
+}
+
 // Get around eslint-config-standard limitation on "exported" directive
 //   by exporting as follows:
 //   https://github.com/standard/standard/issues/614
 window.getPageData = function getPageData ({
-    customProperties = []
+    customProperties = [],
+    targetElementId
 } = {customProperties: []}) {
     // Todo: Support retrieval of current selected element
     //   (by selector?) once it may be supported:
@@ -34,6 +69,11 @@ window.getPageData = function getPageData ({
             container.firstElementChild && container.firstElementChild.nodeName.toLowerCase()
         );
     }
+
+    // Todo: Use the likes of https://github.com/fczbkk/css-selector-generator/issues/27 if implementing ES6 Modules
+    const elem = browser.menus.getTargetElement(targetElementId);
+    const contextSelector = getSelectorForElement(elem);
+    const contextHTML = elem.outerHTML;
 
     const msg = {
         // Todo: ensure all of the following are documented
@@ -60,6 +100,8 @@ window.getPageData = function getPageData ({
         // Todo: add to these magic items, depending also on whether there is a context or not
         selectedHTML,
         selectedText,
+        contextSelector,
+        contextHTML,
         nodeName,
         // Todo: Change to require user to specify these (since associatable with specific tags)
         pageTitle: document.title, // hidden

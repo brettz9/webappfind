@@ -379,6 +379,12 @@
     "seq_selectedText": {
         "message": "The text highlighted on the current page"
     },
+    "seq_contextSelector": {
+        "message": "The unique CSS selector of the right-clicked element on the current page (regardless of whether there is selected text)"
+    },
+    "seq_contextHTML": {
+        "message": "The HTML string contents of the right-clicked element on the current page (regardless of whether there is selected text)"
+    },
     "seq_linkPageURLAsNativePath": {
         "message": "The clicked link's location as a native path (e.g., \"C:\\\")"
     },

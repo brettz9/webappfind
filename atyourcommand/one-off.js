@@ -487,7 +487,7 @@ function init ({
                         // 'eval',
                         'contentType', 'pageURL', 'pageTitle',
                         'pageHTML', 'bodyText',
-                        'selectedHTML', 'selectedText',
+                        'selectedHTML', 'selectedText', 'contextSelector', 'contextHTML',
                         /* ,
                         'linkPageURLAsNativePath', 'linkPageTitle',
                         'linkBodyText', 'linkPageHTML',
@@ -544,7 +544,7 @@ function init ({
                             */
                             'contentType', 'pageURL', 'pageTitle',
                             'pageHTML', 'bodyText',
-                            'selectedHTML', 'selectedText',
+                            'selectedHTML', 'selectedText', 'contextSelector', 'contextHTML',
                             // Supplied by webextensions API
                             'favIconUrl',
                             'linkText', 'linkUrl',

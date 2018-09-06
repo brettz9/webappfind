@@ -1,3 +1,7 @@
+## ?
+
+- Enhancement (AYC): Expose `contextSelector` and `contextSelectorHTML`
+
 ## 3.2.0
 
 - Fix: Further i18n (extension name)
