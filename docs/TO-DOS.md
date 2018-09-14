@@ -2,6 +2,25 @@
 
 ## To-dos (Command line API)
 
+1. Pass *content type* to web app, allowing user to bake it in to the
+    executable via executable builder (or auto-detect via AppleScript)
+    even when not associating files by content type (allows site to
+    handle multiple content types or library to parse common types
+    like JSON automatically (as well as using `binary` info))
+    1. Auto-detect
+```applescript
+-- https://macscripter.net/viewtopic.php?pid=191505#p191505
+-- use AppleScript version "2.4" -- Yosemite (10.10) or later
+-- use framework "Foundation"
+use framework "AppKit" -- for NSWorkspace
+use scripting additions
+
+set posixPath to POSIX path of (choose file)
+set theUTI to current application's NSWorkspace's sharedWorkspace()'s typeOfFile:posixPath |error|:(missing value)
+if theUTI = missing value then error theError's localizedDescription() as text
+return theUTI as text
+-- e.g., public.jpeg
+```
 1. Allow command line for *temporary file* or designated file saving
     of string contents in WebAppFind as well (with dialog to approve
     there as in [AtYourCommand](https://github.com/brettz9/atyourcommand)
