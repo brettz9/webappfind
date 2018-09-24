@@ -9,6 +9,8 @@
     "author": "Brett Zamir",
     "homepage_url": "https://github.com/brettz9/webappfind",
 
+    "web_accessible_resources": ["filebrowser/index.html"],
+
     "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self';",
     "optional_permissions": [
         "bookmarks",
@@ -19,15 +21,15 @@
         "geolocation",
         "idle",
         "notifications",
-        "topSites",
-        "webRequestBlocking"
+        "topSites"
     ],
     "$$$comment-optional-permissions": "`background`, `contentSettings`, `debugger`, `management`, `pageCapture` were giving console warnings",
 
 
     "permissions": [
 
-        "nativeMessaging", "<all_urls>",
+        "nativeMessaging", "<all_urls>", "file:///*/*",
+        "webRequestBlocking",
 
         "contextMenus", "activeTab", "tabs", "webNavigation", "history",
 

@@ -23,6 +23,7 @@ are still experimental, we are bundling four add-ons together.
 - [ExecutableBuilder](./executable-builder/README.md)
 - [AtYourCommand](./atyourcommand/README.md) -
 - [AsYouWish](./README-AsYouWish.md)
+- [FileBrowser](./filebrowser/README.md)
 
 See the respective READMEs for more details.
 
