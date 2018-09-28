@@ -1,26 +1,22 @@
 /* eslint-env webextensions */
-import * as EnvironmentBridge from '/node-bridges/EnvironmentBridge.js';
+// import * as EnvironmentBridge from '/node-bridges/EnvironmentBridge.js';
 import {buildOpenWithExecutable} from '/node-bridges/ExecBridge.js';
-
-function l (msg) { // eslint-disable-line no-unused-vars
-    console.log(msg);
-}
 
 function openOrCreateICO () {
     // TODO:
     throw new Error('Not yet implemented');
 };
 
+/*
 function batchQuote (item) {
     return `"${
-        item.replace(/"/g, '\\"')
+        item.replace(/\\/g, '\\\\').replace(/"/g, '\\"')
     }"`;
 }
 
 function stripQuotes (str) {
     return str.replace(/"/g, '');
 }
-
 // Todo: Option to preserve shortcut, SED, and, if converting to exe, the batch file
 // Todo: Otherwise i18nize, complete, and test (and i18nize
 //          fileSelectMessage passed to native-app.js?)
@@ -35,11 +31,9 @@ async function createBatchForShortcutCreation (data) { // eslint-disable-line no
             description = 'Browser Shortcut',
             iconPath, // OPTIONAL
             hotKey, // OPTIONAL // Todo: Give user a non-textual way to input
-            /*
-            1 Activates and displays a window. If the window is minimized or maximized, the system restores it to its original size and position.
-            3 Activates the window and displays it as a maximized window.
-            7 Minimizes the window and activates the next top-level window.
-            */
+            // 1 Activates and displays a window. If the window is minimized or maximized, the system restores it to its original size and position.
+            // 3 Activates the window and displays it as a maximized window.
+            // 7 Minimizes the window and activates the next top-level window.
             windowStyle = '1',
             webappdoc, // Todo: convert to native path if in file:// form; handle differently if a URL or desktop file and support URLs in WebAppFind!
             // Todo: If user opts for (dynamic) webappdoc, do some simple checking for HTTP(S) and if it is, change the argument to webappurl instead
@@ -74,6 +68,7 @@ async function createBatchForShortcutCreation (data) { // eslint-disable-line no
         'findstr "^:::" "%~sf0">tempExecBuilder.vbs & cscript //nologo tempExecBuilder.vbs %1 & del tempExecBuilder.vbs\n';
     return batch;
 }
+*/
 
 function buildSED (userSED) { // eslint-disable-line no-unused-vars
     // Possible values from http://www.mdgx.com/INF_web/cdfinfo.htm

@@ -1,0 +1,7 @@
+extraction:
+  javascript:
+    index:
+      filters:
+        - exclude: "vendor"
+        - exclude: "polyfills/browser-polyfill.js"
+        - exclude: "options/jml.js"
