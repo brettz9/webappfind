@@ -356,7 +356,7 @@ module.exports = function () { // listener
             } catch (ignore) {
             }
 
-            if (path && mode) {
+            if (mode) {
                 fileTypesFile = file.join(file.dirname(path), 'filetypes.json');
                 if (file.exists(fileTypesFile)) {
                     fileTypesJSON = file.read(fileTypesFile);

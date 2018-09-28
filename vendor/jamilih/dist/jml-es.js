@@ -399,7 +399,8 @@ function _copyOrderedAtts(attArr) {
 function _childrenToJML(node) {
     return function (childNodeJML, i) {
         var cn = node.childNodes[i];
-        cn.parentNode.replaceChild(jml.apply(undefined, toConsumableArray(childNodeJML)), cn);
+        var j = Array.isArray(childNodeJML) ? jml.apply(undefined, toConsumableArray(childNodeJML)) : jml(childNodeJML);
+        cn.parentNode.replaceChild(j, cn);
     };
 }
 
@@ -670,6 +671,7 @@ var jml = function jml() {
                         break;
                     }case '$document':
                     {
+                        // Todo: Conditionally create XML document
                         var _node2 = doc.implementation.createHTMLDocument();
                         if (attVal.childNodes) {
                             attVal.childNodes.forEach(_childrenToJML(_node2));
@@ -681,12 +683,17 @@ var jml = function jml() {
                                 j++;
                             }
                         } else {
+                            if (attVal.$DOCTYPE) {
+                                var dt = { $DOCTYPE: attVal.$DOCTYPE };
+                                var doctype = jml(dt);
+                                _node2.firstChild.replaceWith(doctype);
+                            }
                             var html = _node2.childNodes[1];
                             var head = html.childNodes[0];
-                            var body = html.childNodes[1];
+                            var _body = html.childNodes[1];
                             if (attVal.title || attVal.head) {
                                 var meta = doc.createElement('meta');
-                                meta.charset = 'utf-8';
+                                meta.setAttribute('charset', 'utf-8');
                                 head.appendChild(meta);
                             }
                             if (attVal.title) {
@@ -696,9 +703,10 @@ var jml = function jml() {
                                 attVal.head.forEach(_appendJML(head));
                             }
                             if (attVal.body) {
-                                attVal.body.forEach(_appendJMLOrText(body));
+                                attVal.body.forEach(_appendJMLOrText(_body));
                             }
                         }
+                        nodes[nodes.length] = _node2;
                         break;
                     }case '$DOCTYPE':
                     {
@@ -723,7 +731,7 @@ var jml = function jml() {
                                 // internalSubset: // Todo
                             };
                         } else {
-                            _node3 = doc.implementation.createDocumentType(attVal.name, attVal.publicId, attVal.systemId);
+                            _node3 = doc.implementation.createDocumentType(attVal.name, attVal.publicId || '', attVal.systemId || '');
                         }
                         nodes[nodes.length] = _node3;
                         break;
@@ -958,7 +966,9 @@ var jml = function jml() {
                             procValue = [];
                             for (var p in val) {
                                 if (val.hasOwnProperty(p)) {
-                                    procValue.push(p + '=' + '"' + val[p].replace(/"/g, '\\"') + '"');
+                                    procValue.push(p + '=' + '"' +
+                                    // https://www.w3.org/TR/xml-stylesheet/#NT-PseudoAttValue
+                                    val[p].replace(/"/g, '&quot;') + '"');
                                 }
                             }
                             procValue = procValue.join(' ');
@@ -1409,7 +1419,7 @@ jml.toJML = function (dom, config) {
             case 12:
                 // NOTATION
                 start = { $NOTATION: { name: node.nodeName } };
-                addExternalID(start.$NOTATION, node, true);
+                addExternalID(start.$NOTATION, node);
                 set$$1(start);
                 break;
             default:
@@ -1589,6 +1599,9 @@ jml.setWindow = function (wind) {
 };
 jml.setDocument = function (docum) {
     doc = docum;
+    if (docum && docum.body) {
+        body = docum.body;
+    }
 };
 jml.setXMLSerializer = function (xmls) {
     XmlSerializer = xmls;
@@ -1604,7 +1617,9 @@ jml.getXMLSerializer = function () {
     return XmlSerializer;
 };
 
+var body = doc && doc.body;
+
 var nbsp = '\xA0'; // Very commonly needed in templates
 
 export default jml;
-export { jml, $, $$, nbsp };
+export { jml, $, $$, nbsp, body };
