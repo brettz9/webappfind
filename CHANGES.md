@@ -1,3 +1,14 @@
+## 3.4.0
+
+- Security fix: Escape backslash (courtesy lgtm); possible if users
+    inputs them for selectors in add-on form
+- Refactoring: Avoid unneeded check (courtesy lgtm)
+- Linting: Comment out unused code; avoid warning for expression
+    known to Firefox through `executeScript`; add `lgtm.yml` (LGTM)
+- Update: local Jamilih copies based on latest version
+- npm: Bump Jamilih
+- npm: Update devDeps
+
 ## 3.3.0
 
 - Enhancement (AYC): Expose `contextSelector` and `contextSelectorHTML`
