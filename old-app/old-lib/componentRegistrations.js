@@ -163,7 +163,7 @@ function handleError (errorMsg) {
     if (prefs.displayErrors) {
         tabs.activeTab.attach({
             contentScriptWhen: 'ready',
-            contentScript: 'document.getElementById("newtab-horizontal-margin").appendChild(document.createTextNode("' + errorMsg.replace(/"/g, '\\"') + '"));' // Using ID within about:newtab
+            contentScript: 'document.getElementById("newtab-horizontal-margin").appendChild(document.createTextNode("' + errorMsg.replace(/\\/g, '\\\\').replace(/"/g, '\\"') + '"));' // Using ID within about:newtab
         });
         // Close the tab if alerting the user of errors in a way different from using the opened URL
         // tabs.activeTab.close();
