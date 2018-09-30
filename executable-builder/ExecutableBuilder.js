@@ -70,6 +70,7 @@ async function createBatchForShortcutCreation (data) { // eslint-disable-line no
 }
 */
 
+/*
 function buildSED (userSED) { // eslint-disable-line no-unused-vars
     // Possible values from http://www.mdgx.com/INF_web/cdfinfo.htm
     const defaultSED = [
@@ -167,6 +168,7 @@ function buildSED (userSED) { // eslint-disable-line no-unused-vars
     userSED.forEach(addUserSections);
     return serializeSED(defaultSED);
 }
+*/
 
 async function saveExecutables (data) {
     console.log('data', data);
