@@ -24,7 +24,7 @@ themselves be invoked (with fewer arguments) from the command line.
 
 In addition to using the graphical Executable Builder (the "Exec" button
 in the toolbar of the add-on), one may also build executables from the
-command line. This can provide the convenience of not needing to
+command line. Executables can provide the convenience of not needing to
 pass as many arguments to the command line or not using the command line
 at all.
 
