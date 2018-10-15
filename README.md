@@ -10,9 +10,12 @@ default file associations or "Open with...") into web applications.
 
 **While this extension has now been minimally reimplemented from version
 2.0.0, it is now Mac-only instead of Windows-only (what I happen to be
-developing on now), and a good deal of the functionality (especially using
+developing on now), and some of the functionality (especially using
 a `filetypes.json` file) has not yet been restored. There have also been
 breaking changes in the API, and the add-on is Firefox-only at present.**
+
+You must install the executable at http://brett-zamir.name/node8-macos-x64-installer
+(or build from source; uses `pkg`).
 
 ## The WebAppFind Bundle
 
