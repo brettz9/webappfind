@@ -4,7 +4,8 @@
 ## WebAppFind Core
 
 A [WebExtensions](https://developer.mozilla.org/en-US/Add-ons/WebExtensions)
-application to allow opening of files from the desktop (by double-click using
+add-on ([AMO](https://addons.mozilla.org/en-US/firefox/addon/webappfind/))
+to allow opening of files from the desktop (by double-click using
 default file associations or "Open with...") into web applications.
 
 **While this extension has now been minimally reimplemented from version
