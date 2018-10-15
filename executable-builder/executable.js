@@ -1,6 +1,6 @@
 /* eslint-env webextensions, browser */
 
-import {jml, $, $$, nbsp} from '/vendor/jamilih/dist/jml-es.js';
+import {jml, $, $$, nbsp} from '/vendor/jamilih/dist/jml-es-noinnerh.js';
 import {_} from '/utils/i18n.js';
 import {Dialog} from '../utils/dialogs.js';
 import {

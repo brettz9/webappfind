@@ -1,6 +1,6 @@
 /* eslint-env browser */
 // Todo: Make as own module dependency
-import {jml, $, $$, nbsp} from '/vendor/jamilih/dist/jml-es.js';
+import {jml, $, $$, nbsp} from '/vendor/jamilih/dist/jml-es-noinnerh.js';
 
 /**
 * @class ExpandableInputs

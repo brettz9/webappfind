@@ -5,7 +5,7 @@
     "short_name": "__MSG_extensionShortName__",
     "description": "__MSG_extensionDescription__",
 
-    "version": "3.3.0",
+    "version": "3.4.1",
     "author": "Brett Zamir",
     "homepage_url": "https://github.com/brettz9/webappfind",
 
@@ -81,7 +81,7 @@
     "applications": {
         "gecko": {
             "id": "webappfind@brett-zamir.me",
-            "strict_min_version": "54.0"
+            "strict_min_version": "63.0"
         }
     }
 }

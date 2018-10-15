@@ -1,6 +1,6 @@
 {
   "name": "webappfind",
-  "version": "3.4.0",
+  "version": "3.4.1",
   "author": "Brett Zamir",
   "contributors": [],
   "url": "https://github.com/brettz9/webappfind",
@@ -48,7 +48,7 @@
     "copy-js-string-escape": "cp node_modules/js-string-escape/dist/index-es.js vendor/js-string-escape/dist/index-es.js",
     "copy-load-stylesheets": "cp node_modules/load-stylesheets/dist/index-es.js vendor/load-stylesheets/dist/index-es.js",
     "copy-multiple-select": "cp node_modules/multiple-select/multiple-select.css vendor/multiple-select/multiple-select.css && cp node_modules/multiple-select/dist/multiple-select-es.js vendor/multiple-select/dist/multiple-select-es.js",
-    "copy-jamilih": "cp node_modules/jamilih/dist/jml-es.js vendor/jamilih/dist/jml-es.js && cp node_modules/jamilih/dist/jml-es-noinnerh.js options/jml.js",
+    "copy-jamilih": "cp node_modules/jamilih/dist/jml-es-noinnerh.js vendor/jamilih/dist/jml-es-noinnerh.js && cp node_modules/jamilih/dist/jml-es-noinnerh.js options/jml.js",
     "copy-bootstrap": "cp node_modules/bootstrap/dist/css/bootstrap.css vendor/bootstrap/dist/css/bootstrap.css",
     "copy": "npm run copy-dialog-polyfill && npm run copy-polyfill && npm run copy-jquery && npm run copy-form-serialize && npm run copy-js-string-escape && npm run copy-load-stylesheets && npm run copy-multiple-select && npm run copy-jamilih && npm run copy-bootstrap",
     "eslint": "eslint .",

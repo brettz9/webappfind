@@ -558,17 +558,11 @@
     "Restrict_contexts": {
         "message": "Restrict contexts:"
     },
-    "or": {
-        "message": "or"
-    },
     "Specify_your_own_context": {
         "message": "Specify your own context"
     },
     "Show_if_any_text_highlighted": {
         "message": "Show if any text highlighted"
-    },
-    "Images": {
-        "message": "Images"
     },
     "frames": {
         "message": "Frames"

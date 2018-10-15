@@ -1,3 +1,10 @@
+## 3.4.1
+
+- Fix: Ensure version reflected in `manifest.json`
+- Fix: Duplicates in locale JSON
+- Fix: Indicate minimum version of 63.0 (to use `menus.getTargetElement`)
+- Build: Avoid `innerHTML` version of Jamilih for sake of AMO
+
 ## 3.4.0
 
 - Security fix: Escape backslash (courtesy lgtm); possible if users
