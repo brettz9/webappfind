@@ -1,3 +1,9 @@
+## 3.4.3
+
+- Fix: Options import path
+- Linting: Greater specificity with eslintignore
+- Refactoring: Use absolute path in HTML
+
 ## 3.4.2
 
 - Fix: Use Rollup for AYC (otherwise need static file server outside of
