@@ -1,6 +1,6 @@
 {
   "name": "webappfind",
-  "version": "3.4.1",
+  "version": "3.4.2",
   "author": "Brett Zamir",
   "contributors": [],
   "url": "https://github.com/brettz9/webappfind",
@@ -19,6 +19,7 @@
   },
   "scripts": {
     "test": "mocha",
+    "rollup": "rollup -c",
     "build-pkg-native-apps": "wafcli pkg-native-apps node8-macos-x64",
     "build-pkg-native-apps-all": "wafcli pkg-native-apps all",
     "run-install": "wafcli install single-user",
@@ -115,6 +116,8 @@
     "load-stylesheets": "^0.7.0",
     "mocha": "^5.2.0",
     "multiple-select": "https://github.com/brettz9/multiple-select#es6",
+    "rollup": "0.66.6",
+    "rollup-plugin-root-import": "^0.2.3",
     "webextension-polyfill": "^0.3.1"
   }
 }

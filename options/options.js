@@ -1,6 +1,6 @@
 /* eslint-env browser, webextensions */
-import {jml, $, nbsp} from './jml.js';
-import {DOM} from '../utils/templateUtils.js';
+import {jml, $, nbsp} from '/vendor/options/jml.js';
+import {DOM} from '/utils/templateUtils.js';
 
 function _ (...args) {
     return browser.i18n.getMessage(...args);

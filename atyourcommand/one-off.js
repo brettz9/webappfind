@@ -1,8 +1,8 @@
 /* eslint-env webextensions */
 /* globals jQuery */
 
-import Tags from './Tags.js';
-import ExpandableInputs from './ExpandableInputs.js';
+import Tags from '/atyourcommand/Tags.js';
+import ExpandableInputs from '/atyourcommand/ExpandableInputs.js';
 import {execute, getCommandArgs} from '/lib/execute.js';
 import {jml, $, $$, nbsp} from '/vendor/jamilih/dist/jml-es-noinnerh.js';
 import {_} from '/utils/i18n.js';

@@ -1,3 +1,9 @@
+## 3.4.2
+
+- Fix: Use Rollup for AYC (otherwise need static file server outside of
+    `web-ext run`)
+- Refactoring: Switch to root paths for imports
+
 ## 3.4.1
 
 - Fix: Ensure version reflected in `manifest.json`

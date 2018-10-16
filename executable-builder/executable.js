@@ -2,13 +2,13 @@
 
 import {jml, $, $$, nbsp} from '/vendor/jamilih/dist/jml-es-noinnerh.js';
 import {_} from '/utils/i18n.js';
-import {Dialog} from '../utils/dialogs.js';
+import {Dialog} from '/utils/dialogs.js';
 import {
     serialize as formSerialize, deserialize as formDeserialize
 } from '/vendor/form-serialize/src/index.js';
-import * as BrowserHistory from './BrowserHistory.js';
+import * as BrowserHistory from '/executable-builder/BrowserHistory.js';
 import * as FileBridge from '/node-bridges/FileBridge.js';
-import * as ExecutableBuilder from './ExecutableBuilder.js';
+import * as ExecutableBuilder from '/executable-builder/ExecutableBuilder.js';
 import * as EnvironmentBridge from '/node-bridges/EnvironmentBridge.js';
 import * as ProfileBridge from '/node-bridges/ProfileBridge.js';
 import * as TemplateFileBridge from '/node-bridges/TemplateFileBridge.js';
