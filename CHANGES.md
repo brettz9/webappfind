@@ -1,3 +1,7 @@
+## ?
+
+- Fix: Polyfill path for options
+
 ## 3.4.4
 
 - Fix: Check for element existence with `getTargetElement`
