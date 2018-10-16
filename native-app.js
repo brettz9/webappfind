@@ -147,8 +147,7 @@ on getFile (argv)
                 : `"\\"${escapeBashDoubleQuoted(argv.string)}\\""`) +
             ' & ' +
             addOtherArgs() + `"
-    end tell
-    `
+        `
         // A normal `file` not `string`
         : ('file' in argv ? '' : `try
         set input to item 1 of argv -- Not needed in Automator AS, but needed in normal AS
@@ -191,7 +190,8 @@ on getFile (argv)
             ' & ' +
             // Todo: Allow `args` to be passed in at run-time if not baked in (though won't work with normal file opening)
             addOtherArgs() + `"
-
+        `
+    ) + `
         set appName to "Firefox"
         tell application "System Events"
             if not (exists process appName) then
@@ -200,13 +200,14 @@ on getFile (argv)
                 set frontmost of process appName to true
             end if
         end tell
-    end tell
-`) + ('filePicker' in argv || 'file' in argv
-        ? `
+        end tell
+` +
+('filePicker' in argv || 'file' in argv
+    ? `
     return`
-        : `
+    : `
     return input`
-    ) + `
+) + `
 end getFile
 `;
     // Todo: Ensure native-app.js path works if called in executable form (and invoke bash if not?)

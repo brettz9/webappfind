@@ -1,6 +1,8 @@
 ## ?
 
-- Fix: Polyfill path for options
+- Fix (Installer): Ensure Firefox brought to foreground for string
+    argument script
+- Fix: Polyfill path for options (not used at present by Firefox)
 
 ## 3.4.4
 
