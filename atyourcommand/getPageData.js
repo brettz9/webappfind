@@ -73,7 +73,7 @@ window.getPageData = function getPageData ({
     // Todo: Use the likes of https://github.com/fczbkk/css-selector-generator/issues/27 if implementing ES6 Modules
     const elem = browser.menus.getTargetElement(targetElementId);
     const contextSelector = getSelectorForElement(elem);
-    const contextHTML = elem.outerHTML;
+    const contextHTML = elem && elem.outerHTML;
 
     const msg = {
         // Todo: ensure all of the following are documented

@@ -1,3 +1,7 @@
+## 3.4.4
+
+- Fix: Check for element existence with `getTargetElement`
+
 ## 3.4.3
 
 - Fix: Options import path
