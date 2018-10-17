@@ -14,7 +14,7 @@ developing on now), and some of the functionality (especially using
 a `filetypes.json` file) has not yet been restored. There have also been
 breaking changes in the API, and the add-on is Firefox-only at present.**
 
-You must install the executable at http://brett-zamir.name/node8-macos-x64-installer
+You must install the executable at <http://brett-zamir.name/webappfind/node8-macos-x64-installer>
 (or build from source; uses `pkg`).
 
 ## The WebAppFind Bundle
