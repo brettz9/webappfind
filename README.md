@@ -17,6 +17,14 @@ breaking changes in the API, and the add-on is Firefox-only at present.**
 You must install the executable at <http://brett-zamir.name/webappfind/node8-macos-x64-installer>
 (or build from source; uses `pkg`).
 
+## Videos
+
+- [Short overview of WebAppFind capabilities](WebAppFind Quick Overview.mp4) ((Youtube)[https://www.youtube.com/watch?v=2ysSAPKhDwQ&feature=youtu.be])
+- [Intro and Rationale](WebAppFind-Intro-and-Rationale.mp4)
+- [Extended usage tutorial](WebAppFind Usage.mp4)
+
+[![Short overview of WebAppFind capabilities embedded](./screenshots/waf-overview-screenshot1.png)](https://www.youtube.com/watch?v=2ysSAPKhDwQ&feature=youtu.be)
+
 ## The WebAppFind Bundle
 
 Due to the inconvenience of creating installers for and bundling Node in
