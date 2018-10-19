@@ -19,9 +19,9 @@ You must install the executable at <http://brett-zamir.name/webappfind/node8-mac
 
 ## Videos
 
-- [Short overview of WebAppFind capabilities](http://brett-zamir.name/webappfind/WebAppFind%20Quick%20Overview.mp4) (or click screenshot below)
-- [Intro and Rationale](http://brett-zamir.name/webappfind/WebAppFind-Intro-and-Rationale.mp4)
-- [Extended usage tutorial](http://brett-zamir.name/webappfind/WebAppFind%20Usage.mp4)
+- [Short overview of WebAppFind capabilities](http://brett-zamir.name/webappfind/WebAppFind%20Quick%20Overview.mp4) ([Youtube](https://www.youtube.com/watch?v=2ysSAPKhDwQ) or click screenshot below)
+- [Intro and Rationale](http://brett-zamir.name/webappfind/WebAppFind-Intro-and-Rationale.mp4) ([Youtube](https://www.youtube.com/watch?v=nflwCasjnG0))
+- [Extended usage tutorial](http://brett-zamir.name/webappfind/WebAppFind%20Usage.mp4) ([Youtube](https://www.youtube.com/watch?v=wuP25cguR6o))
 
 [![Short overview of WebAppFind capabilities embedded](./screenshots/waf-overview-screenshot1.png)](https://www.youtube.com/watch?v=2ysSAPKhDwQ&feature=youtu.be)
 
