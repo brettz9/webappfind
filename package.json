@@ -110,7 +110,7 @@
     "eslint-plugin-promise": "4.0.1",
     "eslint-plugin-standard": "4.0.0",
     "form-serialize": "https://github.com/brettz9/form-serialize#browser-deserialize-rollup-babel7",
-    "jamilih": "^0.42.0",
+    "jamilih": "^0.43.0",
     "jquery": "^3.3.1",
     "js-string-escape": "https://github.com/brettz9/js-string-escape#rollup",
     "load-stylesheets": "^0.7.0",
