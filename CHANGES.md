@@ -3,6 +3,10 @@
 - Fix (Installer): Ensure Firefox brought to foreground for string
     argument script
 - Fix: Polyfill path for options (not used at present by Firefox)
+- Linting (Markdown): Fix linting format
+- Docs: Add video links and screenshots
+- npm: Update ws dep and devDeps
+- npm: Update version of js-string-escape
 
 ## 3.4.4
 
