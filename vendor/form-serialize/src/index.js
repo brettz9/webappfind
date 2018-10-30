@@ -24,7 +24,7 @@ const brackets = /(\[[^[\]]*\])/g;
 //    - empty: [true | false]. If true serialize empty fields
 function serialize (form, options) {
     if (typeof options !== 'object') {
-        options = { hash: !!options };
+        options = {hash: !!options};
     } else if (options.hash === undefined) {
         options.hash = true;
     }
