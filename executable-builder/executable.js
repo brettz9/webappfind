@@ -1064,8 +1064,7 @@ function init () {
             dataset: {
                 type, dirPick, pathInputID, groupID, group, sel,
                 executablePathSelect = (
-                    // Suppressing error due to lgtm issue: https://github.com/Semmle/ql/issues/252
-                    parentNode && parentNode.dataset && parentNode.dataset.executablePathSelect // lgtm [js/trivial-conditional]
+                    parentNode && parentNode.dataset && parentNode.dataset.executablePathSelect
                 )
             }
         } = target;
