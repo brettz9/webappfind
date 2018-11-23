@@ -264,3 +264,16 @@ can cover the entire range of functionality available in the UI.
 
 For tips for using with other tools and comparison to other similar tools,
 see [Tools-and-Comparisons](./Tools-and-Comparisons.md).
+
+## Adding as Quick Action extension
+
+Recent versions of MacOS (e.g., Mojave) allow one to have "Quick Actions"
+display on the Finder, making the commands easier to access than
+right-clicking to find the desired item within the Services submenu.
+
+You can get this behavior by following the instructions in the Usage video
+for creating a service (now renamed within Automator as a "Quick Action")
+and then, while on the desktop, select a file type supported by that
+service (e.g., an HTML file if your web app can open HTML files) and ensure
+your item is selected when clicking on `... More` and `Customize` (i.e.,
+within `System Preferences -> Extensions -> Finder`).
