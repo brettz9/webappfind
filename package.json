@@ -45,7 +45,7 @@
     "copy-dialog-polyfill": "cp node_modules/dialog-polyfill/dialog-polyfill.js vendor/dialog-polyfill/dialog-polyfill.js && cp node_modules/dialog-polyfill/dialog-polyfill.css vendor/dialog-polyfill/dialog-polyfill.css",
     "copy-polyfill": "cp node_modules/webextension-polyfill/dist/browser-polyfill.js polyfills/browser-polyfill.js",
     "copy-jquery": "cp node_modules/jquery/dist/jquery.js vendor/jquery/dist/jquery.js",
-    "copy-form-serialize": "cp node_modules/form-serialize/src/index.js vendor/form-serialize/src/index.js",
+    "copy-form-serialize": "cp node_modules/form-serialize/dist/index-es.js vendor/form-serialize/dist/index-es.js",
     "copy-js-string-escape": "cp node_modules/js-string-escape/dist/index-es.js vendor/js-string-escape/dist/index-es.js",
     "copy-load-stylesheets": "cp node_modules/load-stylesheets/dist/index-es.js vendor/load-stylesheets/dist/index-es.js",
     "copy-multiple-select": "cp node_modules/multiple-select/multiple-select.css vendor/multiple-select/multiple-select.css && cp node_modules/multiple-select/dist/multiple-select-es.js vendor/multiple-select/dist/multiple-select-es.js",
