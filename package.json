@@ -42,7 +42,7 @@
     "webext": "web-ext run --browser-console",
     "webext-run": "web-ext run --browser-console",
     "webext-build": "web-ext build --overwrite-dest",
-    "copy-dialog-polyfill": "cp node_modules/dialog-polyfill/dialog-polyfill.js vendor/dialog-polyfill/dialog-polyfill.js && cp node_modules/dialog-polyfill/dialog-polyfill.css vendor/dialog-polyfill/dialog-polyfill.css",
+    "copy-dialog-polyfill": "cp node_modules/dialog-polyfill/dist/dialog-polyfill.esm.js vendor/dialog-polyfill/dist/dialog-polyfill.esm.js && cp node_modules/dialog-polyfill/dialog-polyfill.css vendor/dialog-polyfill/dialog-polyfill.css",
     "copy-polyfill": "cp node_modules/webextension-polyfill/dist/browser-polyfill.js polyfills/browser-polyfill.js",
     "copy-jquery": "cp node_modules/jquery/dist/jquery.js vendor/jquery/dist/jquery.js",
     "copy-form-serialize": "cp node_modules/form-serialize/dist/index-es.js vendor/form-serialize/dist/index-es.js",
@@ -94,30 +94,30 @@
     "minimist": "^1.2.0",
     "mkdirp": "^0.5.1",
     "uuid": "^3.3.2",
-    "ws": "^6.1.0"
+    "ws": "^6.2.1"
   },
   "optionalDependencies": {
-    "regedit": "3.0.0"
+    "regedit": "3.0.2"
   },
   "devDependencies": {
-    "bootstrap": "^4.1.3",
+    "bootstrap": "^4.3.1",
     "chai": "^4.2.0",
-    "dialog-polyfill": "^0.4.10",
-    "eslint": "5.8.0",
+    "dialog-polyfill": "^0.5.0",
+    "eslint": "5.16.0",
     "eslint-config-standard": "12.0.0",
-    "eslint-plugin-import": "2.14.0",
-    "eslint-plugin-node": "8.0.0",
-    "eslint-plugin-promise": "4.0.1",
+    "eslint-plugin-import": "2.16.0",
+    "eslint-plugin-node": "8.0.1",
+    "eslint-plugin-promise": "4.1.1",
     "eslint-plugin-standard": "4.0.0",
     "form-serialize": "https://github.com/brettz9/form-serialize#browser-deserialize-rollup-babel7",
-    "jamilih": "^0.43.0",
+    "jamilih": "^0.44.0",
     "jquery": "^3.3.1",
     "js-string-escape": "https://github.com/brettz9/js-string-escape#rollup",
     "load-stylesheets": "^0.7.0",
-    "mocha": "^5.2.0",
+    "mocha": "^6.0.2",
     "multiple-select": "https://github.com/brettz9/multiple-select#es6",
-    "rollup": "0.66.6",
-    "rollup-plugin-root-import": "^0.2.3",
-    "webextension-polyfill": "^0.3.1"
+    "rollup": "1.8.0",
+    "rollup-plugin-root-import": "^0.2.4",
+    "webextension-polyfill": "^0.4.0"
   }
 }

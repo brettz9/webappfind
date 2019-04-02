@@ -2,10 +2,12 @@
 
 - Fix (Installer): Ensure Firefox brought to foreground for string
     argument script
-- Fix: Polyfill path for options (not used at present by Firefox)
+- Fix: Polyfill path for options file (not used at present by Firefox)
+- Update: Bootstrap and dialog copies
+- Refactoring: Use ESM for updated dialog-polyfill
 - Linting (Markdown): Fix linting format
 - Docs: Add video links and screenshots
-- npm: Update ws dep and devDeps
+- npm: Update ws dep, regedit, and devDeps
 - npm: Update version of js-string-escape
 
 ## 3.4.4
