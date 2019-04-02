@@ -114,7 +114,7 @@ function getLaunchServiceHandlers ({contentTag, contentType, type = 'extension'}
                 return LSHandlerContentType && contentType === LSHandlerContentType;
             });
             // Allow `contentTag` to execute if this fails
-            if (foundIndex > -1) {
+            if (foundIndex !== undefined) {
                 return {
                     foundIndex,
                     foundHandler: foundIndex > -1 ? LSHandlers[foundIndex] : null,
