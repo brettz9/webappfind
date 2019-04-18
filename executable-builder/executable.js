@@ -5,7 +5,7 @@ import {_} from '/utils/i18n.js';
 import {Dialog} from '/utils/dialogs.js';
 import {
     serialize as formSerialize, deserialize as formDeserialize
-} from '/vendor/form-serialize/dist/index-es.js';
+} from '/vendor/form-serialization/dist/index-es.js';
 import * as BrowserHistory from '/executable-builder/BrowserHistory.js';
 import * as FileBridge from '/node-bridges/FileBridge.js';
 import * as ExecutableBuilder from '/executable-builder/ExecutableBuilder.js';

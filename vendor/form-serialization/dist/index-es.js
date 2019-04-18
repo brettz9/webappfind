@@ -70,30 +70,53 @@ function _nonIterableRest() {
   throw new TypeError("Invalid attempt to destructure non-iterable instance");
 }
 
-// get successful control from form and assemble into object
-// http://www.w3.org/TR/html401/interact/forms.html#h-17.13.2
+/**
+ *
+ * Get successful control from form and assemble into object
+ * @see {@link http://www.w3.org/TR/html401/interact/forms.html#h-17.13.2}
+ * @module FormSerialization
+ */
 // types which indicate a submit action and are not successful controls
 // these will be ignored
 var kRSubmitter = /^(?:submit|button|image|reset|file)$/i; // node names which could be successful controls
 
 var kRSuccessContrls = /^(?:input|select|textarea|keygen)/i; // Matches bracket notation.
 
-var brackets = /(\[[^[\]]*\])/g; // serializes form fields
-// @param form MUST be an HTMLForm element
-// @param options is an optional argument to configure the serialization. Default output
-// with no options specified is a url encoded string
-//    - hash: [true | false] Configure the output type. If true, the output will
-//    be a js object.
-//    - serializer: [function] Optional serializer function to override the default one.
-//    The function takes 3 arguments (result, key, value) and should return new result
-//    hash and url encoded str serializers are provided with this module
-//    - disabled: [true | false]. If true serialize disabled fields.
-//    - empty: [true | false]. If true serialize empty fields
+var brackets = /(\[[^[\]]*\])/g;
+/**
+ * @callback module:FormSerialization.Serializer
+ * @param {PlainObject|string|*} result
+ * @param {string} key
+ * @param {string} value
+ * @returns {PlainObject|string|*} New result
+*/
+
+/**
+ * @typedef {PlainObject} module:FormSerialization.Options
+ * @property {boolean} [hash] Configure the output type. If true, the
+ *  output will be a JavaScript object.
+ * @property {module:FormSerialization.Serializer} [serializer] Optional
+ *   serializer function to override the default one. Otherwise, hash
+ *   and URL-encoded string serializers are provided with this module,
+ *   depending on the setting of `hash`.
+ * @property {boolean} [disabled] If true serialize disabled fields.
+ * @property {boolean} [empty] If true serialize empty fields
+*/
+
+/**
+ * Serializes form fields.
+ * @function module:FormSerialization.serialize
+ * @param {HTMLFormElement} form MUST be an `HTMLFormElement`
+ * @param {module:FormSerialization.Options} options is an optional argument
+ *   to configure the serialization.
+ * @returns {*|string|PlainObject} Default output with no options specified is
+ *   a url encoded string
+ */
 
 function serialize(form, options) {
   if (_typeof(options) !== 'object') {
     options = {
-      hash: !!options
+      hash: Boolean(options)
     };
   } else if (options.hash === undefined) {
     options.hash = true;
@@ -119,8 +142,9 @@ function serialize(form, options) {
         type = element.type,
         name = element.name,
         checked = element.checked;
-    var value = element.value; // We can't just use element.value for checkboxes cause some browsers lie to us;
-    // they say "on" for value when the box isn't checked
+    var value = element.value; // We can't just use element.value for checkboxes cause some
+    //   browsers lie to us; they say "on" for value when the
+    //   box isn't checked
 
     if ((type === 'checkbox' || type === 'radio') && !checked) {
       value = undefined;
@@ -199,6 +223,11 @@ function serialize(form, options) {
 
   return result;
 }
+/**
+ *
+ * @param {string} string
+ * @returns {string[]}
+ */
 
 function parseKeys(string) {
   var keys = [];
@@ -216,6 +245,14 @@ function parseKeys(string) {
 
   return keys;
 }
+/**
+ *
+ * @param {PlainObject|Array} result
+ * @param {string[]} keys
+ * @param {string} value
+ * @returns {string|PlainObject|Array}
+ */
+
 
 function hashAssign(result, keys, value) {
   if (keys.length === 0) {
@@ -252,7 +289,7 @@ function hashAssign(result, keys, value) {
     // better than parseInt because it doesn't truncate away trailing
     // letters and actually fails if whole thing is not a number
 
-    var index = +string; // If the characters between the brackets is not a number it is an
+    var index = Number(string); // If the characters between the brackets is not a number it is an
     // attribute name and can be assigned directly.
 
     if (isNaN(index)) {
@@ -265,7 +302,14 @@ function hashAssign(result, keys, value) {
   }
 
   return result;
-} // Object/hash encoding serializer.
+}
+/**
+ * Object/hash encoding serializer.
+ * @param {PlainObject} result
+ * @param {string} key
+ * @param {string} value
+ * @returns {PlainObject}
+ */
 
 
 function hashSerializer(result, key, value) {
@@ -297,7 +341,14 @@ function hashSerializer(result, key, value) {
   }
 
   return result;
-} // urlform encoding serializer
+}
+/**
+ * URL form encoding serializer.
+ * @param {string} result
+ * @param {string} key
+ * @param {string} value
+ * @returns {string} New result
+ */
 
 
 function strSerialize(result, key, value) {
@@ -308,6 +359,13 @@ function strSerialize(result, key, value) {
   value = value.replace(/%20/g, '+');
   return result + (result ? '&' : '') + encodeURIComponent(key) + '=' + value;
 }
+/**
+ * @function module:FormSerialization.deserialize
+ * @param {HTMLFormElement} form
+ * @param {PlainObject} hash
+ * @returns {void}
+ */
+
 
 function deserialize(form, hash) {
   // input(text|radio|checkbox)|select(multiple)|textarea|keygen
@@ -317,14 +375,29 @@ function deserialize(form, hash) {
         value = _ref4[1];
 
     var control = form[name];
+    var hasBrackets = false;
 
-    if (!form[name]) {
-      control = form[name + '[]']; // We want this for RadioNodeList so setting value auto-disables other boxes
+    if (!control) {
+      // Try again for jsdom
+      control = form.querySelector("[name=\"".concat(name, "\"]"));
 
-      if (!('length' in control)) {
-        // The latter assignment only gets single
-        //    elements, so if not a RadioNodeList, we get all values here
-        control = form.querySelectorAll("[name=\"".concat(name, "[]\"]"));
+      if (!control) {
+        // We want this for `RadioNodeList` so setting value
+        //  auto-disables other boxes
+        control = form[name + '[]'];
+
+        if (!control || _typeof(control) !== 'object' || !('length' in control)) {
+          // The latter query would only get a single
+          //  element, so if not a `RadioNodeList`, we get
+          //  all values here
+          control = form.querySelectorAll("[name=\"".concat(name, "[]\"]"));
+
+          if (!control) {
+            throw new Error("Name not found ".concat(name));
+          }
+        }
+
+        hasBrackets = true;
       }
     }
 
@@ -333,6 +406,22 @@ function deserialize(form, hash) {
 
     if (type === 'checkbox') {
       control.checked = value !== '';
+    }
+
+    if (type === 'radio' || control[0] && control[0].type === 'radio') {
+      _toConsumableArray(form.querySelectorAll("[name=\"".concat(name + (hasBrackets ? '[]' : ''), "\"]"))).forEach(function (radio) {
+        radio.checked = value === radio.value;
+      });
+    }
+
+    if (control[0] && control[0].type === 'select-multiple') {
+      _toConsumableArray(control[0].options).forEach(function (o) {
+        if (value.includes(o.value)) {
+          o.selected = true;
+        }
+      });
+
+      return;
     }
 
     if (Array.isArray(value)) {
@@ -355,6 +444,16 @@ function deserialize(form, hash) {
           return;
         }
 
+        if (c.type === 'select-multiple') {
+          _toConsumableArray(c.options).forEach(function (o) {
+            if (v === o.value) {
+              o.selected = true;
+            }
+          });
+
+          return;
+        }
+
         c.value = v;
       });
     } else {
@@ -363,4 +462,4 @@ function deserialize(form, hash) {
   });
 }
 
-export { serialize, deserialize };
+export { deserialize, serialize };

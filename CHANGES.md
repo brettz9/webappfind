@@ -9,6 +9,7 @@
 - Docs: Add video links and screenshots
 - npm: Update ws dep, regedit, and devDeps
 - npm: Update version of js-string-escape
+- npm: Switch from `form-serialize` to `form-serialization`
 
 ## 3.4.4
 
