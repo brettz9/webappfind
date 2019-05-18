@@ -842,3 +842,4 @@ or on the desktop.
     1. Make [AtYourCommand](../atyourcommand/README.md) for Atom
         Project file context menu and main editor context menu; could
         even share same user database with browser's.
+        1. Could then use [@brettz9/git-utilities](https://github.com/brettz9/git-utilities)

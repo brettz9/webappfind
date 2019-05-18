@@ -22,7 +22,7 @@ const dialogs = new Dialog({locale: uiLanguage});
 Todos:
 1. Build command line output including path flag (Windows info)
     1. Use command line http://www.registryonwindows.com/registry-command-line.php
-        (invokable from browser add-on) to add to registry re: open-with values or
+        (invokable from browser add-on) to add to registry re: "open with" values or
         use js-ctypes or command line for integrating with deeper Windows
         (and Linux) functionality? e.g., adding items for 'open with'?
         1. http://msdn.microsoft.com/en-us/library/windows/desktop/cc144158%28v=vs.85%29.aspx

@@ -215,6 +215,7 @@ end getFile
     //        make client above customizable here too (though defaulting to this particular executable)
     // Todo: optionally associate to file type
     //        see https://apple.stackexchange.com/questions/9866/programmatically-script-atically-changing-the-default-open-with-setting/9954#9954
+    //        though with `com.apple.LaunchServices/com.apple.launchservices.secure` instead
     // Todo optionally add to dock and/or execute the result;
     const resp = [];
     function addLog (str, obj) {
