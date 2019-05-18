@@ -23,7 +23,7 @@ return theUTI as text
 ```
 1. Allow command line for *temporary file* or designated file saving
     of string contents in WebAppFind as well (with dialog to approve
-    there as in [AtYourCommand](https://github.com/brettz9/atyourcommand)
+    there as in [AtYourCommand](../atyourcommand/README.md)
     if would cause an overwrite).
 1. Builder command to indicate:
     1. *icon path* (or *link to SVG-edit* to make own)
@@ -96,7 +96,7 @@ return theUTI as text
             be able to replicate this if necessary
 1. Support the *"register"* mode from command line?
 1. See below and also possibly the notes within the
-    [Executable Builder](https://github.com/brettz9/executable-builder) code
+    [Executable Builder](../executable-builder/README.md) code
 
 ## To-dos (Reimplementing basics/preferences)
 
@@ -245,8 +245,8 @@ return theUTI as text
         but browser aware too). Could use in conjunction with proposed
         "hidden" flag to avoid adding a tab (or do so by default).
     1. *Prompt user for a web app URL* if no app set for file type
-1. [executable builder](https://github.com/brettz9/executable-builder)
-    and [AtYourCommand](https://github.com/brettz9/atyourcommand)
+1. [executable builder](../executable-builder/README.md)
+    and [AtYourCommand](../atyourcommand/README.md)
     1. *Installer script to run to facilitate setting up of OpenWith* per
         user choices (if Executable Builder is not installed, it could link
         to it, and if it is, it could bring user through steps).
@@ -363,7 +363,7 @@ or on the desktop.
     executable or batch file could do its own `filetypes.json`
     processing to determine target profile or window?
 1. Allow `filetypes.json` to designate icon files (as well as
-    suggested shortcut names?) for use with [Executable Builder](https://github.com/brettz9/executable-builder)
+    suggested shortcut names?) for use with [Executable Builder](../executable-builder/README.md)
     executables so the user will not need to create their own
     icon? Executables or batch files (or filebrowser-enhanced)
     might pre-read the current directory and parse the JSON file
@@ -412,8 +412,8 @@ or on the desktop.
 1. Supply own `filetypes.json` by command line including a remote one
     1. If a directory or other file is supplied, convert it to the
         child or sibling `filetypes.json` file respectively?
-        (would be convenient for atyourcommand to supply a
-        right-clicked file and have WebAppFind detect it's own
+        (would be convenient for [atyourcommand](../atyourcommand/README.md)
+        to supply a right-clicked file and have WebAppFind detect it's own
         remote `filetypes.json`)
 1. WebAppFind command line or `filetypes.json` to resolve URL into
     content to be passed to web app or path/link (file: or c:\) for
@@ -425,7 +425,7 @@ or on the desktop.
         control for web->desktop add-ons and call that within an
         executable/Executable Builder (leading potentially back
         through WebAppFind command-line control)? Integrate with
-        [AtYourCommand](https://github.com/brettz9/atyourcommand)
+        [AtYourCommand](../atyourcommand/README.md)
     1. Use server's `filetypes.json` also if present
 
 ## To-dos (Possible future mode additions)
@@ -675,8 +675,9 @@ or on the desktop.
     dialog for this purpose as opposed to a file (though with an optional
     file to save back)
 1. Allow `postMessage` of content within inputs/textareas and the DOM (or
-    rely on AtYourCommand for this?)
-1. Allow PUT/POST back to AtYourCommand to have side effects such as
+    rely on [AtYourCommand](../atyourcommand/README.md) for this?)
+1. Allow PUT/POST back to [AtYourCommand](../atyourcommand/README.md) to
+    have side effects such as
     modifying in place highlighted right-clicking text (without the user seeing
     the web app open), e.g., to convert JS to CoffeeScript in a document
     one is viewing.
@@ -696,13 +697,13 @@ or on the desktop.
         [URI templates](http://tools.ietf.org/html/rfc6570)
         for server-side discovery and a special API for `postMessage`
         client-side discovery (e.g., if
-        [atyourcommand](https://github.com/brettz9/atyourcommand)
+        [atyourcommand](../atyourcommand/README.md)
         were to make known to you the modes available in an app
         when one is designing a command to shuffle off content to it)? Make
         this perhaps a mode itself also so that files from the desktop could
         also be opened in a manner that the web app displays the available
         modes (and can post them back optionally to a calling app, again,
-        like atyourcommand).
+        like [atyourcommand](../atyourcommand/README.md)).
         1. Develop utility wrapper library for API to store to disk via
             WebAppFind and/or to store to `localStorage`, IndexedDB,
             and/or remote POST/PUT (since may wish to keep and possibly
@@ -739,7 +740,7 @@ or on the desktop.
 1. See [webappfind-demos-samples](https://github.com/brettz9/webappfind-demos-samples)
     for to-dos; update it for any API changes
 1. Integrate functionality into <https://github.com/brettz9/filebrowser-enhanced>
-1. For [AtYourCommand](https://github.com/brettz9/atyourcommand),
+1. For [AtYourCommand](../atyourcommand/README.md),
     the web app could, if opened in edit mode, place a (privileged
     cross-domain) PUT request on behalf of the web app for a save-back,
     allowing users the choice of application for saving files back to the web
@@ -823,8 +824,21 @@ or on the desktop.
             *mechanism also for passing content into another add-on*
             1. Test with "Open with..." to open file in a Node script
                 which communicates via Node WebSockets
-        1. AtYourCommand to run once to set-up user's context menus (and
-            desktop-file-opening behaviors)
+        1. [AtYourCommand](../atyourcommand/README.md) to run once to
+            set-up user's context menus (and desktop-file-opening behaviors)
         1. AsYouWish to allow websites to communicate into the browser or
             to eval-able Node code; at minimum start shared,
             site-agnostic storage
+1. See [Executable Builder](../executable-builder/README.md)
+1. See [AtYourCommand to-dos](../atyourcommand/README.md)
+1. See [AsYouWish](https://github.com/brettz9/asyouwish/) (and integrate
+    its to-dos within this repo if not already)
+1. Atom
+    1. Package to add "Open with..." to project view files
+    1. Add [Executable Builder](../executable-builder/README.md)
+        (sensitive to context of current files instead
+        of context in the browser of current web page--e.g., create an
+        executable for the right-clicked file/file type)
+    1. Make [AtYourCommand](../atyourcommand/README.md) for Atom
+        Project file context menu and main editor context menu; could
+        even share same user database with browser's.
