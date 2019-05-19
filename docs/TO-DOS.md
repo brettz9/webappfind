@@ -837,13 +837,15 @@ or on the desktop.
     1. Package to add "Open with..." to project view files
         1. Wrap behavior into package so if add other platform support, can
             add there
-        1. Per <https://apple.stackexchange.com/a/9883/206073>
-            use `mdls <file-name>` ([node-mdls](https://github.com/brettz9/node-mdls)),
+        1. Approach at <https://apple.stackexchange.com/a/9883/206073>
+            1. Get content-types, use `mdls <file-name>` ([node-mdls](https://github.com/brettz9/node-mdls)),
             specifically `mdls -name kMDItemContentTypeTree <file-name>`
             then
             `defaults read com.apple.LaunchServices/com.apple.launchservices.secure LSHandlers`;
-            can grep lines before/after, e.g.,
+            1. Get bundle identifier for content-type; can grep lines before/after, e.g.,
             `defaults read com.apple.LaunchServices/com.apple.launchservices.secure LSHandlers | grep public.svg-image -B 1 -A 7`
+            1. Open by (or just obtain path for) bundle identifier (e.g., stored within `LSHandlerRoleEditor` or `LSHandlerRoleViewer`): <https://apple.stackexchange.com/questions/115947/locating-an-app-by-its-bundle-identifier-from-the-command-line>
+            1. (Tangential note: If have bundle name (e.g., "Safari"), use https://github.com/sindresorhus/bundle-id to get its bundle identifier)
         1. File-specific: `xattr` with `com.apple.LaunchServices.OpenWith`: https://superuser.com/a/1254271/156958
             1. Note: Use `ls -l@` to list available file-specific and
                 `xattr -lp com.apple.LaunchServices.OpenWith <file-name>`
