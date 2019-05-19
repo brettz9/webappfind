@@ -833,7 +833,7 @@ or on the desktop.
 1. See [AtYourCommand to-dos](../atyourcommand/README.md)
 1. See [AsYouWish](https://github.com/brettz9/asyouwish/) (and integrate
     its to-dos within this repo if not already)
-1. Atom (or `filebrowser-extended`)
+1. Atom (and possibly a revamped `filebrowser-extended`)
     1. Package to add "Open with..." to project view files
         1. Wrap behavior into package so if add other platform support, can
             add there
