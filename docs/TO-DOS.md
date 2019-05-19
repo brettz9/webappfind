@@ -841,7 +841,9 @@ or on the desktop.
             use `mdls <file-name>` ([node-mdls](https://github.com/brettz9/node-mdls)),
             specifically `mdls -name kMDItemContentTypeTree <file-name>`
             then
-            `defaults read com.apple.LaunchServices/com.apple.launchservices.secure LSHandlers`
+            `defaults read com.apple.LaunchServices/com.apple.launchservices.secure LSHandlers`;
+            can grep lines before/after, e.g.,
+            `defaults read com.apple.LaunchServices/com.apple.launchservices.secure LSHandlers | grep public.svg-image -B 1 -A 7`
         1. File-specific: `xattr` with `com.apple.LaunchServices.OpenWith`: https://superuser.com/a/1254271/156958
             1. Note: Use `ls -l@` to list available file-specific and
                 `xattr -lp com.apple.LaunchServices.OpenWith <file-name>`
