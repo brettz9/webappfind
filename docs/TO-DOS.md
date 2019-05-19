@@ -835,6 +835,17 @@ or on the desktop.
     its to-dos within this repo if not already)
 1. Atom
     1. Package to add "Open with..." to project view files
+        1. Wrap behavior into package so if add other platform support, can
+            add there
+        1. Per <https://apple.stackexchange.com/a/9883/206073>
+            use `mdls` then
+            `defaults read com.apple.LaunchServices/com.apple.launchservices.secure LSHandlers`
+        1. File-specific: `xattr` with `com.apple.LaunchServices.OpenWith`: https://superuser.com/a/1254271/156958
+            1. Note: Use `ls -l@` to list available file-specific and
+                `xattr -lp com.apple.LaunchServices.OpenWith <file-name>`
+                seems to get some useful data when present (e.g., after
+                editing "Open with" in "Get info" dialog (without
+                "Change all"))
     1. Add [Executable Builder](../executable-builder/README.md)
         (sensitive to context of current files instead
         of context in the browser of current web page--e.g., create an
