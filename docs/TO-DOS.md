@@ -838,7 +838,9 @@ or on the desktop.
         1. Wrap behavior into package so if add other platform support, can
             add there
         1. Per <https://apple.stackexchange.com/a/9883/206073>
-            use `mdls` then
+            use `mdls <file-name>` ([node-mdls](https://github.com/brettz9/node-mdls)),
+            specifically `mdls -name kMDItemContentTypeTree <file-name>`
+            then
             `defaults read com.apple.LaunchServices/com.apple.launchservices.secure LSHandlers`
         1. File-specific: `xattr` with `com.apple.LaunchServices.OpenWith`: https://superuser.com/a/1254271/156958
             1. Note: Use `ls -l@` to list available file-specific and
@@ -846,6 +848,9 @@ or on the desktop.
                 seems to get some useful data when present (e.g., after
                 editing "Open with" in "Get info" dialog (without
                 "Change all"))
+                1. Better yet:
+                    `xattr -px com.apple.LaunchServices.OpenWith <file name> | xxd -r -p | plutil -p -`
+                    (Thank you, <http://scriptingosx.com/2017/08/parse-binary-property-lists-in-finder-metadata/>! If necessary, <https://medium.com/@karaiskc/understanding-apples-binary-property-list-format-281e6da00dbd>)
     1. Add [Executable Builder](../executable-builder/README.md)
         (sensitive to context of current files instead
         of context in the browser of current web page--e.g., create an
