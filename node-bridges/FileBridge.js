@@ -27,6 +27,7 @@ const defaultLocaleStrings = {
 };
 // TODO: Could reimplement as a Node-based file/directory picker;
 //           maybe this? https://github.com/Joker-Jelly/nfb
+//           or perhaps more simply, use `filepicker` in `dialog-node`?
 function picker ({dirPath, selectFolder, defaultExtension, filterMap = [], locale, localeStrings}) {
     localeStrings = Object.assign(
         {},
