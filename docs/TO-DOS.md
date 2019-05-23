@@ -733,6 +733,8 @@ or on the desktop.
         desktop)? Also allow a dialog to ask for WebAppFind arguments to
         web apps (could be at executable level or within the WebAppFind
         add-on).
+1. Filepicker (using `dialog-node`)
+1. Services Menu creator?
 
 ## To-dos (Related enhancements to other add-ons or refactoring to act as separate)
 
