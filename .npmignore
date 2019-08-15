@@ -11,5 +11,6 @@ package.json
 src/**
 ignore/**
 bin/**
+test
 web-ext-artifacts/**
 output.app/**

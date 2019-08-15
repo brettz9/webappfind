@@ -1,7 +1,8 @@
 const fs = require('fs');
-const ini = require('ini');
 const homedir = require('os').homedir();
+const ini = require('ini');
+
 const profiles = ini.parse(
-    fs.readFileSync(`${homedir}/Library/Application Support/Firefox/profiles.ini`, 'utf-8')
+  fs.readFileSync(`${homedir}/Library/Application Support/Firefox/profiles.ini`, 'utf-8')
 );
 console.log(JSON.stringify({profiles}));
