@@ -16,7 +16,7 @@ function cmd (args) {
   return getNodeJSON('cmd', args);
 }
 
-function execFile (aFile, args = [], options) {
+function execFile (aFile, args = [], options = undefined) {
   if (!getNodeJSON) {
     ({getNodeJSON} = browser.extension.getBackgroundPage());
   }

@@ -4,19 +4,7 @@
 
 const fs = require('fs');
 const {execFile} = require('child_process');
-const mkdirpOriginal = require('mkdirp');
 
-const mkdirpProm = (dirPath, opts) => {
-  return new Promise((resolve, reject) => {
-    mkdirpOriginal(dirPath, opts, (err) => {
-      if (err) {
-        reject(err);
-        return;
-      }
-      resolve();
-    });
-  });
-};
 const readFileProm = (path, options) => {
   return new Promise((resolve, reject) => {
     fs.readFile(
@@ -171,7 +159,6 @@ const execFileProm = (file, args, options) => {
   });
 };
 
-exports.mkdirpProm = mkdirpProm;
 exports.readFileProm = readFileProm;
 exports.writeFileProm = writeFileProm;
 exports.readdirProm = readdirProm;

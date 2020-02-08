@@ -1,4 +1,3 @@
-/* eslint-disable node/no-unsupported-features/es-syntax */
 /* eslint-env webextensions */
 async function autocompleteURLHistory ({listID, value: userVal}) {
   const historyItems = await browser.history.search({

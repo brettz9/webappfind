@@ -1,4 +1,3 @@
-/* eslint-disable node/no-unsupported-features/es-syntax */
 /* eslint-env browser */
 // Todo: Make as own module dependency
 import {jml, $, $$, nbsp} from '/vendor/jamilih/dist/jml-es-noinnerh.js';

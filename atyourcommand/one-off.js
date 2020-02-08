@@ -1,5 +1,4 @@
-/* eslint-disable node/no-unsupported-features/es-syntax,
-  node/no-unsupported-features/node-builtins, node/no-unsupported-features/es-builtins */
+/* eslint-disable node/no-unsupported-features/node-builtins */
 /* eslint-env webextensions */
 /* globals jQuery */
 
@@ -13,9 +12,7 @@ import * as EnvironmentBridge from '/node-bridges/EnvironmentBridge.js';
 import * as FileBridge from '/node-bridges/FileBridge.js';
 import loadStylesheets from '/vendor/load-stylesheets/dist/index-es.js';
 
-import addMultipleSelect from '/vendor/multiple-select/dist/multiple-select-es.js';
-
-addMultipleSelect(jQuery);
+import '/vendor/multiple-select/dist/multiple-select-es.js';
 
 const uiLanguage = browser.i18n.getUILanguage();
 const dialogs = new Dialog({locale: uiLanguage});
@@ -180,8 +177,8 @@ function rebuildCommandList () {
 }
 
 /**
-* @param {array} optTexts Array of option text
-* @param {array} [values] Array of values corresponding to text
+* @param {string[]} optTexts Array of option text
+* @param {string[]} [values] Array of values corresponding to text
 * @param {string} [ns] Namespace to add to locale string
 */
 /*

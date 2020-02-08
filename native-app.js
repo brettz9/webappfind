@@ -12,11 +12,12 @@ const uuid = require('uuid/v4');
 
 const {MacOSDefaults} = require('macos-defaults');
 const minimist = require('minimist');
+const mkdirp = require('mkdirp');
 
 // We have a special pkg-related promises file as pkg will overwrite these
 //   methods, causing conflicts (and too early to use Node 10.0 Promise-based `fs`)
 const {
-  execFileProm, readFileProm, writeFileProm, mkdirpProm, readdirProm, unlinkProm, statProm
+  execFileProm, readFileProm, writeFileProm, readdirProm, unlinkProm, statProm
 } = require('./polyfills/promise-wrappers-pkg');
 const {
   addOrReplaceExtensionHandler,
@@ -580,7 +581,7 @@ const nodeJSONMethods = {
   _makeProfileSubDirectory (dir) {
     const profD = directories.ProfD,
       pDir = path.join(profD, dir);
-    return mkdirpProm(pDir).catch((err) => {
+    return mkdirp(pDir).catch((err) => {
       if (err.code !== 'EEXIST') {
         throw err;
       }

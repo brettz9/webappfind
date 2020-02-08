@@ -1,4 +1,3 @@
-/* eslint-disable node/no-unsupported-features/es-syntax */
 /* eslint-env webextensions */
 // import * as EnvironmentBridge from '/node-bridges/EnvironmentBridge.js';
 import {buildOpenWithExecutable} from '/node-bridges/ExecBridge.js';

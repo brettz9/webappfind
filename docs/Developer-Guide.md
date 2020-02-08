@@ -51,24 +51,24 @@ Add this back to comments when reenabling this preference:
 ```js
 let pathID; // We might use an array to track multiple path IDs within the same app (once WebAppFind may be modified to support this capability!)
 window.addEventListener('message', function ({origin, data}) {
-    // `data` might be set to something like:
-    // {type: 'view', pathID: '{1e5c754e-95d3-4431-a08c-5364db753d97}', content: 'the loaded file contents will be here!'}
+  // `data` might be set to something like:
+  // {type: 'view', pathID: '{1e5c754e-95d3-4431-a08c-5364db753d97}', content: 'the loaded file contents will be here!'}
 
-    let type, pathID, content;
-    try {
-        ({type, pathID, content} = data); // May throw if data is not an object
-        if (origin !== location.origin || // We are only interested in a message sent as though within this URL by our browser add-on
-            type === 'save' // Avoid our post below (other messages might be possible in the future which may also need to be excluded if your subsequent code makes assumptions on the type of message this is)
-        ) {
-            return;
-        }
-    } catch (err) {
-        return;
+  let type, pathID, content;
+  try {
+    ({type, pathID, content} = data); // May throw if data is not an object
+    if (origin !== location.origin || // We are only interested in a message sent as though within this URL by our browser add-on
+      type === 'save' // Avoid our post below (other messages might be possible in the future which may also need to be excluded if your subsequent code makes assumptions on the type of message this is)
+    ) {
+      return;
     }
-    if (type === 'view') {
-        // We remember the pathID in case we are in "edit" mode which requires a pathID for saving back to disk
-        // Do something with `content` like adding it to a textarea, etc.
-    }
+  } catch (err) {
+    return;
+  }
+  if (type === 'view') {
+    // We remember the pathID in case we are in "edit" mode which requires a pathID for saving back to disk
+    // Do something with `content` like adding it to a textarea, etc.
+  }
 });
 ```
 
@@ -107,11 +107,11 @@ app would like to inform the user in some manner).
 //  they wish to make a save such as if they have approved
 //  draft auto-saving or when manually clicking a save button.
 window.postMessage({
-    webappfind: {
-        type: 'save',
-        pathID: previouslySavedPathIDFromViewEvent,
-        content: dataToSaveAsString
-    }
+  webappfind: {
+    type: 'save',
+    pathID: previouslySavedPathIDFromViewEvent,
+    content: dataToSaveAsString
+  }
 }, location.origin);
 ```
 

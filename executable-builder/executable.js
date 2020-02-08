@@ -1,6 +1,5 @@
 /* eslint-env webextensions, browser */
 /* eslint-disable default-case,
-  node/no-unsupported-features/es-syntax,
   node/no-unsupported-features/node-builtins */
 
 import {jml, $, $$, nbsp} from '/vendor/jamilih/dist/jml-es-noinnerh.js';
@@ -1164,7 +1163,7 @@ function init () {
     } else if (sel) {
       let selVal = $(sel).value;
       if (selVal.startsWith('resource:')) {
-        selVal = selVal.substring(0, selVal.lastIndexOf('/') + 1);
+        selVal = selVal.slice(0, selVal.lastIndexOf('/') + 1);
         window.open(selVal, 'resource' + (winOpenCtr++));
         return;
       }

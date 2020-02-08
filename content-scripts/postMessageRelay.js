@@ -1,5 +1,4 @@
 /* eslint-env browser, webextensions */
-/* eslint-disable node/no-unsupported-features/es-syntax */
 var postMessageRelay; // eslint-disable-line no-var, no-unused-vars
 (() => {
 'use strict';

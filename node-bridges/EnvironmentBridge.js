@@ -1,5 +1,4 @@
 /* eslint-env webextensions */
-/* eslint-disable node/no-unsupported-features/es-syntax */
 import {_} from '/utils/i18n.js';
 
 const {getNodeJSON} = browser.extension.getBackgroundPage();

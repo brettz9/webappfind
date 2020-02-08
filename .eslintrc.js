@@ -12,6 +12,17 @@ module.exports = {
       'URLSearchParams'
     ]
   },
+  overrides: [{
+    files: ['*.md'],
+    globals: {
+      previouslySavedPathIDFromViewEvent: true,
+      dataToSaveAsString: true
+    },
+    rules: {
+      'no-unused-vars': ['error', {varsIgnorePattern: 'pathID|content', argsIgnorePattern: 'i|type'}],
+      'no-useless-return': 0
+    }
+  }],
   globals: {
     __dirname: true,
     exports: true,

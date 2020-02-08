@@ -1,6 +1,4 @@
 /* eslint-env webextensions */
-/* eslint-disable node/no-unsupported-features/es-syntax,
-  node/no-unsupported-features/es-builtins */
 
 const {getNodeJSON} = browser.extension.getBackgroundPage();
 

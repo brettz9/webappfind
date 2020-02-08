@@ -2,7 +2,8 @@
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
-const {mkdirp, writeFile, copyExecutable, regedit} = require('../polyfills/promise-wrappers');
+const mkdirp = require('mkdirp');
+const {writeFile, copyExecutable, regedit} = require('../polyfills/promise-wrappers');
 
 const browsers = ['Chrome', 'Chromium', 'Firefox'];
 const extensionName = 'webappfind'; // Also used for JSON file name

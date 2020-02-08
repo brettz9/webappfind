@@ -1,5 +1,4 @@
 /* eslint-disable no-alert,
-  node/no-unsupported-features/es-syntax,
   node/no-unsupported-features/node-builtins */
 /* eslint-env webextensions, browser */
 

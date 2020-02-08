@@ -1,9 +1,9 @@
 /**
-These may need tweaking or moving out of NormalTags
-Note that img.src and a.href include base URI
- @todo Allow video and audio to be checked for <source> tags
- @todo Do more thorough review of all other tags
- @todo Include SVG elements
+ * These may need tweaking or moving out of NormalTags
+ * Note that img.src and a.href include base URI.
+ * @todo Allow video and audio to be checked for `<source>` tags
+ * @todo Do more thorough review of all other tags
+ * @todo Include SVG elements
 */
 const Tags = [
   ['frames', ['frame', 'frameset', ['iframe', {prop: 'src'}], ['noframes', {hidden: 'feature-present'}]]],

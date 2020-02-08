@@ -52,7 +52,7 @@
     "copy-jamilih": "cp node_modules/jamilih/dist/jml-es-noinnerh.js vendor/jamilih/dist/jml-es-noinnerh.js && cp node_modules/jamilih/dist/jml-es-noinnerh.js options/jml.js",
     "copy-bootstrap": "cp node_modules/bootstrap/dist/css/bootstrap.css vendor/bootstrap/dist/css/bootstrap.css",
     "copy": "npm run copy-dialog-polyfill && npm run copy-polyfill && npm run copy-jquery && npm run copy-form-serialization && npm run copy-js-string-escape && npm run copy-load-stylesheets && npm run copy-multiple-select && npm run copy-jamilih && npm run copy-bootstrap",
-    "eslint": "eslint .",
+    "eslint": "eslint --ext=js,md,html .",
     "lint": "npm run eslint && npm run webext-lint",
     "run": "npm run eslint && npm run webext-run",
     "addon": "npm run eslint && npm run webext-build",
@@ -84,7 +84,7 @@
     ]
   },
   "engines": {
-    "node": ">= 6.0.0"
+    "node": ">=8.3.0"
   },
   "dependencies": {
     "chrome-native-messaging": "0.2.0",
@@ -93,43 +93,44 @@
     "macos-defaults": "https://github.com/brettz9/macOS-defaults",
     "mdls": "1.2.0",
     "minimist": "^1.2.0",
-    "mkdirp": "^0.5.1",
-    "uuid": "^3.3.2",
-    "ws": "^7.1.2"
+    "mkdirp": "^1.0.3",
+    "uuid": "^3.4.0",
+    "ws": "^7.2.1"
   },
   "optionalDependencies": {
     "regedit": "3.0.3"
   },
   "devDependencies": {
-    "@mysticatea/eslint-plugin": "^11.0.0",
-    "bootstrap": "^4.3.1",
+    "@mysticatea/eslint-plugin": "^13.0.0",
+    "bootstrap": "^4.4.1",
     "chai": "^4.2.0",
     "dialog-polyfill": "^0.5.0",
-    "eslint": "^6.1.0",
-    "eslint-config-ash-nazg": "^8.5.2",
-    "eslint-config-standard": "^13.0.1",
+    "eslint": "^6.8.0",
+    "eslint-config-ash-nazg": "^17.2.0",
+    "eslint-config-standard": "^14.1.0",
     "eslint-plugin-array-func": "^3.1.3",
-    "eslint-plugin-compat": "^3.3.0",
+    "eslint-plugin-compat": "^3.5.1",
     "eslint-plugin-eslint-comments": "^3.1.2",
     "eslint-plugin-html": "^6.0.0",
-    "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-jsdoc": "^15.8.0",
-    "eslint-plugin-markdown": "^1.0.0",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-jsdoc": "^21.0.0",
+    "eslint-plugin-markdown": "^1.0.1",
+    "eslint-plugin-no-unsanitized": "^3.0.2",
     "eslint-plugin-no-use-extend-native": "^0.4.1",
-    "eslint-plugin-node": "^9.1.0",
+    "eslint-plugin-node": "^11.0.0",
     "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-sonarjs": "^0.4.0",
-    "eslint-plugin-standard": "^4.0.0",
-    "eslint-plugin-unicorn": "^10.0.0",
-    "jamilih": "^0.45.0",
+    "eslint-plugin-sonarjs": "^0.5.0",
+    "eslint-plugin-standard": "^4.0.1",
+    "eslint-plugin-unicorn": "^16.0.0",
+    "jamilih": "^0.51.0",
     "jquery": "^3.4.1",
     "js-string-escape": "https://github.com/brettz9/js-string-escape#rollup",
-    "load-stylesheets": "^0.8.0",
-    "mocha": "^6.2.0",
-    "multiple-select": "1.3.1",
-    "rollup": "1.19.4",
-    "rollup-plugin-root-import": "^0.2.4",
-    "typescript": "^3.5.3",
-    "webextension-polyfill": "^0.4.0"
+    "load-stylesheets": "^0.9.0",
+    "mocha": "^7.0.1",
+    "multiple-select": "1.5.2",
+    "rollup": "1.31.0",
+    "rollup-plugin-root-import": "^1.0.0",
+    "typescript": "^3.7.5",
+    "webextension-polyfill": "^0.6.0"
   }
 }

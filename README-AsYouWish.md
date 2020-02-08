@@ -20,14 +20,14 @@ One may use any of the commands from the [WebExtensions API](https://developer.m
 
 ```js
 window.postMessage({
-    webappfind: {
-        method: 'addonEval',
-        string: `
+  webappfind: {
+    method: 'addonEval',
+    string: `
 browser.tabs.create({
-    url: 'https://en.wikipedia.org'
+  url: 'https://en.wikipedia.org'
 });
 `
-    }
+  }
 }, '*');
 ```
 
@@ -40,10 +40,10 @@ dependent on what exact version of Node [pkg](https://github.com/zeit/pkg)
 
 ```js
 window.postMessage({
-    webappfind: {
-        method: 'nodeEval',
-        string: `require('path').join('a', 'b', 'c');`
-    }
+  webappfind: {
+    method: 'nodeEval',
+    string: `require('path').join('a', 'b', 'c');`
+  }
 }, '*');
 ```
 
@@ -57,13 +57,13 @@ after this event fires.
 
 ```js
 window.addEventListener('message', ({data: {webappfind: {evalReady}}}) => {
-    if (!evalReady) {
-        // Ignore our own `postMessage`'s or their results as well as the
-        //  passing and receipt of non-AsYouWish WebAppFind messages, or
-        //  the results of our posts
-        return;
-    }
-    // Use one or both of the `window.postMessage` APIs above here
+  if (!evalReady) {
+    // Ignore our own `postMessage`'s or their results as well as the
+    //  passing and receipt of non-AsYouWish WebAppFind messages, or
+    //  the results of our posts
+    return;
+  }
+  // Use one or both of the `window.postMessage` APIs above here
 });
 ```
 
@@ -74,13 +74,13 @@ of the `postMessage`s above.
 
 ```js
 window.addEventListener('message', ({data: {webappfind: {i, result, type}}}) => {
-    if (!result) {
-        return;
-    }
-    // Handle result here from any `window.postMessage` APIs used above;
-    //   use `i` to track which particular response goes with which message
-    //   and `type` to determine if the request method were for `addonEval`
-    //   or `nodeEval`.
+  if (!result) {
+    return;
+  }
+  // Handle result here from any `window.postMessage` APIs used above;
+  //   use `i` to track which particular response goes with which message
+  //   and `type` to determine if the request method were for `addonEval`
+  //   or `nodeEval`.
 });
 ```
 

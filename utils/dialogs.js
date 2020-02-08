@@ -1,5 +1,5 @@
 // Todo: Make as own module dependency
-/* eslint-disable node/no-unsupported-features/es-syntax, promise/avoid-new */
+/* eslint-disable promise/avoid-new */
 import {jml, nbsp} from '/vendor/jamilih/dist/jml-es-noinnerh.js';
 import {$e} from '/utils/templateUtils.js';
 import dialogPolyfill from '/vendor/dialog-polyfill/dist/dialog-polyfill.esm.js';

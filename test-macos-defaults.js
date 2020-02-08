@@ -1,5 +1,3 @@
-/* eslint-disable node/no-unsupported-features/es-syntax */
-
 const {MacOSDefaults} = require('macos-defaults');
 
 const mod = new MacOSDefaults();

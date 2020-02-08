@@ -1,6 +1,5 @@
 /* eslint-env browser, webextensions */
-/* eslint-disable node/no-unsupported-features/es-syntax,
-  node/no-unsupported-features/node-builtins */
+/* eslint-disable node/no-unsupported-features/node-builtins */
 import {jml, $, nbsp} from '/options/jml.js';
 import {DOM} from '/utils/templateUtils.js';
 
