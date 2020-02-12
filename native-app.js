@@ -713,6 +713,9 @@ function processMessage (msgObj) {
   let {method, content} = msgObj;
   if (nodeJSON) {
     method = method === 'execFile' ? 'execFileProm' : method;
+    if (!{}.hasOwnProperty.call(nodeJSONMethods, method)) {
+      throw new Error('Unknown method');
+    }
     return nodeJSONMethods[method](...args).then((result) => {
       return {i, method, result, nodeJSON: true};
     }).catch((error) => {
