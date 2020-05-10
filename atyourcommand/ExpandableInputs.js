@@ -106,8 +106,6 @@ class ExpandableInputs {
         return;
       }
       switch (dataset.ei_type) {
-      default:
-        throw new TypeError('Unexpected type');
       case 'remove': {
         const noneToRemove = that.remove(dataset.ei_id);
 
@@ -124,6 +122,8 @@ class ExpandableInputs {
       } case 'add':
         that.add();
         break;
+      default:
+        throw new TypeError('Unexpected type');
       }
     });
   }

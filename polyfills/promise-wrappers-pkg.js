@@ -126,7 +126,7 @@ function copyFileUtil (source, target, readOptions, writeOptions) {
 
 const isWin = process.platform.startsWith('win');
 if (isWin) {
-  // eslint-disable-next-line global-require
+  // eslint-disable-next-line node/global-require
   const regeditOriginal = require('regedit'); // https://github.com/ironSource/node-regedit
   const regedit = {
     putValue () {

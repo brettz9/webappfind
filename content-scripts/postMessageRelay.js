@@ -28,8 +28,6 @@ window.addEventListener('message', function ({origin, data}) {
   const {type, pathID, content} = data.webappfind;
   // console.log('type', type, origin, data);
   switch (type) {
-  default:
-    throw new TypeError('Unexpected type: ' + type);
   case 'read':
     port.postMessage({type: 'read', pathID});
     break;
@@ -42,6 +40,8 @@ window.addEventListener('message', function ({origin, data}) {
     l('saving... pathID:', pathID, 'length: ', content.length);
     port.postMessage({type: 'save', pathID, content});
     break;
+  default:
+    throw new TypeError('Unexpected type: ' + type);
   }
 });
 
@@ -95,8 +95,6 @@ async function webappfindStart (result) {
 
 port.onMessage.addListener(function ({type, result, pathID, error}) {
   switch (type) {
-  default:
-    throw new TypeError('Unexpected type: ' + type);
   case 'saveEnd':
     window.postMessage({
       webappfind: {
@@ -109,6 +107,9 @@ port.onMessage.addListener(function ({type, result, pathID, error}) {
     break;
   case 'start':
     webappfindStart(result);
+    break;
+  default:
+    throw new TypeError('Unexpected type: ' + type);
   }
 });
 })();

@@ -8,7 +8,7 @@ const os = require('os');
 const ini = require('ini');
 const nativeMessage = require('chrome-native-messaging');
 const WebSocket = require('ws');
-const uuid = require('uuid/v4');
+const {v4: uuid} = require('uuid');
 
 const {MacOSDefaults} = require('macos-defaults');
 const minimist = require('minimist');
@@ -269,9 +269,6 @@ end getFile
       let role = 'Viewer';
       if ('mode' in argv) {
         switch (argv.mode) {
-        default: {
-          throw new TypeError('Unrecognized mode');
-        }
         // Descriptions at https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
         case 'view':
           role = 'Viewer';
@@ -285,6 +282,8 @@ end getFile
         case 'none':
           role = 'None';
           break;
+        default:
+          throw new TypeError('Unrecognized mode');
         }
       }
       // Todo (high priority): Switch to `LSItemContentTypes`
@@ -423,10 +422,10 @@ const isFirefox = true; // Todo: Detect; in addon through `browser.runtime.getBr
 if (!isFirefox) {
   // Todo: Set ProfD for other browsers
   throw new Error('Other browser besides Firefox not yet supported');
-/* eslint-disable no-process-env */
+/* eslint-disable node/no-process-env */
 } else if (process.env.MOZ_CRASHREPORTER_EVENTS_DIRECTORY) {
   directories.ProfD = path.resolve(process.env.MOZ_CRASHREPORTER_EVENTS_DIRECTORY, '../..');
-  /* eslint-enable no-process-env */
+  /* eslint-enable node/no-process-env */
 } else {
   throw new Error(`MOZ_CRASHREPORTER_EVENTS_DIRECTORY environment variable not set by Firefox`);
   // either -P / -p "profile_name" or -profile "profile_path" (precedence?) default: fs.readFileSync('%AppData%\Mozilla\Firefox\profiles.ini').trim().split(/(?:\r\n?\n){2}/g).find(_=>_.includes('Default=1')).match(/Path=(.*))[1]
@@ -726,8 +725,6 @@ function processMessage (msgObj) {
     });
   }
   switch (method) {
-  default:
-    throw new TypeError('Unexpected method: ' + method);
   case 'execbuildopen': {
     // Not working currently due to browser restrictions on opening popup
     //  unless there is a user action
@@ -803,6 +800,8 @@ function processMessage (msgObj) {
       'string' in msgObj ? msgObj.string : undefined
     ));
   }
+  default:
+    throw new TypeError('Unexpected method: ' + method);
   }
 }
 

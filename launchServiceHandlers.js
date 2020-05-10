@@ -26,8 +26,6 @@ function setLaunchServiceHandlers (serviceHandlers) {
 function addRolesForMode ({mode, params, appID}) {
   const roles = [];
   switch (mode) {
-  default:
-    throw new TypeError('Unexpected mode: ' + mode);
   case 'view':
     roles.push('LSHandlerRoleViewer');
     break;
@@ -44,6 +42,8 @@ function addRolesForMode ({mode, params, appID}) {
   case 'all':
     roles.push('LSHandlerRoleAll');
     break;
+  default:
+    throw new TypeError('Unexpected mode: ' + mode);
   }
   roles.forEach((role) => {
     params[role] = appID;
@@ -93,6 +93,7 @@ console.log('handlersByTag', handlersByTag.LSHandlerRoleAll);
 */
 function getLaunchServiceHandlers ({contentTag, contentType, type = 'extension'}) {
   switch (type) {
+  // eslint-disable-next-line default-case-last
   default: {
     if (type) { // Allow user to specify their own manually
       break;

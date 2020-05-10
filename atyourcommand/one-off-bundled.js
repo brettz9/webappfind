@@ -145,7 +145,7 @@
     return _setPrototypeOf(o, p);
   }
 
-  function isNativeReflectConstruct() {
+  function _isNativeReflectConstruct() {
     if (typeof Reflect === "undefined" || !Reflect.construct) return false;
     if (Reflect.construct.sham) return false;
     if (typeof Proxy === "function") return true;
@@ -159,7 +159,7 @@
   }
 
   function _construct(Parent, args, Class) {
-    if (isNativeReflectConstruct()) {
+    if (_isNativeReflectConstruct()) {
       _construct = Reflect.construct;
     } else {
       _construct = function _construct(Parent, args, Class) {
@@ -229,6 +229,23 @@
     return _assertThisInitialized(self);
   }
 
+  function _createSuper(Derived) {
+    return function () {
+      var Super = _getPrototypeOf(Derived),
+          result;
+
+      if (_isNativeReflectConstruct()) {
+        var NewTarget = _getPrototypeOf(this).constructor;
+
+        result = Reflect.construct(Super, arguments, NewTarget);
+      } else {
+        result = Super.apply(this, arguments);
+      }
+
+      return _possibleConstructorReturn(this, result);
+    };
+  }
+
   function _superPropBase(object, property) {
     while (!Object.prototype.hasOwnProperty.call(object, property)) {
       object = _getPrototypeOf(object);
@@ -260,19 +277,15 @@
   }
 
   function _slicedToArray(arr, i) {
-    return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest();
+    return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();
   }
 
   function _toConsumableArray(arr) {
-    return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();
+    return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();
   }
 
   function _arrayWithoutHoles(arr) {
-    if (Array.isArray(arr)) {
-      for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
-
-      return arr2;
-    }
+    if (Array.isArray(arr)) return _arrayLikeToArray(arr);
   }
 
   function _arrayWithHoles(arr) {
@@ -280,14 +293,11 @@
   }
 
   function _iterableToArray(iter) {
-    if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);
+    if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter);
   }
 
   function _iterableToArrayLimit(arr, i) {
-    if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) {
-      return;
-    }
-
+    if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return;
     var _arr = [];
     var _n = true;
     var _d = false;
@@ -313,12 +323,29 @@
     return _arr;
   }
 
+  function _unsupportedIterableToArray(o, minLen) {
+    if (!o) return;
+    if (typeof o === "string") return _arrayLikeToArray(o, minLen);
+    var n = Object.prototype.toString.call(o).slice(8, -1);
+    if (n === "Object" && o.constructor) n = o.constructor.name;
+    if (n === "Map" || n === "Set") return Array.from(n);
+    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
+  }
+
+  function _arrayLikeToArray(arr, len) {
+    if (len == null || len > arr.length) len = arr.length;
+
+    for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
+
+    return arr2;
+  }
+
   function _nonIterableSpread() {
-    throw new TypeError("Invalid attempt to spread non-iterable instance");
+    throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
   }
 
   function _nonIterableRest() {
-    throw new TypeError("Invalid attempt to destructure non-iterable instance");
+    throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
   }
 
   /*
@@ -362,6 +389,8 @@
   var NS_HTML = 'http://www.w3.org/1999/xhtml',
       hyphenForCamelCase = /\x2D([a-z])/g;
   var ATTR_MAP = {
+    maxlength: 'maxLength',
+    minlength: 'minLength',
     readonly: 'readOnly'
   }; // We define separately from ATTR_DOM for clarity (and parity with JsonML) but no current need
   // We don't set attribute esp. for boolean atts as we want to allow setting of `undefined`
@@ -385,7 +414,7 @@
   var NULLABLES = ['autocomplete', 'dir', // HTMLElement
   'integrity', // script, link
   'lang', // HTMLElement
-  'max', 'min', 'title' // HTMLElement
+  'max', 'min', 'minLength', 'maxLength', 'title' // HTMLElement
   ];
 
   var $$1 = function $(sel) {
@@ -939,20 +968,20 @@
 
                 var def = customizedBuiltIn ? is : localName;
 
-                if (customElements.get(def)) {
+                if (window.customElements.get(def)) {
                   return "break";
                 }
 
                 var getConstructor = function getConstructor(cnstrct) {
-                  var baseClass = options && options["extends"] ? doc.createElement(options["extends"]).constructor : customizedBuiltIn ? doc.createElement(localName).constructor : HTMLElement;
+                  var baseClass = options && options["extends"] ? doc.createElement(options["extends"]).constructor : customizedBuiltIn ? doc.createElement(localName).constructor : window.HTMLElement;
                   /**
                    * Class wrapping base class.
                    */
 
-                  return cnstrct ?
-                  /*#__PURE__*/
-                  function (_baseClass) {
+                  return cnstrct ? /*#__PURE__*/function (_baseClass) {
                     _inherits(_class, _baseClass);
+
+                    var _super = _createSuper(_class);
 
                     /**
                      * Calls user constructor.
@@ -962,21 +991,21 @@
 
                       _classCallCheck(this, _class);
 
-                      _this = _possibleConstructorReturn(this, _getPrototypeOf(_class).call(this));
+                      _this = _super.call(this);
                       cnstrct.call(_assertThisInitialized(_this));
                       return _this;
                     }
 
                     return _class;
-                  }(baseClass) :
-                  /*#__PURE__*/
-                  function (_baseClass2) {
+                  }(baseClass) : /*#__PURE__*/function (_baseClass2) {
                     _inherits(_class2, _baseClass2);
+
+                    var _super2 = _createSuper(_class2);
 
                     function _class2() {
                       _classCallCheck(this, _class2);
 
-                      return _possibleConstructorReturn(this, _getPrototypeOf(_class2).apply(this, arguments));
+                      return _super2.apply(this, arguments);
                     }
 
                     return _class2;
@@ -1054,7 +1083,7 @@
                 } // console.log('def', def, '::', typeof options === 'object' ? options : undefined);
 
 
-                customElements.define(def, cnstrctr, _typeof(options) === 'object' ? options : undefined);
+                window.customElements.define(def, cnstrctr, _typeof(options) === 'object' ? options : undefined);
                 return "break";
               }();
 
@@ -1718,10 +1747,10 @@
       /**
        * Polyfill for `DOMException`.
        */
-      var DOMException =
-      /*#__PURE__*/
-      function (_Error) {
+      var DOMException = /*#__PURE__*/function (_Error) {
         _inherits(DOMException, _Error);
+
+        var _super3 = _createSuper(DOMException);
 
         /* eslint-enable no-shadow, unicorn/custom-error-definition */
 
@@ -1734,14 +1763,14 @@
 
           _classCallCheck(this, DOMException);
 
-          _this2 = _possibleConstructorReturn(this, _getPrototypeOf(DOMException).call(this, message)); // eslint-disable-next-line unicorn/custom-error-definition
+          _this2 = _super3.call(this, message); // eslint-disable-next-line unicorn/custom-error-definition
 
           _this2.name = name;
           return _this2;
         }
 
         return DOMException;
-      }(_wrapNativeSuper(Error));
+      }( /*#__PURE__*/_wrapNativeSuper(Error));
 
       if (reportInvalidState) {
         // INVALID_STATE_ERR per section 9.3 XHTML 5: http://www.w3.org/TR/html5/the-xhtml-syntax.html
@@ -2128,15 +2157,15 @@
    */
 
 
-  var JamilihMap =
-  /*#__PURE__*/
-  function (_Map) {
+  var JamilihMap = /*#__PURE__*/function (_Map) {
     _inherits(JamilihMap, _Map);
+
+    var _super4 = _createSuper(JamilihMap);
 
     function JamilihMap() {
       _classCallCheck(this, JamilihMap);
 
-      return _possibleConstructorReturn(this, _getPrototypeOf(JamilihMap).apply(this, arguments));
+      return _super4.apply(this, arguments);
     }
 
     _createClass(JamilihMap, [{
@@ -2185,21 +2214,21 @@
     }]);
 
     return JamilihMap;
-  }(_wrapNativeSuper(Map));
+  }( /*#__PURE__*/_wrapNativeSuper(Map));
   /**
    * Element-aware wrapper for `WeakMap`.
    */
 
 
-  var JamilihWeakMap =
-  /*#__PURE__*/
-  function (_WeakMap) {
+  var JamilihWeakMap = /*#__PURE__*/function (_WeakMap) {
     _inherits(JamilihWeakMap, _WeakMap);
+
+    var _super5 = _createSuper(JamilihWeakMap);
 
     function JamilihWeakMap() {
       _classCallCheck(this, JamilihWeakMap);
 
-      return _possibleConstructorReturn(this, _getPrototypeOf(JamilihWeakMap).apply(this, arguments));
+      return _super5.apply(this, arguments);
     }
 
     _createClass(JamilihWeakMap, [{
@@ -2248,7 +2277,7 @@
     }]);
 
     return JamilihWeakMap;
-  }(_wrapNativeSuper(WeakMap));
+  }( /*#__PURE__*/_wrapNativeSuper(WeakMap));
 
   jml.Map = JamilihMap;
   jml.WeakMap = JamilihWeakMap;
@@ -2485,8 +2514,6 @@
           return;
         }
         switch (dataset.ei_type) {
-        default:
-          throw new TypeError('Unexpected type');
         case 'remove': {
           const noneToRemove = that.remove(dataset.ei_id);
 
@@ -2503,6 +2530,8 @@
         } case 'add':
           that.add();
           break;
+        default:
+          throw new TypeError('Unexpected type');
         }
       });
     }
@@ -2756,11 +2785,11 @@
         }
         const urlNum = n1.match(/^url(\d+)$/);
         if (urlNum) {
-          return escapeValue(urls[parseInt(urlNum[1]) - 1]);
+          return escapeValue(urls[Number.parseInt(urlNum[1]) - 1]);
         }
         const fileNum = n1.match(/^file(\d+)$/);
         if (fileNum) {
-          return escapeValue(files[parseInt(fileNum[1]) - 1]);
+          return escapeValue(files[Number.parseInt(fileNum[1]) - 1]);
         }
         return ''; // Todo: Report an error
       }).replace(/&lt;/g, '<').replace(/&amp;/g, '&');
@@ -2902,7 +2931,7 @@
       var invalid = function(k, ok) {
         return !(s[k] === undefined || s[k] === ok);
       };
-      
+
       if (s.opacity < 1 ||
           invalid('zIndex', 'auto') ||
           invalid('transform', 'none') ||
@@ -2943,6 +2972,11 @@
    * @param {Element} el to blur
    */
   function safeBlur(el) {
+    // Find the actual focused element when the active element is inside a shadow root
+    while (el && el.shadowRoot && el.shadowRoot.activeElement) {
+      el = el.shadowRoot.activeElement;
+    }
+
     if (el && el.blur && el !== document.body) {
       el.blur();
     }
@@ -2971,6 +3005,47 @@
       return false;
     }
     return el.getAttribute('method').toLowerCase() === 'dialog';
+  }
+
+  /**
+   * @param {!DocumentFragment|!Element} hostElement
+   * @return {?Element}
+   */
+  function findFocusableElementWithin(hostElement) {
+    // Note that this is 'any focusable area'. This list is probably not exhaustive, but the
+    // alternative involves stepping through and trying to focus everything.
+    var opts = ['button', 'input', 'keygen', 'select', 'textarea'];
+    var query = opts.map(function(el) {
+      return el + ':not([disabled])';
+    });
+    // TODO(samthor): tabindex values that are not numeric are not focusable.
+    query.push('[tabindex]:not([disabled]):not([tabindex=""])');  // tabindex != "", not disabled
+    var target = hostElement.querySelector(query.join(', '));
+
+    if (!target && 'attachShadow' in Element.prototype) {
+      // If we haven't found a focusable target, see if the host element contains an element
+      // which has a shadowRoot.
+      // Recursively search for the first focusable item in shadow roots.
+      var elems = hostElement.querySelectorAll('*');
+      for (var i = 0; i < elems.length; i++) {
+        if (elems[i].tagName && elems[i].shadowRoot) {
+          target = findFocusableElementWithin(elems[i].shadowRoot);
+          if (target) {
+            break;
+          }
+        }
+      }
+    }
+    return target;
+  }
+
+  /**
+   * Determines if an element is attached to the DOM.
+   * @param {Element} element to check
+   * @return {Boolean} whether the element is in DOM
+   */
+  function isConnected(element) {
+    return element.isConnected || document.body.contains(element);
   }
 
   /**
@@ -3032,7 +3107,7 @@
     this.backdrop_.addEventListener('click', this.backdropClick_.bind(this));
   }
 
-  dialogPolyfillInfo.prototype = {
+  dialogPolyfillInfo.prototype = /** @type {HTMLDialogElement.prototype} */ ({
 
     get dialog() {
       return this.dialog_;
@@ -3044,7 +3119,7 @@
      * longer open or is no longer part of the DOM.
      */
     maybeHideModal: function() {
-      if (this.dialog_.hasAttribute('open') && document.body.contains(this.dialog_)) { return; }
+      if (this.dialog_.hasAttribute('open') && isConnected(this.dialog_)) { return; }
       this.downgradeModal();
     },
 
@@ -3120,15 +3195,7 @@
         target = this.dialog_;
       }
       if (!target) {
-        // Note that this is 'any focusable area'. This list is probably not exhaustive, but the
-        // alternative involves stepping through and trying to focus everything.
-        var opts = ['button', 'input', 'keygen', 'select', 'textarea'];
-        var query = opts.map(function(el) {
-          return el + ':not([disabled])';
-        });
-        // TODO(samthor): tabindex values that are not numeric are not focusable.
-        query.push('[tabindex]:not([disabled]):not([tabindex=""])');  // tabindex != "", not disabled
-        target = this.dialog_.querySelector(query.join(', '));
+        target = findFocusableElementWithin(this.dialog_);
       }
       safeBlur(document.activeElement);
       target && target.focus();
@@ -3165,7 +3232,7 @@
       if (this.dialog_.hasAttribute('open')) {
         throw new Error('Failed to execute \'showModal\' on dialog: The element is already open, and therefore cannot be opened modally.');
       }
-      if (!document.body.contains(this.dialog_)) {
+      if (!isConnected(this.dialog_)) {
         throw new Error('Failed to execute \'showModal\' on dialog: The element is not in a Document.');
       }
       if (!dialogPolyfill.dm.pushDialog(this)) {
@@ -3221,7 +3288,7 @@
       this.dialog_.dispatchEvent(closeEvent);
     }
 
-  };
+  });
 
   var dialogPolyfill = {};
 
@@ -3531,6 +3598,7 @@
           return realGet.call(this);
         };
         var realSet = methodDescriptor.set;
+        /** @this {HTMLElement} */
         methodDescriptor.set = function(v) {
           if (typeof v === 'string' && v.toLowerCase() === 'dialog') {
             return this.setAttribute('method', v);
@@ -3587,6 +3655,8 @@
      * and possibly sets its return value.
      */
     document.addEventListener('submit', function(ev) {
+      if (ev.defaultPrevented) { return; }  // e.g. a submit which prevents default submission
+
       var form = /** @type {HTMLFormElement} */ (ev.target);
       if (!isFormMethodDialog(form)) { return; }
       ev.preventDefault();
@@ -3604,7 +3674,7 @@
       }
       dialogPolyfill.formSubmitter = null;
 
-    }, true);
+    }, false);
   }
 
   // Todo: Make as own module dependency

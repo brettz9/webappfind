@@ -3,7 +3,7 @@ const {expect} = require('chai');
 
 describe('Native messaging communication', function () {
   it('should send and receive messages', (done) => {
-    // eslint-disable-next-line global-require
+    // eslint-disable-next-line node/global-require
     const WebSocket = require('ws');
     const ws = new WebSocket('ws://localhost:8080');
     const testFile = 'test123.js';

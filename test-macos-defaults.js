@@ -31,6 +31,7 @@ Also has `LSHandlerPreferredVersions` (which may have its own `LSHandlerRoleAll`
 */
 async function getLaunchServiceHandlers ({contentTag, contentType, type = 'extension'}) {
   switch (type) {
+  // eslint-disable-next-line default-case-last
   default: {
     if (type) { // Allow user to specify their own manually
       break;

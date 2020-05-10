@@ -1012,6 +1012,7 @@ function init () {
       });
       autocompleteURLHistoryResponse(response);
       break;
+    // eslint-disable-next-line default-case-last
     } default: {
       if (!name.startsWith('associateDesktopFilePath')) {
         break;
@@ -1176,6 +1177,7 @@ function init () {
       let {id} = target;
       if (nodeName.toLowerCase() === 'option') {
         switch (parentNode.id) {
+        // eslint-disable-next-line default-case-last
         default:
           if (!parentNode.id.startsWith('associateDesktopFilePath')) {
             break;
@@ -1207,6 +1209,7 @@ function init () {
         deleteTemplateResponse(response);
         break;
       }
+      // eslint-disable-next-line default-case-last
       default: {
         if (!id.startsWith('associateDesktopFilePath') &&
           !id.startsWith('associateDesktopFilePick')

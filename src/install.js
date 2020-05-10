@@ -1,4 +1,5 @@
-/* eslint-disable promise/prefer-await-to-callbacks, promise/prefer-await-to-then */
+/* eslint-disable promise/prefer-await-to-callbacks, promise/prefer-await-to-then,
+  node/no-sync */
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
@@ -118,14 +119,14 @@ node "${mainNativeScriptJS}"
             */
           };
           switch (browser) {
-          default:
-            throw new TypeError('Unexpected browser: ' + browser);
           case 'Firefox':
             appManifest.allowed_extensions = [`${extensionName}@brett-zamir.me`];
             break;
           case 'Chrome': case 'Chromium':
             appManifest.allowed_origins = [`chrome-extension://${extensionID}`];
             break;
+          default:
+            throw new TypeError('Unexpected browser: ' + browser);
           }
           return Promise.all([
             // eslint-disable-next-line promise/no-nesting

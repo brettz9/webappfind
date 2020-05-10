@@ -67,8 +67,6 @@ window.addEventListener('message', async ({data}) => {
   let ok;
   i++;
   switch (method) {
-  default:
-    throw new TypeError('Unexpected method ' + method);
   case 'addonEval': {
     ok = avoidConfirm || confirm(
       _('trust_site_addon_code')
@@ -88,6 +86,8 @@ window.addEventListener('message', async ({data}) => {
     }
     break;
   }
+  default:
+    throw new TypeError('Unexpected method ' + method);
   }
 });
 
