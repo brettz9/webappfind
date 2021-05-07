@@ -254,6 +254,8 @@ return theUTI as text
 
 ## To-dos (File type finding)
 
+Now this should probably be replaced with <https://web.dev/file-handling/>.
+
 **Note: This section was for an earlier incarnation of WebAppFind. These
 should be reimplemented and updated as necessary, possibly integrating
 the to-dos in the section following.**

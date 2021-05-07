@@ -1,6 +1,11 @@
 # webappfind
 <!-- TODO: Adapt the filetypes.json comments below after implementation -->
 
+***Browsers seems to have been broken this project some time now, and I
+haven't been able to revisit to restore behavior. Thankfully, it appears that
+the standard [file-handling API](https://web.dev/file-handling/) can meet
+some of the use cases (at leasts the `webappfind` proper ones).***
+
 ## WebAppFind Core
 
 A [WebExtensions](https://developer.mozilla.org/en-US/Add-ons/WebExtensions)
