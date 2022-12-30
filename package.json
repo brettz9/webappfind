@@ -126,7 +126,7 @@
     "jquery": "^3.5.1",
     "js-string-escape": "git+https://github.com/brettz9/js-string-escape.git#rollup",
     "load-stylesheets": "^0.9.0",
-    "mocha": "^7.1.2",
+    "mocha": "^10.2.0",
     "multiple-select": "1.5.2",
     "rollup": "2.9.0",
     "rollup-plugin-root-import": "^1.0.0",
